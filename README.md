@@ -13,7 +13,7 @@
     - [파스타 포털 수동 설치(CLOUDit)](./Use-Guide/platform/PAAS-TA_PLATFORM_INSTALL_AUTOMATION_CLOUDIT_PORTAL_v1.0.md)
 
 ##  가이드
-- [CF Migration 가이드 (3.1 to 4.0)](./PaaS_TA_4.0_migration.md)
+- [CF Migration 가이드 (3.1 to 4.0)](../../../Guide-4.0-ROTELLE/blob/master/PaaS_TA_4.0_migration.md)
 
 ## 서비스 설치 가이드
 - DBMS 설치
@@ -44,12 +44,13 @@
 
 ## 모니터링 설치 가이드
 - [PaaS-TA 모니터링](./service-guide/monitoring/PAAS-TA_MONITORING_INSTALL_GUIDE_V5.0.md)
+- [IaaS/PaaS(PaaS-TA) 통합 모니터링](../../../Guide-4.0-ROTELLE/blob/master/Install-Guide/monitoring/PaaS_TA_4.0_iaas_paas_monitoring.md)
 
 ## 마켓플레이스 설치 가이드
 - [PaaS-TA 마켓플레이스](./service-guide/marketplace/PaaS-TA_MARKETPLACE_INSTALL_GUIDE_V1.0.md)
 
 ## 활용 가이드
-- [BOSH CLI V2(Command Line Interface) 사용](./Use-Guide/Bosh/PaaS-TA_BOSH_CLI_V2_사용자_가이드v1.0.md)
+- [BOSH CLI V2(Command Line Interface) 사용](../../../Guide-4.0-ROTELLE/blob/master/Use-Guide/Bosh/PaaS-TA_BOSH_CLI_V2_사용자_가이드v1.0.md)
 - [CF CLI(Command Line Interface) 사용](../../../Guide-1.0-Spaghetti-/blob/master/Use-Guide/OpenPaas%20CLi%20가이드.md)
 - [Eclipse plugin 개발도구 사용](../../../Guide-1.0-Spaghetti-/blob/master/Use-Guide/Open%20PaaS%20개발환경%20사용%20가이드.md)
 - [PaaS-TA 사용자 포털 가이드](./use-guide/portal/PAAS-TA_USER_PORTAL_USE_GUIDE_V1.1.md)
