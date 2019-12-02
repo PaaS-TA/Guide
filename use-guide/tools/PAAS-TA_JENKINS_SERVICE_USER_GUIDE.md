@@ -104,24 +104,25 @@ Execute shell탭에서 CF배포에 필요한 Manifest 파일을 작성한다.
 (참조: https://docs.cloudfoundry.org/devguide/deploy-apps/manifest.html)  
 저장 버튼을 선택하여, 설정을 종료한다.
 <br>
+₩₩₩
 	cat > manifest.yml << EOF -> 매니페스트 파일을 생성하는 단계이다. 사용자의 맞게 메니페스트 파일을 설정한다.
-	---
-	applications:
-	- name: portal-registration
-	  memory: 1G
-	  instances: 5
-	  path: ./build/libs/paas-ta-portal-registration.jar
-	  buildpacks: 
-	    - java_buildpack
-	  env:
-	    eureka_instance_hostname: localhost
-	    eureka_client_registerWithEureka: false
-	    eureka_client_fetchRegistry: false
-	    eureka_client_healthcheck_enabled: true
-	    eureka_server_enableSelfPreservation: true
-	    server_port: 2221
+	---  
+	applications:  
+	- name: portal-registration  
+	  memory: 1G  
+	  instances: 5  
+	  path: ./build/libs/paas-ta-portal-registration.jar  
+	  buildpacks:   
+	    - java_buildpack  
+	  env:  
+	    eureka_instance_hostname: localhost  
+	    eureka_client_registerWithEureka: false  
+	    eureka_client_fetchRegistry: false  
+	    eureka_client_healthcheck_enabled: true  
+	    eureka_server_enableSelfPreservation: true  
+	    server_port: 2221  
 	EOF
-
+₩₩₩
 ### <div id='9'/> 4.2. CF Deploy
 ![JENKINS_7]  
 Deploy는 빌드에서 생성된 빌드파일을 CF 배포하는 스탭이다. 기본 설정탭에서 다음과 같이 설정한다. Shared Workspace -> Sample을 설정한다. 
