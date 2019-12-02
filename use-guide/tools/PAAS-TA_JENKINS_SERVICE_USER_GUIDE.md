@@ -309,7 +309,11 @@ Build은 K8S 배포하기 위하여, 소스 빌드 및 Docker Image 생성을 �
 	docker build -f Dockerfile -t paastateam/portalregistration:$BUILD_NUMBER
 	-> Docker image를 빌드한다. $BUILD_NUMBER 변수는 JENKINS에서 제공하는 시스템 변수이다.
 	현재 빌드하고 있는 순번의 값을 제공한다.
-
+	
+	DOCKER_ID=[사용자 ID]
+	DOCKER_PW=[사용자 패스워드]
+	
+	docker login -u ${DOCKER_ID} -p ${DOCKER_PW}
 	docker push paastateam/portalregistration:$BUILD_NUMBER
 	-> Docker image를 DockerRepository서버 업로드한다.
 <br>
