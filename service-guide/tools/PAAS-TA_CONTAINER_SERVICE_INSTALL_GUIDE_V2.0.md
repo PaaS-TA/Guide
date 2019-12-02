@@ -50,14 +50,14 @@ PaaS-TA 3.5 버전부터는 Bosh 2.0 기반으로 배포(deploy)를 진행한다
     <td>1</td>
     <td>1</td>
     <td>4G</td>
-    <td>Root 4G + 영구디스크 20G</td>
+    <td>Root 4G + 영구디스크 50G</td>
   </tr>
   <tr>
     <td>worker</td>
     <td>N</td>
     <td>8</td>
     <td>16G</td>
-    <td>Root 4G + 영구디스크 50G</td>
+    <td>Root 4G + 영구디스크 100G</td>
   </tr>
   <tr>
     <td>container-service-api<br></td>
@@ -578,7 +578,7 @@ caas_apply_addons_azs: [z2]
 caas_master_backend_port: 8443
 caas_master_port: 8443
 caas_master_azs: [z3]
-caas_master_persistent_disk_type: 5120
+caas_master_persistent_disk_type: 51200
 
 # WORKER
 caas_worker_instances: 3
@@ -706,7 +706,7 @@ caas_apply_addons_azs: [z5]
 caas_master_backend_port: "8443"
 caas_master_port: "8443"
 caas_master_azs: [z7]
-caas_master_persistent_disk_type: 5120
+caas_master_persistent_disk_type: 51200
 
 # WORKER
 caas_worker_instances: 3
@@ -836,7 +836,7 @@ caas_apply_addons_azs: [z5]
 caas_master_backend_port: 8443
 caas_master_port: 8443
 caas_master_azs: [z7]
-caas_master_persistent_disk_type: 5120
+caas_master_persistent_disk_type: 51200
 
 # WORKER
 caas_worker_instances: 3
@@ -964,7 +964,7 @@ caas_apply_addons_azs: [z6]
 caas_master_backend_port: 8443
 caas_master_port: 8443
 caas_master_azs: [z7]
-caas_master_persistent_disk_type: 5120
+caas_master_persistent_disk_type: 51200
 
 # WORKER
 caas_worker_instances: 3
@@ -1098,7 +1098,7 @@ caas_apply_addons_azs: [z5]
 caas_master_backend_port: "8443"
 caas_master_port: "8443"
 caas_master_azs: [z7]
-caas_master_persistent_disk_type: 5120
+caas_master_persistent_disk_type: 51200
 
 # WORKER
 caas_worker_instances: 3
@@ -2120,7 +2120,7 @@ Task 615 done
 +     name: default
 +   - name: vip
 +     static_ips: xxx.xxx.xxx.xxx
-+   persistent_disk: 5120
++   persistent_disk: 51200
 +   stemcell: xenial
 +   vm_type: small
 + - azs:
