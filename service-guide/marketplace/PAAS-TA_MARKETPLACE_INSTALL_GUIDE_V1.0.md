@@ -46,9 +46,12 @@
   >
   >CF CLI V2 사용자 가이드 : <https://github.com/PaaS-TA/Guide-1.0-Spaghetti-/blob/master/Use-Guide/OpenPaas%20CLi%20%EA%B0%80%EC%9D%B4%EB%93%9C.md>
   >
-  >PaaS-TA 설치 가이드 : <https://github.com/PaaS-TA/Guide-4.0-ROTELLE/blob/master/PaaS_TA_PaaS-TA_Install_Guide-v5.0.md>
+  >PaaS-TA 설치 가이드 : <https://github.com/PaaS-TA/Guide-5.0-Ravioli/blob/master/install-guide/paasta/PAAS-TA_CORE_INSTALL_GUIDE_V5.0.md>
   >
-  >PaaS-TA 사용자 포털 설치 가이드 : <https://github.com/PaaS-TA/Guide-4.0-ROTELLE/blob/master/Install-Guide/Portal/PaaS-TA_Portal_install.md>
+  >PaaS-TA 사용자 포털 설치 가이드
+  >> API : <https://github.com/PaaS-TA/Guide-5.0-Ravioli/blob/master/install-guide/portal/PAAS-TA_PORTAL_API_SERVICE_INSTALL_GUIDE_V1.0.md>
+  >>
+  >> UI : <https://github.com/PaaS-TA/Guide-5.0-Ravioli/blob/master/install-guide/portal/PAAS-TA_PORTAL_UI_SERVICE_INSTALL_GUIDE_V1.0.md>
 
 
 #### <div id='211'/> 2.1.1. App 파일 및 Manifest 파일 다운로드
