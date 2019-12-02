@@ -104,6 +104,23 @@ Execute shell탭에서 CF배포에 필요한 Manifest 파일을 작성한다.
 (참조: https://docs.cloudfoundry.org/devguide/deploy-apps/manifest.html)  
 저장 버튼을 선택하여, 설정을 종료한다.
 <br>
+	cat > manifest.yml << EOF -> 매니페스트 파일을 생성하는 단계이다. 사용자의 맞게 메니페스트 파일을 설정한다.
+	---
+	applications:
+	- name: portal-registration
+	  memory: 1G
+	  instances: 5
+	  path: ./build/libs/paas-ta-portal-registration.jar
+	  buildpacks: 
+	    - java_buildpack
+	  env:
+	    eureka_instance_hostname: localhost
+	    eureka_client_registerWithEureka: false
+	    eureka_client_fetchRegistry: false
+	    eureka_client_healthcheck_enabled: true
+	    eureka_server_enableSelfPreservation: true
+	    server_port: 2221
+	EOF
 
 ### <div id='9'/> 4.2. CF Deploy
 ![JENKINS_7]  
@@ -253,14 +270,39 @@ Build은 K8S 배포하기 위하여, 소스 빌드 및 Docker Image 생성을 �
 ![JENKINS_19]  
 
 	Cat > application.yml << EOF
-	-> 배포된 Jenkins 서비스 샘플 예제 참조
-	EOF 
-	-> 서비스에 필요한 설정파일을 생성한다.
+	spring:
+	 application:
+	    name: PortalRegistration
+	eureka:
+	  server:
+	    enableSelfPreservation: true
+	  instance:
+	    appname: \${spring.application.name}
+	    hostname: \${spring.cloud.client.hostname}
+	    preferIpAddress: true
+	  client:  
+	    registerWithEureka: false
+	    fetchRegistry: false
+	    serviceUrl:  
+	      defaultZone: http://127.0.0.1:2221/eureka/
+	    healthcheck:
+	      enabled: true
+	server:
+	  port: \${PORT:2221}   
+		EOF 
+	-> 서비스에 필요한 설정파일을 생성한다.사용자에 맞게 수정한다트
 
 	cat < Dockerfile << EOF
-	-> 배포된 Jenkins 서비스 샘플 예제 참조
+	FROM ubuntu:18.04
+	RUN echo "nameserver 8.8.8.8" > /etc/resolv.conf
+	RUN apt update
+	RUN apt install -y openjdk-8-jdk
+	ADD build/libs/paas-ta-portal-registration.jar app.jar
+	ADD application.yml application.yml
+	ENV JAVA_OPTS="org.springframework.boot.loader.WarLauncher -Dspring.config.location=application.yml -Xms512m -Xmx1024m -XX:ReservedCodeCacheSize=240m -XX:+UseCompressedOops -Dfile.encoding=UTF-8 -XX:+UseConcMarkSweepGC -XX:SoftRefLRUPolicyMSPerMB=50 -Dsun.io.useCanonCaches=false -Djava.net.preferIPv4Stack=true -XX:+HeapDumpOnOutOfMemoryError -XX:-OmitStackTraceInFastThrow -Xverify:none"
+	ENTRYPOINT ["java","-jar","/app.jar"]
 	EOF
-	-> 생성할 Docker image 스팩을 정의한다.
+	-> 생성할 Docker image 스팩을 정의한다. 사용자에 맞게 Dockerfile 설정을 수정한다.
 
 	docker build -f Dockerfile -t paastateam/portalregistration:$BUILD_NUMBER
 	-> Docker image를 빌드한다. $BUILD_NUMBER 변수는 JENKINS에서 제공하는 시스템 변수이다.
@@ -277,13 +319,13 @@ Deploy은 K8S 배포 위한 기본 설정이다. 기본 설정탭에서 다음�
 
 ![JENKINS_21]  
 
-	BEFOREJOB_BUILD_NUMBER=$((($cat /var/jenkins_home/jobs/Sample_K8S_Build/nextBuildNumber) -1))
+	BEFOREJOB_BUILD_NUMBER=$((($cat /hoem/jenkins_home/jobs/Sample_K8S_Build/nextBuildNumber) -1))
 	-> 이전 JOB의 빌드번호를 가져온다. 이 예제에서는 이전 JOB은 빌드를 의미한다.
 
 	DEPLOYMENT_NAME=paasta-deployment
 	-> K8S에 생성 될 Deployment 이름.
 
-	APP_NAME=paasta
+	APP_NAME=$DEPLOYMENT_NAME
 	-> K8S에 Service에 사용될 이름을 정의
 	
 	INTERNAL_SERVICE_PORT=2221
@@ -291,20 +333,57 @@ Deploy은 K8S 배포 위한 기본 설정이다. 기본 설정탭에서 다음�
 
 	INTANCE=1
 	-> K8S에 생성 Pods의 갯수
-
+	
+	IMAGE=paastateam/portalregistration
+	-> K8S에 사용 이미지 이름
+	
 	TIME=$(date +%Y%m%m%d%H%M)
 
 	DEPLOYMENT_NAME=${DEPLOYMNET_NAME}-${TIME}
-	SERVICE_NAME=${APP_NAME}-service
+	SERVICE_NAME=${DEPLOYMNET_NAME}-service
 
 	cat > k8s_deploy.yml << EOF
-	K8S 스팩 -> 배포된 Jenkins 서비스 샘플 예제 참조
+	---
+	apiVersion: apps/v1
+	kind: Deployment
+	metadata:
+	  name: ${DEPLOYMENT_NAME}
+	  labels:
+	    app: ${APP_NAME}
+	spec:
+	  replicas: ${INSTANCE}
+	  selector:
+	    matchLabels:
+	      app: ${APP_NAME}
+	  template:
+	    metadata:
+	      labels:
+		app: ${APP_NAME}
+	    spec:
+	      containers:
+	      - name: ${APP_NAME}
+		image: ${IMAGE}:${BEFOREJOB_BUILD_NUMBER}
+		ports:
+		- containerPort: ${INTERNAL_SERVICE_PORT}       
 	EOF
 
 
 
 	cat > k8s_deploy_service.yml << EOF
-	K8S 서비스 스팩 -> 배포된 Jenkins 서비스 샘플 예제 참조
+	---
+	kind: Service
+	apiVersion: v1
+	metadata:
+	  name: ${SERVICE_NAME}
+	spec:
+	  type: NodePort
+	  selector:
+	    app: ${APP_NAME}
+	  ports:
+	    - protocol: TCP
+	      port: ${INTERNAL_SERVICE_PORT}
+	      targetPort: ${INTERNAL_SERVICE_PORT}
+	      name: ${APP_NAME}       
 	EOF
 
 
