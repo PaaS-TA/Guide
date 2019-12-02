@@ -104,7 +104,7 @@ Execute shell탭에서 CF배포에 필요한 Manifest 파일을 작성한다.
 (참조: https://docs.cloudfoundry.org/devguide/deploy-apps/manifest.html)  
 저장 버튼을 선택하여, 설정을 종료한다.
 <br>
-₩₩₩
+```
 	cat > manifest.yml << EOF -> 매니페스트 파일을 생성하는 단계이다. 사용자의 맞게 메니페스트 파일을 설정한다.
 	---  
 	applications:  
@@ -122,7 +122,7 @@ Execute shell탭에서 CF배포에 필요한 Manifest 파일을 작성한다.
 	    eureka_server_enableSelfPreservation: true  
 	    server_port: 2221  
 	EOF
-₩₩₩
+```
 ### <div id='9'/> 4.2. CF Deploy
 ![JENKINS_7]  
 Deploy는 빌드에서 생성된 빌드파일을 CF 배포하는 스탭이다. 기본 설정탭에서 다음과 같이 설정한다. Shared Workspace -> Sample을 설정한다. 
@@ -201,6 +201,7 @@ Deploy(Blue&Green)는 빌드에서 생성된 빌드파일을 CF 배포하는 스
 
 	cf delete-route $CF_DOMAIN -n $GREEN -f
 	-> 신규서비스에 부여한 임시 라우터 삭제
+	
 <br>
 
 ### <div id='11'/> 4.4	CF Deploy(Rolling)
@@ -439,17 +440,64 @@ Deploy은 K8S 배포 위한 기본 설정이다. 기본 설정탭에서 다음�
 	SERVICE_GREEN=${SERVICE_NAME}-${TIME}
 
 	cat > green.yml << EOF
-	K8S 스팩 -> 배포된 Jenkins 서비스 샘플 예제 참조
+	---
+	apiVersion: apps/v1
+	kind: Deployment
+	metadata:
+	  name: ${DEPLOYMENT_NAME_GREEN}
+	  labels:
+	    app: ${APP_NAME_GREEN}
+	spec:
+	  replicas: 1
+	  selector:
+	    matchLabels:
+	      app: ${APP_NAME_GREEN}
+	  template:
+	    metadata:
+	      labels:
+		app: ${APP_NAME_GREEN}
+	    spec:
+	      containers:
+	      - name: ${APP_NAME_GREEN}
+		image: ${IMAGE}:${BEFOREJOB_BUILD_NUMBER}
+		ports:
+		- containerPort: 2221
 	EOF
 
 
 	cat > green_service.yml << EOF
-	K8S 서비스 스팩 -> 배포된 Jenkins 서비스 샘플 예제 참조
+	---
+	kind: Service
+	apiVersion: v1
+	metadata:
+	  name: ${SERVICE_GREEN}
+	spec:
+	  type: NodePort
+	  selector:
+	    app: ${APP_NAME_GREEN}
+	  ports:
+	    - protocol: TCP
+	      port: ${INTERNAL_SERVICE_PORT}
+	      targetPort: ${INTERNAL_SERVICE_PORT}
+	      name: ${APP_NAME_GREEN}       
 	EOF
 
 
 	cat > blue_service.yml << EOF
-	기존 서비스의 연결되는 App에 대한 설정을 Green으로 변경되어 있는 yml -> 배포된 Jenkins 서비스 샘플 예제 참조
+	---
+	kind: Service
+	apiVersion: v1
+	metadata:
+	  name: ${SERVICE_NAME}
+	spec:
+	  type: NodePort
+	  selector:
+	    app: ${APP_NAME_GREEN}
+	  ports:
+	    - protocol: TCP
+	      port: ${INTERNAL_SERVICE_PORT}
+	      targetPort: ${INTERNAL_SERVICE_PORT}
+	      name: ${APP_NAME_GREEN}       
 	EOF
 
 	Kubectl create -f greeen.yml
@@ -486,10 +534,10 @@ Rolling Update란? Blue&Green과 비슷한 형태의 배포로 동일한 이름�
 Deploy은 K8S 배포 위한 기본 설정이다. 기본 설정탭에서 다음과 같이 설정한다. Shared Workspace -> Sample_K8S을 설정한다.   
 ![JENKINS_26]  
 
-	BEFOREJOB_BUILD_NUMBER=$((($cat /var/jenkins_home/jobs/Sample_K8S_Build/nextBuildNumber) -1))
+	BEFOREJOB_BUILD_NUMBER=$((($cat /home/jenkins_home/jobs/Sample_K8S_Build/nextBuildNumber) -1))
 	-> 이전 JOB의 빌드번호를 가져온다. 이 예제에서는 이전 JOB은 빌드를 의미한다.
 
-	DEPLOYMENT_NAME=paasta-deployment
+	DEPLOYMENT_NAME=[업데이트할 Deployment ]
 	-> K8S에 생성 될 Deployment 이름.
 
 	APP_NAME=paasta
@@ -507,7 +555,33 @@ Deploy은 K8S 배포 위한 기본 설정이다. 기본 설정탭에서 다음�
 	SERVICE_NAME=${APP_NAME}-service
 
 	cat > k8s_deploy.yml << EOF
-	K8S 스팩 -> 배포된 Jenkins 서비스 샘플 예제 참조
+	---
+	apiVersion: apps/v1
+	kind: Deployment
+	metadata:
+	  name: ${DEPLOYMENT_NAME}
+	  labels:
+	    app: ${APP_NAME}
+	spec:
+	  strategy:
+	    type: RollingUpdate
+	    rollingUpdate:
+		maxSurge: 1
+		maxUnavailable: 0
+	  replicas: ${INSTANCE}
+	  selector:
+	    matchLabels:
+	      app: ${APP_NAME}
+	  template:
+	    metadata:
+	      labels:
+		app: ${APP_NAME}
+	    spec:
+	      containers:
+	      - name: ${APP_NAME}
+		image: ${IMAGE}:${BEFOREJOB_BUILD_NUMBER}
+		ports:
+		- containerPort: ${INTERNAL_SERVICE_PORT}  
 	EOF
 
 
