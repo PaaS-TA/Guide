@@ -1,0 +1,56 @@
+- type: replace
+  path: /releases/-
+  value:
+    name: haproxy
+    sha1: 8327dbea90e340eafab5054b3eca9fd001416c7f
+    url: https://bosh.io/d/github.com/cloudfoundry-incubator/haproxy-boshrelease?v=9.3.0
+    version: 9.3.0
+- type: remove
+  path: /instance_groups/name=router/vm_extensions
+- type: remove
+  path: /instance_groups/name=tcp-router/vm_extensions
+- type: remove
+  path: /instance_groups/name=scheduler/vm_extensions
+- type: replace
+  path: /instance_groups/name=smoke-tests:before
+  value:
+    azs:
+    - z1
+    instances: 1
+    jobs:
+    - name: haproxy
+      properties:
+        ha_proxy:
+          backend_ca_file: ((router_ca.certificate))
+          backend_port: 30732
+          enable_4443: false
+          backend_ssl: verify
+          ssl_pem: ((haproxy_ssl.certificate))((haproxy_ssl.private_key))
+          tcp_link_port: 2222
+      release: haproxy
+    name: haproxy
+    networks:
+    - name: default
+      static_ips:
+      - ((haproxy_private_ip))
+    stemcell: default
+    vm_type: minimal
+- type: replace
+  path: /variables/-
+  value:
+    name: haproxy_ca
+    options:
+      common_name: haproxyCA
+      is_ca: true
+    type: certificate
+- type: replace
+  path: /variables/-
+  value:
+    name: haproxy_ssl
+    options:
+      alternative_names:
+      - ((system_domain))
+      - '*.((system_domain))'
+      ca: haproxy_ca
+      common_name: haproxySSL
+    type: certificate

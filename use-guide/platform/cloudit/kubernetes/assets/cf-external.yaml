@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: cf-ingress
+  namespace: paasta
+spec:
+  selector:
+    cf: foo
+  ports:
+  - name: http
+    nodePort: 30274
+    port: 80
+    protocol: TCP
+    targetPort: 80
+  - name: https
+    nodePort: 30732
+    port: 443
+    protocol: TCP
+    targetPort: 443
+  sessionAffinity: None
+  type: NodePort

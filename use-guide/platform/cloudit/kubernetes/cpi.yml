@@ -1,0 +1,156 @@
+---
+- type: replace
+  path: /releases/-
+  value:
+    name: bosh-kubernetes-cpi
+    url: file://~/workspace/paasta-kubernetes-cpi-deployment/releases/bosh-kubernetes-cpi.tgz
+    sha1: foo
+
+- type: replace
+  path: /resource_pools/name=vms/stemcell?
+  value:
+    url: https://s3.amazonaws.com/bosh-core-stemcells/315.22/bosh-stemcell-315.22-warden-boshlite-ubuntu-xenial-go_agent.tgz
+    sha1: 4546f6d38430af02b046357889daaf2ba41ef1d2
+
+#- type: replace
+#  path: /cloud_provider/mbus
+#  value: https://mbus:((mbus_bootstrap_password))@((internal_ip)):((agent_nodeport))
+
+#- type: replace
+#  path: /cloud_provider/properties/agent/mbus?
+#  value: https://mbus:((mbus_bootstrap_password))@0.0.0.0:((agent_nodeport))
+
+# Expose director to outside
+- path: /resource_pools/name=vms/cloud_properties?
+  type: replace
+  value:
+    node_ports:
+    - name: agent
+      nodePort: 32614
+      port: 6868 
+      protocol: TCP
+    - name: director
+      nodePort: 31274
+      port: 25555
+      protocol: TCP
+    - name: blobstore
+      nodePort: 30482
+      port: 25250 
+      protocol: TCP
+    - name: nats
+      nodePort: 30428
+      port: 4222
+      protocol: TCP
+    - name: ssh
+      nodePort: 31713
+      port: 22
+      protocol: TCP
+#    - name: uaa
+#      nodePort: 32074
+#      port: 8443
+#      protocol: TCP
+#    - name: credhub
+#      nodePort: 31071
+#      port: 8844
+#      protocol: TCP
+
+# Configure VM size
+- type: replace
+  path: /resource_pools/name=vms/cloud_properties?
+  value:
+    resources:
+      requests:
+        memory: 8Gi
+        cpu: 400m
+      limits:
+        memory: 8Gi
+        cpu: 400m
+  
+- type: replace
+  path: /networks/name=default
+  value:
+    name: default
+    type: dynamic
+    dns: [8.8.8.8]
+
+- type: replace
+  path: /disk_pools/name=disks/disk_size
+  value: 65_536
+
+- type: replace
+  path: /disk_pools/name=disks/cloud_properties?
+  value:
+    storage_class: ((storage_class))
+
+
+# Bosh Director Port
+#- type: replace
+#  path: /instance_groups/name=bosh/properties/director/port?
+#  value: ((director_nodeport))
+
+# Bosh Blobstore Port
+#- type: replace
+#  path: /instance_groups/name=bosh/properties/blobstore/port?
+#  value: ((blobstore_nodeport))
+
+# Bosh Blobstore Port
+#- type: replace
+#  path: /instance_groups/name=bosh/properties/nats/port?
+#  value: ((nats_nodeport))
+
+# Add CPI job
+- type: replace
+  path: /instance_groups/name=bosh/jobs/-
+  value: &cpi_job
+    name: kubernetes_cpi
+    release: bosh-kubernetes-cpi
+
+- type: replace
+  path: /instance_groups/name=bosh/properties/director/cpi_job?
+  value: kubernetes_cpi
+
+- type: replace
+  path: /cloud_provider/template?
+  value: *cpi_job
+
+- type: replace
+  path: /instance_groups/name=bosh/properties/service_account?/enabled
+  value: true
+
+- type: replace
+  path: /cloud_provider/properties/config?
+  value: ((kube_config))
+
+# Add PDB controller job
+- type: replace
+  path: /instance_groups/name=bosh/jobs/-
+  value:
+    name: kubernetes_cpi_pdbctrl
+    release: bosh-kubernetes-cpi
+    properties:
+      director:
+        host: ((internal_ip))
+#        port: ((director_nodeport))
+        tls:
+          cert:
+            ca: ((director_ssl.ca))
+        client: hm # todo use hm?
+        client_secret: ((hm_password))
+
+# Add Localhost IP
+- type: replace
+  path: /variables/name=mbus_bootstrap_ssl/options/alternative_names/-
+  value: ((local_host))
+
+- type: replace
+  path: /variables/name=director_ssl/options/alternative_names/-
+  value: ((local_host))
+
+- type: replace
+  path: /variables/name=nats_server_tls/options/alternative_names/-
+  value: ((local_host))
+
+- type: replace
+  path: /variables/name=blobstore_server_tls/options/alternative_names/-
+  value: ((local_host))
+

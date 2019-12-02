@@ -1,0 +1,83 @@
+azs:
+- name: z1
+- name: z2
+- name: z3
+
+compilation:
+  az: z1
+  network: default
+  reuse_compilation_vms: true
+  vm_type: minimal
+  workers: 6
+
+disk_types:
+- disk_size: 1024
+  name: 1GB
+  cloud_properties:
+    storage_class: paasta-rbd
+- disk_size: 5120
+  name: 5GB
+  cloud_properties:
+    storage_class: paasta-rbd
+- disk_size: 10240
+  name: 10GB
+  cloud_properties:
+    storage_class: paasta-rbd
+- disk_size: 102400
+  name: 100GB
+  cloud_properties:
+    storage_class: paasta-rbd
+
+networks:
+- name: default
+  type: dynamic
+  subnets:
+  - azs: [z1, z2, z3]
+    dns: [8.8.8.8]
+
+vm_extensions:
+- name: 50GB_ephemeral_disk
+- name: 100GB_ephemeral_disk
+- name: cf-router-network-properties
+  cloud_properties:
+    labels:
+      cf: foo
+- name: cf-haproxy-network-properties
+- name: cf-tcp-router-network-properties
+- name: diego-ssh-proxy-network-properties
+  cloud_properties:
+    labels:
+      cf-ssh: foo
+- name: portal-proxy-network-properties
+  cloud_properties:
+    labels:
+      portal-proxy: foo
+
+vm_types:
+- name: minimal
+  cloud_properties:
+    resources:
+      requests:
+        memory: 2Gi
+        #cpu: 250m
+      limits:
+        memory: 2Gi
+        #cpu: 250m
+- name: small
+  cloud_properties:
+    resources:
+      requests:
+        memory: 2Gi
+        #cpu: 250m
+      limits:
+        memory: 2Gi
+        #cpu: 250m
+- name: small-highmem
+  cloud_properties:
+    resources:
+      requests:
+        memory: 4Gi
+        #cpu: 400m
+      limits:
+        memory: 4Gi
+        #cpu: 400m

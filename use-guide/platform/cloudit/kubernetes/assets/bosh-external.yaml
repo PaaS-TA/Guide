@@ -1,0 +1,45 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: bosh-ingress
+  namespace: paasta
+spec:
+  ports:
+  - name: agent
+    nodePort: 32614
+    port: 6868                  #32613
+    protocol: TCP
+    targetPort: 6868    #32613
+  - name: director
+    nodePort: 31274     #31273
+    port: 25555
+    protocol: TCP
+    targetPort: 25555
+  - name: blobstore
+    nodePort: 30482
+    port: 25250                 #30481
+    protocol: TCP
+    targetPort: 25250   #30481
+  - name: nats
+    nodePort: 30428
+    port: 4222                  #30427
+    protocol: TCP
+    targetPort: 4222    #30427
+  - name: ssh
+    nodePort: 31713     #31712
+    port: 22
+    protocol: TCP
+    targetPort: 22
+#  - name: uaa
+#    nodePort: 32074
+#    port: 8443
+#    protocol: TCP
+#    targetPort: 8443
+#  - name: credhub
+#    nodePort: 31071
+#    port: 8844
+#    protocol: TCP
+#    targetPort: 8844
+  selector:
+    director: foo
+  type: NodePort

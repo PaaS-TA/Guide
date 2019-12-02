@@ -1,0 +1,237 @@
+cloud_provider:
+  cert: ((mbus_bootstrap_ssl))
+  mbus: https://mbus:((mbus_bootstrap_password))@((internal_ip)):6868
+  properties:
+    agent:
+      mbus: https://mbus:((mbus_bootstrap_password))@0.0.0.0:6868
+    blobstore:
+      path: /var/vcap/micro_bosh/data/cache
+      provider: local
+    ntp:
+    - time1.google.com
+    - time2.google.com
+    - time3.google.com
+    - time4.google.com
+disk_pools:
+- disk_size: 65536
+  name: disks
+instance_groups:
+- instances: 1
+  jobs:
+  - name: bpm
+    release: bpm
+  - name: nats
+    release: bosh
+  - name: postgres-10
+    release: bosh
+  - name: blobstore
+    release: bosh
+  - name: director
+    release: bosh
+  - name: health_monitor
+    release: bosh
+  name: bosh
+  networks:
+  - name: default
+    #static_ips:
+    #- ((internal_ip))
+  persistent_disk_pool: disks
+  properties:
+    agent:
+      env:
+        bosh:
+          blobstores:
+          - options:
+              endpoint: https://((internal_ip)):25250
+              password: ((blobstore_agent_password))
+              tls:
+                cert:
+                  ca: ((blobstore_ca.certificate))
+              user: agent
+            provider: dav
+      mbus: nats://nats:((nats_password))@((internal_ip)):4222
+    blobstore:
+      address: ((internal_ip))
+      agent:
+        password: ((blobstore_agent_password))
+        user: agent
+      director:
+        password: ((blobstore_director_password))
+        user: director
+      port: 25250
+      provider: dav
+      tls:
+        cert:
+          ca: ((blobstore_ca.certificate))
+          certificate: ((blobstore_server_tls.certificate))
+          private_key: ((blobstore_server_tls.private_key))
+    director:
+      address: 127.0.0.1
+      db:
+        adapter: postgres
+        database: bosh
+        host: 127.0.0.1
+        listen_address: 127.0.0.1
+        password: ((postgres_password))
+        user: postgres
+      enable_dedicated_status_worker: true
+      enable_nats_delivered_templates: true
+      enable_post_deploy: true
+      events:
+        record_events: true
+      flush_arp: true
+      generate_vm_passwords: true
+      local_dns:
+        enabled: true
+      name: ((director_name))
+      ssl:
+        cert: ((director_ssl.certificate))
+        key: ((director_ssl.private_key))
+      user_management:
+        local:
+          users:
+          - name: admin
+            password: ((admin_password))
+          - name: hm
+            password: ((hm_password))
+        provider: local
+      workers: 4
+    hm:
+      director_account:
+        ca_cert: ((director_ssl.ca))
+        password: ((hm_password))
+        user: hm
+      resurrector_enabled: true
+    nats:
+      address: ((internal_ip))
+      password: ((nats_password))
+      tls:
+        ca: ((nats_server_tls.ca))
+        client_ca:
+          certificate: ((nats_ca.certificate))
+          private_key: ((nats_ca.private_key))
+        director:
+          certificate: ((nats_clients_director_tls.certificate))
+          private_key: ((nats_clients_director_tls.private_key))
+        health_monitor:
+          certificate: ((nats_clients_health_monitor_tls.certificate))
+          private_key: ((nats_clients_health_monitor_tls.private_key))
+        server:
+          certificate: ((nats_server_tls.certificate))
+          private_key: ((nats_server_tls.private_key))
+      user: nats
+    ntp:
+    - time1.google.com
+    - time2.google.com
+    - time3.google.com
+    - time4.google.com
+    postgres:
+      adapter: postgres
+      database: bosh
+      host: 127.0.0.1
+      listen_address: 127.0.0.1
+      password: ((postgres_password))
+      user: postgres
+  resource_pool: vms
+name: bosh
+networks:
+- name: default
+  subnets:
+  - dns:
+    - 8.8.8.8
+    gateway: ((internal_gw))
+    range: ((internal_cidr))
+    static:
+    - ((internal_ip))
+  type: manual
+releases:
+- name: bosh
+  sha1: 5a449c2af577531da97168b9bb99fb3e7f63ef1a
+  url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/bosh-269.0.1-ubuntu-xenial-315.22-20190514-221729-619924606-20190514221741.tgz
+  version: 269.0.1
+- name: bpm
+  sha1: e2fdf4586c1e914287fdbcad5e46f7ee99ac1120
+  url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/bpm-1.0.4-ubuntu-xenial-315.22-20190514-221122-71304512-20190514221136.tgz
+  version: 1.0.4
+resource_pools:
+- env:
+    bosh:
+      mbus:
+        cert: ((mbus_bootstrap_ssl))
+      password: '*'
+  name: vms
+  network: default
+variables:
+- name: admin_password
+  type: password
+- name: blobstore_director_password
+  type: password
+- name: blobstore_agent_password
+  type: password
+- name: hm_password
+  type: password
+- name: mbus_bootstrap_password
+  type: password
+- name: nats_password
+  type: password
+- name: postgres_password
+  type: password
+- name: default_ca
+  options:
+    common_name: ca
+    is_ca: true
+  type: certificate
+- name: mbus_bootstrap_ssl
+  options:
+    alternative_names:
+    - ((internal_ip))
+    ca: default_ca
+    common_name: ((internal_ip))
+  type: certificate
+- name: director_ssl
+  options:
+    alternative_names:
+    - ((internal_ip))
+    ca: default_ca
+    common_name: ((internal_ip))
+  type: certificate
+- name: nats_ca
+  options:
+    common_name: default.nats-ca.bosh-internal
+    is_ca: true
+  type: certificate
+- name: nats_server_tls
+  options:
+    alternative_names:
+    - ((internal_ip))
+    ca: nats_ca
+    common_name: default.nats.bosh-internal
+    extended_key_usage:
+    - server_auth
+  type: certificate
+- name: nats_clients_director_tls
+  options:
+    ca: nats_ca
+    common_name: default.director.bosh-internal
+    extended_key_usage:
+    - client_auth
+  type: certificate
+- name: nats_clients_health_monitor_tls
+  options:
+    ca: nats_ca
+    common_name: default.hm.bosh-internal
+    extended_key_usage:
+    - client_auth
+  type: certificate
+- name: blobstore_ca
+  options:
+    common_name: default.blobstore-ca.bosh-internal
+    is_ca: true
+  type: certificate
+- name: blobstore_server_tls
+  options:
+    alternative_names:
+    - ((internal_ip))
+    ca: blobstore_ca
+    common_name: ((internal_ip))
+  type: certificate

@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: portal-proxy-ingress
+  namespace: paasta
+spec:
+  ports:
+  - name: http-proxy
+    nodePort: 30602
+    port: 80
+    protocol: TCP
+    targetPort: 80
+  - name: eureka
+    nodePort: 30702
+    port: 2221
+    protocol: TCP
+    targetPort: 2221
+  selector:
+    portal-proxy: foo
+  sessionAffinity: None
+  type: NodePort

@@ -1,0 +1,93 @@
+- type: replace
+  path: /resource_pools/name=vms/cloud_properties/labels?/director
+  value: foo
+
+# Your Paas-TA deployment Namespace in Kuberntes Cluster
+
+- type: replace
+  path: /instance_groups/name=bosh/properties/namespace?
+  value: ((paasta_namespace))
+
+# Assume (todo?) that internal_ip also hosts kubernetes api on 443
+- type: replace
+  path: /instance_groups/name=bosh/properties/service_account/override_api_host?
+  value: ((kube_api))
+
+- type: replace
+  path: /instance_groups/name=bosh/properties/service_account/override_api_port?
+  value: ((kube_api_port))
+
+# PDB controller
+- type: replace
+  path: /instance_groups/name=bosh/jobs/name=kubernetes_cpi_pdbctrl/properties/kube?/namespace
+  value: ((paasta_namespace))
+
+- type: replace
+  path: /instance_groups/name=bosh/jobs/name=kubernetes_cpi_pdbctrl/properties/kube?/service_account/override_api_host
+  value: ((kube_api))
+
+- type: replace
+  path: /instance_groups/name=bosh/jobs/name=kubernetes_cpi_pdbctrl/properties/kube?/service_account/override_api_port
+  value: ((kube_api_port))
+
+# Registry
+- type: replace
+  path: /instance_groups/name=bosh/properties/registry?/backend
+  value: ((reg_backend))
+
+- type: replace
+  path: /instance_groups/name=bosh/properties/registry?/host
+  value: ((reg_host))
+
+#- type: replace
+  #path: /instance_groups/name=bosh/properties/registry?/pull_host
+  #value: ((pull_host))
+
+- type: replace
+  path: /instance_groups/name=bosh/properties/registry?/auth/url
+  value: ((reg_url))
+
+- type: replace
+  path: /instance_groups/name=bosh/properties/registry?/auth/username
+  value: ((reg_user))
+
+- type: replace
+  path: /instance_groups/name=bosh/properties/registry?/auth/password
+  value: ((reg_password))
+
+- type: replace
+  path: /instance_groups/name=bosh/properties/image_pull_secret_name?
+  value: ((reg_pull_secret_name))
+
+- type: replace
+  path: /cloud_provider/properties/registry?/backend
+  value: ((reg_backend))
+
+- type: replace
+  path: /cloud_provider/properties/registry?/host
+  value: ((reg_host))
+
+#- type: replace
+  #path: /cloud_provider/properties/registry?/pull_host
+  #value: ((pull_host))
+
+- type: replace
+  path: /cloud_provider/properties/registry?/auth/url
+  value: ((reg_url))
+
+- type: replace
+  path: /cloud_provider/properties/registry?/auth/username
+  value: ((reg_user))
+
+- type: replace
+  path: /cloud_provider/properties/registry?/auth/password
+  value: ((reg_password))
+
+- type: replace
+  path: /cloud_provider/properties/namespace?
+  value: ((paasta_namespace))
+
+- type: replace
+  path: /cloud_provider/properties/image_pull_secret_name?
+  value: ((reg_pull_secret_name))
+
