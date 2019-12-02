@@ -47,7 +47,7 @@
 - [IaaS/PaaS(PaaS-TA) 통합 모니터링](../../../Guide-4.0-ROTELLE/blob/master/Install-Guide/monitoring/PaaS_TA_4.0_iaas_paas_monitoring.md)
 
 ## 마켓플레이스 설치 가이드
-- [PaaS-TA 마켓플레이스](./service-guide/marketplace/PaaS-TA_MARKETPLACE_INSTALL_GUIDE_V1.0.md)
+- [PaaS-TA 마켓플레이스](./service-guide/marketplace/PAAS-TA_MARKETPLACE_INSTALL_GUIDE_V1.0.md)
 
 ## 활용 가이드
 - [BOSH CLI V2(Command Line Interface) 사용](../../../Guide-4.0-ROTELLE/blob/master/Use-Guide/Bosh/PaaS-TA_BOSH_CLI_V2_사용자_가이드v1.0.md)
@@ -57,7 +57,7 @@
 - [PaaS-TA 운영자 포털 가이드](./use-guide/portal/PAAS-TA_ADMIN_PORTAL_USE_GUIDE_V1.1.md)
 - [PaaS-TA 배포 파이프라인 사용자 가이드](./use-guide/tools/PAAS-TA_DELIVERY_PIPELINE_SERVICE_USE_GUIDE_V1.0.md)
 - [PaaS-TA 형상관리 서비스 사용자 가이드](./use-guide/tools/PAAS-TA_SOURCE_CONTROL_SERVICE_USE_GUIDE_V1.0.md)
-- [PaaS-TA Container 서비스 사용자 가이드](./use-guide/tools/PAAS-TA_CONTAINER_SERVICE_USE_GUIDE_V1.0.md)
+- [PaaS-TA Container 서비스 사용자 가이드](./use-guide/tools/PAAS-TA_CONTAINER_SERVICE_USE_GUIDE_V2.0.md)
 - [PaaS-TA Logging 서비스 사용자 가이드](./use-guide/tools/PAAS-TA_LOGGING_SERVICE_USE_GUIDE_V1.0.md)
 ## 개발 언어별 애플리케이션 가이드
 - [Node.js](../../../Guide-1.0-Spaghetti-/blob/master/Sample-App-Guide/OpenPaaS_PaaSTA_Application_Nodejs_develope_guide.md)
