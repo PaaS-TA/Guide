@@ -56,7 +56,7 @@
 마켓플레이스 설치에 필요한 App 파일 및 Manifest 파일을 다운로드 받아 서비스 설치 작업 경로로 위치시킨다.
 
 -	설치 파일 다운로드 위치 : https://paas-ta.kr/download/package
--	App, Manifest 파일은 /home/{user_name}/workspace/paasta-5.0/release/marketplace 이하에 다운로드 받아야 한다.
+-	App, Manifest 파일은 /home/{user_name}/workspace/paasta-5.0/release/service/marketplace 이하에 다운로드 받아야 한다.
 -	설치 작업 경로 생성 및 파일 다운로드
 
 > Marketplace 관련 프로젝트 폴더
@@ -77,10 +77,10 @@
 
  ```
  - Application 파일 다운로드 파일 위치 경로 생성
- $ mkdir -p ~/workspace/paasta-5.0/release/marketplace
+ $ mkdir -p ~/workspace/paasta-5.0/release/service/marketplace
  ```
 
- -	Marketplace 관련 폴더들을 다운로드 받아 ~/workspace/paasta-5.0/release/marketplace 이하 디렉토리에 이동한다.
+ -	Marketplace 관련 폴더들을 다운로드 받아 ~/workspace/paasta-5.0/release/service/marketplace 이하 디렉토리에 이동한다.
 
 
 ### <div id='22'/> 2.2. 마켓플레이스 Manifest 파일 수정 및 App 배포
@@ -117,17 +117,17 @@
   $ cf create-service <서비스명> <서비스플랜> <내 서비스명>
   예시) $ cf create-service Mysql-DB Mysql-Plan1-10con marketplace-mysql
   ```
-  > MySQL 서비스 신청 참고 : https://github.com/PaaS-TA/Guide-4.0-ROTELLE/blob/master/Service-Guide/DBMS/PaaS-TA%20MySQL%20%EC%84%9C%EB%B9%84%EC%8A%A4%ED%8C%A9%20%EC%84%A4%EC%B9%98%20%EA%B0%80%EC%9D%B4%EB%93%9C.md#32
+  > MySQL 서비스 신청 참고 : https://github.com/PaaS-TA/Guide-5.0-Ravioli/blob/master/service-guide/dbms/PAAS-TA_MYSQL_SERVICE_INSTALL_GUIDE_V1.0.md
 
   또는
 
-  > PaaS-TA 사용자 포탈 참고 : https://github.com/PaaS-TA/Guide-4.0-ROTELLE/blob/master/Use-Guide/portal/PaaS-TA%20%EC%82%AC%EC%9A%A9%EC%9E%90%20%ED%8F%AC%ED%83%88%20%EA%B0%80%EC%9D%B4%EB%93%9C_v1.1.md#36
+  > PaaS-TA 사용자 포탈 참고 : https://github.com/PaaS-TA/Guide-5.0-Ravioli/blob/master/use-guide/portal/PAAS-TA_USER_PORTAL_USE_GUIDE_V1.1.md
 
 <br>
 
 5) 마켓플레이스에 필요한 Object Storage(Swift) 정보를 확인한다.
   ```
-  1) 아래 URL 들을 참고하여 Swift 를 설치한다.
+  1) 아래 URL을 참고하여 Swift 를 설치한다.
      https://docs.openstack.org/swift/latest/development_saio.html
 
   2) 설치를 모두 마친 뒤 아래와 같이 Marketplace Api 와 Marketplace Seller 프로젝트의 manifest.yml 에 Swfit 정보를 수정해 준다.
@@ -159,14 +159,15 @@
      >>- 쿼타 GUID
      >>- Object Storage 정보
      >>- 마켓플레이스 DBMS 신청 서비스 정보
-  > 3) marketplace api 와는 달리 marketplace web-user/ web-seller/ web-admin 의 경우에는 'marketplace_api_url' 에 미리 배포하였던 marketplace-api 의 url 을 넣어 수정한다.
+  > 3) marketplace api 와는 달리 marketplace web-user/ web-seller / web-admin 의 경우에는 'marketplace_api_url' 에 미리 배포하였던 marketplace-api 의 url 을 넣어 수정한다.
 
   <strong>[ marketplace-api/manifest.yml ]</strong>
   ```
   ---
   applications:
   - name: marketplace-api
-    memory: 1G
+    memory: 2G
+    disk_quota: 2G
     instances: 1
     buildpacks:
     - java_buildpack
@@ -353,7 +354,7 @@
   ---
   applications:
   - name: marketplace-webuser
-    memory: 1G
+    memory: 2G
     instances: 1
     buildpacks:
     - java_buildpack
@@ -409,7 +410,7 @@
     buildpacks:
   +   java_buildpack
   + instances:    1
-  + memory:       1G
+  + memory:       2G
     env:
   +   cloudfoundry.authorization
   +   cloudfoundry.cc.api.host
@@ -584,9 +585,9 @@
   OK
 
   name                   requested state   instances   memory   disk   urls
-  marketplace-api        stopped           0/1         1G       1G     marketplace-api.<DOMAIN>.xip.io
+  marketplace-api        stopped           0/1         2G       2G     marketplace-api.<DOMAIN>.xip.io
   marketplace-webadmin   stopped           0/1         1G       1G     marketplace-webadmin.<DOMAIN>.xip.io
-  marketplace-webuser    stopped           0/1         1G       1G     marketplace-webuser.<DOMAIN>.xip.io
+  marketplace-webuser    stopped           0/1         2G       1G     marketplace-webuser.<DOMAIN>.xip.io
   marketplace-webseller  stopped           0/1         1G       1G     marketplace-webseller.<DOMAIN>.xip.io
   ```
 
@@ -749,9 +750,9 @@
   OK
 
   name                    requested state   instances   memory   disk   urls
-  marketplace-webseller   started           1/1         1G       1G     marketplace-webseller.<DOMAIN>.xip.io
+  marketplace-webseller   started           1/1         2G       2G     marketplace-webseller.<DOMAIN>.xip.io
   marketplace-webadmin    started           1/1         1G       1G     marketplace-webadmin.<DOMAIN>.xip.io
-  marketplace-webuser     started           1/1         1G       1G     marketplace-webuser.<DOMAIN>.xip.io
+  marketplace-webuser     started           1/1         2G       1G     marketplace-webuser.<DOMAIN>.xip.io
   marketplace-api         started           1/1         1G       1G     marketplace-api.<DOMAIN>.xip.io
 
   ```
