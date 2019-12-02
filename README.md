@@ -7,8 +7,8 @@
     - [플랫폼 설치 자동화  설치](./Use-Guide//platform/PAAS-TA_PLATFORM_INSTALL_AUTOMATION_INSTALL_GUIDE_v1.0.md)
     - [플랫폼 설치 자동화 사용 메뉴얼](./Use-Guide/platform/PAAS-TA_PLATFORM_INSTALL_AUTOMATION_USE_MANUAL_v1.0.md)
   - 파스타 플랫폼 수동 설치
-    - [BOSH 설치(AWS, OpenStack, vSphere, Google, Azure)](./PaaS_TA_BOSH2_Install_Guide-v4.6.md)
-    - [파스타 수동 설치(AWS, OpenStack, vSphere, Google, Azure)](./PaaS_TA_PaaS-TA_Install_Guide-v4.6.md)
+    - [BOSH 설치(AWS, OpenStack, vSphere, Google, Azure)](./install-guide/bosh/PAAS-TA_BOSH2_INSTALL_GUIDE_V5.0.md)
+    - [파스타 수동 설치(AWS, OpenStack, vSphere, Google, Azure)](./install-guide/paasta/PAAS-TA_CORE_INSTALL_GUIDE_V5.0.md)
     - [BOSH 및 파스타 설치(CLOUDit)](./Use-Guide/platform/PAAS-TA_PLATFORM_INSTALL_AUTOMATION_CLOUDIT_v1.0.md)
     - [파스타 포털 수동 설치(CLOUDit)](./Use-Guide/platform/PAAS-TA_PLATFORM_INSTALL_AUTOMATION_CLOUDIT_PORTAL_v1.0.md)
 
@@ -43,8 +43,7 @@
 - [PaaS-TA 포털 API](./install-guide/portal/PAAS-TA_PORTAL_API_SERVICE_INSTALL_GUIDE_V1.0.md)
 
 ## 모니터링 설치 가이드
-- [PaaS-TA 모니터링](./Install-Guide/monitoring/PaaS_TA_4.0_paas_monitoring.md)
-- [IaaS/PaaS(PaaS-TA) 통합 모니터링](./Install-Guide/monitoring/PaaS_TA_4.0_iaas_paas_monitoring.md)
+- [PaaS-TA 모니터링](./service-guide/monitoring/PAAS-TA_MONITORING_INSTALL_GUIDE_V5.0.md)
 
 ## 마켓플레이스 설치 가이드
 - [PaaS-TA 마켓플레이스](./service-guide/marketplace/PaaS-TA_MARKETPLACE_INSTALL_GUIDE_V1.0.md)
