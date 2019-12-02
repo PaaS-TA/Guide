@@ -61,6 +61,7 @@
 - [PaaS-TA Container 서비스 사용자 가이드](./use-guide/tools/PAAS-TA_CONTAINER_SERVICE_USE_GUIDE_V2.0.md)
 - [PaaS-TA Logging 서비스 사용자 가이드](./use-guide/tools/PAAS-TA_LOGGING_SERVICE_USE_GUIDE_V1.0.md)
 - [PaaS-TA Jenkins 서비스](./use-guide/tools/PAAS-TA_JENKINS_SERVICE_USER_GUIDE.md)
+- [PaaS-TA 마켓플레이스 가이드](./use-guide/marketplace/PAAS-TA_MARKETPLACE_USE_GUIDE_V1.0.md)
 ## 개발 언어별 애플리케이션 가이드
 - [Node.js](../../../Guide-1.0-Spaghetti-/blob/master/Sample-App-Guide/OpenPaaS_PaaSTA_Application_Nodejs_develope_guide.md)
 - [PHP](../../../Guide-1.0-Spaghetti-/blob/master/Sample-App-Guide/OpenPaaS_PaaSTA_Application_PHP_develope_guide.md)
