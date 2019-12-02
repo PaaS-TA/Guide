@@ -943,7 +943,7 @@ Select an org (or press enter to skip):
 ```
 
 ### <div id='1032'/> * 통합 Monitoring을 적용한 PaaS-TA 5.0 설치
-- [통합 Monitoring을 적용한 PaaS-TA 5.0 설치](https://github.com/PaaS-TA)
+- [통합 Monitoring을 적용한 PaaS-TA 5.0 설치](../paasta-monitoring/PAAS-TA_CORE_MONITORING_INSTALL_GUIDE_V5.0.md)
 
 [PaaSTa_BOSH_Use_Guide_Image1]:./images/bosh1.png
 [PaaSTa_BOSH_Use_Guide_Image2]:./images/bosh2.png
