@@ -1030,7 +1030,7 @@ $ bosh –e {director_name} vms
 
 ### <div id='23'/>3.5.3. monitoring dashboard접속
  
- http://{monitoring-web-ip}:8080 에 접속하여 회원 가입 후 Main Dashboard에 접속한다.
+ http://{monitoring-web-ip}:8080/public/login.html 에 접속하여 회원 가입 후 Main Dashboard에 접속한다.
 
  Login 화면에서 회원 가입 버튼을 클릭한다.
 
