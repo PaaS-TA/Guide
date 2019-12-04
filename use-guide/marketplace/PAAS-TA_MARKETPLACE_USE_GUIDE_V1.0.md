@@ -213,7 +213,7 @@ https://github.com/PaaS-TA/Guide-4.0-ROTELLE/blob/master/Use-Guide/portal/PaaS-T
 <br>
 
 3. 구매하거나 장비구니에 추가한다.  
-<br>
+
 3.1. "구매"버튼을 클릭하여 상품을 구매한다.    
 ![u_saleDetail-purchase]
 <br>
