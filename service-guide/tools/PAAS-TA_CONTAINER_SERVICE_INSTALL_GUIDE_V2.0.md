@@ -464,6 +464,9 @@ bosh -e ${director_name} update-runtime-config manifests/ops-files/paasta-contai
 ```
 - Deployment YAML에서 사용하는 변수들을 서버 환경에 맞게 수정한다.
 
+>*<CREDHUB_ADMIN_CLIENT_SECRET> 에는 /home/{user_name}/workspace/paasta-5.0/deployment/bosh-deployment/{각 iaas}/creds.yml 의 'credhub_admin_client_secret' key 값의 value 를 입력한다.*
+<br>
+
 > vSphere용
 
 ```
