@@ -89,7 +89,7 @@ https://github.com/PaaS-TA/Guide-4.0-ROTELLE/blob/master/Use-Guide/portal/PaaS-T
 <br>
 
 >**PaaS-TA 운영자 포탈**
-1. PaaS-TA 관리자 포탈에서 로그인한다.
+1. PaaS-TA 자 포탈에서 로그인한다.
 ![adminPortal_login]
 <br>
 
@@ -212,8 +212,8 @@ https://github.com/PaaS-TA/Guide-4.0-ROTELLE/blob/master/Use-Guide/portal/PaaS-T
 ![u_saleDetail-select]
 <br>
 
-3. 구매하거나 장비구니에 추가한다.
-3.1. "구매"버튼을 클릭하여 상품을 구매한다.  
+3. 구매하거나 장비구니에 추가한다.  
+3.1. "구매"버튼을 클릭하여 상품을 구매한다.    
 ![u_saleDetail-purchase]
 <br>
 
