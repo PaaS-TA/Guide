@@ -175,11 +175,11 @@ PaaS-TA 포탈의 운영에 필요한 관리를 수행하기 위한 메뉴이다
      > ![pipeline]
 
      
-※ **p-sourcecontrol** 앱 서비스 등록 방법 예시
+※ **sourcecontrol** 앱 서비스 등록 방법 예시
 1. 앱 서비스 등록 폼 화면에 앱 서비스 등록에 필요한 내용을 입력한다.
 2. 앱 서비스에 등록할 이름을 입력한다. 
 3. 분류는 "개발 지원 도구"로 지정한다.
-4. 서비스는 "p-paasta-sourcecontrol" 로 지정한다.
+4. 서비스는 "paasta-sourcecontrol" 로 지정한다.
 5. 썸네일는 사용자가 등록하고자 하는 이미지를 지정하여 선택한다.
 6. 문서 URL을 넣어준다.
      > (예) https://github.com/PaaS-TA/Guide-3.0-Penne-/blob/master/Service-Guide/Tools/PaaS-TA%20%ED%98%95%EC%83%81%EA%B4%80%EB%A6%AC%20%EC%84%9C%EB%B9%84%EC%8A%A4%ED%8C%A9%20%EC%84%A4%EC%B9%98%20%EA%B0%80%EC%9D%B4%EB%93%9C_v1.0.md <br>
