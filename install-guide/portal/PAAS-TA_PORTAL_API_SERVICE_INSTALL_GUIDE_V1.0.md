@@ -2002,7 +2002,7 @@ $ uaac client add portalclient -s xxxxx --redirect_uri "http://portal-web-user.x
 
 
 # 3. PaaS-TA Portal 운영
-이전버전에서 사용한 Portal DB를 PaasTA 3.5 Portal DB에 마이그레이션 하는 방법을 설명한다.
+이전버전에서 사용한 Portal DB를 PaaS-TA 3.5 Portal DB에 마이그레이션 하는 방법을 설명한다.
 ### 3.1. DB Migration
 
 ##### 1. DB tool을 이용해 기존에 사용한 DB와 Paas-TA 3.5 Portal DB를 연결한다. 
