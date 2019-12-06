@@ -28,10 +28,10 @@
 # <div id='1'/>1.  문서 개요 
 
 ## <div id='2'/>1.1.  목적
-본 문서(설치가이드)는 파스타(5.0) 환경기준으로 PaaS-TA 모니터링을 설치를 위한 가이드를 제공한다.
+본 문서(설치가이드)는 PaaS-TA(5.0) 환경기준으로 PaaS-TA 모니터링을 설치를 위한 가이드를 제공한다.
 
 ## <div id='3'/>1.2.  범위
-본 문서(설치가이드)는 파스타(5.0) 환경기준으로 PaaS-TA 모니터링을 설치를 위한 가이드를 제공한다. 모니터링중 IaaS-PaaS 통합 모니터링은 별도 통합 모니터링문서를 제공하며 본문서는 PaaS, CaaS, SaaS 모니터링 설치 가이드를 제공함에 있다.
+본 문서(설치가이드)는 PaaS-TA(5.0) 환경기준으로 PaaS-TA 모니터링을 설치를 위한 가이드를 제공한다. 모니터링중 IaaS-PaaS 통합 모니터링은 별도 통합 모니터링문서를 제공하며 본문서는 PaaS, CaaS, SaaS 모니터링 설치 가이드를 제공함에 있다.
 
 ## <div id='4'/>1.3.  참고자료
 
@@ -91,7 +91,7 @@ SaaS 서비스는 내부적으로 메트릭스 정보를 수집 하는 PINPOINT 
 
 ## <div id='13'/>3.1. Pre-requsite
 
-1. PaaS-Ta 5.0 Monitoring을 설치 하기 위해서는 bosh 설치과정에서 언급한 것 처럼 관련 deployment, release , stemcell을 파스타 사이트에서 다운로드 받아 정해진 경로에 복사 해야 한다.
+1. PaaS-TA 5.0 Monitoring을 설치 하기 위해서는 bosh 설치과정에서 언급한 것 처럼 관련 deployment, release , stemcell을 PaaS-TA 사이트에서 다운로드 받아 정해진 경로에 복사 해야 한다.
 2. PaaS-TA 5.0이 설치되어 있어야 하며 monitoring Agent가 설치되어 있어야 한다.
 3. bosh login이 되어 있어야 한다.
 
@@ -101,13 +101,13 @@ SaaS 서비스는 내부적으로 메트릭스 정보를 수집 하는 PINPOINT 
 
 > **[Monitoring Source Git](https://github.com/PaaS-TA/PaaS-TA-Monitoring)**
 
-파스타 다운로드 URL에서 [PaaS-TA 설치 릴리즈] 파일을 다운로드 받아 ~/workspace/paasta-5.0/release 이하 디렉토리에 압축을 푼다. 압출을 풀면 아래 그림과 같이 ~/workspace/paasta-5.0/release/monitoring 이하 디렉토리가 생성되며 이하에 릴리즈 파일(tgz)이 존재한다.
+PaaS-TA 사이트에서 [PaaS-TA 설치 릴리즈] 파일을 다운로드 받아 ~/workspace/paasta-5.0/release 이하 디렉토리에 압축을 푼다. 압출을 풀면 아래 그림과 같이 ~/workspace/paasta-5.0/release/monitoring 이하 디렉토리가 생성되며 이하에 릴리즈 파일(tgz)이 존재한다.
 
 ![PaaSTa_release_dir_5.0]
 
-## <div id='15'/>3.3. PaaS-Ta Monitoring 설치환경
+## <div id='15'/>3.3. PaaS-TA Monitoring 설치환경
 
-~/workspace/paasta-5.0/deployment/paasta-deployment-monitoring 이하 디렉토리에는 paasta-monitoring, paasta-pinpoint-monitoring 디렉토리가 존재한다. Logsearch는 logAgent에서 발생한 Log정보를 수집하여 저장하는 Deployment이다. Pasta-monitoring은 PaaS-TA VM에서 발생한 Metric정보를 수집하여 모니터링을 실행한다.
+~/workspace/paasta-5.0/deployment/paasta-deployment-monitoring 이하 디렉토리에는 paasta-monitoring, paasta-pinpoint-monitoring 디렉토리가 존재한다. Logsearch는 logAgent에서 발생한 Log정보를 수집하여 저장하는 Deployment이다. paasta-monitoring은 PaaS-TA VM에서 발생한 Metric정보를 수집하여 모니터링을 실행한다.
 
 ```
 $ cd ~/workspace/paasta-5.0/deployment/paasta-deployment-monitoring
@@ -470,7 +470,7 @@ stemcells:
 ### <div id='18'/>3.4.2. deploy-logsearch.sh
 
 deploy.sh의 –v 의 inception_os_user_name, router_ip, system_domain 및 director_name을 시스템 상황에 맞게 설정한다.
-system_domain은 paasta 설치시 설정했던 system_domain을 입력하면 된다.
+system_domain은 PaaS-TA 설치시 설정했던 system_domain을 입력하면 된다.
 router_ip는 ls-router가 설치된 azs에서 정의한 cider값의 적당한 IP를 지정한다.
 
 ```
@@ -1037,7 +1037,7 @@ $ bosh –e {director_name} vms
  ![PaaSTa_monitoring_login_5.0]
 
 
-member_info에는 사용자가 사용할 ID/PWD를 입력하고 하단 paas-info에는 PaaS-TA admin 권한의 계정을 입력한다. paasta deploy시 입력한 admin/pwd를 입력해야 한다. 입력후 [인증수행]를 실행후 Joing버튼을 클릭하면 회원가입이 완료된다.
+member_info에는 사용자가 사용할 ID/PWD를 입력하고 하단 paas-info에는 PaaS-TA admin 권한의 계정을 입력한다. PaaS-TA deploy시 입력한 admin/pwd를 입력해야 한다. 입력후 [인증수행]를 실행후 Joing버튼을 클릭하면 회원가입이 완료된다.
 
  ![PaaSTa_monitoring_join_5.0]
 
