@@ -180,9 +180,9 @@ $ mkdir -p ${HOME}/workspace/paasta-5.0/release
 $ mkdir -p ${HOME}/workspace/paasta-5.0/stemcell
 ```
 
-- 파스타 다운로드 URL에서 [PaaS-TA Deployment] 파일을 다운로드해 ${HOME}/workspace/paasta-5.0/deployment 이하 디렉터리에 압축을 푼다.
-- 파스타 다운로드 URL에서 [PaaS-TA Release] 파일을 다운로드해 ${HOME}/workspace/paasta-5.0/release 이하 디렉터리에 압축을 푼다.
-- 파스타 다운로드 URL에서 [PaaS-TA Stemcell] 파일을 다운로드해 ${HOME}/workspace/paasta-5.0/stemcell 이하 디렉터리에 압축을 푼다.
+- PaaS-TA 사이트에서 [PaaS-TA Deployment] 파일을 다운로드해 ${HOME}/workspace/paasta-5.0/deployment 이하 디렉터리에 압축을 푼다.
+- PaaS-TA 사이트에서 [PaaS-TA Release] 파일을 다운로드해 ${HOME}/workspace/paasta-5.0/release 이하 디렉터리에 압축을 푼다.
+- PaaS-TA 사이트에서 [PaaS-TA Stemcell] 파일을 다운로드해 ${HOME}/workspace/paasta-5.0/stemcell 이하 디렉터리에 압축을 푼다.
 
 ### <div id='1016'/>3.3.4.    BOSH 설치 파일
 
