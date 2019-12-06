@@ -87,7 +87,7 @@ PaaS-TA 3.1 버전까지는  PaaS-TA Container, Controller를 각각의 deployme
    - [설치 파일 다운로드](https://paas-ta.kr/download/package)
 
 PaaS-TA 사이트에서 [PaaS-TA Release] 파일을 내려받아 ${HOME}/workspace/paasta-5.0/release 이하 디렉터리에 압축을 푼다. 
-압출을 풀면 아래 그림과 같이 ${HOME}/workspace/paasta-5.0/release/paasta-monitoring 디렉터리가 생성되며 릴리즈 파일(tgz)이 존재한다.
+압출을 풀면 아래와 같이 ${HOME}/workspace/paasta-5.0/release/paasta-monitoring 디렉터리가 생성되며 릴리즈 파일(tgz)이 존재한다.
 
 ```
 ubuntu@ip-10-0-0-59:~/workspace/paasta-5.0/release/paasta-monitoring$ ls
@@ -114,7 +114,7 @@ loggregator-agent-3.9-ubuntu-xenial-315.36-20190604-002328-413557573.tgz        
 ```
 
 ## <div id='1011'/>3.3.  Stemcell 업로드
-PaaS-TA 사이트에서 [PaaS-TA Stemcell] 파일을 내려받아 ${HOME}/workspace/paasta-5.0/stemcell 이하 디렉터리에 압축을 푼다. 압출을 풀면 아래 그림과 같이 ${HOME}/workspace/paasta-5.0/stemcell/paasta-monitoring 디렉터리가 생성되며 릴리즈 파일(tgz)이 존재한다.
+PaaS-TA 사이트에서 [PaaS-TA Stemcell] 파일을 내려받아 ${HOME}/workspace/paasta-5.0/stemcell 이하 디렉터리에 압축을 푼다. 압출을 풀면 아래와 같이 ${HOME}/workspace/paasta-5.0/stemcell/paasta-monitoring 디렉터리가 생성되며 릴리즈 파일(tgz)이 존재한다.
 
 ```
 ubuntu@ip-10-0-0-59:~/workspace/paasta-5.0/stemcell/paasta-monitoring$ ls
@@ -426,7 +426,7 @@ $ bosh –e {director_name} cloud-config
 
 ### <div id='1013'/>3.4.1. azs
 
-PaaS-TA에서 제공되는 Cloud Config 예제는 z1 ~ z6까지 설정되어 있다. z1 ~z3까지는 PaaS-TA VM이 설치되는 Zone이며, z4 ~ z6까지는 서비스가 설치되는 Zone으로 정의한다. 3개 단위로 설정하는 이유는 서비스 3중화를 위해서이다. PaaS-TA를 설치하는 환경에 따라 다르게 설정해도 된다.
+PaaS-TA에서 제공되는 Cloud Config 예제는 z1 ~ z6까지 설정되어 있다. z1 ~ z3까지는 PaaS-TA VM이 설치되는 Zone이며, z4 ~ z6까지는 서비스가 설치되는 Zone으로 정의한다. 3개 단위로 설정하는 이유는 서비스 3중화를 위해서이다. PaaS-TA를 설치하는 환경에 따라 다르게 설정해도 된다.
 
 ### <div id='1014'/>3.4.2. vm types
 
