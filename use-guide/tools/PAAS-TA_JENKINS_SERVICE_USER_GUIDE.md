@@ -73,7 +73,7 @@ Jenkins 관리 -> 시스템 설정 으로 이동한다.
 	-	Jenkins Location 설정에서 Jenkins URL이 사용자가 접속한 주소가 아닐 경우, 사용자가 접속한 주소로 수정한다. 
 ![JENKINS_4]  
 2.	Workspace Sharing
-	-	기본적으로 Sample용으로 Sample와 Sample_K8S를 제공하고 있다. 추후에 필요한 경우 추가를 이용하여, 사용자에 맞게 늘려서 사용하면 된다. 
+	-	기본적으로 Sample용으로 Template_CF와 Template_K8S를 제공하고 있다. 추후에 필요한 경우 추가를 이용하여, 사용자에 맞게 늘려서 사용하면 된다. 
 
 <br><br>
 
@@ -89,7 +89,7 @@ Jenkins 서비스를 이용하여, 빌드 및 CF 배포에 관해서 기술되�
 ### <div id='8'/> 4.1.	빌드
 ![JENKINS_5]  
 
-빌드는 소스를 형상관리에서 끌어와, 소스를 빌드를 하는 스탭이다. 기본 설정탭에서 다음과 같이 설정한다. Shared Workspace -> Sample을 설정한다. 
+빌드는 소스를 형상관리에서 끌어와, 소스를 빌드를 하는 스탭이다. 기본 설정탭에서 다음과 같이 설정한다. Shared Workspace -> Template_CF을 설정한다. 
 
 - Shared Workspace는 Job별로 공간을 생성하지 않고, 한 공간에서 Job을 진행할 수 있도록 제공되는 기능이다. Shared Workspace는 Jenkis 관리 -> 시스템 설정에서 설정 해야한다.
 
@@ -125,7 +125,7 @@ Execute shell탭에서 CF배포에 필요한 Manifest 파일을 작성한다.
 ```
 ### <div id='9'/> 4.2. CF Deploy
 ![JENKINS_7]  
-Deploy는 빌드에서 생성된 빌드파일을 CF 배포하는 스탭이다. 기본 설정탭에서 다음과 같이 설정한다. Shared Workspace -> Sample을 설정한다. 
+Deploy는 빌드에서 생성된 빌드파일을 CF 배포하는 스탭이다. 기본 설정탭에서 다음과 같이 설정한다. Shared Workspace -> Template_CF을 설정한다. 
 
 - Shared Workspace는 Job별로 공간을 생성하지 않고, 한 공간에서 Job을 진행할 수 있도록 제공되는 기능이다. Shared Workspace는 Jenkis 관리 -> 시스템 설정에서 설정 해야한다.
 ![JENKINS_8]  
@@ -168,7 +168,7 @@ Blue&Green 배포 프로세스
 
 ![JENKINS_10]  
 
-Deploy(Blue&Green)는 빌드에서 생성된 빌드파일을 CF 배포하는 스탭이다.. 기본 설정탭에서 다음과 같이 설정한다. Shared Workspace -> Sample을 설정한다. 
+Deploy(Blue&Green)는 빌드에서 생성된 빌드파일을 CF 배포하는 스탭이다.. 기본 설정탭에서 다음과 같이 설정한다. Shared Workspace -> Template_CF을 설정한다. 
 
 ![JENKINS_11]  
 	Add build step을 클릭하여, Execute Shell 를 선택하여 스탭을 추가한다. (기본 예제 소스 붙여넣기)
@@ -208,7 +208,7 @@ Deploy(Blue&Green)는 빌드에서 생성된 빌드파일을 CF 배포하는 스
 Rolling Update란? Blue&Green과 비슷한 형태의 배포로 동일한 이름의 인스턴스를 내부적으로 생성하여, 자동으로 기존 서비스와 신규서비스를 교체하는 업데이트이다. 
 
 ![JENKINS_12]  
-Deploy(Blue&Green)는 빌드에서 생성된 빌드파일을 CF 배포하는 스탭이다. 기본 설정탭에서 다음과 같이 설정한다. Shared Workspace -> Sample을 설정한다. 
+Deploy(Blue&Green)는 빌드에서 생성된 빌드파일을 CF 배포하는 스탭이다. 기본 설정탭에서 다음과 같이 설정한다. Shared Workspace -> Template_CF을 설정한다. 
  
 ![JENKINS_13]  
 Add build step을 클릭하여, Execute Shell 를 선택하여 스탭을 추가한다. (기본 예제 소스 붙여넣기)
@@ -246,7 +246,7 @@ Jenkins 서비스를 이용하여, 빌드 및 Kubernetes 배포에 관해서 기
 ### <div id='12'/> 5.1.	K8S_Setting
 ![JENKINS_15]  
 
-Setting은 K8S 접속하기 위하여, Kubectl을 설정하는 과정이다.  기본 설정탭에서 다음과 같이 설정한다. Shared Workspace -> Sample_K8S을 설정한다. 
+Setting은 K8S 접속하기 위하여, Kubectl을 설정하는 과정이다.  기본 설정탭에서 다음과 같이 설정한다. Shared Workspace -> Template_K8S를 설정한다. 
 
 ![JENKINS_16]  
 CaaS에서 제공하는 Access페이지의 정보를 모두 입력한다.  
@@ -258,7 +258,7 @@ Pem파일을 열어 내용을 cert.crt에 입력한다.
 <br>
 
 ### <div id='13'/> 5.2. K8S_Build(Docker Build)
-Build은 K8S 배포하기 위하여, 소스 빌드 및 Docker Image 생성을 위한 설정이다. 기본 설정탭에서 다음과 같이 설정한다. Shared Workspace -> Sample_K8S을 설정한다. 
+Build은 K8S 배포하기 위하여, 소스 빌드 및 Docker Image 생성을 위한 설정이다. 기본 설정탭에서 다음과 같이 설정한다. Shared Workspace -> Template_K8S를 설정한다. 
 
 이미지 구성 프로세스
   1.	소스를 빌드한다.
@@ -321,11 +321,11 @@ Build은 K8S 배포하기 위하여, 소스 빌드 및 Docker Image 생성을 �
 ### <div id='14'/> 5.3.	K8S_Deploy
 ![JENKINS_20]    
 
-Deploy은 K8S 배포 위한 기본 설정이다. 기본 설정탭에서 다음과 같이 설정한다. Shared Workspace -> Sample_K8S을 설정한다.   
+Deploy은 K8S 배포 위한 기본 설정이다. 기본 설정탭에서 다음과 같이 설정한다. Shared Workspace -> Template_K8S를 설정한다.   
 
 ![JENKINS_21]  
 
-	BEFOREJOB_BUILD_NUMBER=$((($cat /hoem/jenkins_home/jobs/Sample_K8S_Build/nextBuildNumber) -1))
+	BEFOREJOB_BUILD_NUMBER=$((($cat /hoem/jenkins_home/jobs/Template_K8S_Build/nextBuildNumber) -1))
 	-> 이전 JOB의 빌드번호를 가져온다. 이 예제에서는 이전 JOB은 빌드를 의미한다.
 
 	DEPLOYMENT_NAME=paasta-deployment
@@ -414,11 +414,11 @@ Deploy은 K8S 배포 위한 기본 설정이다. 기본 설정탭에서 다음�
 
 ![JENKINS_23]  
 
-Deploy은 K8S 배포 위한 기본 설정이다. 기본 설정탭에서 다음과 같이 설정한다. Shared Workspace -> Sample_K8S을 설정한다.   
+Deploy은 K8S 배포 위한 기본 설정이다. 기본 설정탭에서 다음과 같이 설정한다. Shared Workspace -> Template_K8S을 설정한다.   
 
 ![JENKINS_24]  
 
-	BEFOREJOB_BUILD_NUMBER=$((($cat /var/jenkins_home/jobs/Sample_K8S_Build/nextBuildNumber) -1))
+	BEFOREJOB_BUILD_NUMBER=$((($cat /var/jenkins_home/jobs/Template_K8S_Build/nextBuildNumber) -1))
 	-> 이전 JOB의 빌드번호를 가져온다. 이 예제에서는 이전 JOB은 빌드를 의미한다.
 	SERVER_IP=xxx.xxx.xxx.xxx
 	-> 서비스 정상여부를 확인하기 위하여, K8S에 등록된 기존 서비스의 접속주소의 정보를 입력한다.
@@ -535,10 +535,10 @@ Deploy은 K8S 배포 위한 기본 설정이다. 기본 설정탭에서 다음�
 ### <div id='16'/> 5.5.	K8S_Deploy(Rolling)
 Rolling Update란? Blue&Green과 비슷한 형태의 배포로 동일한 이름의 인스턴스를 내부적으로 생성하여, 자동으로 기존 서비스와 신규서비스를 교체하는 업데이트이다.   
 ![JENKINS_25]  
-Deploy은 K8S 배포 위한 기본 설정이다. 기본 설정탭에서 다음과 같이 설정한다. Shared Workspace -> Sample_K8S을 설정한다.   
+Deploy은 K8S 배포 위한 기본 설정이다. 기본 설정탭에서 다음과 같이 설정한다. Shared Workspace -> Template_K8S을 설정한다.   
 ![JENKINS_26]  
 
-	BEFOREJOB_BUILD_NUMBER=$((($cat /home/jenkins_home/jobs/Sample_K8S_Build/nextBuildNumber) -1))
+	BEFOREJOB_BUILD_NUMBER=$((($cat /home/jenkins_home/jobs/Template_K8S_Build/nextBuildNumber) -1))
 	-> 이전 JOB의 빌드번호를 가져온다. 이 예제에서는 이전 JOB은 빌드를 의미한다.
 
 	DEPLOYMENT_NAME=[업데이트할 Deployment ]
