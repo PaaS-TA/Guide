@@ -78,7 +78,7 @@ PaaS-TA 3.1 버전까지는  PaaS-TA Container, Controller를 각각의 deployme
 
 ## <div id='109'/>3.1.    Prerequisite
 
-- PaaS-TA를 설치하기 위해 deployment, release, stemcell을 파스타 사이트에서 내려받아 정해진 경로에 복사한다.
+- PaaS-TA를 설치하기 위해 deployment, release, stemcell을 PaaS-TA 사이트에서 내려받아 정해진 경로에 복사한다.
 - Monitoring Option을 적용한 BOSH2 기반의 BOSH를 설치한다.
 - PaaS-TA 설치는 BOSH를 설치한 Inception(설치 환경)에서 작업한다.
 
@@ -86,7 +86,7 @@ PaaS-TA 3.1 버전까지는  PaaS-TA Container, Controller를 각각의 deployme
 
    - [설치 파일 다운로드](https://paas-ta.kr/download/package)
 
-파스타 다운로드 URL에서 [PaaS-TA Release] 파일을 내려받아 ${HOME}/workspace/paasta-5.0/release 이하 디렉터리에 압축을 푼다. 
+PaaS-TA 사이트에서 [PaaS-TA Release] 파일을 내려받아 ${HOME}/workspace/paasta-5.0/release 이하 디렉터리에 압축을 푼다. 
 압출을 풀면 아래 그림과 같이 ${HOME}/workspace/paasta-5.0/release/paasta-monitoring 디렉터리가 생성되며 릴리즈 파일(tgz)이 존재한다.
 
 ```
@@ -114,7 +114,7 @@ loggregator-agent-3.9-ubuntu-xenial-315.36-20190604-002328-413557573.tgz        
 ```
 
 ## <div id='1011'/>3.3.  Stemcell 업로드
-파스타 다운로드 URL에서 [PaaS-TA Stemcell] 파일을 내려받아 ${HOME}/workspace/paasta-5.0/stemcell 이하 디렉터리에 압축을 푼다. 압출을 풀면 아래 그림과 같이 ${HOME}/workspace/paasta-5.0/stemcell/paasta-monitoring 디렉터리가 생성되며 릴리즈 파일(tgz)이 존재한다.
+PaaS-TA 사이트에서 [PaaS-TA Stemcell] 파일을 내려받아 ${HOME}/workspace/paasta-5.0/stemcell 이하 디렉터리에 압축을 푼다. 압출을 풀면 아래 그림과 같이 ${HOME}/workspace/paasta-5.0/stemcell/paasta-monitoring 디렉터리가 생성되며 릴리즈 파일(tgz)이 존재한다.
 
 ```
 ubuntu@ip-10-0-0-59:~/workspace/paasta-5.0/stemcell/paasta-monitoring$ ls
