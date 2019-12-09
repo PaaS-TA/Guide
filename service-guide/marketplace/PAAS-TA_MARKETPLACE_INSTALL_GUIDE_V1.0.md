@@ -93,13 +93,13 @@
   $ cf create-quota marketplace_quota -m 100G -i -1 -s -1 -r -1 --reserved-route-ports -1 --allow-paid-service-plans
   $ cf create-org marketplace -q marketplace_quota
   $ cf create-space system -o marketplace
-  $ cf target -o marketplace -s system
   ```
 
 2) 아래는 마켓플레이스의 상품을 배포할 CF 공간을 설정하기 위해 PaaS-TA 어드민 계정으로 CF에 로그인한 후 상품 배포용 조직 및 공간을 생성하는 명령어 모음이다.
   ```
   $ cf create-org marketplace-org -q marketplace_quota
   $ cf create-space marketplace-space -o marketplace-org
+  $ cf target -o marketplace-org -s marketplace-space
   ```
 3) 생성한 조직과 공간, 쿼타에 대한 GUID 를 확인한다.
   ```
