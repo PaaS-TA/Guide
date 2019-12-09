@@ -118,7 +118,7 @@
   $ cf service-access -b mysql-service-broker
 
   $ cf create-service <서비스명> <서비스플랜> <내 서비스명>
-  예시) $ cf create-service Mysql-DB Mysql-Plan1-10con marketplace-mysql
+  예시) $ cf create-service Mysql-DB Mysql-Plan2-100con marketplace-mysql
   ```
   > MySQL 서비스 신청 참고 : https://github.com/PaaS-TA/Guide-5.0-Ravioli/blob/master/service-guide/dbms/PAAS-TA_MYSQL_SERVICE_INSTALL_GUIDE_V1.0.md
 
