@@ -6,7 +6,7 @@
     * [인프라 설정](#5)
 	* [스템셀과 릴리즈](#6)
 	  * [PaaS-TA 사용자 포털 스템셀](#8)
-	* [BOOTSTRAP 및 파스타 설치하기](#9)
+	* [BOOTSTRAP 및 PaaS-TA 설치하기](#9)
 	* [PaaS-TA 사용자 포털 배포하기](#14)
 	  * [PaaS-TA 사용자 포털 스템셀 업로드](#15)
 	  * [PaaS-TA 사용자 포털 릴리즈 업로드](#16)
@@ -36,7 +36,7 @@ Cloudit 클라우드 환경에 PaaS-TA포털을 설치하기 위해서는 인프
 
 
 ## <div id='5'/>2.1  인프라 설정
-※ BOSH 및 파스타 설치(CLOUDit) [2.1  인프라 설정][Cloudit_Infra_setting] 참조  
+※ BOSH 및 PaaS-TA 설치(CLOUDit) [2.1  인프라 설정][Cloudit_Infra_setting] 참조  
 
 #### 1. Cloudit 로드밸런서 생성 – HAProxy배포 VM ([2.4.5. PaaS-TA 사용자 포털 배포](#19) 이후 진행) – 네트워크<div id='23'/>
 1.1.	로드밸런서 생성 중 Router 또는 HAProxy가 배포된 VM을 멤버로 등록시엔 다음과 같은 포트로 구성한다
@@ -140,14 +140,14 @@ Cloudit의 Kubernetes 환경에 배포 가능한 PaaS-TA 버전은 아래와 같
 
 
 
-## <div id='9'/>2.3.  **BOOTSTRAP 및 파스타 설치하기**
-BOSH 및 파스타 설치(CLOUDit) [2.3  BOOTSTRAP 설치하기][Cloudit_bootStrap_install] 참조  
-BOSH 및 파스타 설치(CLOUDit) [2.4. CF-Deployment 배포하기][Cloudit_cf_install] 참조  
+## <div id='9'/>2.3.  **BOOTSTRAP 및 PaaS-TA 설치하기**
+BOSH 및 PaaS-TA 설치(CLOUDit) [2.3  BOOTSTRAP 설치하기][Cloudit_bootStrap_install] 참조  
+BOSH 및 PaaS-TA 설치(CLOUDit) [2.4. CF-Deployment 배포하기][Cloudit_cf_install] 참조  
 
 
 
 ## <div id='14'/>2.4.  **PaaS-TA 사용자 포털 배포하기**
-BOSH 및 파스타 배포가 완료되면 PaaS-TA 사용자 포털을 배포할 준비가 된 상태이며 PaaS-TA 사용자 포털을 배포하는 절차는 다음과 같다.
+BOSH 및 PaaS-TA 배포가 완료되면 PaaS-TA 사용자 포털을 배포할 준비가 된 상태이며 PaaS-TA 사용자 포털을 배포하는 절차는 다음과 같다.
 ![Cloudit_PaaSTa_Platform_Use_Guide_Image01]
 
 
