@@ -497,7 +497,7 @@ $ bosh –e {director_name} vms
 
 PaaS-TA SaaS는 Application CPU, Memory, Thread , Response Time 정보를 수집을 위해서는 paasta-pinpoint-monitoring가 설치되어야 한다. 
 자세한 설치 방법은 아래 링크를 참조하길 바랍니다.
-> **[설치 정보](https://github.com/PaaS-TA/PAAS-TA-PINPOINT-MONITORING-RELEASE)**
+> **[PaaS-TA Pinpoint Monitoring release 설치](https://github.com/PaaS-TA/PAAS-TA-PINPOINT-MONITORING-RELEASE)**
 
 ## <div id='19-1'/>3.6.	PaaS-TA Container service 설치 및 Prometheus Agent 정보확인
 
@@ -1007,20 +1007,20 @@ admin_password: xxxxxxxxx
 8) pinpoint_was_ip는 설치한 pinpoint_haproxy_webui 내부 ip를 지정한다
 9) prometheus_ip는 Kubernetes의 prometheus-prometheus-prometheus-oper-prometheus-0 Pod의 Node ip를 지정한다.
     <br>
-   참조) [3.6.4 prometheus-prometheus-prometheus-oper-prometheus-0 POD의 Node IP를 확인한다.](#19-4)   
+   참조) [3.6.4. prometheus-prometheus-prometheus-oper-prometheus-0 POD의 Node IP를 확인한다.](#19-5)   
 10) kubernetes_ip는 Kubernetes의 서비스 API ip를 지정한다.   
-   참조) [3.6.5 Kubernetes API URL serverAddress를 확인한다.](#19-5)
+   참조) [3.6.5. Kubernetes API URL serverAddress를 확인한다.](#19-6)
 11) kubernetes_token는 Kubernetes 서비스 API를 Request 호출할 수 있도록 Header에 설정하는 인증 토큰값을 지정한다.
-   참조) [3.6.6 Kubernetes API Request 호출시 Header(Authorization) 인증을 위한 Token값을 확인한다.](#19-6) 
+   참조) [3.6.6. Kubernetes API Request 호출시 Header(Authorization) 인증을 위한 Token값을 확인한다.](#19-7) 
 12) cassbroker_ip는 CaaS 서비스 로그인 인증 처리를 위한 API ip를 지정한다.        
 
-Monit-deploy.sh을 실행하여 paasta-monitoring을 설치 한다
+deploy-paasta-monitoring.sh을 실행하여 PaaS-TA Monitoring을 설치 한다
 ```
 $ cd ~/workspace/paasta-5.0/deployment/paasta-deployment-monitoring/paasta-monitoring
 $ deploy-paasta-monitoring.sh
 ```
 
-설치 완료후 PaaS-TA Monitoring이 설치 완료 되었음을 확인한다.
+PaaS-TA Monitoring이 설치 완료 되었음을 확인한다.
 ```
 $ bosh –e {director_name} vms
 ```
@@ -1029,7 +1029,7 @@ $ bosh –e {director_name} vms
 
 ### <div id='23'/>3.7.3. PaaS-TA Monitoring dashboard 접속
  
- http://{monitoring-web-ip}:8080/public/login.html 에 접속하여 회원 가입 후 Main Dashboard에 접속한다.
+ http://{monit_public_ip}:8080/public/login.html 에 접속하여 회원 가입 후 Main Dashboard에 접속한다.
 
  Login 화면에서 회원 가입 버튼을 클릭한다.
 
