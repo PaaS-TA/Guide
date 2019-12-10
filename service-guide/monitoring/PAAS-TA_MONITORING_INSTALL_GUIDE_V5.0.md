@@ -5,8 +5,8 @@
   * [범위](#3)
   * [참고자료](#4)
 2. [PaaS-TA Monitoring Architecture](#5)
-    * [PaaS-TA Monitoring Architecture](#6)
-    * [PaaS-TA 자원정보 수집 Architecture](#7)
+    * [PaaS Monitoring Architecture](#6)
+    * [PaaS 자원정보 수집 Architecture](#7)
     * [CaaS Monitoring Architecture](#8)
     * [CaaS 자원정보 수집 Architecture](#9)
     * [SaaS Monitoring Architecture](#10)
@@ -18,12 +18,12 @@
     * [Logsearch 설치](#16)
         *  [logsearch-deployment.yml](#17)
         *  [deploy.sh](#18)
-    * [paasta-pinpoint-monitoring release 설치](#19)    
-    * [paasta-container-service release 설치 및 Prometheus Agent 정보확인](#19-1)
+    * [PaaS-TA Pinpoint Monitoring release 설치](#19)    
+    * [PaaS-TA Container service 설치 및 Prometheus Agent 정보확인](#19-1)
     * [PaaS-TA Monitoring 설치](#20)
         *  [paasta-monitoring.yml](#21)
-        *  [monit-deploy.sh](#22)
-    * [monitoring dashboard접속](#23)
+        *  [deploy-paasta-monitoring.sh](#22)
+    * [PaaS-TA Monitoring dashboard 접속](#23)
 
 # <div id='1'/>1.  문서 개요 
 
@@ -47,7 +47,7 @@ CF DEPLOYMENT: [https://github.com/cloudfoundry/cf-deployment](https://github.co
 
 
 
-# <div id='5'/>2. PaaS-TA  Monitoring Architecture
+# <div id='5'/>2. PaaS-TA Monitoring Architecture
 
 ## <div id='6'/>2.1. PaaS Monitoring Architecture
 PaaS Monitoring 운영환경에서는 크게 Backend 환경에서 실행되는 Batch 프로세스 영역과 Frontend 환경에서 실행되는 Monitoring 시스템 영역으로 나누어진다.
@@ -493,13 +493,13 @@ $ bosh –e {director_name} vms
 ```
 ![PaaSTa_logsearch_vms_5.0]
 
-## <div id='19'/>3.5.	paasta-pinpoint-monitoring 설치
+## <div id='19'/>3.5.	PaaS-TA Pinpoint Monitoring release 설치
 
 PaaS-TA SaaS는 Application CPU, Memory, Thread , Response Time 정보를 수집을 위해서는 paasta-pinpoint-monitoring가 설치되어야 한다. 
 자세한 설치 방법은 아래 링크를 참조하길 바랍니다.
 > **[설치 정보](https://github.com/PaaS-TA/PAAS-TA-PINPOINT-MONITORING-RELEASE)**
 
-## <div id='19-1'/>3.6.	paasta-container-service 설치 및 Prometheus Agent 정보확인
+## <div id='19-1'/>3.6.	PaaS-TA Container service 설치 및 Prometheus Agent 정보확인
 
 PaaS-TA CaaS 서비스는 Kubernetes Cluster, Workload, Pod 및 Alarm 정보를 수집을 위하여 paasta-container-service에 Prometheus Agent가 설치되어야 한다. 
 ```
@@ -622,36 +622,36 @@ caas_worker_instances: 3
 caas_worker_azs: [z1,z2,z3]
 ```
 
-### <div id='19-3'/>3.6.2	paasta-container-service 설치
+### <div id='19-3'/>3.6.2.	PaaS-TA Container service 설치
 Cloud Provider 환경에 맟는 deploy shell 스크립트를 실행한다. 
 
 ```
 $  ./deploy-{Cloud Provider}.sh
 ```
 
-### <div id='19-4'/>3.6.3	paasta-container-service의 설치 완료를 확인한다. 
+### <div id='19-4'/>3.6.3.	PaaS-TA Container service의 설치 완료를 확인한다. 
 ![PaaSTa_paasta_container_service_vms]
 
-### <div id='19-4'/>3.6.3	Kubernetes Prometheus Pods 정보를 확인한다.  
+### <div id='19-5'/>3.6.4.	Kubernetes Prometheus Pods 정보를 확인한다.  
 ```
 $  bosh -e {director_name} ssh -d paaata-container-service master
 $  /var/vcap/packages/kubernetes/bin/kubectl get pods --all-namespaces -o wide
 ```
 ![PaaSTa_paasta_container_service_pods]
 
-### <div id='19-4'/>3.6.4	prometheus-prometheus-prometheus-oper-prometheus-0 POD의 Node IP를 확인한다.
+### <div id='19-6'/>3.6.5.	prometheus-prometheus-prometheus-oper-prometheus-0 POD의 Node IP를 확인한다.
 ```
 $  /var/vcap/packages/kubernetes/bin/kubectl get nodes -o wide
 ```
 ![PaaSTa_paasta_container_service_nodes]
 
-### <div id='19-5'/>3.6.5	Kubernetes API URL(serverAddress)를 확인한다.
+### <div id='19-7'/>3.6.6.	Kubernetes API URL(serverAddress)를 확인한다.
 ```
 $  curl localhost:8080/api
 ```
 ![PaaSTa_paasta_container_service_kubernetes_api]
 
-### <div id='19-6'/>3.6.6	Kubernetes API Request 호출시 Header(Authorization) 인증을 위한 Token값을 확인한다. 
+### <div id='19-8'/>3.6.7.	Kubernetes API Request 호출시 Header(Authorization) 인증을 위한 Token값을 확인한다. 
 ```
 $  /var/vcap/packages/kubernetes/bin/kubectl -n kube-system describe secret $(/var/vcap/packages/kubernetes/bin/kubectl -n kube-system get secret | grep monitoring-admin | awk '{print $1}')
 ```
@@ -666,7 +666,7 @@ PaaS Monitoring을 위해서 paasta-monitoring이 설치되어야 한다.
 $ cd ~/workspace/paasta-5.0/deployment/paasta-deployment-monitoring/paasta-monitoring
 ```
 
-### <div id='21'/>3.5.1.	paasta-monitoring.yml
+### <div id='21'/>3.7.1.	paasta-monitoring.yml
 paasta-monitoring.yml에는 redis, influxdb(metric_db), mariadb, monitoring-web, monitoring-batch에 대한 명세가 있다.
 
 ```
@@ -955,7 +955,7 @@ update:
 
 ```
 
-### <div id='22'/>3.5.2.	deploy-paasta-monitoring.sh
+### <div id='22'/>3.7.2.	deploy-paasta-monitoring.sh
 deploy-paasta-monitoring.sh의 –v 의 inception_os_user_name, system_domain 및 director_name을 시스템 상황에 맞게 설정한다.
 
 ```
@@ -993,7 +993,6 @@ bosh –e {director_name} -d paasta-monitoring deploy paasta-monitoring.yml  \
 
 ```
 
-
 Note: 
 1)	mariadb, influxdb, redis vm은 사용자가 직접 ip를 지정한다. Ip 지정시 paasta-monitoring.yml의 az와 cloud-config의 subnet이 일치하는 ip대역내에 ip를 지정한다.
 2)	bosh_url: bosh 설치시 설정한 bosh private ip
@@ -1028,7 +1027,7 @@ $ bosh –e {director_name} vms
 ![PaaSTa_monitoring_vms_5.0]
 
 
-### <div id='23'/>3.5.3. PaaS-TA Monitoring dashboard 접속
+### <div id='23'/>3.7.3. PaaS-TA Monitoring dashboard 접속
  
  http://{monitoring-web-ip}:8080/public/login.html 에 접속하여 회원 가입 후 Main Dashboard에 접속한다.
 
