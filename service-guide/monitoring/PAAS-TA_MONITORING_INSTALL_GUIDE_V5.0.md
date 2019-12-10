@@ -4,8 +4,8 @@
   * [목적](#2)
   * [범위](#3)
   * [참고자료](#4)
-2. [PaaS-TA  Monitoring Architecture](#5)
-    * [PaaS-TA  Monitoring Architecture](#6)
+2. [PaaS-TA Monitoring Architecture](#5)
+    * [PaaS-TA Monitoring Architecture](#6)
     * [PaaS-TA 자원정보 수집 Architecture](#7)
     * [CaaS Monitoring Architecture](#8)
     * [CaaS 자원정보 수집 Architecture](#9)
@@ -13,7 +13,7 @@
     * [SaaS 자원정보 수집 Architecture](#11)
 3. [PaaS-TA Monitoring 설치](#12)
     * [Pre-requsite](#13)
-    * [PaaS-TA 5.0 모니터링 설치 파일 다운로드](#14)
+    * [PaaS-TA 5.0 Monitoring 설치 파일 다운로드](#14)
     * [PaaS-TA Monitoring 설치환경](#15)
     * [Logsearch 설치](#16)
         *  [logsearch-deployment.yml](#17)
@@ -28,10 +28,10 @@
 # <div id='1'/>1.  문서 개요 
 
 ## <div id='2'/>1.1.  목적
-본 문서(설치가이드)는 PaaS-TA(5.0) 환경기준으로 PaaS-TA 모니터링 설치를 위한 가이드를 제공한다.
+본 문서(설치가이드)는 PaaS-TA(5.0) 환경기준으로 PaaS-TA Monitoring 설치를 위한 가이드를 제공한다.
 
 ## <div id='3'/>1.2.  범위
-본 문서(설치가이드)는 PaaS-TA(5.0) 환경기준으로 PaaS-TA 모니터링 설치를 위한 가이드를 제공한다. 모니터링중 IaaS-PaaS 통합 모니터링은 별도 통합 모니터링문서를 제공하며 본문서는 PaaS, CaaS, SaaS 모니터링 설치 가이드를 제공함에 있다.
+본 문서(설치가이드)는 PaaS-TA(5.0) 환경기준으로 PaaS-TA Monitoring 설치를 위한 가이드를 제공한다. Monitoring 중 IaaS-PaaS 통합 Monitoring은 별도 통합 Monitoring 문서를 제공하며 본문서는 PaaS, CaaS, SaaS Monitoring 설치 가이드를 제공함에 있다.
 
 ## <div id='4'/>1.3.  참고자료
 
@@ -57,7 +57,7 @@ PaaS-TA Monitoring 시스템은 TSDB(InfluxDB)로부터 시스템 환경 정보 
 ![PaaSTa_Monit_architecure_Image]
 
 ## <div id='7'/>2.2. PaaS 자원정보 수집 Architecture
-PaaS-TA는 내부적으로 메트릭스 정보를 수집 및 전달하는 Metric Agent와 로그 정보를 수집 및 전달하는 syslog 모듈을 제공한다. Metric Agent는 시스템 관련 메트릭스를 수집하여 InfluxDB에 정보를 저장한다. syslog는 PaaS-TA를 Deploy 하기 위한 manfiest 파일의 설정으로도 로그 정보를 ELK 서비스에 전달할 수 있으며, 로그 정보를 전달하기 위해서는 relp 프로토콜(reliable event logging protocol)을 사용한다.
+PaaS는 내부적으로 메트릭스 정보를 수집 및 전달하는 Metric Agent와 로그 정보를 수집 및 전달하는 syslog 모듈을 제공한다. Metric Agent는 시스템 관련 메트릭스를 수집하여 InfluxDB에 정보를 저장한다. syslog는 PaaS-TA를 Deploy 하기 위한 manfiest 파일의 설정으로도 로그 정보를 ELK 서비스에 전달할 수 있으며, 로그 정보를 전달하기 위해서는 relp 프로토콜(reliable event logging protocol)을 사용한다.
 
 ![PaaSTa_Monit_collect_architecure_Image]
 
@@ -70,12 +70,12 @@ PaaS-TA Monitoring dashboard는 관리자 화면으로 알람이 발생된 이�
 ![Caas_Monit_architecure_Image]
 
 ## <div id='9'/>2.4. CaaS 자원정보 수집 Architecture
-CaaS 서비스는 내부적으로 메트릭스 정보를 수집 하는 Prometheus Metric Agent(Node Exporter, cAdvisor) 제공한다. Prometheus 기본 제공되는 로컬 디지스 Time-Series Database 정보를 저장한다. 해당 정보를 조회하기 위해서는 Prometheus 제공하는 API를 통하여 조회할 수 있다.
+CaaS는 내부적으로 메트릭스 정보를 수집 하는 Prometheus Metric Agent(Node Exporter, cAdvisor) 제공한다. Prometheus 기본 제공되는 로컬 디지스 Time-Series Database 정보를 저장한다. 해당 정보를 조회하기 위해서는 Prometheus 제공하는 API를 통하여 조회할 수 있다.
 
 ![Caas_Monit_collect_architecure_Image]
 
 ## <div id='10'/>2.5. SaaS Monitoring Architecture
-Saas 서비스 모니터링 운영환경에는 크게 Backend 환경에서 실행되는 Batch 프로세스 영역과 Frontend 환경에서 실행되는 Monitoring 시스템 영역으로 나누어진다.
+Saas Monitoring 운영환경에는 크게 Backend 환경에서 실행되는 Batch 프로세스 영역과 Frontend 환경에서 실행되는 Monitoring 시스템 영역으로 나누어진다.
 Batch 프로세스는 PaaS-TA Portal SaaS 서비스에서 등록한 임계치 정보를 기준으로 주기적으로 시스템 metrics 정보를 조회 및 분석하여, 임계치를 초과한 서비스 발견시 관리자에게 Alarm을 전송한다.
 Monitoring 시스템 은 PINPOINT APM Server 로부터 시스템 메트 데이터를 조회하고, 조회된 정보는 SaaS Monitoring 시스템의 현재 자원 사용 현황을 조회한다.
 Monitoring Portal은 관리자 화면으로 알람이 발생된 이벤트 현황 정보를 조회하고, Application 현황 및 서비스에 대한 통계 정보를 조회할 수 있으며, 이벤트 관련 처리정보를 이력관리할 수 있는 화면을 제공한다
@@ -95,7 +95,7 @@ PaaS-TA SaaS는 내부적으로 메트릭스 정보를 수집 하는 PINPOINT Me
 2. PaaS-TA 5.0이 설치되어 있어야 하며, monitoring Agent가 설치되어 있어야 한다.
 3. bosh login이 되어 있어야 한다.
 
-## <div id='14'/>3.2.	PaaS-TA 5.0 모니터링 설치 파일 다운로드
+## <div id='14'/>3.2.	PaaS-TA 5.0 Monitoring 설치 파일 다운로드
 
 > **[설치 파일 다운로드 받기](https://paas-ta.kr/download/package)**
 
@@ -107,7 +107,7 @@ PaaS-TA 사이트에서 [PaaS-TA 설치 릴리즈] 파일을 다운로드 받아
 
 ## <div id='15'/>3.3. PaaS-TA Monitoring 설치환경
 
-~/workspace/paasta-5.0/deployment/paasta-deployment-monitoring 이하 디렉토리에는 paasta-monitoring, paasta-pinpoint-monitoring 디렉토리가 존재한다. Logsearch는 logAgent에서 발생한 Log정보를 수집하여 저장하는 Deployment이다. paasta-monitoring은 PaaS-TA VM에서 발생한 Metric 정보를 수집하여 모니터링을 실행한다.
+~/workspace/paasta-5.0/deployment/paasta-deployment-monitoring 이하 디렉토리에는 paasta-monitoring, paasta-pinpoint-monitoring 디렉토리가 존재한다. Logsearch는 logAgent에서 발생한 Log정보를 수집하여 저장하는 Deployment이다. paasta-monitoring은 PaaS-TA VM에서 발생한 Metric 정보를 수집하여 Monitoring을 실행한다.
 
 ```
 $ cd ~/workspace/paasta-5.0/deployment/paasta-deployment-monitoring
@@ -660,7 +660,7 @@ $  /var/vcap/packages/kubernetes/bin/kubectl -n kube-system describe secret $(/v
 
 ## <div id='20'/>3.7.	PaaS-TA Monitoring 설치
 
-PaaS 모니터링을 위해서 paasta-monitoring이 설치되어야 한다. 
+PaaS Monitoring을 위해서 paasta-monitoring이 설치되어야 한다. 
 
 ```
 $ cd ~/workspace/paasta-5.0/deployment/paasta-deployment-monitoring/paasta-monitoring
@@ -1002,7 +1002,7 @@ Note:
 creds.yml
 admin_password: xxxxxxxxx 
 4)	smtp_url: smtp Server ip (PaaS-TA를 설치한 시스템에서 사용가능한 smtp 서버 IP
-5)	monit_public_ip: monitoring web의 public ip로 외부에서 모니터링 화면에 접속하기 위해 필요한 외부 ip(public ip 필요)
+5)	monit_public_ip: monitoring web의 public ip로 외부에서 Monitoring 화면에 접속하기 위해 필요한 외부 ip(public ip 필요)
 6)	system_domain: paasta를 설치 할때 설정한 system_domain을 입력한다.
 7) pinpoint_ip는 설지한 pinpoint_haproxy_webui public ip를 지정한다.
 8) pinpoint_was_ip는 설치한 pinpoint_haproxy_webui 내부 ip를 지정한다
@@ -1021,7 +1021,7 @@ $ cd ~/workspace/paasta-5.0/deployment/paasta-deployment-monitoring/paasta-monit
 $ deploy-paasta-monitoring.sh
 ```
 
-설치 완료후 PaaS-TA 모니터링이 설치 완료 되었음을 확인한다.
+설치 완료후 PaaS-TA Monitoring이 설치 완료 되었음을 확인한다.
 ```
 $ bosh –e {director_name} vms
 ```
