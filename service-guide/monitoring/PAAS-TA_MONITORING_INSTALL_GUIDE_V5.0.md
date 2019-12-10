@@ -99,7 +99,7 @@ PaaS-TA SaaS는 내부적으로 메트릭스 정보를 수집 하는 PINPOINT Me
 
 > **[설치 파일 다운로드 받기](https://paas-ta.kr/download/package)**
 
-> **[Monitoring Source Git](https://github.com/PaaS-TA/PaaS-TA-Monitoring)**
+> **[PaaS-TA Monitoring Source Github](https://github.com/PaaS-TA/PaaS-TA-Monitoring)**
 
 PaaS-TA 사이트에서 [PaaS-TA 설치 릴리즈] 파일을 다운로드 받아 ~/workspace/paasta-5.0/release 이하 디렉토리에 압축을 푼다. 압출을 풀면 아래 그림과 같이 ~/workspace/paasta-5.0/release/paasta-monitoring 이하 디렉토리가 생성되며 이하에 릴리즈 파일(tgz)이 존재한다.
 
