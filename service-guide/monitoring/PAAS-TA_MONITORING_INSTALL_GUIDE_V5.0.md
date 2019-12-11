@@ -24,7 +24,8 @@
     * [PaaS-TA Monitoring 설치](#20)
         *  [paasta-monitoring.yml](#21)
         *  [deploy-paasta-monitoring.sh](#22)
-    * [PaaS-TA Monitoring dashboard 접속](#23)
+    * [PaaS-TA Monitoring IaaS 설치](#23)    
+    * [PaaS-TA Monitoring dashboard 접속](#24)
 
 # <div id='1'/>1.  문서 개요 
 
@@ -1035,7 +1036,28 @@ $ bosh –e {director_name} vms
 ![PaaSTa_monitoring_vms_5.0]
 
 
-### <div id='23'/>3.7.3. PaaS-TA Monitoring dashboard 접속
+## <div id='23'/>3.8.	PaaS-TA Monitoring IaaS 설치
+
+### <div id='23-1'/>3.8.1. Pre-requsite
+ 1. Openstack Queens version 이상
+ 2. PaaS-TA가 Openstack에 설치 되어 있어야 한다.
+ 3. 설치된 Openstack위에 PaaS-TA에 설치 되어 있어야 한다.(PaaS-TA Agent설치 되어 있어야 한다)
+ 4. IaaS-PaaS-Monitoring 시스템에는 선행작업(Prerequisites)으로 Monasca Server가 설치 되어 있어야 한다. Monasca Client(agent)는 openstack controller, compute node에 설치되어 있어야 한다. 아래 Monasca Server/Client를 먼저 설치 후 IaaS-PaaS-Monitoring을 설치 해야 한다.
+ 
+### <div id='23-2'/>3.8.2.	Monasca 설치
+Monasca는 Server와 Client로 구성되어 있다. Openstack controller/compute Node에 Monasca-Client(Agent)를 설치 하여 Monasca 상태정보를 Monasca-Server에 전송한다. 수집된 Data를 기반으로 IaaS 모니터링을 수행한다.
+Monasca-Server는 Openstack에서 VM을 수동 생성하여 설치를 진행한다.
+
+#### <div id='23-3'/>3.8.2.1.	Monasca Server 설치
+
+> **[Monasca - Server](./monasca-server.md)**
+
+#### <div id='23-4'/>3.8.2.2.	Monasca Client(agent) 설치
+
+> **[Monasca - Client](./monasca-client.md)** 
+ 
+
+## <div id='24'/>3.9. PaaS-TA Monitoring dashboard 접속
  
  http://{monit_public_ip}:8080/public/login.html 에 접속하여 회원 가입 후 Main Dashboard에 접속한다.
 
