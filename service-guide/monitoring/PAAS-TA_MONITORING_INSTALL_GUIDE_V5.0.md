@@ -4,13 +4,14 @@
   * [목적](#2)
   * [범위](#3)
   * [참고자료](#4)
-2. [PaaS-TA Monitoring Architecture](#5)
+2. [PaaS-TA Monitoring Architecture](#5)    
     * [PaaS Monitoring Architecture](#6)
     * [PaaS 자원정보 수집 Architecture](#7)
     * [CaaS Monitoring Architecture](#8)
     * [CaaS 자원정보 수집 Architecture](#9)
     * [SaaS Monitoring Architecture](#10)
     * [SaaS 자원정보 수집 Architecture](#11)
+    * [IaaS Monitoring Architecture](#11-1) 
 3. [PaaS-TA Monitoring 설치](#12)
     * [Pre-requsite](#13)
     * [PaaS-TA 5.0 Monitoring 설치 파일 다운로드](#14)
@@ -84,6 +85,12 @@ Monitoring Portal은 관리자 화면으로 알람이 발생된 이벤트 현황
 
 ## <div id='11'/>2.6. SaaS 자원정보 수집 Architecture
 PaaS-TA SaaS는 내부적으로 메트릭스 정보를 수집 하는 PINPOINT Metric Agent 제공한다. Metric Agent는 Application JVM 관련 메트릭스를 수집하여 Hbase DB에 정보를 저장한다. 해당 정보는 PINPOINT APM 서버의 API를 통하여 조회할 수 있다.
+
+## <div id='11-1'/>2.7. IaaS  Monitoring Architecture
+IaaS 서비스 모니터링 운영환경은 IaaS는 Openstack과 Monasca를 기반으로 구성되어 있다. IaaS는 Openstack Node에 monasca Agent가 설치되어 Metric Data를 Monasca에 전송하여 InfluxDB에 저장한다. PaaS는 PaaS-TA에 모니터링 Agent가 설치되어 InfluxDB에 전송 저장한다. 
+Log Agent도 IaaS/PaaS에 설치되어 Log Data를 각각의 Log Repository에 전송한다.
+![IaaSTa_Monit_architecure_Image]
+
 
 ![Saas_Monit_collect_architecure_Image]
 
@@ -1044,7 +1051,7 @@ PaaS-TA Monitoring main dashboard 화면
 
  ![PaaSTa_monitoring_main_dashboard_5.0]
 
-
+[IaaSTa_Monit_architecure_Image]:./images/iaas-archi.png
 [PaaSTa_Monit_architecure_Image]:./images/monit_architecture.png
 [Caas_Monit_architecure_Image]:./images/caas_monitoring_architecture.png
 [Saas_Monit_architecure_Image]:./images/saas_monitoring_architecture.png
