@@ -27,7 +27,7 @@ PaaS-TA 3.5 버전부터는 Bosh2.0 기반으로 deploy를 진행하며 기존 B
 설치 범위는 WEB-IDE 사용을 검증하기 위한 기본 설치를 기준으로 작성하였다.
 
 ### <div id='4'/> 1.3. 시스템 구성도
-본 문서의 설치된 시스템 구성도입니다. Browser(paasta Portal), WEB IDE
+본 문서의 설치된 시스템 구성도입니다. Browser(PaaS-TA Portal), WEB IDE
 Server, Workspace, Desktop IDE로 최소사항을 구성하였다.
 
 ![](/service-guide/images/webide/web-ide-01.png)
