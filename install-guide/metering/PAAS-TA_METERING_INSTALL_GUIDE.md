@@ -20,11 +20,11 @@
 - [3.2 paasta-usage-repoting 데이터 추출](#10)  
 
 <br><br>
-# <div id='1'/>1.  문서 개요
+# <div id='#'/>1.  문서 개요
 <br>		
 본 문서(node.js API 서비스 미터링 애플리케이션 개발 가이드)는 파스-타 플랫폼 프로젝트의 미터링 플러그인과 Node.js API 애플리케이션과 연동하여 API 서비스를 미터링하는 방법에 대해 기술 하였다. 
 
-## <div id='2'/>1.1 범위  
+## <div id='1'/>1.1 범위  
 본 문서의 범위는 파스-타 플랫폼 프로젝트의 Node.js API 서비스 애플리케이션 개발과 CF-Abacus 연동에 대한 내용으로 한정되어 있다. (CF-Abacus 1.1.5 작성됨)
 ```
 참고 자료  
@@ -32,14 +32,14 @@
 ```
 # 2. Abacus 배포
 
-## <div id='3'/>2.1 배포 전제 조건
+## <div id='2'/>2.1 배포 전제 조건
 이 가이드는 ubuntu16.04 및 로컬 설치를 기준으로 작성되어 있다.   
 	- Paas-TA가 로컬에 설치 되어 있어야 한다.  
 	- CF가 로컬에 설치 되어 있어야 한다.  
 	- CF-Cli 가 로컬에 설치 되어 있어야 한다.  
 	- 설치 패키지가 로컬에 설치 되어 있어야 한다.  
 
-## <div id='4'/>2.2 필수 프로그램 설치
+## <div id='3'/>2.2 필수 프로그램 설치
 </br>
 - Node.js와 npm은 같이 설치된다  
 
@@ -53,7 +53,7 @@
 
 </br>
 
-## <div id='5'/>2.3 Cf-Abacus 다운로드  
+## <div id='4'/>2.3 Cf-Abacus 다운로드  
 <br>    
 
 ```
@@ -61,7 +61,7 @@ $ wget https://github.com/cloudfoundry-incubator/cf-abacus/archive/v1.1.5.tar.gz
 $ tar -xvf v1.1.5.tar.gz  
 ```
 
-## <div id='6'/>2.4 Node.js 설치 순서  
+## <div id='5'/>2.4 Node.js 설치 순서  
 <br>  
 
 ```
@@ -91,7 +91,7 @@ echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/source
 $ sudo apt-get update && sudo apt-get install yarn
 ```
  
-## <div id='7'/>2.3  MongoDB,RabbitMQ 설치
+## <div id='6'/>2.3  MongoDB,RabbitMQ 설치
 ※ abacus 데이터 저장소로 MongoDB를 사용하며, RabbitMQ를 통하여, 메시지 분산처리를 지원한다.  
 ※ abacus 데모를 실행하기 위해서는 MongoDB, RabbitMQ를 설치 해야 한다.  
 ※ CF-Abacus 1.1.5부터는 Docker를 사용하여, 별도의 설정없이 MongoDB, RabbitMQ 설치를 지원한다.   
@@ -131,7 +131,7 @@ $ docker-compose up
 ```  
 ![METERING_3]  
  
-## <div id='8'/>2.4 UAA 계정 등록
+## <div id='7'/>2.4 UAA 계정 등록
 CF 설치한 abacus에서 CF의 앱 사용량 정보를 수집하기 위해서 CF 접근을 위한 계정 및 토큰을발급 받아야 한다.  
 또한 보안 모드로 abacus를 배포한 경우, abacus 컴포넌트간의 데이터 전송을 위한 계정을 등록해야 한다.  
 
@@ -221,7 +221,7 @@ uaac client add <ClientID> -s <ClientSecret> #
 $ uaac client add abacus-service-dashboard -s abacus-secret --authorized_grant_types authorization_code,refresh_token --redirect_uri 'http://abacus-service-dashboard.115.68.46.188.xip.io/manage/instances/* https://abacus-service-dashboard.115.68.46.188.xip.io/manage/instances/*' --authorities abacus.usage.read,abacus.usage.write,uaa.none --scope openid,cloud_controller_service_permissions.read,cloud_controller.read,abacus.usage.read,abacus.usage.write
 ```
 
-## <div id='9'/>2.5. Abacus 배포를 위한 조직 및 영역 설정
+## <div id='8'/>2.5. Abacus 배포를 위한 조직 및 영역 설정
 
 ```
 ## CF target 설정
@@ -250,7 +250,7 @@ $ cf target -o <조직> -s <영역>
 
 ```
 
-## <div id='10'/>2.6.	cf-abacus 배포
+## <div id='9'/>2.6.	cf-abacus 배포
 
 Abacus 기능 개요
 
@@ -440,7 +440,7 @@ $ yarn run store-defaults
 
 # <div id='#'/>3.	API 호출  
 설치된 CF-ABACUS에 대한 데이터 호출 방법을 설명한다.  
-## <div id='11'/>3.1	Token 생성  
+## <div id='10'/>3.1	Token 생성  
 
 ```
 $curl -X POST   'https://uaa.115.68.46.188.xip.io/oauth/token?client_id=abacus&client_secret=abacus-secret&grant_type=client_credentials&scopre=reporting.agent.write%20,%20abacus.usage.write'   -H 'Content-Type: application/x-www-form-urlencoded' -H 'cache-control: no-cache' -k
