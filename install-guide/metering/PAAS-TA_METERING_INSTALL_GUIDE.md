@@ -9,15 +9,15 @@
 - [2.1 배포 전제 조건](#2)
 - [2.2 필수 프로그램 설치](#3)  
 - [2.3 MogoDB,RabbitMQ](#4)  
-- [2.4 UAA 계정 등록](#5)  
-- [2.5 Abacus 베포를 위한 조직 및 영역 설정](#6)  
-- [2.6 cf-abacus 배포](#7)  
+- [2.4 UAA 계정 등록](#67)  
+- [2.5 Abacus 베포를 위한 조직 및 영역 설정](#8)  
+- [2.6 cf-abacus 배포](#9)  
 
 
 [3. API 호출](#)
 
-- [3.1 Token 생성](#8)  
-- [3.2 paasta-usage-repoting 데이터 추출](#9)  
+- [3.1 Token 생성](#10)  
+- [3.2 paasta-usage-repoting 데이터 추출](#11)  
 
 <br><br>
 # <div id='#'/>1.  문서 개요
@@ -457,7 +457,7 @@ $curl -X POST   'https://uaa.115.68.46.188.xip.io/oauth/token?client_id=abacus&c
 access_token 을 추출한다.
 ```
 
-paasta-usage-repoting 데이터 추출
+## <div id='11'/>3.2 paasta-usage-repoting 데이터 추출
 ```
 ## org guid 추출
 $ cf org <org명> --guid
