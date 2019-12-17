@@ -21,7 +21,7 @@
 ### 1.1. 목적
 
 본 문서(PaaS-TA Portal Release 설치 가이드)는 전자정부표준프레임워크 기반의 PaaS-TA에서 제공되는 PaaS-TA Portal Release를 Bosh2.0을 이용하여 설치 하는 방법을 기술하였다.
-PaaS-TA 4.6 버전부터는 Bosh2.0 기반으로 deploy를 진행하며 내부 네트워크는 link를 적용시켜 자동으로 Ip가 할당이 된다. 기존 Bosh1.0 기반으로 설치를 원할경우에는 PaaS-TA 3.1 이하 버전의 문서를 참고한다.
+PaaS-TA 5.0 버전부터는 Bosh2.0 기반으로 deploy를 진행하며 내부 네트워크는 link를 적용시켜 자동으로 Ip가 할당이 된다. 기존 Bosh1.0 기반으로 설치를 원할경우에는 PaaS-TA 3.1 이하 버전의 문서를 참고한다.
 
 ### 1.2. 범위
 설치 범위는 PaaS-TA Portal Release를 검증하기 위한 기본 설치를 기준으로 작성하였다.
@@ -201,7 +201,7 @@ BOSH CLI v2 가 설치 되어 있지 않을 경우 먼저 BOSH2.0 설치 가이�
      
      Succeeded
 
-> 2. bosh-dns include deployments에 paasta가 없다면 ~/workspace/paasta-4.6/deployment/bosh-deployment/runtime-configs 의 dns.yml 을 열어서 paasta를 추가해야한다.
+> 2. bosh-dns include deployments에 paasta가 없다면 ~/workspace/paasta-5.0/deployment/bosh-deployment/runtime-configs 의 dns.yml 을 열어서 paasta를 추가해야한다.
 
        addons:
       - name: bosh-dns
@@ -231,7 +231,7 @@ BOSH CLI v2 가 설치 되어 있지 않을 경우 먼저 BOSH2.0 설치 가이�
 
 
 > 3. dns.yml의 bosh-dns addons 설정 부분이다. Incoude.deployments에 paasta를 위와같이 추가시킨다. 
-> 4. yml설정을 한 후에 ~/workspace/paasta-4.6/deployment/bosh-deployment/update-runtime-config.sh을 실행시키면 runtime-config가 업데이트가 된다.
+> 4. yml설정을 한 후에 ~/workspace/paasta-5.0/deployment/bosh-deployment/update-runtime-config.sh을 실행시키면 runtime-config가 업데이트가 된다.
 > 5. 다시 bosh runtime-config 명령어를 통해 bosh-dns include deployments 에 paasta가 있는지 확인 후 성공적으로 등록이 되었으면 paasta-portal 릴리즈 업로드 및 deploy를 진행한다.
 ### 2.2. PaaS-TA Portal API 릴리즈 업로드
 
