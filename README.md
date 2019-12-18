@@ -14,8 +14,14 @@
 
 ##  가이드
 - [CF Migration 가이드 (3.1 to 4.0)](../../../Guide-4.0-ROTELLE/blob/master/PaaS_TA_4.0_migration.md)
+  
+## 포털 설치 가이드
+- [PaaS-TA 포털 UI](./install-guide/portal/PAAS-TA_PORTAL_UI_SERVICE_INSTALL_GUIDE_V1.0.md)
+- [PaaS-TA 포털 API](./install-guide/portal/PAAS-TA_PORTAL_API_SERVICE_INSTALL_GUIDE_V1.0.md)
 
 ## 서비스 설치 가이드
+**아래 서비스 설치 전에 BOSH, PaaS-TA, PaaS-TA 포털이 설치되어 있어야 한다.**
+
 - DBMS 설치
   - [Cubrid](./service-guide/dbms/PAAS-TA_CUBRID_SERVICE_INSTALL_GUIDE_V1.0.md)
   - [MySQL](./service-guide/dbms/PAAS-TA_MYSQL_SERVICE_INSTALL_GUIDE_V1.0.md)
@@ -39,10 +45,6 @@
   - [라이프사이클 관리 서비스](./service-guide/tools/PAAS-TA_LIFECYCLE_MANAGEMENT_SERVICE_INSTALL_GUIDE_V1.0.md)
 - 미터링
   - [CF-Abacus](./install-guide/metering/PAAS-TA_METERING_INSTALL_GUIDE.md)
-  
-## 포털 설치 가이드
-- [PaaS-TA 포털 UI](./install-guide/portal/PAAS-TA_PORTAL_UI_SERVICE_INSTALL_GUIDE_V1.0.md)
-- [PaaS-TA 포털 API](./install-guide/portal/PAAS-TA_PORTAL_API_SERVICE_INSTALL_GUIDE_V1.0.md)
 
 ## 모니터링 설치 가이드
 - [PaaS-TA 모니터링](./service-guide/monitoring/PAAS-TA_MONITORING_INSTALL_GUIDE_V5.0.md)
