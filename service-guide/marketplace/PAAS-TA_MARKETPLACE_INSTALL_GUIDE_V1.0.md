@@ -36,23 +36,7 @@
 
 ### <div id='21'/> 2.1. 설치 전 준비사항
 본 설치 가이드는 Linux 환경에서 설치하는 것을 기준으로 하였다.
-마켓플레이스를 설치하기 위해서는 먼저 BOSH CLI v2 및 PaaS-TA, PaaS-TA 사용자 포털이 설치되어 있어야 한다.<br>
-위에 해당하는 사항들이 설치 되어 있지 않을 경우, 먼저 BOSH 2.0 설치 가이드 문서를 참고하여 BOSH CLI v2를 설치를 하고 사용법을 숙지해야한다.<br>
-
-- 설치 및 사용자 가이드
-  >BOSH 2 사용자 가이드 : <https://github.com/PaaS-TA/Guide-4.0-ROTELLE/blob/master/PaaS-TA_BOSH2_사용자_가이드v1.0.md>
-  >
-  >BOSH CLI V2 사용자 가이드 : <https://github.com/PaaS-TA/Guide-4.0-ROTELLE/blob/master/Use-Guide/Bosh/PaaS-TA_BOSH_CLI_V2_사용자_가이드v1.0.md>
-  >
-  >CF CLI V2 사용자 가이드 : <https://github.com/PaaS-TA/Guide-1.0-Spaghetti-/blob/master/Use-Guide/OpenPaas%20CLi%20%EA%B0%80%EC%9D%B4%EB%93%9C.md>
-  >
-  >PaaS-TA 설치 가이드 : <https://github.com/PaaS-TA/Guide-5.0-Ravioli/blob/master/install-guide/paasta/PAAS-TA_CORE_INSTALL_GUIDE_V5.0.md>
-  >
-  >PaaS-TA 사용자 포털 설치 가이드
-  >> API : <https://github.com/PaaS-TA/Guide-5.0-Ravioli/blob/master/install-guide/portal/PAAS-TA_PORTAL_API_SERVICE_INSTALL_GUIDE_V1.0.md>
-  >>
-  >> UI : <https://github.com/PaaS-TA/Guide-5.0-Ravioli/blob/master/install-guide/portal/PAAS-TA_PORTAL_UI_SERVICE_INSTALL_GUIDE_V1.0.md>
-
+마켓플레이스를 설치하기 위해서는 BOSH 2.0과 PaaS-TA 5.0, PaaS-TA 포털이 설치되어 있어야 한다.
 
 #### <div id='211'/> 2.1.1. App 파일 및 Manifest 파일 다운로드
 
