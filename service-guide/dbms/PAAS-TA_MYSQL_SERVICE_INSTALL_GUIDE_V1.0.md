@@ -565,7 +565,7 @@ instance_groups:
   - name: mysql
     release: paasta-mysql  
     properties:
-      admin_password: admin                            # MySQL 어드민 패스워드
+      admin_password: {mariadb_admin_password}         # MySQL 어드민 패스워드 (변경 시, op-mysql-java-broker job properties의 jdbc_pwd 변숫값과 동일 적용) 
       cluster_ips:                                     # 클러스터 구성시 IPs(필수)
       - xx.x.xxx.01
       network_name: ((default_network_name))
@@ -619,7 +619,7 @@ instance_groups:
     release: paasta-mysql
     properties:                                       # Mysql 정보
       jdbc_ip: xx.x.xxx.02
-      jdbc_pwd: admin
+      jdbc_pwd: {mariadb_admin_password}              # JDBC 패스워드 (변경 시, mysql job properties의 admin_password 변숫값과 동일 적용) 
       jdbc_port: 3306
       log_dir: paasta-mysql-java-broker
       log_file: paasta-mysql-java-broker
