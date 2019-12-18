@@ -7,7 +7,7 @@
 2. [MySQL 서비스팩 설치](#2)
   - 2.1. [설치전 준비사항](#21)
   - 2.2. [MySQL 서비스 릴리즈 업로드](#22)
-  - 2.3. [MySQL 서비스 Deployment 파일 수정 및 배포](#23)
+  - 2.3. [MySQL 서비스 Deployment 파일 수정 및 배포](#23)\
   - 2.4. [MySQL 서비스 브로커 등록](#24)
 3. [MySQL 연동 Sample Web App 설명](#3)
   - 3.1. [Sample Web App 구조](#31)
@@ -1291,6 +1291,7 @@ destination ips : mysql 인스턴스 ips.
 
 ##### 모든 App에 Mysql 서비스를 사용할수 있도록 생성한 보안 그룹을 적용한 후, App을 리부팅 한다.  
 
+>`$ cf bind-staging-security-group p-mysql`
 >`$ cf bind-running-security-group p-mysql`  
 >`$ cf restart mysql-sample-app`  
 >![update_mysql_vsphere_31] 
