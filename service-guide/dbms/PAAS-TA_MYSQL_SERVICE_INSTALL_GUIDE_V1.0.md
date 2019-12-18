@@ -1274,7 +1274,7 @@ destination ips : mysql 인스턴스 ips.
 [
   {
     "protocol": "tcp",
-    "destination": "10.30.107.164 - 10.30.107.166"
+    "destination": "10.30.107.164 - 10.30.107.166",
     "ports": "3306"
   }
 ]
