@@ -46,11 +46,13 @@
 - 미터링
   - [CF-Abacus](./install-guide/metering/PAAS-TA_METERING_INSTALL_GUIDE.md)
 
+## 마켓플레이스 설치 가이드
+**마켓플레이스 설치 전에 BOSH, PaaS-TA, PaaS-TA 포털이 설치되어 있어야 한다.**
+
+- [PaaS-TA 마켓플레이스](./service-guide/marketplace/PAAS-TA_MARKETPLACE_INSTALL_GUIDE_V1.0.md)
+
 ## 모니터링 설치 가이드
 - [PaaS-TA 모니터링](./service-guide/monitoring/PAAS-TA_MONITORING_INSTALL_GUIDE_V5.0.md)
-
-## 마켓플레이스 설치 가이드
-- [PaaS-TA 마켓플레이스](./service-guide/marketplace/PAAS-TA_MARKETPLACE_INSTALL_GUIDE_V1.0.md)
 
 ## 활용 가이드
 - [BOSH CLI V2(Command Line Interface) 사용](../../../Guide-4.0-ROTELLE/blob/master/Use-Guide/Bosh/PaaS-TA_BOSH_CLI_V2_사용자_가이드v1.0.md)
