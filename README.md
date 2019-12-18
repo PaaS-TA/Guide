@@ -46,7 +46,6 @@
 
 ## 모니터링 설치 가이드
 - [PaaS-TA 모니터링](./service-guide/monitoring/PAAS-TA_MONITORING_INSTALL_GUIDE_V5.0.md)
-- [IaaS/PaaS(PaaS-TA) 통합 모니터링](../../../Guide-4.0-ROTELLE/blob/master/Install-Guide/monitoring/PaaS_TA_4.0_iaas_paas_monitoring.md)
 
 ## 마켓플레이스 설치 가이드
 - [PaaS-TA 마켓플레이스](./service-guide/marketplace/PAAS-TA_MARKETPLACE_INSTALL_GUIDE_V1.0.md)
