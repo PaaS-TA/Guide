@@ -1268,7 +1268,7 @@ buildpack: java_buildpack
 >(참고) App구동시 Mysql 서비스 접속 에러로 App 구동이 안될 경우 보안 그룹을 추가한다.  
 
 ##### rule.json 화일을 만들고 아래와 같이 내용을 넣는다.  
->`$ vi rule.json 
+>`$ vi rule.json`   
 destination ips : mysql 인스턴스 ips.
 ```json
 [
