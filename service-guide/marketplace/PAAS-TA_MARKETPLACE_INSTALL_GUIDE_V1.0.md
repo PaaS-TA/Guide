@@ -38,7 +38,7 @@
 본 설치 가이드는 Linux 환경에서 설치하는 것을 기준으로 하였다.
 마켓플레이스를 설치하기 위해서는 BOSH 2.0과 PaaS-TA 5.0, PaaS-TA 포털이 설치되어 있어야 한다.
 
-##### 마켓플레이스 설치에 필요한 Object Storage(Swift)의 정보를 설정하기 위해서는 paasta-marketplace-env-release가 설치되어 있어야 한다.
+##### 마켓플레이스 설치에 필요한 Object Storage(Swift) 및 DB 정보를 설정하기 위해서는 paasta-marketplace-env-release가 설치되어 있어야 한다.
 -	설치 가이드 및 사용자 가이드
   > PaaS-TA Marketplace Environment Release 설치: https://github.com/PaaS-TA/PAAS-TA-MARKETPLACE-ENV-RELEASE
   
@@ -118,10 +118,7 @@
 
 5) 마켓플레이스에 필요한 Object Storage(Swift) 정보를 확인한다.
   ```
-  1) 아래 URL을 참고하여 Swift 를 설치한다.
-     https://docs.openstack.org/swift/latest/development_saio.html
-
-  2) 설치를 모두 마친 뒤 아래와 같이 Marketplace Api 와 Marketplace Seller 프로젝트의 manifest.yml 에 Swfit 정보를 수정해 준다.
+  1) Marketplace Api 와 Marketplace Seller 프로젝트의 manifest.yml 에 Swfit 정보를 수정해 준다.
 
     *******************************< manifest.yml >*******************************
     objectStorage.swift.tenantName: <생성한 Object Storage tenant 이름>
