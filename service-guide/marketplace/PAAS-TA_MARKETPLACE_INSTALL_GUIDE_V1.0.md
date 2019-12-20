@@ -104,35 +104,21 @@ marketplace
   $ cf curl "/v2/domains"
   ```
 
-4) 마켓플레이스에 필요한 DBMS 를 신청한다.
-  ```
-  $ cf service-brokers
+4) 마켓플레이스에 필요한 Object Storage(Swift) 정보를 확인한다.
 
-  $ cf service-access -b mysql-service-broker
+> **[paasta-marketplace-env.yml](https://github.com/PaaS-TA/PAAS-TA-MARKETPLACE-ENV-RELEASE/blob/master/README.md#-33-marketplace-environment-deployment-파일-수정-및-배포)**
 
-  $ cf create-service <서비스명> <서비스플랜> <내 서비스명>
-  예시) $ cf create-service Mysql-DB Mysql-Plan2-100con marketplace-mysql
-  ```
-  > MySQL 서비스 신청 참고 : https://github.com/PaaS-TA/Guide-5.0-Ravioli/blob/master/service-guide/dbms/PAAS-TA_MYSQL_SERVICE_INSTALL_GUIDE_V1.0.md
-
-  또는
-
-  > PaaS-TA 사용자 포탈 참고 : https://github.com/PaaS-TA/Guide-5.0-Ravioli/blob/master/use-guide/portal/PAAS-TA_USER_PORTAL_USE_GUIDE_V1.1.md
-
-<br>
-
-5) 마켓플레이스에 필요한 Object Storage(Swift) 정보를 확인한다.
   ```
   1) Marketplace Api 와 Marketplace Seller 프로젝트의 manifest.yml 에 Swfit 정보를 수정해 준다.
 
     *******************************< manifest.yml >*******************************
-    objectStorage.swift.tenantName: <생성한 Object Storage tenant 이름>
-    objectStorage.swift.username: <생성한 Object Storage account 사용자 이름>
-    objectStorage.swift.password: <생성한 Object Storage account password>
-    objectStorage.swift.authUrl: <생성한 Object Storage API 엔드포인트>
+    objectStorage.swift.tenantName: <Object Storage tenant 이름>
+    objectStorage.swift.username: <Object Storage account 사용자 이름>
+    objectStorage.swift.password: <Object Storage account password>
+    objectStorage.swift.authUrl: <Object Storage API 엔드포인트>
     objectStorage.swift.authMethod: <Object Storage 인증 메서드>
     objectStorage.swift.preferredRegion: <설정해준 Region>
-    objectStorage.swift.container: <생성한 Object Storage Container 이름>
+    objectStorage.swift.container: <Object Storage Container 이름>
     ******************************************************************************
 
   ```
