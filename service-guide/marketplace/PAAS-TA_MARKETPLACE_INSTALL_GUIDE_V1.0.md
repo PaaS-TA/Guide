@@ -49,10 +49,11 @@
 -	설치 파일 다운로드 위치 : https://paas-ta.kr/download/package  
 - 설치 작업 경로 및 디렉토리 (파일) 구성  
 ```  
-# 설치 작업 경로  
+### 설치 작업 경로  
 ${HOME}/workspace/paasta-5.0/release/service/marketplace  
 
-# 설치 디렉토리 (파일) 구성  
+### 설치 디렉토리 (파일) 구성  
+marketplace
 ├── marketplace-api  
 │   ├── manifest.yml  
 │   └── marketplace-api.jar  
@@ -69,27 +70,38 @@ ${HOME}/workspace/paasta-5.0/release/service/marketplace
 
 ### <div id='22'/> 2.2. 마켓플레이스 Manifest 파일 수정 및 App 배포
 ### <div id='221'/> 2.2.1. CF 공간 설정 및 백엔드 서비스 설정
-1) 마켓플레이스를 설치할 CF 공간을 설정하기 위해 PaaS-TA 어드민 계정으로 CF에 로그인한 후 Marketplace를 배포할 조직 및 공간을 생성하고, 배포할 공간으로 target 설정을 한다. 아래는 cf login 후 신규로 설정하는 명령어 모음이다.
+
+마켓플레이스는 파스-타에 애플리케이션으로 서비스가 배포된다. 마켓플레이스 서비스 배포 및 마켓플레이스의 상품 배포를 위한 조직과 공간 설정 진행을 위해 조직과 공간을 생성하고 설정할 수 있는 권한을 가진 관리자 계정으로 로그인 되어 있어야 한다.
+
+1) 마켓플레이스 배포를 위한 조직 및 공간을 생성하고 설정을 진행한다.
+
   ```
+  ### 마켓플래이스 배포를 위한 조직 및 공간 생성 및 설정 
   $ cf create-quota marketplace_quota -m 100G -i -1 -s -1 -r -1 --reserved-route-ports -1 --allow-paid-service-plans
   $ cf create-org marketplace -q marketplace_quota
-  $ cf create-space system -o marketplace
+  $ cf create-space system -o marketplace  
   ```
 
-2) 아래는 마켓플레이스의 상품을 배포할 CF 공간을 설정하기 위해 PaaS-TA 어드민 계정으로 CF에 로그인한 후 상품 배포용 조직 및 공간을 생성하는 명령어 모음이다.
+2) 마켓플레이스의 상품 배포를 위한 조직 및 공간을 생성하고 설정을 진행한다.
   ```
+  ### 마켓플래이스 상품 배포를 위한 조직 및 공간 생성 및 설정 
   $ cf create-org marketplace-org -q marketplace_quota
   $ cf create-space marketplace-space -o marketplace-org
-  $ cf target -o marketplace-org -s marketplace-space
-  ```
+  ```  
+  
 3) 생성한 조직과 공간, 쿼타에 대한 GUID 를 확인한다.
   ```
-  - 조직 GUID : $ cf org marketplace-org --guid
-  - 공간 GUID : $ cf space marketplace-space --guid
-  - 쿼타 GUID : $ cf curl "/v2/quota_definitions"
-    => 생성한 쿼타명에 해당하는 resources.metadata.guid
-  - 도메인 GUID : $ cf curl "/v2/domains"
-    => resources.metadata.guid
+  ### 조직 GUID 확인 
+  $ cf org marketplace-org --guid
+  
+  ### 공간 GUID 확인 
+  $ cf space marketplace-space --guid
+  
+  ### 쿼타 GUID 확인 ("marketplace_quota"에 해당하는 GUID 확인)
+  $ cf curl "/v2/quota_definitions"
+  
+  ### 도메인 GUID 확인  
+  $ cf curl "/v2/domains"
   ```
 
 4) 마켓플레이스에 필요한 DBMS 를 신청한다.
