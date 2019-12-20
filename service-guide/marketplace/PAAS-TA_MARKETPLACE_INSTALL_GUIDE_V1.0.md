@@ -38,7 +38,7 @@
 본 설치 가이드는 Linux 환경에서 설치하는 것을 기준으로 하였다.
 마켓플레이스를 설치하기 위해서는 BOSH 2.0과 PaaS-TA 5.0, PaaS-TA 포털이 설치되어 있어야 한다.
 
-##### 마켓플레이스 설치에 필요한 Object Storage(Swift) 및 DB 정보를 설정하기 위해서는 paasta-marketplace-env-release가 설치되어 있어야 한다.
+##### 마켓플레이스 설치에 필요한 Object Storage(Swift) 및 DB 정보를 설정하기 위해서는 paasta-marketplace-env-release가 필수적으로 설치되어 있어야 한다.
 
 > **[PaaS-TA Marketplace Environment Release 설치](https://github.com/PaaS-TA/PAAS-TA-MARKETPLACE-ENV-RELEASE)**
   
@@ -46,33 +46,26 @@
 
 마켓플레이스 설치에 필요한 App 파일 및 Manifest 파일을 다운로드 받아 서비스 설치 작업 경로로 위치시킨다.
 
--	설치 파일 다운로드 위치 : https://paas-ta.kr/download/package
--	App, Manifest 파일은 /home/{user_name}/workspace/paasta-5.0/release/service/marketplace 이하에 다운로드 받아야 한다.
--	설치 작업 경로 생성 및 파일 다운로드
+-	설치 파일 다운로드 위치 : https://paas-ta.kr/download/package  
+- 설치 작업 경로 및 디렉토리 (파일) 구성  
+```  
+# 설치 작업 경로  
+${HOME}/workspace/paasta-5.0/release/service/marketplace  
 
-> Marketplace 관련 프로젝트 폴더
-  >> marketplace-api<br>
-  >> marketplace-webuser<br>
-  >> marketplace-webseller<br>
-  >> marketplace-webadmin<br>
-
-* 각 폴더 내부에는 manifest.yml 파일과 jar/war 파일로 구성되어 있습니다.
->	Manifest 파일
- >> manifest.yml
-
-> Application 파일
- >> marketplace-api.jar<br>
- >> marketplace-web-user.war<br>
- >> marketplace-web-seller.war<br>
- >> marketplace-web-admin.war<br>
-
- ```
- - Application 파일 다운로드 파일 위치 경로 생성
- $ mkdir -p ~/workspace/paasta-5.0/release/service/marketplace
- ```
-
- -	Marketplace 관련 폴더들을 다운로드 받아 ~/workspace/paasta-5.0/release/service/marketplace 이하 디렉토리에 이동한다.
-
+# 설치 디렉토리 (파일) 구성  
+├── marketplace-api  
+│   ├── manifest.yml  
+│   └── marketplace-api.jar  
+├── marketplace-webadmin  
+│   ├── manifest.yml  
+│   └── marketplace-web-admin.war  
+├── marketplace-webseller  
+│   ├── manifest.yml  
+│   └── marketplace-web-seller.war  
+└── marketplace-webuser  
+    ├── manifest.yml  
+    └── marketplace-web-user.war  
+```  
 
 ### <div id='22'/> 2.2. 마켓플레이스 Manifest 파일 수정 및 App 배포
 ### <div id='221'/> 2.2.1. CF 공간 설정 및 백엔드 서비스 설정
