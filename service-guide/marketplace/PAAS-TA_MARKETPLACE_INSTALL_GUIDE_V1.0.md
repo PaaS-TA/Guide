@@ -161,7 +161,7 @@ mariadb/01ce2b6f-1038-468d-92f8-f68f72f7ea77         running        z2  10.174.1
   ```
   ## Object Storage(Swift)
     OBJECT STORAGE TENANTNAME : paasta-marketplace
-    OBJECT STORAGE USERNAME : paasta-marketplace"
+    OBJECT STORAGE USERNAME : paasta-marketplace
     OBJECT STORAGE PASSWORD : paasta
     OBJECT STORAGE AUTHURL : http://<OBJECT_STORAGE_IP>:5000/v2.0/tokens
     OBJECT STORAGE CONTAINER : marketplace-container
@@ -174,7 +174,7 @@ mariadb/01ce2b6f-1038-468d-92f8-f68f72f7ea77         running        z2  10.174.1
 ### <div id='222'/> 2.2.2. manifest 파일 설정
 - 마켓플레이스 manifest는 Components 요소 및 배포의 속성을 정의한 YAML 파일이다. manifest 파일에는 어떤 name, memory, instance, host, path, buildpack, env 등을 사용 할 것인지 정의가 되어 있다.
 
-  1) marketplace-api 의 manifest 파일을 수정한다.
+  1) marketplace-api 의 manifest 파일을 환경에 맞게 수정한다.
     
   ```
   $ cd ${HOME}/workspace/paasta-5.0/release/service/marketplace/marketplace-api
@@ -227,10 +227,10 @@ mariadb/01ce2b6f-1038-468d-92f8-f68f72f7ea77         running        z2  10.174.1
 
       ### 수정 필요 ###
       market_org_name: marketplace-org
-      market_org_guid: <조직 GUID>
+      market_org_guid: <marketplace-org 조직 GUID>
       market_space_name: marketplace-space
-      market_space_guid: <공간 GUID>
-      market_quota_guid: <쿼타 GUID>
+      market_space_guid: <marketplace-space 공간 GUID>
+      market_quota_guid: <marketplace_quota 쿼타 GUID>
       market_domain_guid: <도메인 GUID>
       market_naming-type: "Auto"
 
@@ -268,7 +268,7 @@ mariadb/01ce2b6f-1038-468d-92f8-f68f72f7ea77         running        z2  10.174.1
   ```
   <br>
   
-  2) marketplace-webadmin 의 manifest 파일을 수정한다.  
+  2) marketplace-webadmin 의 manifest 파일을 환경에 맞게 수정한다.  
     
   ```
   $ cd ${HOME}/workspace/paasta-5.0/release/service/marketplace/marketplace-webadmin
@@ -319,7 +319,7 @@ mariadb/01ce2b6f-1038-468d-92f8-f68f72f7ea77         running        z2  10.174.1
   ```
   <br>
   
-  3) marketplace-webseller 의 manifest 파일을 수정한다.  
+  3) marketplace-webseller 의 manifest 파일을 환경에 맞게 수정한다.  
     
   ```
   $ cd ${HOME}/workspace/paasta-5.0/release/service/marketplace/marketplace-webseller
@@ -375,7 +375,7 @@ mariadb/01ce2b6f-1038-468d-92f8-f68f72f7ea77         running        z2  10.174.1
   ```
   <br>
 
-  4) marketplace-webuser 의 manifest 파일을 수정한다.  
+  4) marketplace-webuser 의 manifest 파일을 환경에 맞게 수정한다.  
     
   ```
   $ cd ${HOME}/workspace/paasta-5.0/release/service/marketplace/marketplace-webuser
