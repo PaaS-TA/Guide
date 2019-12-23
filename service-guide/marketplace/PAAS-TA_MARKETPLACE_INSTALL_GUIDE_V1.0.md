@@ -104,44 +104,82 @@ marketplace
   $ cf curl "/v2/domains"
   ```
 
-4) 마켓플레이스에 필요한 Object Storage(Swift) 정보를 확인한다.
+4) 마켓플레이스에 필요한 Object Storage(Swift) 및 DB 환경 정보를 확인한다.
 
-> **[paasta-marketplace-env.yml](https://github.com/PaaS-TA/PAAS-TA-MARKETPLACE-ENV-RELEASE/blob/master/README.md#-33-marketplace-environment-deployment-파일-수정-및-배포)**
-
+  - 위 2.1 설치 전 준비사항에서 사전 설치한 마켓플레이스 환경 정보를 확인하여 Object Storage(Swift) 및 DB 정보를 추출한다.  
+    ++ [PaaS-TA Marketplace Environment Release 설치 가이드](https://github.com/PaaS-TA/PAAS-TA-MARKETPLACE-ENV-RELEASE/blob/master/README.md#-33-marketplace-environment-deployment-파일-수정-및-배포)
   ```
-  1) Marketplace Api 와 Marketplace Seller 프로젝트의 manifest.yml 에 Swfit 정보를 수정해 준다.
-
-    *******************************< manifest.yml >*******************************
-    objectStorage.swift.tenantName: <Object Storage tenant 이름>
-    objectStorage.swift.username: <Object Storage account 사용자 이름>
-    objectStorage.swift.password: <Object Storage account password>
-    objectStorage.swift.authUrl: <Object Storage API 엔드포인트>
-    objectStorage.swift.authMethod: <Object Storage 인증 메서드>
-    objectStorage.swift.preferredRegion: <설정해준 Region>
-    objectStorage.swift.container: <Object Storage Container 이름>
-    ******************************************************************************
-
+  ## 마켓플레이스에 필요한 Object Storage(Swift) 및 DB 접속 URL 확인
+  
+  $ bosh -e micro-bosh -d paasta-marketplace-env vms
+  Deployment 'paasta-marketplace-env'
+  
+  Instance                                             Process State  AZ  IPs              VM CID                                   VM Type  Active
+binary_storage/66e5bf20-da8d-42b4-a325-fba5f6e326e8  running        z2  10.174.1.56      vm-a81d9fe1-e9e8-4729-9786-bbb5f1518234  medium   true
+mariadb/01ce2b6f-1038-468d-92f8-f68f72f7ea77         running        z2  10.174.1.57      vm-ce5deeed-ba4e-49d1-b6ab-1f07c779e776  small    true
+  
+  ==========================================================================================
+  ## DB 접속 정보 확인 > PAAS-TA-MARKETPLACE-ENV-RELEASE :: deploy-paasta-marketplace-env.sh 
+  
+  $ cat PAAS-TA-MARKETPLACE-ENV-RELEASE/deployment/deploy-paasta-marketplace-env.sh
+  
+  bosh -e micro-bosh -d paasta-marketplace-env deploy paasta-marketplace-env.yml \
+    -v default_network_name=default \
+    -v stemcell_os=ubuntu-xenial \
+    -v vm_type_small=small \
+    -v vm_type_medium=medium \
+    -v db_port=3306 \                                  ## DB port 설정
+    -v db_admin_password="admin!password"              ## DB Admin 패스워드 설정
+  
+  ==========================================================================================
+  ## Object Storage(Swift) 접속 정보 확인 > PAAS-TA-MARKETPLACE-ENV-RELEASE :: paasta-marketplace-env.yml 의 PROPERTIES 영역
+  
+  $ cat PAAS-TA-MARKETPLACE-ENV-RELEASE/deployment/paasta-marketplace-env.yml
+  
+  ######### PROPERTIES ##########
+  properties:
+  mariadb:                                                 # MARIA DB SERVER 설정 정보
+    port: ((db_port))
+    admin_user:
+      password: ((db_admin_password))                      # MARIA DB ADMIN USER PASSWORD
+  binary_storage:                                          # BINARY STORAGE SERVER 설정 정보
+    proxy_port: 10008                                      # 프록시 서버 Port(Object Storage 접속 Port)
+    auth_port: 5000
+    username:                                              # 최초 생성되는 유저이름(Object Storage 접속 유저이름)
+      - paasta-marketplace
+    password:                                              # 최초 생성되는 유저 비밀번호(Object Storage 접속 유저 비밀번호)
+      - paasta
+    tenantname:                                            # 최초 생성되는 테넌트 이름(Object Storage 접속 테넌트 이름)
+      - paasta-marketplace
+    email:                                                 # 최소 생성되는 유저의 이메일
+      - email@email.com
+    binary_desc:                                           # objectStorage_swift_container
+      - 'marketplace-container'                                 
+  ``` 
+  
+  - **마켓플레이스 Object Storage(Swift) 및 DB 환경 정보**
   ```
-
+  ## Object Storage(Swift)
+    OBJECT STORAGE TENANTNAME : paasta-marketplace
+    OBJECT STORAGE USERNAME : paasta-marketplace"
+    OBJECT STORAGE PASSWORD : paasta
+    OBJECT STORAGE AUTHURL : http://<OBJECT_STORAGE_IP>:5000/v2.0/tokens
+    OBJECT STORAGE CONTAINER : marketplace-container
+    
+  ## DB 정보
+    DB PORT : 3306
+    DB ADMIN PASSWORD : "admin!password"
+  ``` 
+  
 ### <div id='222'/> 2.2.2. manifest 파일 설정
 - 마켓플레이스 manifest는 Components 요소 및 배포의 속성을 정의한 YAML 파일이다. manifest 파일에는 어떤 name, memory, instance, host, path, buildpack, env 등을 사용 할 것인지 정의가 되어 있다.
-  >1) 마켓플레이스의 각 프로젝트 별 manifest 파일을 확인한다. 본 가이드에서 manifest 파일 및 cf 명령문에서 사용되는각 마켓플레이스 앱의 이름은 다음과 같다.
-  >>- marketplace-api
-  >>- marketplace-webuser
-  >>- marketplace-webseller
-  >>- marketplace-webadmin
 
-
-  > 2) 마켓플레이스 App 을 배포하기 위해 필요한  manifest 파일에 앞서 확인하였던 Object Storage 정보, 마켓플레이스 DBMS 신청 서비스 정보 들을 아래의 manifest 파일에 수정하여 넣는다.
-     >>- 조직
-     >>- 공간
-     >>- 쿼타 GUID
-     >>- Object Storage 정보
-     >>- 마켓플레이스 DBMS 신청 서비스 정보
-  > 3) marketplace api 와는 달리 marketplace web-user/ web-seller / web-admin 의 경우에는 'marketplace_api_url' 에 미리 배포하였던 marketplace-api 의 url 을 넣어 수정한다.
-
-  <strong>[ marketplace-api/manifest.yml ]</strong>
+  1) marketplace-api 의 manifest 파일을 수정한다.
+    
   ```
+  $ cd ${HOME}/workspace/paasta-5.0/release/service/marketplace/marketplace-api
+  $ vi manifest.yml
+  
   ---
   applications:
   - name: marketplace-api
@@ -157,9 +195,9 @@ marketplace
       spring_security_username: admin
       spring_security_password: openpaasta
       spring_datasource_driver-class-name: com.mysql.cj.jdbc.Driver
-      spring_datasource_url: jdbc:${vcap.services.Mysql-DB.credentials.uri}/marketplace?characterEncoding=utf8&autoReconnect=true&serverTimezone=Asia/Seoul
-      spring_datasource_username: ${vcap.services.Mysql-DB.credentials.username}
-      spring_datasource_password: ${vcap.services.Mysql-DB.credentials.password}
+      spring_datasource_url: jdbc:mysql://<DB_IP>:<DB_PORT>/marketplace?characterEncoding=utf8&autoReconnect=true&serverTimezone=Asia/Seoul         
+      spring_datasource_username: root
+      spring_datasource_password: <DB_ADMIN_PASSWORD>
       spring_jpa_database: mysql
       spring_jpa_hibernate_ddl-auto: update
       spring_jpa_hibernate_use-new-id-generator-mappings: false
@@ -188,23 +226,23 @@ marketplace
       cloudfoundry_authorization: cf-Authorization
 
       ### 수정 필요 ###
-      market_org_name: <조직 이름>
+      market_org_name: marketplace-org
       market_org_guid: <조직 GUID>
-      market_space_name: <공간 이름>
+      market_space_name: marketplace-space
       market_space_guid: <공간 GUID>
       market_quota_guid: <쿼타 GUID>
       market_domain_guid: <도메인 GUID>
       market_naming-type: "Auto"
 
       ### 수정 필요 ###
-      objectStorage_swift_tenantName: <생성한 Object Storage tenant 이름>
-      objectStorage_swift_username: <생성한 Object Storage account 사용자 이름>
-      objectStorage_swift_password: <생성한 Object Storage account password>
-      objectStorage_swift_authUrl: <생성한 Object Storage API 엔드포인트>
+      objectStorage_swift_tenantName: <OBJECT_STORAGE_TENANTNAME>
+      objectStorage_swift_username: <OBJECT_STORAGE_USERNAME>
+      objectStorage_swift_password: <OBJECT_STORAGE_PASSWORD>
+      objectStorage_swift_authUrl: http://<OBJECT_STORAGE_IP>:5000/v2.0/tokens
       objectStorage_swift_authMethod: keystone
       objectStorage_swift_preferredRegion: Public
-      objectStorage_swift_container: <생성한 Object Storage Container 이름>
-
+      objectStorage_swift_container: <OBJECT_STORAGE_CONTAINER>
+    
       provisioning_pool-size: 3
       provisioning_try-count: 3
       provisioning_timeout: 3600000
@@ -229,9 +267,13 @@ marketplace
 
   ```
   <br>
-
-  <strong>[ marketplace-webadmin/manifest.yml ]</strong>
+  
+  2) marketplace-webadmin 의 manifest 파일을 수정한다.  
+    
   ```
+  $ cd ${HOME}/workspace/paasta-5.0/release/service/marketplace/marketplace-webadmin
+  $ vi manifest.yml
+  
   ---
   applications:
   - name: marketplace-webadmin
@@ -250,9 +292,9 @@ marketplace
       spring_session_jdbc_schema: classpath:org/springframework/session/jdbc/schema-mysql.sql
       spring_mvc_static-path-pattern: /static/**
       spring_datasource_driver-class-name: com.mysql.cj.jdbc.Driver
-      spring_datasource_url: jdbc:${vcap.services.Mysql-DB.credentials.uri}/marketplace_admin?characterEncoding=utf8&autoReconnect=true
-      spring_datasource_username: ${vcap.services.Mysql-DB.credentials.username}
-      spring_datasource_password: ${vcap.services.Mysql-DB.credentials.password}
+      spring_datasource_url: jdbc:mysql://<DB_IP>:<DB_PORT>/marketplace_admin?characterEncoding=utf8&autoReconnect=true
+      spring_datasource_username: root
+      spring_datasource_password: <DB_ADMIN_PASSWORD>
       spring_datasource_validationQuery: SELECT 1
       spring_datasource_hikari_idle-timeout: 300000
       spring_datasource_hikari_max-lifetime: 1200000
@@ -262,7 +304,7 @@ marketplace
       spring_devtools_livereload_enabled: true
       spring_devtools_restart_enabled: true
 
-      marketplace_api_url: http://marketplace-api.<DOMAIN>.xip.io   # 먼저 배포한 'marketplace-api' App 의 urls
+      marketplace_api_url: http://marketplace-api.<DOMAIN>.xip.io   # 'marketplace-api' App 의 urls
       marketplace_registration: cf
       marketplace_client-id: marketclient
       marketplace_client-secret: ********
@@ -276,9 +318,13 @@ marketplace
       cloudfoundry_cc_api_host: ".<DOMAIN>.xip.io"
   ```
   <br>
-
-  <strong>[ marketplace-webseller/manifest.yml ]</strong>
+  
+  3) marketplace-webseller 의 manifest 파일을 수정한다.  
+    
   ```
+  $ cd ${HOME}/workspace/paasta-5.0/release/service/marketplace/marketplace-webseller
+  $ vi manifest.yml
+  
   ---
   applications:
   - name: marketplace-webseller
@@ -298,15 +344,15 @@ marketplace
       spring_mvc_static-path-pattern: /static/**
       spring_thymeleaf_cache: false
       spring_datasource_driver-class-name: com.mysql.cj.jdbc.Driver
-      spring_datasource_url: jdbc:${vcap.services.Mysql-DB.credentials.uri}/marketplace_seller?characterEncoding=utf8&autoReconnect=true
-      spring_datasource_username: ${vcap.services.Mysql-DB.credentials.username}
-      spring_datasource_password: ${vcap.services.Mysql-DB.credentials.password}
+      spring_datasource_url: jdbc:mysql://<DB_IP>:<DB_PORT>/marketplace_seller?characterEncoding=utf8&autoReconnect=true
+      spring_datasource_username: root
+      spring_datasource_password: <DB_ADMIN_PASSWORD>
       spring_datasource_validationQuery: SELECT 1
       spring_datasource_hikari_idle-timeout: 300000
       spring_datasource_hikari_max-lifetime: 1200000
       spring_datasource_hikari_connection-timeout: 30000
 
-      marketplace_api_url: http://marketplace-api.<DOMAIN>.xip.io   # 먼저 배포한 'marketplace-api' App 의 urls
+      marketplace_api_url: http://marketplace-api.<DOMAIN>.xip.io   # 'marketplace-api' App 의 urls
       marketplace_registration: cf
       marketplace_client-id: marketclient
       marketplace_client-secret: ********
@@ -319,17 +365,22 @@ marketplace
       marketplace_jwk-set-uri: https://<DOMAIN>/token_keys
 
       # 파일 업로드 Swift
-      objectStorage_swift_tenantName: paasta-swift
-      objectStorage_swift_username: swift
-      objectStorage_swift_password: swift
-      objectStorage_swift_authUrl: http://<DOMAIN>:5000/v2.0/tokens
+      objectStorage_swift_tenantName: <OBJECT_STORAGE_TENANTNAME>
+      objectStorage_swift_username: <OBJECT_STORAGE_USERNAME>
+      objectStorage_swift_password: <OBJECT_STORAGE_PASSWORD>
+      objectStorage_swift_authUrl: http://<OBJECT_STORAGE_IP>:5000/v2.0/tokens
       objectStorage_swift_authMethod: keystone
       objectStorage_swift_preferredRegion: Public
-      objectStorage_swift_container: paasta-container
+      objectStorage_swift_container: <OBJECT_STORAGE_CONTAINER>
   ```
+  <br>
 
-   <strong>[ marketplace-webuser/manifest.yml ]</strong>
+  4) marketplace-webuser 의 manifest 파일을 수정한다.  
+    
   ```
+  $ cd ${HOME}/workspace/paasta-5.0/release/service/marketplace/marketplace-webuser
+  $ vi manifest.yml
+  
   ---
   applications:
   - name: marketplace-webuser
@@ -348,15 +399,15 @@ marketplace
       spring_session_jdbc_schema: classpath:org/springframework/session/jdbc/schema-mysql.sql
       spring_mvc_static-path-pattern: /static/**
       spring_datasource_driver-class-name: com.mysql.cj.jdbc.Driver
-      spring_datasource_url: jdbc:${vcap.services.Mysql-DB.credentials.uri}/marketplace_user?characterEncoding=utf8&autoReconnect=true
-      spring_datasource_username: ${vcap.services.Mysql-DB.credentials.username}
-      spring_datasource_password: ${vcap.services.Mysql-DB.credentials.password}
+      spring_datasource_url: jdbc:<DB_IP>:<DB_PORT>/marketplace_user?characterEncoding=utf8&autoReconnect=true
+      spring_datasource_username: root
+      spring_datasource_password: <DB_ADMIN_PASSWORD>
       spring_datasource_validationQuery: SELECT 1
       spring_datasource_hikari_idle-timeout: 300000
       spring_datasource_hikari_max-lifetime: 1200000
       spring_datasource_hikari_connection-timeout: 30000
 
-      marketplace_api_url: http://marketplace-api.<DOMAIN>.xip.io   # 먼저 배포한 'marketplace-api' App 의 urls
+      marketplace_api_url: http://marketplace-api.<DOMAIN>.xip.io   # 'marketplace-api' App 의 urls
       marketplace_registration: cf
       marketplace_client-id: marketclient
       marketplace_client-secret: ********
@@ -368,18 +419,18 @@ marketplace
       marketplace_token-uri: https://<DOMAIN>/oauth/token
       marketplace_user-info-uri: https://<DOMAIN>/userinfo
       marketplace_jwk-set-uri: https://<DOMAIN>/token_keys
-
-<br>
+  ```
 <br>
 
 ### <div id='223'/> 2.2.3. 마켓플레이스 App 배포
-* 처음 배포 시에 --no-start 옵션을 넣어준다. 이후 DB서비스를 Bind 한 후 앱을 start 한다.
 
-  - 마켓플레이스 API 배포
+  - 마켓플레이스 API (marketplace-api) 배포  
+   > 마켓플레이스 API는 공통적으로 사용되는 App으로 가장 먼저 배포한다.  
+   
   ```
-  $ cf push marketplace-api -f manifest.yml --no-start
-  ```
-  ```
+  $ cd ${HOME}/workspace/paasta-5.0/release/service/marketplace/marketplace-api
+  $ cf push marketplace-api -f manifest.yml
+
   Pushing from manifest to org market-org / space dev as admin...
   Using manifest file manifest-test.yml
   Getting app info...
@@ -482,12 +533,12 @@ marketplace
   #0   down    2019-09-25T01:40:24Z   0.0%   0 of 0   0 of 0     
   ```
 
-  - 마켓플레이스 Web 앱 배포
-    > - marketplace-webadmin 배포에 대한 예시이다.
+  - 마켓플레이스 Web Admin (marketplace-webadmin) 배포
+  
   ```
-  $ cf push marketplace-webadmin -f manifest.yml --no-start
-  ```
-  ```
+  $ cd ${HOME}/workspace/paasta-5.0/release/service/marketplace/marketplace-webadmin
+  $ cf push marketplace-webadmin -f manifest.yml
+
   Pushing from manifest to org market-org / space dev as admin...
   Using manifest file manifest-test.yml
   Getting app info...
@@ -546,182 +597,21 @@ marketplace
   #0   down    2019-09-25T06:25:07Z   0.0%   0 of 0   0 of 0   
   ```
 
-  > - marketplace-webseller 와 marketplace-webuser 도 동일하게 배포한다.
+  - 마켓플레이스 Web Seller (marketplace-webseller) 배포
   ```
-  $ cf push marketplace-webseller -f manifest.yml --no-start
+  $ cd ${HOME}/workspace/paasta-5.0/release/service/marketplace/marketplace-webseller
+  $ cf push marketplace-webseller -f manifest.yml
+  ```  
+  
+  - 마켓플레이스 Web User (marketplace-webuser) 배포
   ```
-  ```
-  $ cf push marketplace-webuser -f manifest.yml --no-start
-  ```
-<br>
-
-* 생성된 Marketplace 앱 목록을 확인한다.
-  ```
-  $ cf apps
-  ```
-  ```
-  Getting apps in org market-org / space dev as admin...
-  OK
-
-  name                   requested state   instances   memory   disk   urls
-  marketplace-api        stopped           0/1         2G       2G     marketplace-api.<DOMAIN>.xip.io
-  marketplace-webadmin   stopped           0/1         1G       1G     marketplace-webadmin.<DOMAIN>.xip.io
-  marketplace-webuser    stopped           0/1         2G       1G     marketplace-webuser.<DOMAIN>.xip.io
-  marketplace-webseller  stopped           0/1         1G       1G     marketplace-webseller.<DOMAIN>.xip.io
-  ```
-
-
-<br>
-
-- 신청한 백엔드 서비스를 생성한 4개의 App 과 하나씩 각각 바인딩한다.
-  ```
-  $ cf services
-  ```
-  ```
-  Getting services in org market-org / space dev as admin...
-
-  name                service    plan                bound apps        last operation     broker                 upgrade available
-  marketplace-mysql   Mysql-DB   Mysql-Plan1-10con   marketplace-api   create succeeded   mysql-service-broker   
-
-
-  $ cf bind-service <생성한 App 이름> <신청한 서비스>
-
-  예시)
-  $ cf bind-service marketplace-api marketplace-mysql
-  $ cf bind-service marketplace-webadmin marketplace-mysql
-  $ cf bind-service marketplace-webseller marketplace-mysql
-  $ cf bind-service marketplace-webuser marketplace-mysql
-
-  ```
-
-<br>
-
-- 바인딩을 완료 한 후 앱을 구동한다. marketplace-api 를 가장 먼저 시작하고 이후 나머지 앱들을 시작한다.
-  <strong>[marketplace-api]</strong>  
-  ```
-  $ cf start marketplace-api
-  ```
-  ```
-  Starting app marketplace-api in org market-org / space dev as admin...
-
-  Staging app and tracing logs...
-     Downloading java_buildpack...
-     Downloaded java_buildpack
-     Cell 81d75576-549f-4b9e-8ddc-eb65410d877d creating container for instance cca4ceca-1ad2-4c00-b930-3af1ed28d2ed
-     Cell 81d75576-549f-4b9e-8ddc-eb65410d877d successfully created container for instance cca4ceca-1ad2-4c00-b930-3af1ed28d2ed
-     Downloading app package...
-     Downloaded app package (53M)
-     -----> Java Buildpack v4.19 | https://github.com/cloudfoundry/java-buildpack.git#3f4eee2
-     -----> Downloading Jvmkill Agent 1.16.0_RELEASE from https://java-buildpack.cloudfoundry.org/jvmkill/bionic/x86_64/jvmkill-1.16.0-RELEASE.so (0.1s)
-     -----> Downloading Open Jdk JRE 1.8.0_222 from https://java-buildpack.cloudfoundry.org/openjdk/bionic/x86_64/openjdk-jre-1.8.0_222-bionic.tar.gz (5.5s)
-            Expanding Open Jdk JRE to .java-buildpack/open_jdk_jre (0.9s)
-            JVM DNS caching disabled in lieu of BOSH DNS caching
-     -----> Downloading Open JDK Like Memory Calculator 3.13.0_RELEASE from https://java-buildpack.cloudfoundry.org/memory-calculator/bionic/x86_64/memory-calculator-3.13.0-RELEASE.tar.gz (0.0s)
-            Loaded Classes: 21392, Threads: 250
-     -----> Downloading Client Certificate Mapper 1.11.0_RELEASE from https://java-buildpack.cloudfoundry.org/client-certificate-mapper/client-certificate-mapper-1.11.0-RELEASE.jar (0.0s)
-     -----> Downloading Container Security Provider 1.16.0_RELEASE from https://java-buildpack.cloudfoundry.org/container-security-provider/container-security-provider-1.16.0-RELEASE.jar (0.0s)
-     -----> Downloading Spring Auto Reconfiguration 2.9.0_RELEASE from https://java-buildpack.cloudfoundry.org/auto-reconfiguration/auto-reconfiguration-2.9.0-RELEASE.jar (5.1s)
-     Exit status 0
-     Uploading droplet, build artifacts cache...
-     Uploading droplet...
-     Uploading build artifacts cache...
-     Uploaded build artifacts cache (43.4M)
-     Uploaded droplet (96.5M)
-     Uploading complete
-     Cell 81d75576-549f-4b9e-8ddc-eb65410d877d stopping instance cca4ceca-1ad2-4c00-b930-3af1ed28d2ed
-     Cell 81d75576-549f-4b9e-8ddc-eb65410d877d destroying container for instance cca4ceca-1ad2-4c00-b930-3af1ed28d2ed
-     Cell 81d75576-549f-4b9e-8ddc-eb65410d877d successfully destroyed container for instance cca4ceca-1ad2-4c00-b930-3af1ed28d2ed
-
-  Waiting for app to start...
-
-  name:              marketplace-api
-  requested state:   started
-  routes:            marketplace-api.<DOMAIN>.xip.io
-  last uploaded:     Wed 25 Sep 10:43:50 KST 2019
-  stack:             cflinuxfs3
-  buildpacks:        java_buildpack
-
-  type:            web
-  instances:       1/1
-  memory usage:    1024M
-  start command:   JAVA_OPTS="-agentpath:$PWD/.java-buildpack/open_jdk_jre/bin/jvmkill-1.16.0_RELEASE=printHeapHistogram=1 -Djava.io.tmpdir=$TMPDIR -XX:ActiveProcessorCount=$(nproc)
-                   -Djava.ext.dirs=$PWD/.java-buildpack/container_security_provider:$PWD/.java-buildpack/open_jdk_jre/lib/ext -Djava.security.properties=$PWD/.java-buildpack/java_security/java.security $JAVA_OPTS" &&
-                   CALCULATED_MEMORY=$($PWD/.java-buildpack/open_jdk_jre/bin/java-buildpack-memory-calculator-3.13.0_RELEASE -totMemory=$MEMORY_LIMIT -loadedClasses=22692 -poolType=metaspace -stackThreads=250
-                   -vmOptions="$JAVA_OPTS") && echo JVM Memory Configuration: $CALCULATED_MEMORY && JAVA_OPTS="$JAVA_OPTS $CALCULATED_MEMORY" && MALLOC_ARENA_MAX=2 SERVER_PORT=$PORT eval exec
-                   $PWD/.java-buildpack/open_jdk_jre/bin/java $JAVA_OPTS -cp $PWD/. org.springframework.boot.loader.JarLauncher
-       state     since                  cpu    memory         disk           details
-  #0   running   2019-09-25T01:44:15Z   0.0%   115.6M of 1G   170.7M of 1G   
-
-  ```
-
-  <strong>[marketplace-webadmin]</strong>
-  ```
-  $ cf start marketplace-webadmin
-  ```
-  ```
-  Starting app marketplace-webadmin in org market-org / space dev as admin...
-
-  Staging app and tracing logs...
-     Downloading java_buildpack...
-     Downloaded java_buildpack
-     Cell 81d75576-549f-4b9e-8ddc-eb65410d877d creating container for instance cfd9a5b6-d011-4d99-bcaf-cca33beca89a
-     Cell 81d75576-549f-4b9e-8ddc-eb65410d877d successfully created container for instance cfd9a5b6-d011-4d99-bcaf-cca33beca89a
-     Downloading app package...
-     Downloaded app package (72.2M)
-     -----> Java Buildpack v4.19 | https://github.com/cloudfoundry/java-buildpack.git#3f4eee2
-     -----> Downloading Jvmkill Agent 1.16.0_RELEASE from https://java-buildpack.cloudfoundry.org/jvmkill/bionic/x86_64/jvmkill-1.16.0-RELEASE.so (5.1s)
-     -----> Downloading Open Jdk JRE 1.8.0_222 from https://java-buildpack.cloudfoundry.org/openjdk/bionic/x86_64/openjdk-jre-1.8.0_222-bionic.tar.gz (0.5s)
-            Expanding Open Jdk JRE to .java-buildpack/open_jdk_jre (0.9s)
-            JVM DNS caching disabled in lieu of BOSH DNS caching
-     -----> Downloading Open JDK Like Memory Calculator 3.13.0_RELEASE from https://java-buildpack.cloudfoundry.org/memory-calculator/bionic/x86_64/memory-calculator-3.13.0-RELEASE.tar.gz (0.0s)
-            Loaded Classes: 20682, Threads: 250
-     -----> Downloading Client Certificate Mapper 1.11.0_RELEASE from https://java-buildpack.cloudfoundry.org/client-certificate-mapper/client-certificate-mapper-1.11.0-RELEASE.jar (0.0s)
-     -----> Downloading Container Customizer 2.6.0_RELEASE from https://java-buildpack.cloudfoundry.org/container-customizer/container-customizer-2.6.0-RELEASE.jar (0.0s)
-     -----> Downloading Container Security Provider 1.16.0_RELEASE from https://java-buildpack.cloudfoundry.org/container-security-provider/container-security-provider-1.16.0-RELEASE.jar (5.0s)
-     -----> Downloading Spring Auto Reconfiguration 2.9.0_RELEASE from https://java-buildpack.cloudfoundry.org/auto-reconfiguration/auto-reconfiguration-2.9.0-RELEASE.jar (0.1s)
-     Exit status 0
-     Uploading droplet, build artifacts cache...
-     Uploading build artifacts cache...
-     Uploading droplet...
-     Uploaded build artifacts cache (43.4M)
-     Uploaded droplet (115.6M)
-     Uploading complete
-     Cell 81d75576-549f-4b9e-8ddc-eb65410d877d stopping instance cfd9a5b6-d011-4d99-bcaf-cca33beca89a
-     Cell 81d75576-549f-4b9e-8ddc-eb65410d877d destroying container for instance cfd9a5b6-d011-4d99-bcaf-cca33beca89a
-     Cell 81d75576-549f-4b9e-8ddc-eb65410d877d successfully destroyed container for instance cfd9a5b6-d011-4d99-bcaf-cca33beca89a
-
-  Waiting for app to start...
-
-  name:              marketplace-webadmin
-  requested state:   started
-  routes:            marketplace-webadmin.<DOMAIN>.xip.io
-  last uploaded:     Wed 25 Sep 15:50:02 KST 2019
-  stack:             cflinuxfs3
-  buildpacks:        java_buildpack
-
-  type:            web
-  instances:       1/1
-  memory usage:    1024M
-  start command:   JAVA_OPTS="-agentpath:$PWD/.java-buildpack/open_jdk_jre/bin/jvmkill-1.16.0_RELEASE=printHeapHistogram=1 -Djava.io.tmpdir=$TMPDIR -XX:ActiveProcessorCount=$(nproc)
-                   -Djava.ext.dirs=$PWD/.java-buildpack/container_security_provider:$PWD/.java-buildpack/open_jdk_jre/lib/ext -Djava.security.properties=$PWD/.java-buildpack/java_security/java.security $JAVA_OPTS" &&
-                   CALCULATED_MEMORY=$($PWD/.java-buildpack/open_jdk_jre/bin/java-buildpack-memory-calculator-3.13.0_RELEASE -totMemory=$MEMORY_LIMIT -loadedClasses=21985 -poolType=metaspace -stackThreads=250
-                   -vmOptions="$JAVA_OPTS") && echo JVM Memory Configuration: $CALCULATED_MEMORY && JAVA_OPTS="$JAVA_OPTS $CALCULATED_MEMORY" && MALLOC_ARENA_MAX=2 SERVER_PORT=$PORT eval exec
-                   $PWD/.java-buildpack/open_jdk_jre/bin/java $JAVA_OPTS -cp $PWD/. org.springframework.boot.loader.WarLauncher
-       state     since                  cpu    memory         disk           details
-  #0   running   2019-09-25T06:50:20Z   0.0%   153.7M of 1G   222.5M of 1G   
-  ```
-
-  - webseller 와 webuser 도 같은 방식으로 배포한다.
-  ```
-  $ cf start marketplace-webseller
-  ```
-  ```
-  $ cf start marketplace-webuser
+  $ cd ${HOME}/workspace/paasta-5.0/release/service/marketplace/marketplace-webuser
+  $ cf push marketplace-webuser -f manifest.yml
   ```
 <br>
 
-- 배포된 마켓플레이스 관련 App 들을 확인한다.
 
+- 배포된 마켓플레이스 App을 확인한다.
 
   ```
   $ cf apps
