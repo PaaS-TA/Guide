@@ -409,6 +409,11 @@ mariadb/01ce2b6f-1038-468d-92f8-f68f72f7ea77         running        z2  10.174.1
 
 ### <div id='223'/> 2.2.3. 마켓플레이스 App 배포
 
+  - 마켓플레이스 배포용 조직 및 공간으로 target을 설정한다.  
+  ```
+  $ cf target -o marketplace -s system
+  ```  
+  
   - 마켓플레이스 API (marketplace-api) 배포  
    > 마켓플레이스 API는 공통적으로 사용되는 App으로 가장 먼저 배포한다.  
    
@@ -416,106 +421,70 @@ mariadb/01ce2b6f-1038-468d-92f8-f68f72f7ea77         running        z2  10.174.1
   $ cd ${HOME}/workspace/paasta-5.0/release/service/marketplace/marketplace-api
   $ cf push marketplace-api -f manifest.yml
 
-  Pushing from manifest to org marketplace / space dev as admin...
-  Using manifest file manifest.yml
+  Pushing from manifest to org marketplace / space system as admin...
+  Using manifest file /home/ubuntu/workspacepaasta-5.0/release/service/marketplace/marketplace-api/manifest.yml
   Getting app info...
   Creating app with these attributes...
   + name:         marketplace-api
     path:         /home/ubuntu/workspacepaasta-5.0/release/service/marketplace/marketplace-api/marketplace-api.jar
     buildpacks:
   +   java_buildpack
+  + disk quota:   2G
   + instances:    1
   + memory:       2G
     env:
-  +   cloudfoundry.authorization
-  +   cloudfoundry.cc.api.host
-  +   cloudfoundry.cc.api.proxyUrl
-  +   cloudfoundry.cc.api.sslSkipValidation
-  +   cloudfoundry.cc.api.uaaUrl
-  +   cloudfoundry.cc.api.url
-  +   cloudfoundry.user.admin.password
-  +   cloudfoundry.user.admin.username
-  +   cloudfoundry.user.uaaClient.adminClientId
-  +   cloudfoundry.user.uaaClient.adminClientSecret
-  +   cloudfoundry.user.uaaClient.clientId
-  +   cloudfoundry.user.uaaClient.clientSecret
-  +   cloudfoundry.user.uaaClient.loginClientId
-  +   cloudfoundry.user.uaaClient.loginClientSecret
-  +   cloudfoundry.user.uaaClient.skipSSLValidation
-  +   deprovisioning.pool-size
-  +   deprovisioning.progress-fixed-rate
-  +   deprovisioning.progress-initial-delay
-  +   deprovisioning.ready-fixed-rate
-  +   deprovisioning.ready-initial-delay
-  +   deprovisioning.timeout
-  +   deprovisioning.timeout-fixed-rate
-  +   deprovisioning.timeout-initial-delay
-  +   deprovisioning.try-count
-  +   market.domain_guid
-  +   market.naming-type
-  +   market.org.guid
-  +   market.org.name
-  +   market.quota_guid
-  +   market.space.guid
-  +   market.space.name
-  +   objectStorage.swift.authMethod
-  +   objectStorage.swift.authUrl
-  +   objectStorage.swift.container
-  +   objectStorage.swift.password
-  +   objectStorage.swift.preferredRegion
-  +   objectStorage.swift.tenantName
-  +   objectStorage.swift.username
-  +   provisioning.pool-size
-  +   provisioning.progress-fixed-rate
-  +   provisioning.progress-initial-delay
-  +   provisioning.ready-fixed-rate
-  +   provisioning.ready-initial-delay
-  +   provisioning.timeout
-  +   provisioning.timeout-fixed-rate
-  +   provisioning.timeout-initial-delay
-  +   provisioning.try-count
-  +   server_port
-  +   spring_application_name
-  +   spring_datasource_driver-class-name
-  +   spring_datasource_password
-  +   spring_datasource_url
-  +   spring_datasource_username
-  +   spring_jackson_default-property-inclusion
-  +   spring_jackson_serialization_fail-on-empty-beans
-  +   spring_jpa_database
-  +   spring_jpa_database-platform
-  +   spring_jpa_hibernate_ddl-auto
-  +   spring_jpa_hibernate_use-new-id-generator-mappings
-  +   spring_jpa_show-sql
-  +   spring_security_password
-  +   spring_security_username
-  +   spring_servlet_multipart_max-file-size
-  +   spring_servlet_multipart_max-request-size
-  +   task.execution.restrict-to-same-host
-    routes:
-  +   marketplace-api.<DOMAIN>.xip.io
+  +   cloudfoundry_authorization
+  +   cloudfoundry_cc_api_host
+  +   cloudfoundry_cc_api_proxyUrl
+  +   cloudfoundry_cc_api_sslSkipValidation
+  +   cloudfoundry_cc_api_uaaUrl
+  +   cloudfoundry_cc_api_url
+
+  ... ((생략)) ... 
 
   Creating app marketplace-api...
   Mapping routes...
   Comparing local files to remote cache...
   Packaging files to upload...
   Uploading files...
-   938.31 KiB / 938.31 KiB [=================================================================================================================================================================================] 100.00% 1s
+   951.66 KiB / 951.66 KiB [======================================================] 100.00% 1s
 
   Waiting for API to complete processing files...
 
+  Staging app and tracing logs...
+     Downloading java_buildpack...
+     Downloaded java_buildpack
+
+  ... ((생략)) ... 
+
+  Waiting for app to start...
+
   name:              marketplace-api
   requested state:   started
-  routes:            marketplace-api.<DOMAIN>.xip.io
-  last uploaded:     
-  stack:             
-  buildpacks:        
+  routes:            marketplace-api.<DOMAIN>
+  last uploaded:     Tue 24 Dec 06:42:41 UTC 2019
+  stack:             cflinuxfs3
+  buildpacks:        java_buildpack
 
-  type:           web
-  instances:      0/1
-  memory usage:   1024M
-       state      since                  cpu    memory   disk     details
-  #0   running    2019-09-25T01:40:24Z   0.0%   0 of 0   0 of 0     
+  type:            web
+  instances:       1/1
+  memory usage:    2048M
+  start command:   JAVA_OPTS="-agentpath:$PWD/.java-buildpack/open_jdk_jre/bin/jvmkill-1.16.0_RELEASE=printHeapHistogram=1
+                   -Djava.io.tmpdir=$TMPDIR -XX:ActiveProcessorCount=$(nproc)
+                   -javaagent:$PWD/BOOT-INF/lib/aspectjweaver-1.9.2.jar
+                   -Djava.ext.dirs=$PWD/.java-buildpack/container_security_provider:$PWD/.java-buildpack/open_jdk_jre/lib/ext
+                   -Djava.security.properties=$PWD/.java-buildpack/java_security/java.security
+                   $JAVA_OPTS" &&
+                   CALCULATED_MEMORY=$($PWD/.java-buildpack/open_jdk_jre/bin/java-buildpack-memory-calculator-3.13.0_RELEASE
+                   -totMemory=$MEMORY_LIMIT -loadedClasses=22691 -poolType=metaspace
+                   -stackThreads=250 -vmOptions="$JAVA_OPTS") && echo JVM Memory
+                   Configuration: $CALCULATED_MEMORY && JAVA_OPTS="$JAVA_OPTS
+                   $CALCULATED_MEMORY" && MALLOC_ARENA_MAX=2 SERVER_PORT=$PORT eval exec
+                   $PWD/.java-buildpack/open_jdk_jre/bin/java $JAVA_OPTS -cp $PWD/.
+                   org.springframework.boot.loader.JarLauncher
+       state     since                  cpu      memory         disk           details
+  #0   running   2019-12-24T06:43:09Z   304.5%   823.5M of 2G   170.5M of 2G   
+     
   ```
 
   - 마켓플레이스 Web Admin (marketplace-webadmin) 배포
@@ -524,80 +493,196 @@ mariadb/01ce2b6f-1038-468d-92f8-f68f72f7ea77         running        z2  10.174.1
   $ cd ${HOME}/workspace/paasta-5.0/release/service/marketplace/marketplace-webadmin
   $ cf push marketplace-webadmin -f manifest.yml
 
-  Pushing from manifest to org marketplace / space dev as admin...
-  Using manifest file manifest.yml
+  Pushing from manifest to org marketplace / space system as admin...
+  Using manifest file /home/ubuntu/workspace/release/service/marketplace/marketplace-webadmin/manifest.yml
   Getting app info...
   Creating app with these attributes...
   + name:         marketplace-webadmin
-    path:         /home/ubuntu/workspace/paasta-5.0/release/service/marketplace/marketplace-webadmin/marketplace-web-admin.war
+    path:         /home/ubuntu/workspace/release/service/marketplace/marketplace-webadmin/marketplace-web-admin.war
     buildpacks:
   +   java_buildpack
-  + command:  
-  + disk quota:          1G  
-  + health check type:   port  
-  + instances:           1
-  + memory:              1G
+  + instances:    1
+  + memory:       1G
     env:
-  +   cloudfoundry_cc_api_host  
+  +   cloudfoundry_cc_api_host
   +   marketplace_api_url
   +   marketplace_authorization-uri
   +   marketplace_client-id
-  +   marketplace_client-secret
-  +   marketplace_jwk-set-uri
-  +   marketplace_redirect-uri
-  +   marketplace_registration
-  +   marketplace_token-uri
-  +   marketplace_uaa-logout-rediredct-url
-  +   marketplace_uaa-logout-url
-  +   marketplace_user-info-uri
-  +   server_port
-  +   spring_application_name
-  +   spring_datasource_driver-class-name
-  +   spring_datasource_password
-  +   spring_datasource_url
-  +   spring_datasource_username
-  +   spring_mvc_static-path-pattern
-  +   spring_servlet_multipart_max-file-size
-  +   spring_servlet_multipart_max-request-size
-  +   spring_session_jdbc_initialize-schema
-  +   spring_session_jdbc_schema
-  +   spring_session_store-type
-    routes:
-  +   marketplace-webadmin.<DOMAIN>.xip.io
+
+    ... ((생략)) ...
 
   Creating app marketplace-webadmin...
   Mapping routes...
   Comparing local files to remote cache...
   Packaging files to upload...
   Uploading files...
-   1.67 MiB / 1.67 MiB [=====================================================================================================================================================================================] 100.00% 1s
+   1.67 MiB / 1.67 MiB [==========================================================] 100.00% 1s
 
   Waiting for API to complete processing files...
 
-  name:              marketplace-webadmin
-  requested state:   stopped
-  routes:            marketplace-webadmin.<DOMAIN>.xip.io
-  last uploaded:     
-  stack:             
-  buildpacks:        
+  Staging app and tracing logs...
+     Downloading java_buildpack...
+     Downloaded java_buildpack
 
-  type:           web
-  instances:      0/1
-  memory usage:   1024M
-       state   since                  cpu    memory   disk     details
-  #0   down    2019-09-25T06:25:07Z   0.0%   0 of 0   0 of 0   
+    ... ((생략)) ...
+
+  Waiting for app to start...
+
+  name:              marketplace-webadmin
+  requested state:   started
+  routes:            marketplace-webadmin.<DOMAIN>
+  last uploaded:     Tue 24 Dec 06:50:05 UTC 2019
+  stack:             cflinuxfs3
+  buildpacks:        java_buildpack
+
+  type:            web
+  instances:       1/1
+  memory usage:    1024M
+  start command:   JAVA_OPTS="-agentpath:$PWD/.java-buildpack/open_jdk_jre/bin/jvmkill-1.16.0_RELEASE=printHeapHistogram=1
+                   -Djava.io.tmpdir=$TMPDIR -XX:ActiveProcessorCount=$(nproc)
+                   -Djava.ext.dirs=$PWD/.java-buildpack/container_security_provider:$PWD/.java-buildpack/open_jdk_jre/lib/ext
+                   -Djava.security.properties=$PWD/.java-buildpack/java_security/java.security
+                   $JAVA_OPTS" &&
+                   CALCULATED_MEMORY=$($PWD/.java-buildpack/open_jdk_jre/bin/java-buildpack-memory-calculator-3.13.0_RELEASE
+                   -totMemory=$MEMORY_LIMIT -loadedClasses=21980 -poolType=metaspace
+                   -stackThreads=250 -vmOptions="$JAVA_OPTS") && echo JVM Memory
+                   Configuration: $CALCULATED_MEMORY && JAVA_OPTS="$JAVA_OPTS
+                   $CALCULATED_MEMORY" && MALLOC_ARENA_MAX=2 SERVER_PORT=$PORT eval exec
+                   $PWD/.java-buildpack/open_jdk_jre/bin/java $JAVA_OPTS -cp $PWD/.
+                   org.springframework.boot.loader.WarLauncher
+       state     since                  cpu    memory         disk           details
+  #0   running   2019-12-24T06:50:23Z   0.0%   151.7M of 1G   222.7M of 1G   
+  
   ```
 
   - 마켓플레이스 Web Seller (marketplace-webseller) 배포
   ```
   $ cd ${HOME}/workspace/paasta-5.0/release/service/marketplace/marketplace-webseller
   $ cf push marketplace-webseller -f manifest.yml
+  
+  Pushing from manifest to org marketplace / space system as admin...
+  Using manifest file /home/ubuntu/workspace/paasta-5.0/release/service/marketplace/marketplace-webseller/manifest.yml
+  Getting app info...
+  Creating app with these attributes...
+  + name:         marketplace-webseller
+    path:         /home/ubuntu/workspace/paasta-5.0/release/service/marketplace/marketplace-webseller/marketplace-web-seller.war
+    buildpacks:
+  +   java_buildpack
+  + instances:    1
+  + memory:       1G
+    env:
+  +   marketplace_api_url
+  +   marketplace_authorization-uri
+  +   marketplace_client-id
+
+  ... ((생략)) ...
+
+  Creating app marketplace-webseller...
+  Mapping routes...
+  Comparing local files to remote cache...
+  Packaging files to upload...
+  Uploading files...
+   1.71 MiB / 1.71 MiB [==========================================================] 100.00% 1s
+
+  Waiting for API to complete processing files...
+
+  Staging app and tracing logs...
+     Downloading java_buildpack...
+     Downloaded java_buildpack
+
+  ... ((생략)) ...
+
+  Waiting for app to start...
+
+  name:              marketplace-webseller
+  requested state:   started
+  routes:            marketplace-webseller.<DOMAIN>
+  last uploaded:     Tue 24 Dec 06:56:23 UTC 2019
+  stack:             cflinuxfs3
+  buildpacks:        java_buildpack
+
+  type:            web
+  instances:       1/1
+  memory usage:    1024M
+  start command:   JAVA_OPTS="-agentpath:$PWD/.java-buildpack/open_jdk_jre/bin/jvmkill-1.16.0_RELEASE=printHeapHistogram=1
+                   -Djava.io.tmpdir=$TMPDIR -XX:ActiveProcessorCount=$(nproc)
+                   -Djava.ext.dirs=$PWD/.java-buildpack/container_security_provider:$PWD/.java-buildpack/open_jdk_jre/lib/ext
+                   -Djava.security.properties=$PWD/.java-buildpack/java_security/java.security
+                   $JAVA_OPTS" &&
+                   CALCULATED_MEMORY=$($PWD/.java-buildpack/open_jdk_jre/bin/java-buildpack-memory-calculator-3.13.0_RELEASE
+                   -totMemory=$MEMORY_LIMIT -loadedClasses=22334 -poolType=metaspace
+                   -stackThreads=250 -vmOptions="$JAVA_OPTS") && echo JVM Memory
+                   Configuration: $CALCULATED_MEMORY && JAVA_OPTS="$JAVA_OPTS
+                   $CALCULATED_MEMORY" && MALLOC_ARENA_MAX=2 SERVER_PORT=$PORT eval exec
+                   $PWD/.java-buildpack/open_jdk_jre/bin/java $JAVA_OPTS -cp $PWD/.
+                   org.springframework.boot.loader.WarLauncher
+       state     since                  cpu    memory      disk           details
+  #0   running   2019-12-24T06:56:44Z   0.0%   43M of 1G   228.3M of 1G  
   ```  
   
   - 마켓플레이스 Web User (marketplace-webuser) 배포
   ```
   $ cd ${HOME}/workspace/paasta-5.0/release/service/marketplace/marketplace-webuser
   $ cf push marketplace-webuser -f manifest.yml
+  
+  Pushing from manifest to org marketplace / space system as admin...
+  Using manifest file /home/ubuntu/workspace/paasta-5.0/release/service/marketplace/marketplace-webuser/manifest.yml
+  Getting app info...
+  Creating app with these attributes...
+  + name:         marketplace-webuser
+    path:         /home/ubuntu/workspace/paasta-5.0/release/service/marketplace/marketplace-webuser/marketplace-web-user.war
+    buildpacks:
+  +   java_buildpack
+  + instances:    1
+  + memory:       2G
+    env:
+  +   marketplace_api_url
+  +   marketplace_authorization-uri
+  +   marketplace_client-id
+
+  ... ((생략)) ...
+
+  Creating app marketplace-webuser...
+  Mapping routes...
+  Comparing local files to remote cache...
+  Packaging files to upload...
+  Uploading files...
+   1.60 MiB / 1.60 MiB [==========================================================] 100.00% 1s
+
+  Waiting for API to complete processing files...
+
+  Staging app and tracing logs...
+     Downloading java_buildpack...
+     Downloaded java_buildpack
+
+  ... ((생략)) ...
+
+  Waiting for app to start...
+
+  name:              marketplace-webuser
+  requested state:   started
+  routes:            marketplace-webuser.<DOMAIN>
+  last uploaded:     Tue 24 Dec 07:01:08 UTC 2019
+  stack:             cflinuxfs3
+  buildpacks:        java_buildpack
+
+  type:            web
+  instances:       1/1
+  memory usage:    2048M
+  start command:   JAVA_OPTS="-agentpath:$PWD/.java-buildpack/open_jdk_jre/bin/jvmkill-1.16.0_RELEASE=printHeapHistogram=1
+                   -Djava.io.tmpdir=$TMPDIR -XX:ActiveProcessorCount=$(nproc)
+                   -Djava.ext.dirs=$PWD/.java-buildpack/container_security_provider:$PWD/.java-buildpack/open_jdk_jre/lib/ext
+                   -Djava.security.properties=$PWD/.java-buildpack/java_security/java.security
+                   $JAVA_OPTS" &&
+                   CALCULATED_MEMORY=$($PWD/.java-buildpack/open_jdk_jre/bin/java-buildpack-memory-calculator-3.13.0_RELEASE
+                   -totMemory=$MEMORY_LIMIT -loadedClasses=21979 -poolType=metaspace
+                   -stackThreads=250 -vmOptions="$JAVA_OPTS") && echo JVM Memory
+                   Configuration: $CALCULATED_MEMORY && JAVA_OPTS="$JAVA_OPTS
+                   $CALCULATED_MEMORY" && MALLOC_ARENA_MAX=2 SERVER_PORT=$PORT eval exec
+                   $PWD/.java-buildpack/open_jdk_jre/bin/java $JAVA_OPTS -cp $PWD/.
+                   org.springframework.boot.loader.WarLauncher
+       state     since                  cpu    memory         disk           details
+  #0   running   2019-12-24T07:01:29Z   0.0%   212.9M of 2G   220.1M of 1G 
   ```
 <br>
 
@@ -606,14 +691,14 @@ mariadb/01ce2b6f-1038-468d-92f8-f68f72f7ea77         running        z2  10.174.1
 
   ```
   $ cf apps
-  Getting apps in org market-org / space dev as admin...
+  Getting apps in org marketplace / space system as admin...
   OK
 
   name                    requested state   instances   memory   disk   urls
-  marketplace-webseller   started           1/1         2G       2G     marketplace-webseller.<DOMAIN>.xip.io
-  marketplace-webadmin    started           1/1         1G       1G     marketplace-webadmin.<DOMAIN>.xip.io
-  marketplace-webuser     started           1/1         2G       1G     marketplace-webuser.<DOMAIN>.xip.io
-  marketplace-api         started           1/1         1G       1G     marketplace-api.<DOMAIN>.xip.io
+  marketplace-api         started           1/1         2G       2G     marketplace-api.<DOMAIN>
+  marketplace-webadmin    started           1/1         1G       1G     marketplace-webadmin.<DOMAIN>
+  marketplace-webuser     started           1/1         2G       1G     marketplace-webuser.<DOMAIN>
+  marketplace-webseller   started           1/1         1G       1G     marketplace-webseller.<DOMAIN>
 
   ```
 
@@ -625,7 +710,7 @@ UAA 계정 등록 절차에 대한 순서를 확인한다.
   ```
   $ uaac target
 
-  Target: https://uaa.<DOMAIN>.xip.io
+  Target: https://uaa.<DOMAIN>
   Context: admin, from client admin
   ```
 
@@ -657,7 +742,7 @@ UAA 계정 등록 절차에 대한 순서를 확인한다.
 > - 자동승인권한: 사용자 승인이 필요하지 않은 권한 목록을 입력한다.
 
   ```
-  $ uaac client add marketclient -s clientsecret --redirect_uri "http://marketplace-webseller.<DOMAIN>.xip.io http://marketplace-webseller.<DOMAIN>.xip.io/main http://marketplace-webuser.<DOMAIN>.xip.io http://marketplace-webuser.<DOMAIN>.xip.io/main http://marketplace-webadmin.<DOMAIN>.xip.io http://marketplace-webadmin.<DOMAIN>.xip.io/main" --scope "cloud_controller_service_permissions.read , openid , cloud_controller.read , cloud_controller.write , cloud_controller.admin" --authorized_grant_types "authorization_code , client_credentials , refresh_token" --authorities="uaa.resource" --autoapprove="openid , cloud_controller_service_permissions.read"
+  $ uaac client add marketclient -s clientsecret --redirect_uri "http://marketplace-webseller.<DOMAIN> http://marketplace-webseller.<DOMAIN>/main http://marketplace-webuser.<DOMAIN> http://marketplace-webuser.<DOMAIN>/main http://marketplace-webadmin.<DOMAIN> http://marketplace-webadmin.<DOMAIN>/main" --scope "cloud_controller_service_permissions.read , openid , cloud_controller.read , cloud_controller.write , cloud_controller.admin" --authorized_grant_types "authorization_code , client_credentials , refresh_token" --authorities="uaa.resource" --autoapprove="openid , cloud_controller_service_permissions.read"
   ```
 
 
@@ -668,7 +753,7 @@ UAA 계정 등록 절차에 대한 순서를 확인한다.
 > - 마켓플레이스 서비스 대시보드 URI : 성공적으로 리다이렉션 할 마켓플레이스 서비스 대시보드 URI를 입력한다.
 
   ```
-  $ uaac client update marketclient --redirect_uri="http://marketplace-webseller.<DOMAIN>.xip.io http://marketplace-webseller.<DOMAIN>.xip.io/main http://marketplace-webuser.<DOMAIN>.xip.io http://marketplace-webuser.<DOMAIN>.xip.io/main http://marketplace-webadmin.<DOMAIN>.xip.io http://marketplace-webadmin.<DOMAIN>.xip.io/main"
+  $ uaac client update marketclient --redirect_uri="http://marketplace-webseller.<DOMAIN> http://marketplace-webseller.<DOMAIN>/main http://marketplace-webuser.<DOMAIN> http://marketplace-webuser.<DOMAIN>/main http://marketplace-webadmin.<DOMAIN> http://marketplace-webadmin.<DOMAIN>/main"
   ```
 
 ### <div id='24'/> 2.4. 마켓플레이스 서비스 관리
