@@ -207,34 +207,32 @@ mariadb/01ce2b6f-1038-468d-92f8-f68f72f7ea77         running        z2  10.174.1
       spring_jackson_serialization_fail-on-empty-beans: false
       spring_jackson_default-property-inclusion: NON_NULL
       spring_servlet_multipart_max-file-size: 100MB
-
-      ### 수정 필요 ###
-      cloudfoundry_cc_api_url: https://api.<DOMAIN>.xip.io
-      cloudfoundry_cc_api_uaaUrl: https://<DOMAIN>.xip.io
+      spring_servlet_multipart_max-request-size: 100MB
+      
+      cloudfoundry_cc_api_url: https://api.<DOMAIN>
+      cloudfoundry_cc_api_uaaUrl: https://<DOMAIN>
       cloudfoundry_cc_api_sslSkipValidation: true
       cloudfoundry_cc_api_proxyUrl: ""
-      cloudfoundry_cc_api_host: ".<DOMAIN>.xip.io"
+      cloudfoundry_cc_api_host: ".<DOMAIN>"
       cloudfoundry_user_admin_username: admin
       cloudfoundry_user_admin_password: 'admin'
-      cloudfoundry_user_uaaClient_clientId: login
-      cloudfoundry_user_uaaClient_clientSecret: login-secret
+      cloudfoundry_user_uaaClient_clientId: admin
+      cloudfoundry_user_uaaClient_clientSecret: admin-secret
       cloudfoundry_user_uaaClient_adminClientId: admin
       cloudfoundry_user_uaaClient_adminClientSecret: admin-secret
-      cloudfoundry_user_uaaClient_loginClientId: login
-      cloudfoundry_user_uaaClient_loginClientSecret: login-secret
+      cloudfoundry_user_uaaClient_loginClientId: admin
+      cloudfoundry_user_uaaClient_loginClientSecret: admin-secret
       cloudfoundry_user_uaaClient_skipSSLValidation: true
       cloudfoundry_authorization: cf-Authorization
 
-      ### 수정 필요 ###
-      market_org_name: marketplace-org
-      market_org_guid: <marketplace-org 조직 GUID>
-      market_space_name: marketplace-space
-      market_space_guid: <marketplace-space 공간 GUID>
-      market_quota_guid: <marketplace_quota 쿼타 GUID>
-      market_domain_guid: <도메인 GUID>
+      market_org_name: "marketplace-org"
+      market_org_guid: "<marketplace-org 조직 GUID>"
+      market_space_name: "marketplace-space"
+      market_space_guid: "<marketplace-space 공간 GUID>"
+      market_domain_guid: "<도메인 GUID>"
+      market_quota_guid: "<marketplace_quota 쿼타 GUID>"
       market_naming-type: "Auto"
 
-      ### 수정 필요 ###
       objectStorage_swift_tenantName: <OBJECT_STORAGE_TENANTNAME>
       objectStorage_swift_username: <OBJECT_STORAGE_USERNAME>
       objectStorage_swift_password: <OBJECT_STORAGE_PASSWORD>
@@ -264,6 +262,8 @@ mariadb/01ce2b6f-1038-468d-92f8-f68f72f7ea77         running        z2  10.174.1
       deprovisioning_timeout-initial-delay: 1700
 
       task_execution_restrict-to-same-host: false
+      
+      java_opts: '-XX:MaxMetaspaceSize=256000K -Xss349K -Xms1G -XX:MetaspaceSize=256000K -Xmx1G'
 
   ```
   <br>
@@ -295,27 +295,20 @@ mariadb/01ce2b6f-1038-468d-92f8-f68f72f7ea77         running        z2  10.174.1
       spring_datasource_url: jdbc:mysql://<DB_IP>:<DB_PORT>/marketplace_admin?characterEncoding=utf8&autoReconnect=true
       spring_datasource_username: root
       spring_datasource_password: <DB_ADMIN_PASSWORD>
-      spring_datasource_validationQuery: SELECT 1
-      spring_datasource_hikari_idle-timeout: 300000
-      spring_datasource_hikari_max-lifetime: 1200000
-      spring_datasource_hikari_connection-timeout: 30000
 
-      ### thymeleaf 자동반영 설정
-      spring_devtools_livereload_enabled: true
-      spring_devtools_restart_enabled: true
-
-      marketplace_api_url: http://marketplace-api.<DOMAIN>.xip.io   # 'marketplace-api' App 의 urls
+      marketplace_api_url: http://marketplace-api.<DOMAIN>   # 'marketplace-api' App 의 urls
       marketplace_registration: cf
       marketplace_client-id: marketclient
-      marketplace_client-secret: ********
-      marketplace_redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
-      marketplace_uaa-logout-url: https://<DOMAIN>.xip.io/logout.do
-      marketplace_uaa-logout-rediredct-url: http://marketplace-webadmin.<DOMAIN>.xip.io/main
-      marketplace_authorization-uri: https://<DOMAIN>/oauth/authorize
-      marketplace_token-uri: https://<DOMAIN>/oauth/token
-      marketplace_user-info-uri: https://<DOMAIN>/userinfo
-      marketplace_jwk-set-uri: https://<DOMAIN>/token_keys
-      cloudfoundry_cc_api_host: ".<DOMAIN>.xip.io"
+      marketplace_client-secret: clientsecret
+      marketplace_redirect-uri: http://marketplace-webadmin.<DOMAIN>/login/oauth2/code/cf
+      marketplace_uaa-logout-url: https://uaa.<DOMAIN>/logout.do
+      marketplace_uaa-logout-rediredct-url: http://marketplace-webadmin.<DOMAIN>/main
+      
+      marketplace_authorization-uri: https://uaa.<DOMAIN>/oauth/authorize
+      marketplace_token-uri: https://uaa.<DOMAIN>/oauth/token
+      marketplace_user-info-uri: https://uaa.<DOMAIN>/userinfo
+      marketplace_jwk-set-uri: https://uaa.<DOMAIN>/token_keys
+      cloudfoundry_cc_api_host: ".<DOMAIN>"
   ```
   <br>
   
@@ -334,7 +327,7 @@ mariadb/01ce2b6f-1038-468d-92f8-f68f72f7ea77         running        z2  10.174.1
     - java_buildpack
     path: ./marketplace-web-seller.war
     env:
-      server_port: 8778
+      server_port: 8780
       spring_application_name: marketplace-webseller
       spring_servlet_multipart_max-file-size: 1024MB
       spring_servlet_multipart_max-request-size: 1024MB
@@ -347,22 +340,18 @@ mariadb/01ce2b6f-1038-468d-92f8-f68f72f7ea77         running        z2  10.174.1
       spring_datasource_url: jdbc:mysql://<DB_IP>:<DB_PORT>/marketplace_seller?characterEncoding=utf8&autoReconnect=true
       spring_datasource_username: root
       spring_datasource_password: <DB_ADMIN_PASSWORD>
-      spring_datasource_validationQuery: SELECT 1
-      spring_datasource_hikari_idle-timeout: 300000
-      spring_datasource_hikari_max-lifetime: 1200000
-      spring_datasource_hikari_connection-timeout: 30000
 
-      marketplace_api_url: http://marketplace-api.<DOMAIN>.xip.io   # 'marketplace-api' App 의 urls
+      marketplace_api_url: http://marketplace-api.<DOMAIN>   # 'marketplace-api' App 의 urls
       marketplace_registration: cf
       marketplace_client-id: marketclient
-      marketplace_client-secret: ********
-      marketplace_redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
-      marketplace_uaa-logout-url: https://<DOMAIN>.xip.io/logout.do
-      marketplace_uaa-logout-rediredct-url: http://marketplace-webseller.<DOMAIN>.xip.io/main
-      marketplace_authorization-uri: https://<DOMAIN>/oauth/authorize
-      marketplace_token-uri: https://<DOMAIN>/oauth/token
-      marketplace_user-info-uri: https://<DOMAIN>/userinfo
-      marketplace_jwk-set-uri: https://<DOMAIN>/token_keys
+      marketplace_client-secret: clientsecret
+      marketplace_redirect-uri: http://marketplace-webseller.<DOMAIN>/login/oauth2/code/cf
+      marketplace_uaa-logout-url: https://uaa.<DOMAIN>/logout.do
+      marketplace_uaa-logout-rediredct-url: http://marketplace-webseller.<DOMAIN>/main
+      marketplace_authorization-uri: https://uaa.<DOMAIN>/oauth/authorize
+      marketplace_token-uri: https://uaa.<DOMAIN>/oauth/token
+      marketplace_user-info-uri: https://uaa.<DOMAIN>/userinfo
+      marketplace_jwk-set-uri: https://uaa.<DOMAIN>/token_keys
 
       # 파일 업로드 Swift
       objectStorage_swift_tenantName: <OBJECT_STORAGE_TENANTNAME>
@@ -390,7 +379,7 @@ mariadb/01ce2b6f-1038-468d-92f8-f68f72f7ea77         running        z2  10.174.1
     - java_buildpack
     path: ./marketplace-web-user.war
     env:
-      server_port: 8778
+      server_port: 8779
       spring_application_name: marketplace-webuser
       spring_servlet_multipart_max-file-size: 1024MB
       spring_servlet_multipart_max-request-size: 1024MB
@@ -399,26 +388,22 @@ mariadb/01ce2b6f-1038-468d-92f8-f68f72f7ea77         running        z2  10.174.1
       spring_session_jdbc_schema: classpath:org/springframework/session/jdbc/schema-mysql.sql
       spring_mvc_static-path-pattern: /static/**
       spring_datasource_driver-class-name: com.mysql.cj.jdbc.Driver
-      spring_datasource_url: jdbc:<DB_IP>:<DB_PORT>/marketplace_user?characterEncoding=utf8&autoReconnect=true
+      spring_datasource_url: jdbc:mysql://<DB_IP>:<DB_PORT>/marketplace_user?characterEncoding=utf8&autoReconnect=true
       spring_datasource_username: root
       spring_datasource_password: <DB_ADMIN_PASSWORD>
-      spring_datasource_validationQuery: SELECT 1
-      spring_datasource_hikari_idle-timeout: 300000
-      spring_datasource_hikari_max-lifetime: 1200000
-      spring_datasource_hikari_connection-timeout: 30000
 
-      marketplace_api_url: http://marketplace-api.<DOMAIN>.xip.io   # 'marketplace-api' App 의 urls
+      marketplace_api_url: http://marketplace-api.<DOMAIN>   # 'marketplace-api' App 의 urls
       marketplace_registration: cf
       marketplace_client-id: marketclient
-      marketplace_client-secret: ********
-      marketplace_redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
-      marketplace_uaa-logout-url: https://<DOMAIN>.xip.io/logout.do
-      marketplace_uaa-logout-rediredct-url: http://marketplace-webuser.<DOMAIN>.xip.io/main
+      marketplace_client-secret: clientsecret
+      marketplace_redirect-uri: http://marketplace-webuser.<DOMAIN>/login/oauth2/code/cf
+      marketplace_uaa-logout-url: https://uaa.<DOMAIN>/logout.do
+      marketplace_uaa-logout-rediredct-url: http://marketplace-webuser.<DOMAIN>/main
 
-      marketplace_authorization-uri: https://<DOMAIN>/oauth/authorize
-      marketplace_token-uri: https://<DOMAIN>/oauth/token
-      marketplace_user-info-uri: https://<DOMAIN>/userinfo
-      marketplace_jwk-set-uri: https://<DOMAIN>/token_keys
+      marketplace_authorization-uri: https://uaa.<DOMAIN>/oauth/authorize
+      marketplace_token-uri: https://uaa.<DOMAIN>/oauth/token
+      marketplace_user-info-uri: https://uaa.<DOMAIN>/userinfo
+      marketplace_jwk-set-uri: https://uaa.<DOMAIN>/token_keys
   ```
 <br>
 
@@ -431,12 +416,12 @@ mariadb/01ce2b6f-1038-468d-92f8-f68f72f7ea77         running        z2  10.174.1
   $ cd ${HOME}/workspace/paasta-5.0/release/service/marketplace/marketplace-api
   $ cf push marketplace-api -f manifest.yml
 
-  Pushing from manifest to org market-org / space dev as admin...
-  Using manifest file manifest-test.yml
+  Pushing from manifest to org marketplace / space dev as admin...
+  Using manifest file manifest.yml
   Getting app info...
   Creating app with these attributes...
   + name:         marketplace-api
-    path:         /home/ubuntu/workspace/user/hrjin/marketplace/api/marketplace-api.jar
+    path:         /home/ubuntu/workspacepaasta-5.0/release/service/marketplace/marketplace-api/marketplace-api.jar
     buildpacks:
   +   java_buildpack
   + instances:    1
@@ -520,7 +505,7 @@ mariadb/01ce2b6f-1038-468d-92f8-f68f72f7ea77         running        z2  10.174.1
   Waiting for API to complete processing files...
 
   name:              marketplace-api
-  requested state:   stopped
+  requested state:   started
   routes:            marketplace-api.<DOMAIN>.xip.io
   last uploaded:     
   stack:             
@@ -529,8 +514,8 @@ mariadb/01ce2b6f-1038-468d-92f8-f68f72f7ea77         running        z2  10.174.1
   type:           web
   instances:      0/1
   memory usage:   1024M
-       state   since                  cpu    memory   disk     details
-  #0   down    2019-09-25T01:40:24Z   0.0%   0 of 0   0 of 0     
+       state      since                  cpu    memory   disk     details
+  #0   running    2019-09-25T01:40:24Z   0.0%   0 of 0   0 of 0     
   ```
 
   - 마켓플레이스 Web Admin (marketplace-webadmin) 배포
@@ -539,17 +524,21 @@ mariadb/01ce2b6f-1038-468d-92f8-f68f72f7ea77         running        z2  10.174.1
   $ cd ${HOME}/workspace/paasta-5.0/release/service/marketplace/marketplace-webadmin
   $ cf push marketplace-webadmin -f manifest.yml
 
-  Pushing from manifest to org market-org / space dev as admin...
-  Using manifest file manifest-test.yml
+  Pushing from manifest to org marketplace / space dev as admin...
+  Using manifest file manifest.yml
   Getting app info...
   Creating app with these attributes...
   + name:         marketplace-webadmin
-    path:         /home/ubuntu/workspace/user/hrjin/marketplace/admin/marketplace-web-admin.war
+    path:         /home/ubuntu/workspace/paasta-5.0/release/service/marketplace/marketplace-webadmin/marketplace-web-admin.war
     buildpacks:
   +   java_buildpack
-  + instances:    1
-  + memory:       1G
+  + command:  
+  + disk quota:          1G  
+  + health check type:   port  
+  + instances:           1
+  + memory:              1G
     env:
+  +   cloudfoundry_cc_api_host  
   +   marketplace_api_url
   +   marketplace_authorization-uri
   +   marketplace_client-id
@@ -558,6 +547,8 @@ mariadb/01ce2b6f-1038-468d-92f8-f68f72f7ea77         running        z2  10.174.1
   +   marketplace_redirect-uri
   +   marketplace_registration
   +   marketplace_token-uri
+  +   marketplace_uaa-logout-rediredct-url
+  +   marketplace_uaa-logout-url
   +   marketplace_user-info-uri
   +   server_port
   +   spring_application_name
@@ -579,7 +570,7 @@ mariadb/01ce2b6f-1038-468d-92f8-f68f72f7ea77         running        z2  10.174.1
   Comparing local files to remote cache...
   Packaging files to upload...
   Uploading files...
-   1.66 MiB / 1.66 MiB [=====================================================================================================================================================================================] 100.00% 1s
+   1.67 MiB / 1.67 MiB [=====================================================================================================================================================================================] 100.00% 1s
 
   Waiting for API to complete processing files...
 
