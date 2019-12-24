@@ -210,7 +210,7 @@ mariadb/01ce2b6f-1038-468d-92f8-f68f72f7ea77         running        z2  10.174.1
       spring_servlet_multipart_max-request-size: 100MB
       
       cloudfoundry_cc_api_url: https://api.<DOMAIN>
-      cloudfoundry_cc_api_uaaUrl: https://<DOMAIN>
+      cloudfoundry_cc_api_uaaUrl: https://uaa.<DOMAIN>
       cloudfoundry_cc_api_sslSkipValidation: true
       cloudfoundry_cc_api_proxyUrl: ""
       cloudfoundry_cc_api_host: ".<DOMAIN>"
@@ -242,7 +242,7 @@ mariadb/01ce2b6f-1038-468d-92f8-f68f72f7ea77         running        z2  10.174.1
       objectStorage_swift_container: <OBJECT_STORAGE_CONTAINER>
     
       provisioning_pool-size: 3
-      provisioning_try-count: 3
+      provisioning_try-count: 7
       provisioning_timeout: 3600000
       provisioning_ready-fixed-rate: 10000
       provisioning_ready-initial-delay: 3000
@@ -252,7 +252,7 @@ mariadb/01ce2b6f-1038-468d-92f8-f68f72f7ea77         running        z2  10.174.1
       provisioning_timeout-initial-delay: 1700
 
       deprovisioning_pool-size: 3
-      deprovisioning_try-count: 3
+      deprovisioning_try-count: 7
       deprovisioning_timeout: 3600000
       deprovisioning_ready-fixed-rate: 10000
       deprovisioning_ready-initial-delay: 7000
