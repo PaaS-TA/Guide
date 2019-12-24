@@ -240,6 +240,10 @@ https://github.com/PaaS-TA/Guide-4.0-ROTELLE/blob/master/Use-Guide/portal/PaaS-T
 ![u_myDetail]
 <br>
 
+3. 만약 구매한 상품이 정상 작동 되지 않은 상태에서 사용을 중단하려면 "강제정지" 버튼을 클릭한다.
+![u_myDetailFailed]
+<br>
+
 #### <div id='3-2-2-2'/> 3.2.2.2. 요금 계산
  - 사용 기간, 카테고리, 상품명으로 구매한 내역을 검색할 수 있다.
  ![u_priceCalculation]
@@ -608,6 +612,7 @@ https://github.com/PaaS-TA/Guide-4.0-ROTELLE/blob/master/Use-Guide/portal/PaaS-T
 [u_myList]:images/u_myList.png
 [u_myList-select]:images/u_myList-select.png
 [u_myDetail]:images/u_myDetail.png
+[u_myDetailFailed]:images/u_myDetailFailed.png
 [u_priceCalculation]:images/u_priceCalculation.png
 [u_priceCalculation-select]:images/u_priceCalculation-select.png
 [u_priceStatistics]:images/u_priceStatistics.png
