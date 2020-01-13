@@ -19,6 +19,7 @@
   -  [2.6. PaaS-TA 포탈에서 Container 서비스 조회 설정](#26)
   -  [2.7. Jenkins 서비스 설정 (Optional)](#27)
   -  [2.7.1. Jenkins 서비스 브로커 등록](#27_1)
+  -  [2.8. 쿠버네티스 마스터 노드 IP 변경 시 인증서 갱신 (Optional)](#28)
 
 # <div id='1'/> 1. 문서 개요
 
@@ -3079,6 +3080,19 @@ broker: delivery-pipeline-service-broker
    delivery-pipeline-v2   delivery-pipeline-dedicated   all
 
 ```
+
+### <div id='28'/> 2.8. 쿠버네티스 마스터 노드 IP 변경 시 인증서 갱신 (Optional)
+쿠버네티스 마스터 노드의 IP가 변경되어 재설치를 하는 경우 해당 IP를 포함한 인증서를 삭제해주어야 신규 인증서가 생성되므로 이 경우 설치 스크립트는 자동으로 인증서를 삭제 후 배포를 진행한다. 만약 CredHub에 로그인이 되어 있지 않으면 아래와 같은 메세지가 나타나며 CredHub 로그인 이후 다시 시도해야 한다.
+
+```
+$ ./deploy-vsphere.sh
+You are not currently authenticated to CredHub. Please log in to continue.
+$
+```
+
+- CredHub 로그인
+CredHub에 로그인이 되어있지 않은 경우 아래 링크의 가이드를 참조한다.
+https://github.com/PaaS-TA/Guide-5.0-Ravioli/blob/master/install-guide/bosh/PAAS-TA_BOSH2_INSTALL_GUIDE_V5.0.md#1029
 
 
 [Architecture]:../images/container-service/Container_Service_Architecture.png
