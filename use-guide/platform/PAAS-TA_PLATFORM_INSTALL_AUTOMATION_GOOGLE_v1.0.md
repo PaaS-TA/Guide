@@ -705,50 +705,50 @@ Manifest를 업로드 하기 위해 플랫폼 설치 자동화 웹 화면에서 
 
 #### 2.	*서비스팩 설치 – 설치*
 
-	2.  생성된 배포 Manifest파일 정보를 이용하여 서비스팩 설치를 실행하고 설치 진행 과정에 대한 로그를 확인한다.
+2.  생성된 배포 Manifest파일 정보를 이용하여 서비스팩 설치를 실행하고 설치 진행 과정에 대한 로그를 확인한다.
 
-	![Google_PaaSTa_Platform_Use_Guide_Image41]
+![Google_PaaSTa_Platform_Use_Guide_Image41]
 
-	[Google_PaaSTa_Platform_Use_Guide_Image01]:./images/install-guide/google/install_flow.png
-	[Google_PaaSTa_Platform_Use_Guide_Image02]:./images/install-guide/google/management/user_add.png
-	[Google_PaaSTa_Platform_Use_Guide_Image03]:./images/install-guide/google/infra/project_add.png
-	[Google_PaaSTa_Platform_Use_Guide_Image04]:./images/install-guide/google/infra/APIs&Service_Enable.png
-	[Google_PaaSTa_Platform_Use_Guide_Image05]:./images/install-guide/google/infra/service_account.png
-	[Google_PaaSTa_Platform_Use_Guide_Image06]:./images/install-guide/google/infra/service_account_create_key.png
-	[Google_PaaSTa_Platform_Use_Guide_Image07]:./images/install-guide/google/infra/network_add.png
-	[Google_PaaSTa_Platform_Use_Guide_Image08]:./images/install-guide/google/infra/external_ip_Add.png
-	[Google_PaaSTa_Platform_Use_Guide_Image09]:./images/install-guide/google/infra/fire_wall_rules_add.png
-	[Google_PaaSTa_Platform_Use_Guide_Image10]:./images/install-guide/google/infra/go_google_infra.png
-	[Google_PaaSTa_Platform_Use_Guide_Image11]:./images/install-guide/google/infra/google_account_add.png
-	[Google_PaaSTa_Platform_Use_Guide_Image12]:./images/install-guide/google/install_flow.png
-	[Google_PaaSTa_Platform_Use_Guide_Image13]:./images/install-guide/google/bootstrapinstall/infra_config.png
-	[Google_PaaSTa_Platform_Use_Guide_Image14]:./images/install-guide/google/bootstrapinstall/google_config_add.png
-	[Google_PaaSTa_Platform_Use_Guide_Image15]:./images/install-guide/google/bootstrapinstall/stemcell_add.png
-	[Google_PaaSTa_Platform_Use_Guide_Image16]:./images/install-guide/google/bootstrapinstall/bosh_release_add.png
-	[Google_PaaSTa_Platform_Use_Guide_Image17]:./images/install-guide/google/bootstrapinstall/cpi_release_add.png
-	[Google_PaaSTa_Platform_Use_Guide_Image18]:./images/install-guide/google/bootstrapinstall/bpm_release_add.png
-	[Google_PaaSTa_Platform_Use_Guide_Image19]:./images/install-guide/google/bootstrapinstall/os_release_add.png
-	[Google_PaaSTa_Platform_Use_Guide_Image20]:./images/install-guide/google/bootstrapinstall/director_credential_add.png
-	[Google_PaaSTa_Platform_Use_Guide_Image21]:./images/install-guide/google/bootstrapinstall/bootstrap_select_iaas.png
-	[Google_PaaSTa_Platform_Use_Guide_Image22]:./images/install-guide/google/bootstrapinstall/bootstrap_google.png
-	[Google_PaaSTa_Platform_Use_Guide_Image23]:./images/install-guide/google/bootstrapinstall/bootstrap_default.png
-	[Google_PaaSTa_Platform_Use_Guide_Image24]:./images/install-guide/google/bootstrapinstall/bootstrap_network.png
-	[Google_PaaSTa_Platform_Use_Guide_Image25]:./images/install-guide/google/bootstrapinstall/bootstrap_resource.png
-	[Google_PaaSTa_Platform_Use_Guide_Image27]:./images/install-guide/google/bootstrapinstall/bootstrap_install.png
-	[Google_PaaSTa_Platform_Use_Guide_Image28]:./images/install-guide/google/bootstrapinstall/director_add.png
-	[Google_PaaSTa_Platform_Use_Guide_Image29]:./images/install-guide/google/cfinstall/cf_flow.png
-	[Google_PaaSTa_Platform_Use_Guide_Image30]:./images/install-guide/google/cfinstall/stemcell_upload.png
-	[Google_PaaSTa_Platform_Use_Guide_Image31]:./images/install-guide/google/cfinstall/paasta_release.png
-	[Google_PaaSTa_Platform_Use_Guide_Image32]:./images/install-guide/google/cfinstall/cf_default.png
-	[Google_PaaSTa_Platform_Use_Guide_Image33]:./images/install-guide/google/cfinstall/cf_network.png
-	[Google_PaaSTa_Platform_Use_Guide_Image34]:./images/install-guide/google/cfinstall/cf_key.png
-	[Google_PaaSTa_Platform_Use_Guide_Image35]:./images/install-guide/google/cfinstall/cf_resource.png
-	[Google_PaaSTa_Platform_Use_Guide_Image36]:./images/install-guide/google/cfinstall/cf_instance.png
-	[Google_PaaSTa_Platform_Use_Guide_Image37]:./images/install-guide/google/cfinstall/cf_install.png
-	[Google_PaaSTa_Platform_Use_Guide_Image38]:./images/install-guide/google/servicepack/servicepack_flow.png
-	[Google_PaaSTa_Platform_Use_Guide_Image39]:./images/install-guide/google/servicepack/manifest_upload.png
-	[Google_PaaSTa_Platform_Use_Guide_Image40]:./images/install-guide/google/servicepack/manifest_add.png
-	[Google_PaaSTa_Platform_Use_Guide_Image41]:./images/install-guide/google/servicepack/servicepack_install.png
-	[Google_PaaSTa_Platform_Use_Guide_Image42]:./images/install-guide/google/cfinstall/paasta_release_5.0.png
-	[Google_PaaSTa_Platform_Use_Guide_Image43]:./images/install-guide/google/bootstrapinstall/bootstrap_resource_4.6.png
-	[Google_PaaSTa_Platform_Use_Guide_Image44]:./images/install-guide/google/cfinstall/cf_default_version.png
+[Google_PaaSTa_Platform_Use_Guide_Image01]:./images/install-guide/google/install_flow.png
+[Google_PaaSTa_Platform_Use_Guide_Image02]:./images/install-guide/google/management/user_add.png
+[Google_PaaSTa_Platform_Use_Guide_Image03]:./images/install-guide/google/infra/project_add.png
+[Google_PaaSTa_Platform_Use_Guide_Image04]:./images/install-guide/google/infra/APIs&Service_Enable.png
+[Google_PaaSTa_Platform_Use_Guide_Image05]:./images/install-guide/google/infra/service_account.png
+[Google_PaaSTa_Platform_Use_Guide_Image06]:./images/install-guide/google/infra/service_account_create_key.png
+[Google_PaaSTa_Platform_Use_Guide_Image07]:./images/install-guide/google/infra/network_add.png
+[Google_PaaSTa_Platform_Use_Guide_Image08]:./images/install-guide/google/infra/external_ip_Add.png
+[Google_PaaSTa_Platform_Use_Guide_Image09]:./images/install-guide/google/infra/fire_wall_rules_add.png
+[Google_PaaSTa_Platform_Use_Guide_Image10]:./images/install-guide/google/infra/go_google_infra.png
+[Google_PaaSTa_Platform_Use_Guide_Image11]:./images/install-guide/google/infra/google_account_add.png
+[Google_PaaSTa_Platform_Use_Guide_Image12]:./images/install-guide/google/install_flow.png
+[Google_PaaSTa_Platform_Use_Guide_Image13]:./images/install-guide/google/bootstrapinstall/infra_config.png
+[Google_PaaSTa_Platform_Use_Guide_Image14]:./images/install-guide/google/bootstrapinstall/google_config_add.png
+[Google_PaaSTa_Platform_Use_Guide_Image15]:./images/install-guide/google/bootstrapinstall/stemcell_add.png
+[Google_PaaSTa_Platform_Use_Guide_Image16]:./images/install-guide/google/bootstrapinstall/bosh_release_add.png
+[Google_PaaSTa_Platform_Use_Guide_Image17]:./images/install-guide/google/bootstrapinstall/cpi_release_add.png
+[Google_PaaSTa_Platform_Use_Guide_Image18]:./images/install-guide/google/bootstrapinstall/bpm_release_add.png
+[Google_PaaSTa_Platform_Use_Guide_Image19]:./images/install-guide/google/bootstrapinstall/os_release_add.png
+[Google_PaaSTa_Platform_Use_Guide_Image20]:./images/install-guide/google/bootstrapinstall/director_credential_add.png
+[Google_PaaSTa_Platform_Use_Guide_Image21]:./images/install-guide/google/bootstrapinstall/bootstrap_select_iaas.png
+[Google_PaaSTa_Platform_Use_Guide_Image22]:./images/install-guide/google/bootstrapinstall/bootstrap_google.png
+[Google_PaaSTa_Platform_Use_Guide_Image23]:./images/install-guide/google/bootstrapinstall/bootstrap_default.png
+[Google_PaaSTa_Platform_Use_Guide_Image24]:./images/install-guide/google/bootstrapinstall/bootstrap_network.png
+[Google_PaaSTa_Platform_Use_Guide_Image25]:./images/install-guide/google/bootstrapinstall/bootstrap_resource.png
+[Google_PaaSTa_Platform_Use_Guide_Image27]:./images/install-guide/google/bootstrapinstall/bootstrap_install.png
+[Google_PaaSTa_Platform_Use_Guide_Image28]:./images/install-guide/google/bootstrapinstall/director_add.png
+[Google_PaaSTa_Platform_Use_Guide_Image29]:./images/install-guide/google/cfinstall/cf_flow.png
+[Google_PaaSTa_Platform_Use_Guide_Image30]:./images/install-guide/google/cfinstall/stemcell_upload.png
+[Google_PaaSTa_Platform_Use_Guide_Image31]:./images/install-guide/google/cfinstall/paasta_release.png
+[Google_PaaSTa_Platform_Use_Guide_Image32]:./images/install-guide/google/cfinstall/cf_default.png
+[Google_PaaSTa_Platform_Use_Guide_Image33]:./images/install-guide/google/cfinstall/cf_network.png
+[Google_PaaSTa_Platform_Use_Guide_Image34]:./images/install-guide/google/cfinstall/cf_key.png
+[Google_PaaSTa_Platform_Use_Guide_Image35]:./images/install-guide/google/cfinstall/cf_resource.png
+[Google_PaaSTa_Platform_Use_Guide_Image36]:./images/install-guide/google/cfinstall/cf_instance.png
+[Google_PaaSTa_Platform_Use_Guide_Image37]:./images/install-guide/google/cfinstall/cf_install.png
+[Google_PaaSTa_Platform_Use_Guide_Image38]:./images/install-guide/google/servicepack/servicepack_flow.png
+[Google_PaaSTa_Platform_Use_Guide_Image39]:./images/install-guide/google/servicepack/manifest_upload.png
+[Google_PaaSTa_Platform_Use_Guide_Image40]:./images/install-guide/google/servicepack/manifest_add.png
+[Google_PaaSTa_Platform_Use_Guide_Image41]:./images/install-guide/google/servicepack/servicepack_install.png
+[Google_PaaSTa_Platform_Use_Guide_Image42]:./images/install-guide/google/cfinstall/paasta_release_5.0.png
+[Google_PaaSTa_Platform_Use_Guide_Image43]:./images/install-guide/google/bootstrapinstall/bootstrap_resource_4.6.png
+[Google_PaaSTa_Platform_Use_Guide_Image44]:./images/install-guide/google/cfinstall/cf_default_version.png
