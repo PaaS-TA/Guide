@@ -643,7 +643,7 @@ $  ./deploy-{Cloud Provider}.sh
 
 ### <div id='19-5'/>3.6.4.	Kubernetes Prometheus Pods 정보를 확인한다.  
 ```
-$  bosh -e {director_name} ssh -d paaata-container-service master
+$  bosh -e {director_name} ssh -d paasta-container-service master
 $  /var/vcap/packages/kubernetes/bin/kubectl get pods --all-namespaces -o wide
 ```
 ![PaaSTa_paasta_container_service_pods]
