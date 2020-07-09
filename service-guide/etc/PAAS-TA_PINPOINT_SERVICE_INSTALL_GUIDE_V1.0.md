@@ -84,6 +84,46 @@ PaaS-TA 3.5 버전부터는 Bosh2.0 기반으로 deploy를 진행하며 기존 B
 
 본 설치 가이드는 Linux 환경에서 설치하는 것을 기준으로 하였다. 서비스 설치를 위해서는 BOSH 2.0과 PaaS-TA 5.0, PaaS-TA 포털이 설치되어 있어야 한다. 
 
+- bosh runtime-config를 확인하여 bosh-dns include deployments 에 pinpoint가 있는지 확인한다.  
+ ※ bosh-dns include deployments에 pinpoint가 없다면 ~/workspace/paasta-5.0/deployment/bosh-deployment/runtime-configs 의 dns.yml 을 열어서 pinpoint를 추가하고, bosh runtime-config를 업데이트 해준다.    
+
+> $ bosh -e micro-bosh runtime-config
+```
+Using environment '10.0.1.6' as client 'admin'
+
+---
+addons:
+- include:
+    deployments:
+    - paasta
+    - pinpoint
+    - pinpoint-monitoring
+    stemcell:
+    - os: ubuntu-trusty
+    - os: ubuntu-xenial
+  jobs:
+  - name: bosh-dns
+    properties:
+      api:
+        client:
+          tls: "((/dns_api_client_tls))"
+        server:
+          tls: "((/dns_api_server_tls))"
+      cache:
+        enabled: true
+      health:
+        client:
+          tls: "((/dns_healthcheck_client_tls))"
+        enabled: true
+        server:
+          tls: "((/dns_healthcheck_server_tls))"
+    release: bosh-dns
+  name: bosh-dns
+...(생략)...
+
+Succeeded
+```
+
 ### <div id="2.2"/> 2.2. Stemcell 확인
 
 Stemcell 목록을 확인하여 서비스 설치에 필요한 Stemcell이 업로드 되어 있는 것을 확인한다.  (PaaS-TA 5.0 과 동일 stemcell 사용)
