@@ -85,7 +85,7 @@ addons:
     deployments:
     - paasta
     - pinpoint
-    - paasta-pinpoint-monitoring
+    - pinpoint-monitoring
     stemcell:
     - os: ubuntu-trusty
     - os: ubuntu-xenial
