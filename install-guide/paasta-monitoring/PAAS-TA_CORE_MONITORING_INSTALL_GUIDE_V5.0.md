@@ -926,17 +926,12 @@ PaaS-TA VM 중 singleton-blobstore, database의 AZs(zone)을 변경하면 조직
 ```
 bosh -e micro-bosh -d paasta -n deploy paasta-deployment-monitoring.yml \
 	-o operations/aws.yml \
-	-o operations/use-compiled-releases.yml \
 	-o operations/use-haproxy.yml \
 	-o operations/use-haproxy-public-network.yml \
-	-o operations/use-compiled-releases-haproxy.yml \
 	-o operations/use-postgres.yml \
-	-o operations/use-compiled-releases-postgres.yml \
 	-o operations/rename-network-and-deployment.yml \
 	-o paasta-addon/paasta-monitoring.yml \
-	-o paasta-addon/use-compiled-releases-monitoring-agent.yml \
 	-o operations/addons/enable-component-syslog.yml \
-	-o operations/addons/use-compiled-releases-syslog.yml \
 	-l aws-vars.yml \
 	-l ../../common/common_vars.yml
 ```
@@ -944,17 +939,12 @@ bosh -e micro-bosh -d paasta -n deploy paasta-deployment-monitoring.yml \
 ```
 bosh -e micro-bosh -d paasta -n deploy paasta-deployment-monitoring.yml \
 	-o operations/azure.yml \
-	-o operations/use-compiled-releases.yml \
 	-o operations/use-haproxy.yml \
 	-o operations/use-haproxy-public-network.yml \
-	-o operations/use-compiled-releases-haproxy.yml \
 	-o operations/use-postgres.yml \
-	-o operations/use-compiled-releases-postgres.yml \
 	-o operations/rename-network-and-deployment.yml \
 	-o paasta-addon/paasta-monitoring.yml \
-	-o paasta-addon/use-compiled-releases-monitoring-agent.yml \
 	-o operations/addons/enable-component-syslog.yml \
-	-o operations/addons/use-compiled-releases-syslog.yml \
 	-l azure-vars.yml \
 	-l ../../common/common_vars.yml
 ```
@@ -962,17 +952,12 @@ bosh -e micro-bosh -d paasta -n deploy paasta-deployment-monitoring.yml \
 ### <div id='1026'/>● deploy-gcp-monitoring.sh
 ```
 bosh -e micro-bosh -d paasta -n deploy paasta-deployment-monitoring.yml \
-	-o operations/use-compiled-releases.yml \
 	-o operations/use-haproxy.yml \
 	-o operations/use-haproxy-public-network.yml \
-	-o operations/use-compiled-releases-haproxy.yml \
 	-o operations/use-postgres.yml \
-	-o operations/use-compiled-releases-postgres.yml \
 	-o operations/rename-network-and-deployment.yml \
 	-o paasta-addon/paasta-monitoring.yml \
-	-o paasta-addon/use-compiled-releases-monitoring-agent.yml \
 	-o operations/addons/enable-component-syslog.yml \
-	-o operations/addons/use-compiled-releases-syslog.yml \
 	-l gcp-vars.yml \
 	-l ../../common/common_vars.yml
 ```
@@ -981,17 +966,12 @@ bosh -e micro-bosh -d paasta -n deploy paasta-deployment-monitoring.yml \
 ```
 bosh -e micro-bosh -d paasta -n deploy paasta-deployment-monitoring.yml \
 	-o operations/openstack.yml \
-	-o operations/use-compiled-releases.yml \
 	-o operations/use-haproxy.yml \
 	-o operations/use-haproxy-public-network.yml \
-	-o operations/use-compiled-releases-haproxy.yml \
 	-o operations/use-postgres.yml \
-	-o operations/use-compiled-releases-postgres.yml \
 	-o operations/rename-network-and-deployment.yml \
 	-o paasta-addon/paasta-monitoring.yml \
-	-o paasta-addon/use-compiled-releases-monitoring-agent.yml \
 	-o operations/addons/enable-component-syslog.yml \
-	-o operations/addons/use-compiled-releases-syslog.yml \
 	-l openstack-vars.yml \
 	-l ../../common/common_vars.yml
 ```
@@ -999,17 +979,12 @@ bosh -e micro-bosh -d paasta -n deploy paasta-deployment-monitoring.yml \
 ### <div id='1028'/>● deploy-vsphere-monitoring.sh
 ```
 bosh -e micro-bosh -d paasta -n deploy paasta-deployment-monitoring.yml \
-	-o operations/use-compiled-releases.yml \
 	-o operations/use-haproxy.yml \
 	-o operations/use-haproxy-public-network-vsphere.yml \
-	-o operations/use-compiled-releases-haproxy.yml \
 	-o operations/use-postgres.yml \
-	-o operations/use-compiled-releases-postgres.yml \
 	-o operations/rename-network-and-deployment.yml \
 	-o paasta-addon/paasta-monitoring.yml \
-	-o paasta-addon/use-compiled-releases-monitoring-agent.yml \
 	-o operations/addons/enable-component-syslog.yml \
-	-o operations/addons/use-compiled-releases-syslog.yml \
 	-l vsphere-vars.yml \
 	-l ../../common/common_vars.yml
 ```
@@ -1024,15 +999,17 @@ $ chmod +x ${HOME}/workspace/paasta-5.0/deployment/monitoring-deployment/paasta/
 
 - 서버 환경에 맞추어 Deploy 스크립트 파일의 설정을 수정한다. 
 
-> $ vi ${HOME}/workspace/paasta-5.0/deployment/monitoring-deployment/paasta/deploy-aws.sh
+> $ vi ${HOME}/workspace/paasta-5.0/deployment/monitoring-deployment/paasta/deploy-aws-monitoring.sh
 
 ```
-bosh -e {director_name} -d paasta -n deploy paasta-deployment.yml \	# PaaS-TA Manifest File
+bosh -e {director_name} -d paasta -n deploy paasta-deployment-monitoring.yml \	# PaaS-TA Manifest File
 	-o operations/aws.yml \						# AWS 설정
 	-o operations/use-haproxy.yml \					# HAProxy 적용
 	-o operations/use-haproxy-public-network.yml \			# HAProxy Public Network 적용
 	-o operations/use-postgres.yml \				# Database Type 설정 (3.5버전 이하에서 Migration 시 필수)
 	-o operations/rename-network-and-deployment.yml \		# Rename Network and Deployment
+	-o paasta-addon/paasta-monitoring.yml \				# [MONITORING] monitoring metric agent 적용 
+	-o operations/addons/enable-component-syslog.yml \		# [MONITORING] monitoring log agent 적용
 	-l aws-vars.yml \						# AWS 환경에 PaaS-TA 설치시 적용하는 변숫값 설정 파일
 	-l ../../common/common_vars.yml					# PaaS-TA 및 각종 Service 설치시 적용하는 공통 변수 설정 파일
 ```
@@ -1041,7 +1018,7 @@ bosh -e {director_name} -d paasta -n deploy paasta-deployment.yml \	# PaaS-TA Ma
 - PaaS-TA 설치 Shell Script 파일 실행 (BOSH 로그인 필요)
 
 ```
-$ cd ${HOME}/workspace/paasta-5.0/deployment/monitoring-deployment
+$ cd ${HOME}/workspace/paasta-5.0/deployment/monitoring-deployment/paasta
 $ ./deploy-{IaaS}-monitoring.sh
 ```
 
@@ -1137,10 +1114,10 @@ loggregator-agent-3.9-ubuntu-xenial-315.36-20190604-002328-413557573.tgz        
 
 - 서버 환경에 맞추어 Deploy 스크립트 파일의 설정을 수정한다. 
 
-> $ vi ${HOME}/workspace/paasta-5.0/deployment/monitoring-deployment/paasta/deploy-aws.sh
+> $ vi ${HOME}/workspace/paasta-5.0/deployment/monitoring-deployment/paasta/deploy-aws-monitoring.sh
 
 ```
-bosh -e {director_name} -d paasta -n deploy paasta-deployment.yml \
+bosh -e {director_name} -d paasta -n deploy paasta-deployment-monitoring.yml \
 	-o operations/aws.yml \						
 	-o operations/use-compiled-releases.yml \
 	-o operations/use-haproxy.yml \					
@@ -1148,15 +1125,19 @@ bosh -e {director_name} -d paasta -n deploy paasta-deployment.yml \
 	-o operations/use-compiled-releases-haproxy.yml \
 	-o operations/use-postgres.yml \				
 	-o operations/use-compiled-releases-postgres.yml \
-	-o operations/rename-network-and-deployment.yml \		
+	-o operations/rename-network-and-deployment.yml \
+	-o paasta-addon/paasta-monitoring.yml \				
+	-o paasta/use-compiled-releases-haproxy.yml \
+	-o operations/addons/enable-component-syslog.yml \
+	-o operations/addons/use-compiled-releases-syslog.yml \
 	-l aws-vars.yml \						
 	-l ../../common/common_vars.yml					
 ```
 - PaaS-TA 설치 Shell Script 파일 실행 (BOSH 로그인 필요)
 
 ```
-$ cd ${HOME}/workspace/paasta-5.0/deployment/paasta-deployment/paasta
-$ ./deploy-{IaaS}.sh
+$ cd ${HOME}/workspace/paasta-5.0/deployment/monitoring-deployment/paasta
+$ ./deploy-{IaaS}-monitoring.sh
 ```
 
 - PaaS-TA 설치 확인
