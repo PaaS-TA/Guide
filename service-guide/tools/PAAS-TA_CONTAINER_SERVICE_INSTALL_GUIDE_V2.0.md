@@ -24,6 +24,9 @@
   
 4. [쿠버네티스 마스터 노드 IP 변경 시 인증서 갱신 (Optional)](#4)  
 
+5. [서비스 삭제](#5)
+
+
 ## <div id='1'/> 1. 문서 개요
 
 ### <div id='1.1'/> 1.1. 목적
@@ -360,16 +363,18 @@ jenkins_namespace_file: "/var/vcap/jobs/container-jenkins-broker/data/create-nam
 BOSH_NAME="<BOSH_NAME>"                             # bosh name (e.g. micro-bosh)
 IAAS="openstack"                                    # IaaS (e.g. aws/azure/gcp/openstack/vsphere)
 COMMON_VARS_PATH="<COMMON_VARS_FILE_PATH>"          # common_vars.yml File Path (e.g. /home/ubuntu/paasta-5.0/common/common_vars.yml)
+DEPLOYMENT_NAME="container-service"                 # deployment name
 
 # DEPLOY
-bosh -e ${BOSH_NAME} -n -d container-service deploy --no-redact container-service.yml \
+bosh -e ${BOSH_NAME} -n -d ${DEPLOYMENT_NAME} deploy --no-redact container-service.yml \
     -l ${COMMON_VARS_PATH} \
     -l ${IAAS}-vars.yml \
     -o operations/paasta-container-service/${IAAS}-network.yml \
     -o operations/iaas/${IAAS}/cloud-provider.yml \
     -o operations/rename.yml \
     -o operations/misc/single-master.yml \
-    -o operations/misc/first-time-deploy.yml
+    -o operations/misc/first-time-deploy.yml \
+    -v deployment_name=${DEPLOYMENT_NAME}
 ```
 
 - 서비스 설치 전 remove-all-addons.sh 을 환경에 맞게 수정한 뒤 실행한다.  
@@ -414,9 +419,10 @@ paasta-container-service-projects-release-2.0.tgz
 BOSH_NAME="<BOSH_NAME>"                             # bosh name (e.g. micro-bosh)
 IAAS="openstack"                                    # IaaS (e.g. aws/azure/gcp/openstack/vsphere)
 COMMON_VARS_PATH="<COMMON_VARS_FILE_PATH>"          # common_vars.yml File Path (e.g. /home/ubuntu/paasta-5.0/common/common_vars.yml)
+DEPLOYMENT_NAME="container-service"                 # deployment name
 
 # DEPLOY
-bosh -e ${BOSH_NAME} -n -d container-service deploy --no-redact container-service.yml \
+bosh -e ${BOSH_NAME} -n -d ${DEPLOYMENT_NAME} deploy --no-redact container-service.yml \
     -l ${COMMON_VARS_PATH} \
     -l ${IAAS}-vars.yml \
     -o operations/use-compiled-releases.yml \
@@ -425,7 +431,8 @@ bosh -e ${BOSH_NAME} -n -d container-service deploy --no-redact container-servic
     -o operations/rename.yml \
     -o operations/misc/single-master.yml \
     -o operations/misc/first-time-deploy.yml \
-    -v inception_os_user_name="ubuntu"
+    -v deployment_name=${DEPLOYMENT_NAME} \
+    -v inception_os_user_name="ubuntu"    
     
 ```
 
@@ -844,6 +851,15 @@ $
 CredHub에 로그인이 되어있지 않은 경우 아래 링크의 가이드를 참조한다.  
 https://github.com/PaaS-TA/Guide-5.0-Ravioli/blob/master/install-guide/bosh/PAAS-TA_BOSH2_INSTALL_GUIDE_V5.0.md#1029
 
+### <div id='5'/> 5. 서비스 삭제
+서비스 삭제 시 CredHub에 로그인이 되어 있는 상태 에서 이하의 script를 실행하여 credHub의 credential 삭제 처리를 진행한다.
+
+```
+$ sh operations/remove-service-credentials.sh <BOSH NAME> <DEPLOYMENT NAME>
+
+e.g.
+$ sh operations/remove-service-credentials.sh micro-bosh container-service
+```
 
 [Architecture]:../images/container-service/Container_Service_Architecture.png
 [Portal_CaaS_01]:../images/container-service/portal-admin.png
