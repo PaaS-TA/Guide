@@ -466,7 +466,7 @@ PaaS-TA Component 간의 통신을 위해 BOSH DNS 배포가 선행되어야 한
 - Runtime Config 업데이트
 
 ```
-$ cd ~/workspace/paasta-5.0/deployment/paasta-deployment/bosh
+$ cd ${HOME}/workspace/paasta-5.0/deployment/paasta-deployment/bosh
 $ bosh -e {director_name} update-runtime-config -n runtime-configs/dns.yml
 ```
 
@@ -584,7 +584,7 @@ PaaS-TA를 설치할 때는 system_domain, paasta_admin_username, paasta_admin_p
 # BOSH INFO
 bosh_url: "http://10.0.1.6"			# BOSH URL (e.g. "https://00.000.0.0")
 bosh_client_admin_id: "admin"			# BOSH Client Admin ID
-bosh_client_admin_secret: "ert7na4jpewscztsxz48"	# BOSH Client Admin Secret('echo $(bosh int ~/workspace/paasta-5.0/deployment/paasta-deployment/bosh/{iaas}/creds.yml --path /admin_password)' 명령어를 통해 확인 가능)
+bosh_client_admin_secret: "ert7na4jpewscztsxz48"	# BOSH Client Admin Secret('echo $(bosh int ~/workspace/paasta-5.0/deployment/paasta-deployment/bosh/{iaas}/creds.yml —path /admin_password))' 명령어를 통해 확인 가능)
 bosh_director_port: 25555			# BOSH Director Port
 bosh_oauth_port: 8443				# BOSH OAuth Port
 
