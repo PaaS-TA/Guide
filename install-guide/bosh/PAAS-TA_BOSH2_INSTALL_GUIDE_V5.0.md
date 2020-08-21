@@ -192,7 +192,7 @@ $ git clone https://github.com/PaaS-TA/paasta-deployment.git
 - paasta-5.0/paasta-deployment 이하 디렉터리
 
 ```
-$ cd ${HOME}/workspace/paasta-5.0/paasta-deployment
+$ cd ${HOME}/workspace/paasta-5.0/deployment/paasta-deployment
 $ ls
 bosh  cloud-config  paasta
 ```
@@ -831,7 +831,7 @@ $ wget https://github.com/cloudfoundry-incubator/credhub-cli/releases/download/2
 $ tar -xvf credhub-linux-2.5.3.tgz 
 $ chmod +x credhub
 $ sudo mv credhub /usr/local/bin/credhub 
-$ credhub –version
+$ credhub –-version
 ```
 
 #### <div id='1039'/>3.3.9.2. CredHub 로그인
@@ -862,7 +862,7 @@ Jumpbox는 BOSH VM에 접근하기 위한 인증을 적용하게 된다.
 BOSH VM에 이상이 있거나 상태를 체크할 때 Jumpbox를 활용하여 BOSH VM에 접근할 수 있다.
 
 ```
-$ cd ${HOME}/workspace/paasta-5.0/deployment/paasta-deployment/bosh
+$ cd cd ${HOME}/workspace/paasta-5.0/deployment/paasta-deployment/bosh
 $ bosh int {iaas}/creds.yml --path /jumpbox_ssh/private_key > jumpbox.key 
 $ chmod 600 jumpbox.key
 $ ssh jumpbox@{bosh_url} -i jumpbox.key
