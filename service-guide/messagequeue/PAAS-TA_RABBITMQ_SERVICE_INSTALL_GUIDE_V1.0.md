@@ -449,10 +449,10 @@ Checking connectivity... done
 
 >`$cd rabbit-example-app`<br>
 
->`$cf push test-app --no-start`<br>
+>`$cf push rabbit-example-app --no-start`<br>
 
 ```
-$ cf push test-app --no-start
+$ cf push rabbit-example-app --no-start
 Pushing from manifest to org system / space dev as admin...
 Using manifest file /home/inception/workspace/user/cheolhan/rabbit-example-app/manifest.yml
 Getting app info...
