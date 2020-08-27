@@ -44,7 +44,9 @@ $ cd ${HOME}/workspace/paasta-5.0/deployment
 $ git clone https://github.com/PaaS-TA/common.git 
 $ git clone https://github.com/PaaS-TA/monitoring-deployment.git
 ```
-release는 clone 으로 받고 설치한다
+release, stemcell 설치 파일 다운로드는 아래 다운로드 에서 받고 설치한다
+https://paas-ta.kr/download/package 
+
 ![PaaSTa_release_dir_5.0]
 
 ### <div id='5'/>2.3. PaaS-TA Monitoring 설치 환경설정
