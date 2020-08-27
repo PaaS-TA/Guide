@@ -418,7 +418,7 @@ paasta-container-service-projects-release-2.0.tgz
 # VARIABLES
 BOSH_NAME="<BOSH_NAME>"                             # bosh name (e.g. micro-bosh)
 IAAS="openstack"                                    # IaaS (e.g. aws/azure/gcp/openstack/vsphere)
-COMMON_VARS_PATH="<COMMON_VARS_FILE_PATH>"          # common_vars.yml File Path (e.g. /home/ubuntu/paasta-5.0/common/common_vars.yml)
+COMMON_VARS_PATH="<COMMON_VARS_FILE_PATH>"          # common_vars.yml File Path (e.g. /home/ubuntu/workspace/paasta-5.0/deployment/common/common_vars.yml)
 DEPLOYMENT_NAME="container-service"                 # deployment name
 
 # DEPLOY
