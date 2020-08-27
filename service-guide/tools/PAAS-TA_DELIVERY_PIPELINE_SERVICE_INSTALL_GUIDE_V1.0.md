@@ -509,9 +509,9 @@ No service brokers found
   **서비스팩 사용자ID** / 비밀번호 : 서비스팩에 접근할 수 있는 사용자 ID입니다. 서비스팩도 하나의 API 서버이기 때문에 아무나 접근을 허용할 수 없어 접근이 가능한 ID/비밀번호를 입력한다.<br>
   **서비스팩 URL** : 서비스팩이 제공하는 API를 사용할 수 있는 URL을 입력한다.
 
->`$ cf create-service-broker delivery-pipeline admin cloudfoundry http://10.30.107.64:9090`  
+>`$ cf create-service-broker delivery-pipeline admin cloudfoundry http://10.30.107.64:8080`  
 ```  
-$ cf create-service-broker delivery-pipeline-broker admin cloudfoundry http://10.30.107.64:9090
+$ cf create-service-broker delivery-pipeline-broker admin cloudfoundry http://10.30.107.64:8080
 Creating service broker delivery-pipeline-broker as admin...
 OK
 ```  
@@ -524,7 +524,7 @@ $ cf service-brokers
 Getting service brokers as admin...
 
 name                           url
-delivery-pipeline-broker       http://10.30.107.64:9090
+delivery-pipeline-broker       http://10.30.107.64:8080
 ```  
 
 ##### 접근 가능한 서비스 목록을 확인한다.
