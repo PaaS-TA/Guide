@@ -56,7 +56,7 @@
 ${HOME}/workspace/paasta-5.0/release/service/marketplace  
 
 ### marketplace 설치 디렉토리 (파일)를 다운로드한다
-wget --content-disposition http://45.248.73.44/index.php/s/wCtqT3RL5N5pqSm/download
+$wget --content-disposition http://45.248.73.44/index.php/s/wCtqT3RL5N5pqSm/download
 
 ### 설치 디렉토리 (파일) 구성  
 marketplace
