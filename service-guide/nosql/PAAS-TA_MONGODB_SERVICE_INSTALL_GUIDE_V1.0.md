@@ -175,7 +175,7 @@ vm_types:
 Succeeded
 ```
 
-- Deployment YAML에서 사용하는 변수 파일을 서버 환경에 맞게 수정한다.
+Deployment YAML에서 사용하는 변수 파일을 서버 환경에 맞게 수정한다.
 
 > $ vi ~/workspace/paasta-5.0/deployment/service-deployment/mongodb/vars.yml
 ```
@@ -265,6 +265,8 @@ broker_deregistrar_broker_azs: [z3]                                      # broke
 broker_deregistrar_broker_instances: 1                                   # broker deregistrar instances
 broker_deregistrar_broker_vm_type: "medium"                              # broker deregistrar vm type
 ```
+
+'pem.yml' 은 MongoDB자체 pem을 등록해 쓰기 때문에 내용 수정하지 않는다.
 
 ### <div id="2.5"/> 2.5. 서비스 설치
 
