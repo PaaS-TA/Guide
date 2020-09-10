@@ -46,7 +46,7 @@ $ git clone https://github.com/paas-ta/monitoring-deployment.git –b v5.0.1
 ```
 release, stemcell 설치 파일 다운로드는 아래 다운로드 에서 받고 설치한다.
 
-https://paas-ta.kr/download/package     $ git clone https://github.com/paas-ta/monitoring-deployment.git –b v5.0.1
+https://paas-ta.kr/download/package
 
 ![PaaSTa_release_dir_5.0]
 
