@@ -184,7 +184,7 @@ $ bosh -version
 - BOSH를 설치하기 위한 deployment가 존재하지 않는다면 다운로드 받는다
 ```
 $ cd ${HOME}/workspace/paasta-5.0/deployment
-$ git clone https://github.com/PaaS-TA/paasta-deployment.git
+$ git clone https://github.com/PaaS-TA/paasta-deployment.git –b v5.0.1
 ```
 
 ### <div id='1014'/>3.3.4.    BOSH 설치 파일
