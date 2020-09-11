@@ -16,7 +16,7 @@
 
 ## <div id='2'/>2.	PaaS-TA Container service 설치
 
-[PaaS-TA Container service 설치 가이드](https://github.com/PaaS-TA/Guide-5.0-Ravioli/branch/service-guide/tools/PAAS-TA_CONTAINER_SERVICE_INSTALL_GUIDE_V2.0.md)
+[PaaS-TA Container service 설치 가이드](https://github.com/PaaS-TA/Guide-5.0-Ravioli/blob/v5.0.1/service-guide/tools/PAAS-TA_CONTAINER_SERVICE_INSTALL_GUIDE_V2.0.md)
 
 ## <div id='3'/>3.	PaaS-TA Container service 설치 완료 확인 
 ![PaaSTa_paasta_container_service_vms]
