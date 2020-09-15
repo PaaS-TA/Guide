@@ -43,7 +43,7 @@
 
 ##### 마켓플레이스 설치에 필요한 Object Storage(Swift) 및 DB 정보를 설정하기 위해서는 paasta-marketplace-env-release가 필수적으로 설치되어 있어야 한다.
 
-> **[PaaS-TA Marketplace Environment Release 설치](https://github.com/PaaS-TA/PAAS-TA-MARKETPLACE-ENV-RELEASE)**
+> **[PaaS-TA Marketplace Environment 설치](./PAAS-TA_MARKETPLACE_ENVIRONMENT_INSTALL_GUIDE_V1.0.md)**
   
 #### <div id='211'/> 2.1.1. App 파일 및 Manifest 파일 다운로드
 
@@ -54,6 +54,9 @@
 ```  
 ### 설치 작업 경로  
 ${HOME}/workspace/paasta-5.0/release/service/marketplace  
+
+### marketplace 설치 디렉토리 (파일)를 다운로드한다
+$wget --content-disposition http://45.248.73.44/index.php/s/wCtqT3RL5N5pqSm/download
 
 ### 설치 디렉토리 (파일) 구성  
 marketplace

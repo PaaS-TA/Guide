@@ -1,1081 +1,475 @@
-## Table of Contents
-1. [문서 개요](#1)
-  -  [1.1. 목적](#2)
-  -  [1.2. 범위](#3)
-  -  [1.3. 시스템 구성도](#4)
-  -  [1.4. 참고 자료](#5)
-2. [형상관리 서비스팩 설치](#6)
-  -  [2.1. 설치 전 준비사항](#7)
-  -  [2.2. 형상관리 서비스 릴리즈 업로드](#8)
-  -  [2.3. 형상관리 서비스 Deployment 파일 수정 및 배포](#9)
-  -  [2.4. 형상관리 서비스 브로커 등록](#10)
-  -  [2.5. 형상관리 서비스 신청](#11)
-  -  [2.6. 형상관리 UAA Client Id 등록](#12)
+## Table of Contents  
 
+1. [문서 개요](#1)  
+  1.1. [목적](#1.1)  
+  1.2. [범위](#1.2)  
+  1.3. [시스템 구성도](#1.3)  
+  1.4. [참고 자료](#1.4)  
 
+2. [형상관리 서비스 설치](#2)  
+  2.1. [Prerequisite](#2.1)   
+  2.2. [Stemcell 확인](#2.2)    
+  2.3. [Deployment 다운로드](#2.3)   
+  2.4. [Deployment 파일 수정](#2.4)  
+  2.5. [서비스 설치](#2.5)    
+  2.6. [서비스 설치 - 다운로드 된 PaaS-TA Release 파일 이용 방식](#2.6)   
+  2.7. [서비스 설치 확인](#2.7)  
+  
+3. [형상관리 서비스 관리 및 신청](#3)  
+  3.1. [서비스 브로커 등록](#3.1)  
+  3.2. [UAA Client 등록](#3.2)  
+  3.3  [서비스 신청](#3.3)  
+    
 
-# <div id='1'/> 1. 문서 개요
+## <div id='1'/> 1. 문서 개요
 
-### <div id='2'/> 1.1 목적
-본 문서(형상관리 서비스팩 설치 가이드)는 개방형 PaaS 플랫폼 고도화 및 개발자 지원 환경 기반의 Open PaaS에서 제공되는 서비스팩인 형상관리 서비스를 Bosh를 이용하여 설치하는 방법을 기술하였다.
+### <div id='1.1'/> 1.1. 목적
+본 문서는 개방형 PaaS 플랫폼 고도화 및 개발자 지원 환경 기반의 Open PaaS에서 제공되는 서비스인 형상관리 서비스를 Bosh를 이용하여 설치하는 방법을 기술하였다.
 PaaS-TA 3.5 버전부터는 Bosh2.0 기반으로 deploy를 진행하며 기존 Bosh1.0 기반으로 설치를 원할경우에는 PaaS-TA 3.1 이하 버전의 문서를 참고한다.
 
-### <div id='3'/> 1.2 범위
-설치 범위는 형상관리 서비스팩을 검증하기 위한 기본 설치를 기준으로 작성하였다.
+### <div id='1.2'/> 1.2. 범위
+설치 범위는 형상관리 서비스 Release를 검증하기 위한 기본 설치를 기준으로 작성하였다.
 
-### <div id='4'/> 1.3 시스템 구성도
-본 문서의 설치된 시스템 구성도입니다. 형상관리 Server, 형상관리 서비스 브로커로 최소 사항을 구성하였다.
+### <div id='1.3'/> 1.3. 시스템 구성도
+
+본 장에서는 형상관리 서비스의 시스템 구성에 대해 기술하였다. 형상관리 서비스의 시스템은 service-broker, mariadb, 형상관리 Server의 최소 사항을 구성하였다.  
 ![source_controller_service_guide01]
 
-### <div id='5'/> 1.4 참고 자료
+### <div id='1.4'/> 1.4. 참고 자료
 > http://bosh.io/docs <br>
 > http://docs.cloudfoundry.org/
 
-# <div id='6'/> 2. 형상관리 서비스팩 설치
+## <div id="2"/> 2. 형상관리 서비스 설치  
 
-### <div id='7'/> 2.1. 설치 전 준비사항
-본 설치 가이드는 Linux 환경에서 설치하는 것을 기준으로 하였다.
-서비스팩 설치를 위해서는 BOSH 2.0과 PaaS-TA 5.0, PaaS-TA 포털이 설치되어 있어야 한다.
+### <div id="2.1"/> 2.1. Prerequisite  
 
-- PaaS-TA에서 제공하는 압축된 릴리즈 파일들을 다운받는다. (PaaSTA-Deployment.zip, PaaSTA-Sample-Apps.zip, PaaSTA-Services.zip)
+본 설치 가이드는 Linux 환경에서 설치하는 것을 기준으로 하였다. 서비스 설치를 위해서는 BOSH 2.0과 PaaS-TA 5.0, PaaS-TA 포털이 설치되어 있어야 한다. 
 
-- 다운로드 위치
->Download : **<https://paas-ta.kr/download/package>**
+### <div id="2.2"/> 2.2. Stemcell 확인  
 
+Stemcell 목록을 확인하여 서비스 설치에 필요한 Stemcell이 업로드 되어 있는 것을 확인한다.  (PaaS-TA 5.0 과 동일 stemcell 사용)
 
-### <div id='8'/> 2.2. 형상관리 서비스 릴리즈 업로드
+> $ bosh -e micro-bosh stemcells
 
--	업로드 되어 있는 릴리즈 목록을 확인한다.
+```
+Using environment '10.0.1.6' as client 'admin'
 
-- **사용 예시**
+Name                                     Version  OS             CPI  CID  
+bosh-aws-xen-hvm-ubuntu-xenial-go_agent  315.64*  ubuntu-xenial  -    ami-0297ff649e8eea21b  
 
-		$ bosh -e micro-bosh releases
-    		Using environment '10.30.40.111' as user 'admin' (openid, bosh.admin)
+(*) Currently deployed
 
-		Name                              Version   Commit Hash
-    		binary-buildpack                  1.0.21*   d714741
-    		bpm                               0.9.0*    c9b7136
-    		caas-release                      1.0*      empty+
-    		capi                              1.62.0*   22a608c
-	    	cf-networking                     2.8.0*    479f4a66
-	    	cf-smoke-tests                    40.0.5*   d6aaf1f
-	    	cf-syslog-drain                   7.0*      71b995a
-	    	cflinuxfs2                        1.227.0*  60128e1
-	    	consul                            195*      67cdbcd
-	    	diego                             2.13.0*   b5644d9
-	    	dotnet-core-buildpack             2.1.3*    46a41cd
-	    	garden-runc                       1.15.1*   75107e7+
-	    	go-buildpack                      1.8.25*   40c60a0
-	    	haproxy                           8.8.0*    9292573
-	    	java-buildpack                    4.13*     c2749d3
-	    	loggregator                       103.0*    05da4e3d
-	    	loggregator-agent                 2.0*      2382c90
-	    	nats                              24*       30e7a82
-	    	nodejs-buildpack                  1.6.28*   4cfdb7b
-	    	paas-ta-portal-release            2.0*      non-git
-	    	paasta-delivery-pipeline-release  1.0*      b3ee8f48+
-	    	paasta-pinpoint                   2.0*      2dbb8bf3+
-	    	php-buildpack                     4.3.57*   efc48f3
-	    	postgres                          29*       5de4d63d+
-	    	python-buildpack                  1.6.18*   bcc4f26
-	    	routing                           0.179.0*  18155a5
-	    	ruby-buildpack                    1.7.21*   9d69600
-	    	silk                              2.9.0*    eebed55
-	    	staticfile-buildpack              1.4.29*   8a82e63
-	    	statsd-injector                   1.3.0*    39e5179
-	    	uaa                               60.2*     ebb5895
+1 stemcells
 
-	    	(*) Currently deployed
-	    	(+) Uncommitted changes
-
-	    	31 releases
-
-	    	Succeeded
-
--	형상관리 서비스 릴리즈가 업로드 되어 있지 않은 것을 확인
-
--	형상관리 서비스 릴리즈 파일을 업로드한다.
-
-- **사용 예시**
-
-		$ bosh -e micro-bosh upload-release paasta-sourcecontrol-release-1.0.tgz
-    		Using environment '10.30.40.111' as user 'admin' (openid, bosh.admin)
-
-		######################################################## 100.00% 138.05 MiB/s 1s
-		Task 7827
-
-		Task 7827 | 00:09:43 | Extracting release: Extracting release (00:00:03)
-		Task 7827 | 00:09:46 | Verifying manifest: Verifying manifest (00:00:00)
-		Task 7827 | 00:09:46 | Resolving package dependencies: Resolving package dependencies (00:00:00)
-		Task 7827 | 00:09:46 | Creating new packages: haproxy/14b0441f6d68c89612f53ce4334a65c80d601e51 (00:00:00)
-		Task 7827 | 00:09:46 | Creating new packages: bosh-helpers/104087b4a6a1d5ebe0e26b0b2e3dcd71a9b971e2 (00:00:00)
-		Task 7827 | 00:09:46 | Creating new packages: java8/88ff03b20ad2f59840fbb5f74a074ca8fdc68213 (00:00:02)
-		Task 7827 | 00:09:48 | Creating new packages: sourcecontrol-api/37c3b7f8c53787e1f536a68543828bb76263ef50 (00:00:02)
-		Task 7827 | 00:09:50 | Creating new packages: tomcat/1ff8747498f45f21b2d43d6bc50d8e53a0ddfca7 (00:00:01)
-		Task 7827 | 00:09:51 | Creating new packages: scm-server/8f9a9d9259ff144dc71e1131c25420d1b3fa056d (00:00:00)
-		Task 7827 | 00:09:51 | Creating new packages: sourcecontrol-webui/70b5fb8f8fb97d196fa48d400f3c8f87bf3a36ea (00:00:02)
-		Task 7827 | 00:09:53 | Creating new packages: mariadb/59a218308c6c7dcf8795b531b53aa4a1c666ce00 (00:00:23)
-		Task 7827 | 00:10:16 | Creating new packages: sourcecontrol-broker/c5394441a91bddd526e232a7e7a466e8c3d90e51 (00:00:01)
-		Task 7827 | 00:10:17 | Creating new jobs: haproxy/83a2a95d33ee96bb34e03e635b0d041ee39724c9 (00:00:00)
-		Task 7827 | 00:10:17 | Creating new jobs: sourcecontrol-api/bfd00eb9d00b8de2d1ff7b4cf32b393ce5add3ac (00:00:00)
-		Task 7827 | 00:10:17 | Creating new jobs: scm-server/5563bed2081ac657e2d857d6a4ff6a698c770175 (00:00:00)
-		Task 7827 | 00:10:17 | Creating new jobs: sourcecontrol-webui/da8252527b24b150daa78bc6348aef149e6f6db7 (00:00:00)
-		Task 7827 | 00:10:17 | Creating new jobs: mariadb/cf48ef607b7415b7ebe178f3ad2e71f66e7c80b4 (00:00:00)
-		Task 7827 | 00:10:17 | Creating new jobs: sourcecontrol-broker/4e9d370ef1df0c400341942b327506af0568bb99 (00:00:00)
-		Task 7827 | 00:10:17 | Release has been created: paasta-sourcecontrol-release/1.0 (00:00:00)
-
-		Task 7827 Started  Thu Sep 13 00:09:43 UTC 2018
-		Task 7827 Finished Thu Sep 13 00:10:17 UTC 2018
-		Task 7827 Duration 00:00:34
-		Task 7827 done
-
-		Succeeded
-
-
--	업로드 된 형상관리 릴리즈를 확인한다.
-
-- **사용 예시**
-
-		$ bosh -e micro-bosh releases
-    		Using environment '10.30.40.111' as user 'admin' (openid, bosh.admin)
-
-		Name                              Version   Commit Hash
-    		binary-buildpack                  1.0.21*   d714741
-		bpm                               0.9.0*    c9b7136
-		caas-release                      1.0*      empty+
-		capi                              1.62.0*   22a608c
-		cf-networking                     2.8.0*    479f4a66
-		cf-smoke-tests                    40.0.5*   d6aaf1f
-		cf-syslog-drain                   7.0*      71b995a
-		cflinuxfs2                        1.227.0*  60128e1
-		consul                            195*      67cdbcd
-		diego                             2.13.0*   b5644d9
-		dotnet-core-buildpack             2.1.3*    46a41cd
-		garden-runc                       1.15.1*   75107e7+
-		go-buildpack                      1.8.25*   40c60a0
-		haproxy                           8.8.0*    9292573
-		java-buildpack                    4.13*     c2749d3
-		loggregator                       103.0*    05da4e3d
-		loggregator-agent                 2.0*      2382c90
-		nats                              24*       30e7a82
-		nodejs-buildpack                  1.6.28*   4cfdb7b
-		paas-ta-portal-release            2.0*      non-git
-		paasta-delivery-pipeline-release  1.0*      b3ee8f48+
-		paasta-sourcecontrol-release      1.0       d41bda4d+
-		paasta-pinpoint                   2.0*      2dbb8bf3+
-		php-buildpack                     4.3.57*   efc48f3
-		postgres                          29*       5de4d63d+
-		python-buildpack                  1.6.18*   bcc4f26
-		routing                           0.179.0*  18155a5
-		ruby-buildpack                    1.7.21*   9d69600
-		silk                              2.9.0*    eebed55
-		staticfile-buildpack              1.4.29*   8a82e63
-		statsd-injector                   1.3.0*    39e5179
-		uaa                               60.2*     ebb5895
-
-	    	(*) Currently deployed
-	    	(+) Uncommitted changes
-
-	    	32 releases
-
-	    	Succeeded
-
--	형상관리 서비스 릴리즈가 업로드 되어 있는 것을 확인
-
--	Deploy시 사용할 Stemcell을 확인한다.
-
-- **사용 예시**
-
-		$ bosh -e micro-bosh stemcells
-		Name                                       Version  OS             CPI  CID
-		bosh-openstack-kvm-ubuntu-xenial-go_agent  315.64*  ubuntu-xenial  -    fb08e389-2350-4091-9b29-41743495e62c
-		~
-
-		(*) Currently deployed
-
-		1 stemcells
-
-		Succeeded
-
->Stemcell 목록이 존재 하지 않을 경우 BOSH 설치 가이드 문서를 참고 하여 Stemcell을 업로드를 해야 한다.
-
-### <div id='9'/> 2.3. 형상관리 서비스 Deployment 파일 수정 및 배포
-BOSH Deployment manifest 는 components 요소 및 배포의 속성을 정의한 YAML 파일이다.
-Deployment manifest 에는 sotfware를 설치 하기 위해서 어떤 Stemcell (OS, BOSH agent) 을 사용할것이며 Release (Software packages, Config templates, Scripts) 이름과 버전, VMs 용량, Jobs params 등을 정의가 되어 있다.
-
-deployment 파일에서 사용하는 network, vm_type 등은 cloud config 를 활용하고 해당 가이드는 Bosh2.0 가이드를 참고한다.
-
--	cloud config 내용 조회
-
-- **사용 예시**
-
-		bosh -e micro-bosh cloud-config
-		Using environment '10.30.40.111' as user 'admin' (openid, bosh.admin)
-
-		azs:
-		- cloud_properties:
-		    datacenters:
-		    - clusters:
-		      - BD-HA:
-			  resource_pool: CF_BOSH2_Pool
-		      name: BD-HA
-		  name: z1
-		- cloud_properties:
-		    datacenters:
-		    - clusters:
-		      - BD-HA:
-			  resource_pool: CF_BOSH2_Pool
-		      name: BD-HA
-		  name: z2
-		- cloud_properties:
-		    datacenters:
-		    - clusters:
-		      - BD-HA:
-			  resource_pool: CF_BOSH2_Pool
-		      name: BD-HA
-		  name: z3
-		- cloud_properties:
-		    datacenters:
-		    - clusters:
-		      - BD-HA:
-			  resource_pool: CF_BOSH2_Pool
-		      name: BD-HA
-		  name: z4
-		- cloud_properties:
-		    datacenters:
-		    - clusters:
-		      - BD-HA:
-			  resource_pool: CF_BOSH2_Pool
-		      name: BD-HA
-		  name: z5
-		- cloud_properties:
-		    datacenters:
-		    - clusters:
-		      - BD-HA:
-			  resource_pool: CF_BOSH2_Pool
-		      name: BD-HA
-		  name: z6
-		compilation:
-		  az: z1
-		  network: default
-		  reuse_compilation_vms: true
-		  vm_type: large
-		  workers: 5
-		disk_types:
-		- disk_size: 1024
-		  name: default
-		- disk_size: 1024
-		  name: 1GB
-		- disk_size: 2048
-		  name: 2GB
-		- disk_size: 4096
-		  name: 4GB
-		- disk_size: 5120
-		  name: 5GB
-		- disk_size: 8192
-		  name: 8GB
-		- disk_size: 10240
-		  name: 10GB
-		- disk_size: 20480
-		  name: 20GB
-		- disk_size: 30720
-		  name: 30GB
-		- disk_size: 51200
-		  name: 50GB
-		- disk_size: 102400
-		  name: 100GB
-		- disk_size: 1048576
-		  name: 1TB
-		networks:
-		- name: default
-		  subnets:
-		  - azs:
-		    - z1
-		    - z2
-		    - z3
-		    - z4
-		    - z5
-		    - z6
-		    cloud_properties:
-		      name: Internal
-		    dns:
-		    - 8.8.8.8
-		    gateway: 10.30.20.23
-		    range: 10.30.0.0/16
-		    reserved:
-		    - 10.30.0.0 - 10.30.111.40
-		- name: public
-		  subnets:
-		  - azs:
-		    - z1
-		    - z2
-		    - z3
-		    - z4
-		    - z5
-		    - z6
-		    cloud_properties:
-		      name: External
-		    dns:
-		    - 8.8.8.8
-		    gateway: 115.68.46.177
-		    range: 115.68.46.176/28
-		    reserved:
-		    - 115.68.46.176 - 115.68.46.188
-		    static:
-		    - 115.68.46.189 - 115.68.46.190
-		  type: manual
-		- name: service_private
-		  subnets:
-		  - azs:
-		    - z1
-		    - z2
-		    - z3
-		    - z4
-		    - z5
-		    - z6
-		    cloud_properties:
-		      name: Internal
-		    dns:
-		    - 8.8.8.8
-		    gateway: 10.30.20.23
-		    range: 10.30.0.0/16
-		    reserved:
-		    - 10.30.0.0 - 10.30.106.255
-		    static:
-		    - 10.30.107.1 - 10.30.107.255
-		- name: service_public
-		  subnets:
-		  - azs:
-		    - z1
-		    - z2
-		    - z3
-		    - z4
-		    - z5
-		    - z6
-		    cloud_properties:
-		      name: External
-		    dns:
-		    - 8.8.8.8
-		    gateway: 115.68.47.161
-		    range: 115.68.47.160/24
-		    reserved:
-		    - 115.68.47.161 - 115.68.47.174
-		    static:
-		    - 115.68.47.175 - 115.68.47.185
-		  type: manual
-		- name: portal_service_public
-		  subnets:
-		  - azs:
-		    - z1
-		    - z2
-		    - z3
-		    - z4
-		    - z5
-		    - z6
-		    cloud_properties:
-		      name: External
-		    dns:
-		    - 8.8.8.8
-		    gateway: 115.68.46.209
-		    range: 115.68.46.208/28
-		    reserved:
-		    - 115.68.46.216 - 115.68.46.222
-		    static:
-		    - 115.68.46.214
-		  type: manual
-		vm_extensions:
-		- cloud_properties:
-		    ports:
-		    - host: 3306
-		  name: mysql-proxy-lb
-		- name: cf-router-network-properties
-		- name: cf-tcp-router-network-properties
-		- name: diego-ssh-proxy-network-properties
-		- name: cf-haproxy-network-properties
-		- cloud_properties:
-		    disk: 51200
-		  name: small-50GB
-		- cloud_properties:
-		    disk: 102400
-		  name: small-highmem-100GB
-		vm_types:
-		- cloud_properties:
-		    cpu: 1
-		    disk: 8192
-		    ram: 1024
-		  name: minimal
-		- cloud_properties:
-		    cpu: 1
-		    disk: 10240
-		    ram: 2048
-		  name: default
-		- cloud_properties:
-		    cpu: 1
-		    disk: 30720
-		    ram: 4096
-		  name: small
-		- cloud_properties:
-		    cpu: 2
-		    disk: 20480
-		    ram: 4096
-		  name: medium
-		- cloud_properties:
-		    cpu: 2
-		    disk: 20480
-		    ram: 8192
-		  name: medium-memory-8GB
-		- cloud_properties:
-		    cpu: 4
-		    disk: 20480
-		    ram: 8192
-		  name: large
-		- cloud_properties:
-		    cpu: 8
-		    disk: 20480
-		    ram: 16384
-		  name: xlarge
-		- cloud_properties:
-		    cpu: 2
-		    disk: 51200
-		    ram: 4096
-		  name: small-50GB
-		- cloud_properties:
-		    cpu: 2
-		    disk: 51200
-		    ram: 4096
-		  name: small-50GB-ephemeral-disk
-		- cloud_properties:
-		    cpu: 4
-		    disk: 102400
-		    ram: 8192
-		  name: small-100GB-ephemeral-disk
-		- cloud_properties:
-		    cpu: 4
-		    disk: 102400
-		    ram: 8192
-		  name: small-highmem-100GB-ephemeral-disk
-		- cloud_properties:
-		    cpu: 8
-		    disk: 20480
-		    ram: 16384
-		  name: small-highmem-16GB
-		- cloud_properties:
-		    cpu: 1
-		    disk: 4096
-		    ram: 2048
-		  name: caas_small
-		- cloud_properties:
-		    cpu: 1
-		    disk: 4096
-		    ram: 1024
-		  name: caas_small_api
-		- cloud_properties:
-		    cpu: 1
-		    disk: 4096
-		    ram: 4096
-		  name: caas_medium
-		- cloud_properties:
-		    cpu: 2
-		    disk: 8192
-		    ram: 4096
-		  name: service_medium
-		- cloud_properties:
-		    cpu: 2
-		    disk: 10240
-		    ram: 2048
-		  name: service_medium_2G
-
-		Succeeded
-
-
--	Deployment 파일을 서버 환경에 맞게 수정한다.
-
-```yml
-# paasta-sourcecontrol-service 설정 파일 내용
-name: paasta-sourcecontrol-service                      # 서비스 배포이름(필수)
-
-releases:
-- name: paasta-sourcecontrol-release                    # 서비스 릴리즈 이름(필수)
-  version: "1.0"                                        # 서비스 릴리즈 버전(필수):latest 시 업로드된 서비스 릴리즈 최신버전
-
-stemcells:
-- alias: default
-  os: ((stemcell_os))
-  version: "((stemcell_version))"
-
-update:
-  canaries: 1                            # canary 인스턴스 수(필수)
-  canary_watch_time: 30000-120000        # canary 인스턴스가 수행하기 위한 대기 시간(필수)
-  max_in_flight: 4                       # non-canary 인스턴스가 병렬로 update 하는 최대 개수(필수)
-  update_watch_time: 30000-120000        # non-canary 인스턴스가 수행하기 위한 대기 시간(필수)
-
-instance_groups:
-- name: scm-server
-  azs:
-  - z5
-  instances: 1
-  persistent_disk_type: 30GB
-  vm_type: ((vm_type_small))
-  stemcell: default
-  networks:
-  - name: ((default_network_name))
-    static_ips:
-    - 10.30.107.121
-  jobs:
-  - name: scm-server
-    release: paasta-sourcecontrol-release
-
-- name: mariadb
-  azs:
-  - z5
-  instances: 1
-  persistent_disk_type: 2GB
-  vm_type: ((vm_type_small))
-  stemcell: default
-  networks:
-  - name: ((default_network_name))
-    static_ips:
-    - 10.30.107.122
-  jobs:
-  - name: mariadb
-    release: paasta-sourcecontrol-release
-
-- name: haproxy
-  azs:
-  - z5
-  instances: 1
-  persistent_disk_type: 2GB
-  vm_type: ((vm_type_small))
-  stemcell: default
-  networks:
-  - name: ((default_network_name))
-    static_ips:
-    - 10.30.107.123
-  - name: ((public_network_name))
-    static_ips:
-    - 115.68.47.175
-  jobs:
-  - name: haproxy
-    release: paasta-sourcecontrol-release
-
-- name: sourcecontrol-webui
-  azs:
-  - z5
-  instances: 1
-  persistent_disk_type: 2GB
-  vm_type: ((vm_type_small))
-  stemcell: default
-  networks:
-  - name: ((default_network_name))
-    static_ips:
-    - 10.30.107.124
-  jobs:
-  - name: sourcecontrol-webui
-    release: paasta-sourcecontrol-release
-
-- name: sourcecontrol-api
-  azs:
-  - z5
-  instances: 1
-  persistent_disk_type: 2GB
-  vm_type: ((vm_type_small))
-  stemcell: default
-  networks:
-  - name: ((default_network_name))
-    static_ips:
-    - 10.30.107.125
-  jobs:
-  - name: sourcecontrol-api
-    release: paasta-sourcecontrol-release
-
-- name: sourcecontrol-broker
-  azs:
-  - z5
-  instances: 1
-  persistent_disk_type: 2GB
-  vm_type: ((vm_type_small))
-  stemcell: default
-  networks:
-  - name: ((default_network_name))
-    static_ips:
-    - 10.30.107.126
-  jobs:
-  - name: sourcecontrol-broker
-    release: paasta-sourcecontrol-release
-
-properties:
-  spring:
-    datasource:
-      url: jdbc:mysql://10.30.107.122:31306/PAASTA_SRC_DB?autoReconnect=true&useUnicode=true&characterEncoding=utf8
-      username: sourcecontrol
-      password: '!scadmin2017'
-      databasename: "PAASTA_SRC_DB"
-    jpa:
-      database: mysql
-
-  haproxy:                                # sourcecontrol haproxy
-    host_ip: 10.30.107.123                # sourcecontrol haproxy host IP
-    url: 10.30.107.123                # sourcecontrol haproxy host IP
-    http_port: 8080                        # sourcecontrol haproxy host port
-
-  sourcecontrol-webui:                  # sourcecontrol webui
-    port: 8080
-    haproxy:
-      urls:
-      - 10.30.107.124
-    java_opts: '-XX:MaxMetaspaceSize=104857K -Xss349K -Xms681574K -XX:MetaspaceSize=104857K -Xmx681574K'
-
-  sourcecontrol-api:                    # sourcecontrol api
-    base:
-      url: http://10.30.107.125:8082        # sourcecontrol api base url
-    port: 8082                              # sourcecontrol api port
-    haproxy:
-      urls:
-      - 10.30.107.125
-    java_opts: '-XX:MaxMetaspaceSize=104857K -Xss349K -Xms681574K -XX:MetaspaceSize=104857K -Xmx681574K'
-
-  sourcecontrol-broker:                 # sourcecontrol broker
-    port: 8080                               # sourcecontrol port
-    java_opts: '-XX:MaxMetaspaceSize=104857K -Xss349K -Xms681574K -XX:MetaspaceSize=104857K -Xmx681574K'
-
-  mariadb:
-    port: 31306
-    datasource:
-      username: root
-      password: "!paas_ta202"
-      databasename:  "PAASTA_SRC_DB"
-
-  scm:
-    base:
-      url: http://10.30.107.121:8084/scm
-      port: 8084
-    haproxy:
-      urls:
-      - 10.30.107.121
-    clone:
-      url: http://115.68.47.175:8084/scm
-  dashboard:
-    url: http://115.68.47.175:8080/repositories/user/{instanceId}
-  api:
-    user: '/api/rest/users'
-    repo: '/api/rest/repositories'
-  cf:
-    uaa:
-      oauth:
-        info:
-          uri: https://uaa.115.68.46.189.xip.io/userinfo
-        token:
-          check:
-            uri: https://uaa.115.68.46.189.xip.io/check_token
-          access:
-            uri: https://uaa.115.68.46.189.xip.io/oauth/token
-        logout:
-          url: https://uaa.115.68.46.189.xip.io/logout.do
-        authorization:
-          uri: https://uaa.115.68.46.189.xip.io/oauth/authorize
-        client:
-          id: scclient
-          secret: clientsecret
-    api:
-      url: https://api.115.68.46.189.xip.io/v2/service_instances/[SUID]/permissions
+Succeeded
 ```
 
--	deploy-mysql-bosh2.0.sh 파일을 서버 환경에 맞게 수정한다.
+### <div id="2.3"/> 2.3. Deployment 다운로드  
 
-```sh
+서비스 설치에 필요한 Deployment를 Git Repository에서 받아 서비스 설치 작업 경로로 위치시킨다.  
+
+- Service Deployment Git Repository URL : https://github.com/PaaS-TA/service-deployment/tree/v5.0.1  
+
+```
+# Deployment 다운로드 파일 위치 경로 생성 및 설치 경로 이동
+$ mkdir -p ~/workspace/paasta-5.0/deployment
+$ cd ~/workspace/paasta-5.0/deployment
+
+# Deployment 파일 다운로드
+$ git clone https://github.com/PaaS-TA/service-deployment.git -b v5.0.1
+```
+
+### <div id="2.4"/> 2.4. Deployment 파일 수정
+
+BOSH Deployment manifest는 Components 요소 및 배포의 속성을 정의한 YAML 파일이다.
+Deployment 파일에서 사용하는 network, vm_type, disk_type 등은 Cloud config를 활용하고, 활용 방법은 BOSH 2.0 가이드를 참고한다.   
+
+- Cloud config 설정 내용을 확인한다.   
+
+> $ bosh -e micro-bosh cloud-config   
+
+```
+Using environment '10.0.1.6' as client 'admin'
+
+azs:
+- cloud_properties:
+    availability_zone: ap-northeast-2a
+  name: z1
+- cloud_properties:
+    availability_zone: ap-northeast-2a
+  name: z2
+
+... ((생략)) ...
+
+disk_types:
+- disk_size: 1024
+  name: default
+- disk_size: 1024
+  name: 1GB
+
+... ((생략)) ...
+
+networks:
+- name: default
+  subnets:
+  - az: z1
+    cloud_properties:
+      security_groups: paasta-security-group
+      subnet: subnet-00000000000000000
+    dns:
+    - 8.8.8.8
+    gateway: 10.0.1.1
+    range: 10.0.1.0/24
+    reserved:
+    - 10.0.1.2 - 10.0.1.9
+    static:
+    - 10.0.1.10 - 10.0.1.120
+
+... ((생략)) ...
+
+vm_types:
+- cloud_properties:
+    ephemeral_disk:
+      size: 3000
+      type: gp2
+    instance_type: t2.small
+  name: minimal
+- cloud_properties:
+    ephemeral_disk:
+      size: 10000
+      type: gp2
+    instance_type: t2.small
+  name: small
+
+... ((생략)) ...
+
+Succeeded
+```
+
+- Deployment YAML에서 사용하는 변수 파일을 서버 환경에 맞게 수정한다.
+
+> $ vi ~/workspace/paasta-5.0/deployment/service-deployment/source-control-service/vars.yml
+
+```
+# STEMCELL
+stemcell_os: "ubuntu-xenial"                                   # stemcell os
+stemcell_version: "315.64"                                     # stemcell version
+
+# VM_TYPE
+vm_type_small: "minimal"                                       # vm type small
+
+# NETWORK
+private_networks_name: "default"                               # private network name
+public_networks_name: "vip"                                    # public network name
+
+# SCM-SERVER
+scm_azs: [z3]                                                  # scm : azs
+scm_instances: 1                                               # scm : instances (1)
+scm_persistent_disk_type: "30GB"                               # scm : persistent disk type
+scm_private_ips: "<SCM_PRIVATE_IPS>"                           # scm : private ips (e.g. "10.0.81.21")
+
+# MARIA-DB# MARIA_DB
+mariadb_azs: [z3]                                              # mariadb : azs
+mariadb_instances: 1                                           # mariadb : instances (1) 
+mariadb_persistent_disk_type: "2GB"                            # mariadb : persistent disk type 
+mariadb_private_ips: "<MARIADB_PRIVATE_IPS>"                   # mariadb : private ips (e.g. "10.0.81.22")
+mariadb_port: "<MARIADB_PORT>"                                 # mariadb : database port (e.g. 31306)
+mariadb_admin_password: "<MARIADB_ADMIN_PASSWORD>"             # mariadb : database admin password (e.g. "!paas_ta202")
+mariadb_broker_username: "<MARIADB_BROKER_USERNAME>"           # mariadb : service-broker-user id (e.g. "sourcecontrol")
+mariadb_broker_password: "<MARIADB_BROKER_PASSWORD>"           # mariadb : service-broker-user password (e.g. "!scadmin2017")
+
+# HAPROXY
+haproxy_azs: [z7]                                              # haproxy : azs
+haproxy_instances: 1                                           # haproxy : instances (1)
+haproxy_persistent_disk_type: "2GB"                            # haproxy : persistent disk type
+haproxy_private_ips: "<HAPROXY_PRIVATE_IPS>"                   # haproxy : private ips (e.g. "10.0.0.103")
+haproxy_public_ips: "<HAPROXY_PUBLIC_IPS>"                     # haproxy : public ips (e.g. "101.101.101.5")
+
+# WEB-UI
+web_ui_azs: [z3]                                               # web-ui : azs
+web_ui_instances: 1                                            # web-ui : instances (1)
+web_ui_persistent_disk_type: "2GB"                             # web-ui : persistent disk type
+web_ui_private_ips: "<WEB_UI_PRIVATE_IPS>"                     # web-ui : private ips (e.g. "10.0.81.24")
+
+# SCM-API
+api_azs: [z3]                                                  # scm-api : azs
+api_instances: 1                                               # scm-api : instances (1)
+api_persistent_disk_type: "2GB"                                # scm-api : persistent disk type
+api_private_ips: "<API_PRIVATE_IPS>"                           # scm-api : private ips (e.g. "10.0.81.25")
+
+# SERVICE-BROKER
+broker_azs: [z3]                                               # service-broker : azs
+broker_instances: 1                                            # service-broker : instances (1)
+broker_persistent_disk_type: "2GB"                             # service-broker : persistent disk type
+broker_private_ips: "<BROKER_PRIVATE_IPS>"                     # service-broker : private ips (e.g. "10.0.81.26")
+
+# UAAC
+uaa_client_sc_id: "scclient"                                   # source-control-service uaa client id
+uaa_client_sc_secret: "clientsecret"                           # source-control-service uaa client secret
+```
+
+### <div id="2.5"/> 2.5. 서비스 설치
+
+- 서버 환경에 맞추어 Deploy 스크립트 파일의 VARIABLES 설정을 수정한다. 
+
+> $ vi ~/workspace/paasta-5.0/deployment/service-deployment/source-control-service/deploy.sh
+
+```
 #!/bin/bash
-bosh -e micro-bosh -d paasta-sourcecontrol-service deploy paasta_sourcecontrol_bosh2.0.yml \
-   -o use-public-network-vsphere.yml \
-   -v default_network_name=service_private \
-   -v public_network_name=service_public \
-   -v stemcell_os=ubuntu-xenial\
-   -v stemcell_version=latest \
-   -v vm_type_small=minimal
+  
+# VARIABLES
+BOSH_NAME="micro-bosh"                           # bosh name (e.g. micro-bosh)
+IAAS="openstack"                                 # IaaS (e.g. aws/azure/gcp/openstack/vsphere)
+COMMON_VARS_PATH="<COMMON_VARS_FILE_PATH>"       # common_vars.yml File Path (e.g. /home/ubuntu/paasta-5.0/common/common_vars.yml)
+
+# DEPLOY
+bosh -e ${BOSH_NAME} -n -d source-control-service deploy --no-redact source-control-service.yml \
+    -o operations/${IAAS}-network.yml \
+    -l ${COMMON_VARS_PATH} \
+    -l vars.yml
 ```
 
--	형상관리 서비스팩을 배포한다.
+- 서비스를 설치한다.  
+```
+$ cd ~/workspace/paasta-5.0/deployment/service-deployment/source-control-service  
+$ sh ./deploy.sh  
+```  
 
-- **사용 예시**
+### <div id="2.6"/> 2.6. 서비스 설치 - 다운로드 된 PaaS-TA Release 파일 이용 방식
 
-		$ ./deploy-sourcecontrol-bosh2.0.sh
-		Using environment '10.30.40.111' as user 'admin' (openid, bosh.admin)
+- 서비스 설치에 필요한 릴리즈 파일을 다운로드 받아 Local machine의 서비스 설치 작업 경로로 위치시킨다.  
+  
+  - 설치 파일 다운로드 위치 : https://paas-ta.kr/download/package    
+  - 릴리즈 파일 : paasta-sourcecontrol-release-1.0.tgz  
 
-		Using deployment 'paasta-sourcecontrol-service'
+```
+# 릴리즈 다운로드 파일 위치 경로 생성
+$ mkdir -p ~/workspace/paasta-5.0/release/service
 
-		+ stemcells:
-		+ - alias: default
-		+   os: ubuntu-xenial
-		+   version: 'latest'
+# 릴리즈 파일 다운로드 및 파일 경로 확인
+$ ls ~/workspace/paasta-5.0/release/service
+paasta-sourcecontrol-release-1.0.tgz
+```
+  
+- 서버 환경에 맞추어 Deploy 스크립트 파일의 VARIABLES 설정을 수정하고 Option file 및 변수를 추가한다.  
+     (추가) -o operations/use-compiled-releases.yml  
+     (추가) -v inception_os_user_name="<HOME_USER_NAME>"  
+     
+> $ vi ~/workspace/paasta-5.0/deployment/service-deployment/source-control-service/deploy.sh
+  
+```
+#!/bin/bash
 
-		+ releases:
-		+ - name: paasta-sourcecontrol-release
-		+   version: '1.0'
+# VARIABLES
+BOSH_NAME="micro-bosh"                           # bosh name (e.g. micro-bosh)
+IAAS="openstack"                                 # IaaS (e.g. aws/azure/gcp/openstack/vsphere)
+COMMON_VARS_PATH="<COMMON_VARS_FILE_PATH>"       # common_vars.yml File Path (e.g. /home/ubuntu/paasta-5.0/common/common_vars.yml)
 
-		+ update:
-		+   canaries: 1
-		+   canary_watch_time: 30000-120000
-		+   max_in_flight: 4
-		+   update_watch_time: 30000-120000
+#!/bin/bash
+  
+# VARIABLES
+BOSH_NAME="micro-bosh"                           # bosh name (e.g. micro-bosh)
+IAAS="openstack"                                 # IaaS (e.g. aws/azure/gcp/openstack/vsphere)
+COMMON_VARS_PATH="<COMMON_VARS_FILE_PATH>"       # common_vars.yml File Path (e.g. /home/ubuntu/paasta-5.0/common/common_vars.yml)
 
-		+ instance_groups:
-		+ - azs:
-		+   - z5
-		+   instances: 1
-		+   name: scm-server
-		+   networks:
-		+   - name: service_private
-		+     static_ips:
-		+     - 10.30.107.121
-		+   persistent_disk_type: 30GB
-		+   stemcell: default
-		+   templates:
-		+   - name: scm-server
-		+     release: paasta-sourcecontrol-release
-		+   vm_type: minimal
-		+ - azs:
-		+   - z5
-		+   instances: 1
-		+   name: mariadb
-		+   networks:
-		+   - name: service_private
-		+     static_ips:
-		+     - 10.30.107.122
-		+   persistent_disk_type: 2GB
-		+   stemcell: default
-		+   templates:
-		+   - name: mariadb
-		+     release: paasta-sourcecontrol-release
-		+   vm_type: minimal
-		+ - azs:
-		+   - z5
-		+   instances: 1
-		+   name: haproxy
-		+   networks:
-		+   - name: service_private
-		+     static_ips:
-		+     - 10.30.107.123
-		+   - default:
-		+     - dns
-		+     - gateway
-		+     name: service_public
-		+     static_ips:
-		+     - 115.68.47.179
-		+   persistent_disk_type: 2GB
-		+   stemcell: default
-		+   templates:
-		+   - name: haproxy
-		+     release: paasta-sourcecontrol-release
-		+   vm_type: minimal
-		+ - azs:
-		+   - z5
-		+   instances: 1
-		+   name: sourcecontrol-webui
-		+   networks:
-		+   - name: service_private
-		+     static_ips:
-		+     - 10.30.107.124
-		+   persistent_disk_type: 2GB
-		+   stemcell: default
-		+   templates:
-		+   - name: sourcecontrol-webui
-		+     release: paasta-sourcecontrol-release
-		+   vm_type: minimal
-		+ - azs:
-		+   - z5
-		+   instances: 1
-		+   name: sourcecontrol-api
-		+   networks:
-		+   - name: service_private
-		+     static_ips:
-		+     - 10.30.107.125
-		+   persistent_disk_type: 2GB
-		+   stemcell: default
-		+   templates:
-		+   - name: sourcecontrol-api
-		+     release: paasta-sourcecontrol-release
-		+   vm_type: minimal
-		+ - azs:
-		+   - z5
-		+   instances: 1
-		+   name: sourcecontrol-broker
-		+   networks:
-		+   - name: service_private
-		+     static_ips:
-		+     - 10.30.107.126
-		+   persistent_disk_type: 2GB
-		+   stemcell: default
-		+   templates:
-		+   - name: sourcecontrol-broker
-		+     release: paasta-sourcecontrol-release
-		+   vm_type: minimal
+# DEPLOY
+bosh -e ${BOSH_NAME} -n -d source-control-service deploy --no-redact source-control-service.yml \
+    -o operations/${IAAS}-network.yml \
+    -o operations/use-compiled-releases.yml \
+    -l ${COMMON_VARS_PATH} \
+    -l vars.yml \
+    -v inception_os_user_name="ubuntu"
+```  
 
-		+ name: paasta-sourcecontrol-service
+- 서비스를 설치한다.  
+```
+$ cd ~/workspace/paasta-5.0/deployment/service-deployment/source-control-service   
+$ sh ./deploy.sh  
+```  
 
-		+ properties:
-		+   api:
-		+     repo: "<redacted>"
-		+     user: "<redacted>"
-		+   cf:
-		+     api:
-		+       url: "<redacted>"
-		+     uaa:
-		+       oauth:
-		+         authorization:
-		+           uri: "<redacted>"
-		+         client:
-		+           id: "<redacted>"
-		+           secret: "<redacted>"
-		+         info:
-		+           uri: "<redacted>"
-		+         logout:
-		+           url: "<redacted>"
-		+         token:
-		+           access:
-		+             uri: "<redacted>"
-		+           check:
-		+             uri: "<redacted>"
-		+   dashboard:
-		+     url: "<redacted>"
-		+   haproxy:
-		+     host_ip: "<redacted>"
-		+     http_port: "<redacted>"
-		+     url: "<redacted>"
-		+   mariadb:
-		+     datasource:
-		+       databasename: "<redacted>"
-		+       password: "<redacted>"
-		+       username: "<redacted>"
-		+     port: "<redacted>"
-		+   scm:
-		+     base:
-		+       port: "<redacted>"
-		+       url: "<redacted>"
-		+     clone:
-		+       url: "<redacted>"
-		+     haproxy:
-		+       urls:
-		+       - "<redacted>"
-		+   sourcecontrol-api:
-		+     base:
-		+       url: "<redacted>"
-		+     haproxy:
-		+       urls:
-		+       - "<redacted>"
-		+     java_opts: "<redacted>"
-		+     port: "<redacted>"
-		+   sourcecontrol-broker:
-		+     java_opts: "<redacted>"
-		+     port: "<redacted>"
-		+   sourcecontrol-webui:
-		+     haproxy:
-		+       urls:
-		+       - "<redacted>"
-		+     java_opts: "<redacted>"
-		+     port: "<redacted>"
-		+   spring:
-		+     datasource:
-		+       databasename: "<redacted>"
-		+       password: "<redacted>"
-		+       url: "<redacted>"
-		+       username: "<redacted>"
-		+     jpa:
-		+       database: "<redacted>"
+### <div id="2.7"/> 2.7. 서비스 설치 확인
 
-		Continue? [yN]: y
+설치 완료된 서비스를 확인한다.
 
-		ask 7838
+> $ bosh -e micro-bosh -d source-control-service vms  
 
-		Task 7838 | 00:18:22 | Preparing deployment: Preparing deployment (00:00:02)
-		Task 7838 | 00:18:25 | Preparing package compilation: Finding packages to compile (00:00:00)
-		Task 7838 | 00:18:25 | Compiling packages: sourcecontrol-broker/c5394441a91bddd526e232a7e7a466e8c3d90e51
-		Task 7838 | 00:18:25 | Compiling packages: sourcecontrol-api/37c3b7f8c53787e1f536a68543828bb76263ef50
-		Task 7838 | 00:18:25 | Compiling packages: sourcecontrol-webui/70b5fb8f8fb97d196fa48d400f3c8f87bf3a36ea
-		Task 7838 | 00:18:25 | Compiling packages: tomcat/1ff8747498f45f21b2d43d6bc50d8e53a0ddfca7
-		Task 7838 | 00:18:25 | Compiling packages: haproxy/14b0441f6d68c89612f53ce4334a65c80d601e51
-		Task 7838 | 00:21:13 | Compiling packages: tomcat/1ff8747498f45f21b2d43d6bc50d8e53a0ddfca7 (00:02:48)
-		Task 7838 | 00:21:13 | Compiling packages: mariadb/59a218308c6c7dcf8795b531b53aa4a1c666ce00
-		Task 7838 | 00:21:21 | Compiling packages: sourcecontrol-broker/c5394441a91bddd526e232a7e7a466e8c3d90e51 (00:02:56)
-		Task 7838 | 00:21:21 | Compiling packages: java8/88ff03b20ad2f59840fbb5f74a074ca8fdc68213
-		Task 7838 | 00:21:21 | Compiling packages: sourcecontrol-webui/70b5fb8f8fb97d196fa48d400f3c8f87bf3a36ea (00:02:56)
-		Task 7838 | 00:21:21 | Compiling packages: scm-server/8f9a9d9259ff144dc71e1131c25420d1b3fa056d
-		Task 7838 | 00:21:30 | Compiling packages: sourcecontrol-api/37c3b7f8c53787e1f536a68543828bb76263ef50 (00:03:05)
-		Task 7838 | 00:21:59 | Compiling packages: scm-server/8f9a9d9259ff144dc71e1131c25420d1b3fa056d (00:00:38)
-		Task 7838 | 00:22:05 | Compiling packages: haproxy/14b0441f6d68c89612f53ce4334a65c80d601e51 (00:03:40)
-		Task 7838 | 00:22:12 | Compiling packages: java8/88ff03b20ad2f59840fbb5f74a074ca8fdc68213 (00:00:51)
-		Task 7838 | 00:22:32 | Compiling packages: mariadb/59a218308c6c7dcf8795b531b53aa4a1c666ce00 (00:01:19)
-		Task 7838 | 00:23:33 | Creating missing vms: scm-server/6e23addc-33c7-4bb0-af95-d66420f15c06 (0)
-		Task 7838 | 00:23:33 | Creating missing vms: mariadb/90ea7861-57ed-43f7-853d-25712a67ba2a (0)
-		Task 7838 | 00:23:33 | Creating missing vms: haproxy/878b393c-d817-4e71-8fe5-553ddf87d362 (0)
-		Task 7838 | 00:23:33 | Creating missing vms: sourcecontrol-webui/840278e2-e1a2-4a30-b904-68538c7cd06f (0)
-		Task 7838 | 00:23:33 | Creating missing vms: sourcecontrol-broker/ec83edb5-130f-4a91-9ac1-20fb622ed0a2 (0)
-		Task 7838 | 00:23:33 | Creating missing vms: sourcecontrol-api/3ecb90fa-2211-4df6-82bb-5c91ed9a4310 (0)
-		Task 7838 | 00:25:38 | Creating missing vms: haproxy/878b393c-d817-4e71-8fe5-553ddf87d362 (0) (00:02:05)
-		Task 7838 | 00:25:40 | Creating missing vms: mariadb/90ea7861-57ed-43f7-853d-25712a67ba2a (0) (00:02:07)
-		Task 7838 | 00:25:49 | Creating missing vms: sourcecontrol-api/3ecb90fa-2211-4df6-82bb-5c91ed9a4310 (0) (00:02:16)
-		Task 7838 | 00:25:52 | Creating missing vms: scm-server/6e23addc-33c7-4bb0-af95-d66420f15c06 (0) (00:02:19)
-		Task 7838 | 00:25:52 | Creating missing vms: sourcecontrol-webui/840278e2-e1a2-4a30-b904-68538c7cd06f (0) (00:02:19)
-		Task 7838 | 00:25:52 | Creating missing vms: sourcecontrol-broker/ec83edb5-130f-4a91-9ac1-20fb622ed0a2 (0) (00:02:19)
-		Task 7838 | 00:25:53 | Updating instance scm-server: scm-server/6e23addc-33c7-4bb0-af95-d66420f15c06 (0) (canary) (00:02:39)
-		Task 7838 | 00:28:32 | Updating instance mariadb: mariadb/90ea7861-57ed-43f7-853d-25712a67ba2a (0) (canary) (00:02:53)
-		Task 7838 | 00:31:25 | Updating instance haproxy: haproxy/878b393c-d817-4e71-8fe5-553ddf87d362 (0) (canary) (00:02:06)
-		Task 7838 | 00:33:31 | Updating instance sourcecontrol-webui: sourcecontrol-webui/840278e2-e1a2-4a30-b904-68538c7cd06f (0) (canary) (00:02:08)
-		Task 7838 | 00:35:39 | Updating instance sourcecontrol-api: sourcecontrol-api/3ecb90fa-2211-4df6-82bb-5c91ed9a4310 (0) (canary) (00:02:08)
-		Task 7838 | 00:37:47 | Updating instance sourcecontrol-broker: sourcecontrol-broker/ec83edb5-130f-4a91-9ac1-20fb622ed0a2 (0) (canary) (00:02:10)
+```
+Using environment '10.0.1.6' as client 'admin'
 
-		Task 7838 Started  Thu Sep 13 00:18:22 UTC 2018
-		Task 7838 Finished Thu Sep 13 00:39:57 UTC 2018
-		Task 7838 Duration 00:21:35
-		Task 7838 done
+Task 7847. Done
 
-		Succeeded
+Deployment 'source-control-service'
 
+Instance                                                   Process State  AZ  IPs            VM CID                                   VM Type  Active
+haproxy/878b393c-d817-4e71-8fe5-553ddf87d362               running        z5  115.68.47.179  vm-cc4c774d-9857-4b3a-9ffc-5f836098eb4e  minimal  true
+								              10.30.107.123
+mariadb/90ea7861-57ed-43f7-853d-25712a67ba2a               running        z5  10.30.107.122  vm-6952fb76-b4d6-4f53-86cb-b0517a76f0d0  minimal  true
+scm-server/6e23addc-33c7-4bb0-af95-d66420f15c06            running        z5  10.30.107.121  vm-08eb6dd3-04ae-435c-9558-9b78286b730c  minimal  true
+sourcecontrol-api/3ecb90fa-2211-4df6-82bb-5c91ed9a4310     running        z5  10.30.107.125  vm-ee4daa28-3e10-4409-9d6f-ce566d54e8a5  minimal  true
+sourcecontrol-broker/ec83edb5-130f-4a91-9ac1-20fb622ed0a2  running        z5  10.30.107.126  vm-23d1a9fc-30d2-4a0f-8631-df8807fc8612  minimal  true
+sourcecontrol-webui/840278e2-e1a2-4a30-b904-68538c7cd06f   running        z5  10.30.107.124  vm-0f7300dd-63b5-4399-b1fd-35aeccffac5c  minimal  true
 
--	배포된 형상관리 서비스팩을 확인한다.
+6 vms
 
-- **사용 예시**
+Succeeded
+```
 
-		$bosh -e micro-bosh -d paasta-sourcecontrol-service vms
-		Using environment '10.30.40.111' as user 'admin' (openid, bosh.admin)
+## <div id="3"/>3.  형상관리 서비스 관리 및 신청
 
-		Task 7847. Done
+### <div id="3.1"/> 3.1. 서비스 브로커 등록
 
-		Deployment 'paasta-sourcecontrol-service'
+서비스의 설치가 완료 되면, PaaS-TA 포탈에서 서비스를 사용하기 위해 형상관리 서비스 브로커를 등록해 주어야 한다.  
+서비스 브로커 등록 시에는 개방형 클라우드 플랫폼에서 서비스 브로커를 등록 할 수 있는 권한을 가진 사용자로 로그인 되어 있어야 한다. 
 
-		Instance                                                   Process State  AZ  IPs            VM CID                                   VM Type  Active
-		haproxy/878b393c-d817-4e71-8fe5-553ddf87d362               running        z5  115.68.47.179  vm-cc4c774d-9857-4b3a-9ffc-5f836098eb4e  minimal  true
-											      10.30.107.123
-		mariadb/90ea7861-57ed-43f7-853d-25712a67ba2a               running        z5  10.30.107.122  vm-6952fb76-b4d6-4f53-86cb-b0517a76f0d0  minimal  true
-		scm-server/6e23addc-33c7-4bb0-af95-d66420f15c06            running        z5  10.30.107.121  vm-08eb6dd3-04ae-435c-9558-9b78286b730c  minimal  true
-		sourcecontrol-api/3ecb90fa-2211-4df6-82bb-5c91ed9a4310     running        z5  10.30.107.125  vm-ee4daa28-3e10-4409-9d6f-ce566d54e8a5  minimal  true
-		sourcecontrol-broker/ec83edb5-130f-4a91-9ac1-20fb622ed0a2  running        z5  10.30.107.126  vm-23d1a9fc-30d2-4a0f-8631-df8807fc8612  minimal  true
-		sourcecontrol-webui/840278e2-e1a2-4a30-b904-68538c7cd06f   running        z5  10.30.107.124  vm-0f7300dd-63b5-4399-b1fd-35aeccffac5c  minimal  true
+- 서비스 브로커 목록을 확인한다  
+> $ cf service-brokers
 
-		6 vms
-
-		Succeeded
-
-
-### <div id='10'/> 2.4. 형상관리 서비스 브로커 등록
-형상관리 서비스팩 배포가 완료되었으면 Application에서 서비스 팩을 사용하기 위해서 먼저 형상관리 서비스 브로커를 등록해 주어야 한다.
-서비스 브로커 등록 시 개방형 클라우드 플랫폼에서 서비스 브로커를 등록할 수 있는 사용자로 로그인이 되어있어야 한다.
-
-##### 서비스 브로커 목록을 확인한다.
-
->`$ cf service-brokers`
 ```
 Getting service brokers as admin...
 
-name                          url
-cubrid-service-broker         http://10.30.60.22:8080
+name   url
+No service brokers found
 ```
 
-##### 형상관리 서비스 브로커를 등록한다.
+- 형상관리 서비스 브로커를 등록한다.
+> $ cf create-service-broker [SERVICE_BROKER] [USERNAME] [PASSWORD] [SERVICE_BROKER_URL]  
+> - [SERVICE_BROKER] : 서비스 브로커 명  
+> - [USERNAME] / [PASSWORD] : 서비스 브로커에 접근할 수 있는 사용자 ID / PASSWORD  
+> - [SERVICE_BROKER_URL] : 서비스 브로커 접근 URL
 
->`$ cf create-service-broker {서비스팩 이름}{서비스팩 사용자ID}{서비스팩 사용자비밀번호} http://{서비스팩 URL(IP)}`
-
-  **서비스팩 이름** : 서비스 팩 관리를 위해 PaaS-TA에서 보여지는 명칭이다. 서비스 Marketplace에서는 각각의 API 서비스 명이 보여지니 여기서 명칭은 서비스팩 리스트의 명칭이다.<br>
-  **서비스팩 사용자ID / 비밀번호** : 서비스팩에 접근할 수 있는 사용자 ID입니다. 서비스팩도 하나의 API 서버이기 때문에 아무나 접근을 허용할 수 없어 접근이 가능한 ID/비밀번호를 입력한다.<br>
-  **서비스팩 URL** : 서비스팩이 제공하는 API를 사용할 수 있는 URL을 입력한다.
-
->`$ cf create-service-broker paasta-sourcecontrol admin cloudfoundry http://<URL>:8080`
 ```
-$ cf service-brokers
+### e.g. 형상관리 서비스 브로커 등록
+$ cf create-service-broker paasta-sourcecontrol-broker admin cloudfoundry http://10.30.107.126:8080
+Creating service broker paasta-sourcecontrol-broker as admin...   
+OK       
+```
+
+- 등록된 형상관리 서비스 브로커를 확인한다.  
+> $ cf service-brokers
+
+```
 Getting service brokers as admin...
 
-name                          url
-cubrid-service-broker         http://10.30.60.22:8080
-paasta-sourcecontrol-broker   http://10.30.130.137
-rabbitmq
+name                         url
+paasta-sourcecontrol-broker   http://10.30.107.126:8080
 ```
 
-- 접근 가능한 서비스 목록을 확인한다.
-
->`$ cf service-access`
-
-- 서비스 브로커 생성 시 디폴트로 접근을 허용하지 않는다.
-
-
-- 특정 조직에 해당 서비스 접근 허용을 할당하고 접근 서비스 목록을 다시 확인한다. (전체 조직)
-
->`$ cf enable-service-access paasta-sourcecontrol`<br>
- >`$ cf service-access`
+- 형상관리 서비스의 서비스 접근 정보를 확인한다.  
+> $ cf service-access -b paasta-sourcecontrol-broker  
 
 ```
-broker : paasta-sourcecontrol-broker
-service                         plan              access              orgs
-paasta-sourcecontrol            Default           all
+Getting service access for broker paasta-sourcecontrol-broker as admin...
+broker: paasta-sourcecontrol-broker
+   service                  plan      access   orgs
+   p-paasta-sourcecontrol   Default   none
 ```
 
-- 서비스 브로커 등록 시 최초에는 접근을 허용하지 않는다. 따라서 access는 none으로 설정된다.
-
-
-### <div id='11'/> 2.5. 형상관리 서비스 신청
-형상관리 서비스를 사용하기 위해서는 서비스 신청(Provision)을 해야 한다.
-**참고**: 서비스 신청시 PaaS-TA에서 서비스를 신청 할 수 있는 사용자로 로그인이 되어 있어야 한다.
-
-- 먼저 PaaS-TA Marketplace에서 서비스가 있는지 확인을 한다.
-
->`$ cf marketplace`
+- 형상관리 서비스의 서비스 접근 허용을 설정(전체)하고 서비스 접근 정보를 재확인 한다.  
+> $ cf enable-service-access p-paasta-sourcecontrol    
+> $ cf service-access -b paasta-sourcecontrol-broker   
 
 ```
-service                  plans                                   description                                                                                                                             broker
-p-rabbitmq               standard                                RabbitMQ is a robust and scalable high-performance multi-protocol messaging broker.                                                     rabbitmq-service-broker
-Mysql-DB                 Mysql-Plan1-10con, Mysql-Plan2-100con   A simple mysql
+$ cf enable-service-access p-paasta-sourcecontrol
+Enabling access to all plans of service p-paasta-sourcecontrol for all orgs as admin...
+OK
+
+$ cf service-access -b paasta-sourcecontrol-broker 
+Getting service access for broker paasta-sourcecontrol-broker as admin...
+broker: paasta-sourcecontrol-broker
+   service                  plan      access   orgs
+   p-paasta-sourcecontrol   Default   all  
 ```
-- Marketplace에서 원하는 서비스가 있으면 서비스 신청(Provision)을 한다.
 
->`$ cf create-service {서비스명} {서비스플랜} {내서비스명}`
+### <div id="3.2"/> 3.2. UAA Client 등록
 
-- 서비스명 : Marketplace에서 보여지는 서비스 명칭이다. 
-- 서비스플랜 : 서비스에 대한 정책으로 plans에 있는 정보 중 하나를 선택한다.
-- 내 서비스명 : 내 서비스에서 보여지는 명칭이다. 이 명칭을 기준으로 환경설정정보를 가져온다.
+- uaac server의 endpoint를 설정한다.
 
 ```
-$ cf create-service paasta-sourcecontrol Default paasta-sourcecontrol -c '{"owner":"admin", "org_name":"org"}'
-service                  plans                                   description                                                                                                                             broker
-p-rabbitmq               standard                                RabbitMQ is a robust and scalable high-performance multi-protocol messaging broker.                                                     rabbitmq-service-broker
-Mysql-DB                 Mysql-Plan1-10con, Mysql-Plan2-100con   A simple mysql
+# endpoint 설정
+$ uaac target https://uaa.<DOMAIN> --skip-ssl-validation
+
+# target 확인
+$ uaac target
+Target: https://uaa.<DOMAIN>
+Context: uaa_admin, from client uaa_admin
+
+```
+
+- uaac 로그인을 한다.
+
+```
+$ uaac token client get <UAA_ADMIN_CLIENT_ID> -s <UAA_ADMIN_CLIENT_SECRET>
+Successfully fetched token via client credentials grant.
+Target: https://uaa.<DOMAIN>
+Context: admin, from client admin
+
+```
+
+- 형상관리 서비스 계정을 생성 한다.  
+$ uaac client add <CF_UAA_CLIENT_ID> -s <CF_UAA_CLIENT_SECRET> --redirect_uri <형상관리서비스 대시보드 URI> --scope <퍼미션 범위> --authorized_grant_types <권한 타입> --authorities=<권한 퍼미션> --autoapprove=<자동승인권한>  
+
+  - <CF_UAA_CLIENT_ID> : uaac 클라이언트 id  
+  - <CF_UAA_CLIENT_SECRET> : uaac 클라이언트 secret  
+  - <형상관리서비스 대시보드 URI> : 성공적으로 리다이렉션 할 형상관리서비스 대시보드 URI 
+    ("http://<source-control-service의 haproxy public IP>:8080, http://<source-control-service의 haproxy public IP>:8080/repositories, http://<source-control-service의 haproxy public IP>:8080/repositories/user")  
+  - <퍼미션 범위> : 클라이언트가 사용자를 대신하여 얻을 수있는 허용 범위 목록  
+  - <권한 타입> : 서비스가 제공하는 API를 사용할 수 있는 권한 목록  
+  - <권한 퍼미션> : 클라이언트에 부여 된 권한 목록  
+  - <자동승인권한> : 사용자 승인이 필요하지 않은 권한 목록  
+
+```  
+# e.g. 형상관리 서비스 계정 생성
+$ uaac client add scclient -s clientsecret --redirect_uri "http://115.68.47.179:8080 http://115.68.47.179:8080/repositories http://115.68.47.179:8080/repositories/user" \
+  --scope "cloud_controller_service_permissions.read , openid , cloud_controller.read , cloud_controller.write , cloud_controller.admin" \
+  --authorized_grant_types "authorization_code , client_credentials , refresh_token" \
+  --authorities="uaa.resource" \
+  --autoapprove="openid , cloud_controller_service_permissions.read"
+
+# e.g. 형상관리 서비스 계정 생성 확인
+$ uaac clients
+scclient
+    scope: cloud_controller.read cloud_controller.write cloud_controller_service_permissions.read openid
+        cloud_controller.admin
+    resource_ids: none
+    authorized_grant_types: refresh_token client_credentials authorization_code
+    redirect_uri: http://115.68.47.179:8080 http://115.68.47.179:8080/repositories http://115.68.47.179:8080/repositories/user
+    autoapprove: cloud_controller_service_permissions.read openid
+    authorities: uaa.resource
+    name: scclient
+    lastmodified: 1542894096080
+```  
+
+### <div id="3.3"/>  3.3. 서비스 신청  
+
+- 형상관리 서비스 사용을 위해 서비스를 신청 한다.
+
+> $ cf create-service [SERVICE] [PLAN] [SERVICE_INSTANCE] [-c PARAMETERS_AS_JSON]
+> - [SERVICE] / [PLAN] : 서비스 명과 서비스 플랜
+> - [SERVICE_INSTANCE] : 서비스 인스턴스 명 (내 서비스 목록에서 보여지는 명칭)
+> - [-c PARAMETERS_AS_JSON] : JSON 형식의 파라미터 (형상관리 서비스 신청 시, owner, org_name 파라미터는 필수)
+
+```
+### e.g. 형상관리 서비스 신청
+$ cf create-service p-paasta-sourcecontrol Default paasta-sourcecontrol -c '{"owner":"demo", "org_name":"demo"}'  
+service                  plans                                   description  
 paasta-sourcecontrol     Default                                 A paasta source control service for application development.provision parameters : parameters {owner : {owner}, org_name : {org_name}}  paasta-sourcecontrol-broker
-```
 
-- 생성된 sourcecontrol 서비스 인스턴스를 확인한다.
->`$ cf services`
-```
+### e.g. 형상관리 서비스 확인
 $ cf services
 Getting services in org system / space dev as admin...
 
 name                    service                  plan            bound apps   last operation     broker                        upgrade available
-my_rabbitmq_service     p-rabbitmq               standard                     create succeeded   rabbitmq-service-broker
 paasta-sourcecontrol    p-paasta-sourcecontrol   Default                      create succeeded   paasta-sourcecontrol-broker
-paasta-webide-service   webide                   webide-shared                create succeeded   webide-service-broker
 ```
 
-### <div id='12'/> 2.6. 형상관리 UAA Client Id 등록
-UAA 포털 계정 등록 절차에 대한 순서를 확인한다.
-
-- 형상관리 서비스 계정 생성을 한다.
-
-> $ uaac client add client -s {클라이언트 비밀번호} --redirect_URL{형상관리서비스 대시보드 URL} --scope {퍼미션 범위} --authorized_grant_types {권한 타입} --authorities={권한 퍼미션} --autoapprove={자동승인권한}
-> - 클라이언트 비밀번호 : uaac 클라이언트 비밀번호를 입력한다.
-> - 형상관리서비스 대시보드 URL: 성공적으로 리다이렉션 할 형상관리서비스 대시보드 URL를 입력한다.
-> - 퍼미션 범위: 클라이언트가 사용자를 대신하여 얻을 수있는 허용 범위 목록을 입력한다.
-> - 권한 타입 : 서비스팩이 제공하는 API를 사용할 수 있는 권한 목록을 입력한다.
-> - 권한 퍼미션 : 클라이언트에 부여 된 권한 목록을 입력한다.
-> - 자동승인권한: 사용자 승인이 필요하지 않은 권한 목록을 입력한다.
-
-```
-$ uaac client add scclient  -s clientsecret --redirect_URL"http://<URL>:8080 http://<URL>:8080/repositories http://<URL>:8080/repositories/user" --scope "cloud_controller_service_permissions.read , openid , cloud_controller.read , cloud_controller.write , cloud_controller.admin" --authorized_grant_types "authorization_code , client_credentials , refresh_token" --authorities="uaa.resource" --autoapprove="openid , cloud_controller_service_permissions.read"
-```
-
-
-- 형상관리 서비스 계정 수정을 한다. (이미 uaac client가 등록되어 있는 경우)
-
-> $ uaac client update scclient  --redirect_uri={형상관리서비스 대시보드 URI}
->
-> - 형상관리서비스 대시보드 URL: 성공적으로 리다이렉션 할 형상관리서비스 대시보드 URI를 입력한다.
-
-```
-$ uaac client update scclient  --redirect_uri="http://<URL>:8080 http://<URL>:8080/repositories http://<URL>:8080/repositories/user"
-```
-
+- 서비스 상세의 대시보드 URL 정보를 확인하여 서비스에 접근한다.
+ ```
+ ### 서비스 상세 정보의 Dashboard URL을 확인한다.
+ $ cf service paasta-sourcecontrol
+ ... (생략) ...
+ Dashboard:        http://115.68.47.179:8080/repositories/user/b840ecb4-15fb-4b35-a9fc-185f42f0de37
+ Service broker:   paasta-sourcecontrol-broker
+ ... (생략) ...
+ ```
+ 
 [source_controller_service_guide01]:/service-guide/images/source-control/source_controller_service_guide01.PNG
