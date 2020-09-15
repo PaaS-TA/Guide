@@ -118,7 +118,13 @@ BOSH 및 PaaS-TA 설치를 위해 Inception 서버에 구성해야 할 컴포넌
 
 ### <div id='1011'/>3.3.1.    Prerequisite
 
-- 본 설치 가이드는 Ubuntu 18.04 버전을 기준으로 한다.
+- 본 설치 가이드는 Ubuntu 18.04 버전을 기준으로 한다.  
+
+- IaaS Security Group의 inbound 의 ICMP types 13 (timestamp request), types 14 (timestamp response) Rule을 비활성화 한다. (CVE-1999-0524 ICMP timestamp response 보안 이슈 적용)  
+
+  예 - AWS security group config)  
+  ![Security_Group_ICMP_Image1](./images/security-group-icmp-01.png)  
+
 
 ### <div id='1012'/>3.3.2.    BOSH CLI 및 Dependency 설치
 
@@ -184,7 +190,7 @@ $ bosh -version
 - BOSH를 설치하기 위한 deployment가 존재하지 않는다면 다운로드 받는다
 ```
 $ cd ${HOME}/workspace/paasta-5.0/deployment
-$ git clone https://github.com/PaaS-TA/paasta-deployment.git –b v5.0.1
+$ git clone https://github.com/PaaS-TA/paasta-deployment.git –b v5.0.2
 ```
 
 ### <div id='1014'/>3.3.4.    BOSH 설치 파일

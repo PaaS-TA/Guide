@@ -66,7 +66,7 @@ PaaS-TA는 BOSH를 기반으로 설치된다. BOSH CLI를 사용하여 BOSH를 �
 
 PaaS-TA 3.1 버전까지는 PaaS-TA Container, Controller를 각각의 deployment로 설치했지만, PaaS-TA 3.5 버전부터 paasta-deployment 하나로 통합되었으며, 한 번에 PaaS-TA를 설치한다. 
 
-![PaaSTa_BOSH_Use_Guide_Image2](https://github.com/PaaS-TA/Guide-5.0-Ravioli/blob/master/install-guide/paasta/images/bosh2.png)
+![PaaSTa_BOSH_Use_Guide_Image2]  
 
 # <div id='106'/>3. PaaS-TA 5.0 설치
 
@@ -80,8 +80,8 @@ PaaS-TA 3.1 버전까지는 PaaS-TA Container, Controller를 각각의 deploymen
 - PaaS-TA를 설치하기 위한 deployment가 존재하지 않는다면 다운로드 받는다
 ```
 $ cd ${HOME}/workspace/paasta-5.0/deployment
-$ git clone https://github.com/PaaS-TA/common.git –b v5.0.1  
-$ git clone https://github.com/PaaS-TA/paasta-deployment.git –b v5.0.1 
+$ git clone https://github.com/PaaS-TA/common.git –b v5.0.2  
+$ git clone https://github.com/PaaS-TA/paasta-deployment.git –b v5.0.2 
 ```
 
 ## <div id='109'/>3.3. Stemcell 업로드
@@ -443,7 +443,7 @@ PaaS-TA를 설치하는 환경에 따라 다르게 설정해도 된다.
 VM Type은 IaaS에서 정의된 VM Type이다. OpenStack의 경우에는 Flavor Type이다.
 
 ※ 다음은 OpenStack에서 정의한 Flavor Type이다.
-![PaaSTa_FLAVOR_Image](https://github.com/PaaS-TA/Guide-5.0-Ravioli/blob/master/install-guide/paasta/images/flavor.png)
+![PaaSTa_FLAVOR_Image]
 
 ### <div id='1013'/>● Compilation
 PaaS-TA 및 서비스 설치 시, PaaS-TA는 Compile VM을 생성하여 소스를 컴파일하고, PaaS-TA VM을 생성하여 컴파일된 파일을 대상 VM에 설치한다.  
@@ -458,23 +458,37 @@ PaaS-TA 및 서비스가 설치되는 VM의 Persistent Disk Size이다.
 Networks는 AZ 별 Subnet Network, DNS, Security Groups, Network ID를 정의한다.  
 보통 AZ 별로 256개의 IP를 정의할 수 있도록 Range Cider를 정의한다.
 
-## <div id='1016'/>3.5. Runtime Config 설정
-PaaS-TA 4.0부터 적용되는 부분으로 PaaS-TA Component에서 Consul이 대체된 Component이다.  
-PaaS-TA Component 간의 통신을 위해 BOSH DNS 배포가 선행되어야 한다.
+## <div id='1016'/>3.5. Runtime Config 설정  
 
+- DNS Runtime Config  
+  PaaS-TA 4.0부터 적용되는 부분으로 PaaS-TA Component에서 Consul이 대체된 Component이다.  
+  PaaS-TA Component 간의 통신을 위해 BOSH DNS 배포가 선행되어야 한다.  
 
-- Runtime Config 업데이트
+  - Runtime Config 업데이트  
 
-```
-$ cd ${HOME}/workspace/paasta-5.0/deployment/paasta-deployment/bosh
-$ bosh -e {director_name} update-runtime-config -n runtime-configs/dns.yml
-```
+  ```  
+  $ cd ${HOME}/workspace/paasta-5.0/deployment/paasta-deployment/bosh
+  $ bosh -e {director_name} update-runtime-config -n runtime-configs/dns.yml
+  ```  
 
-- Runtime Config 확인
+  - Runtime Config 확인  
 
-```
-$ bosh –e {director_name} runtime-config  
-```
+  ```
+  $ bosh –e {director_name} runtime-config
+  ```  
+
+- OS Configuration Runtime Config  
+  BOSH Linux OS 구성 릴리스를 이용하여 sysctl을 구성한다.  
+
+  - Runtime Config 업데이트  
+  ```  
+  $ cd ${HOME}/workspace/paasta-5.0/deployment/paasta-deployment/bosh
+  $ bosh -e {director_name} update-runtime-config -n --name=os-conf runtime-configs/os-conf.yml
+  ```  
+  - Runtime Config 확인  
+  ```  
+  $ bosh –e {director_name} runtime-config --name=os-conf
+  ```  
 
 ## <div id='1017'/>3.6.  PaaS-TA 환경 설정
 
@@ -809,7 +823,7 @@ ex) uaa_client_portal_secret="portalclient"
 
   paasta-portal deploy 파일 안의 portal_client_secret의 값과 일치해야 한다.
 ```
-![PaaSTa_VALUE_Image](https://github.com/PaaS-TA/Guide-5.0-Ravioli/blob/master/install-guide/paasta/images/paasta-value.png)
+![PaaSTa_VALUE_Image]
 
 6. uaa_client_admin_secret : UAAC Admin Client에 접근하기 위한 Secret 변수
 ```
