@@ -73,8 +73,8 @@ BOSH CLI v2 가 설치 되어 있지 않을 경우 먼저 BOSH2.0 설치 가이�
 
 - BOSH2.0 사용자 가이드
 
->[BOSH2 사용자 가이드](https://github.com/PaaS-TA/Guide-5.0-Ravioli/blob/master/install-guide/bosh/PAAS-TA_BOSH2_INSTALL_GUIDE_V5.0.md)<br>
->[BOSH CLI V2 사용자 가이드](https://github.com/PaaS-TA/Guide-4.0-ROTELLE/blob/master/Use-Guide/Bosh/PaaS-TA_BOSH_CLI_V2_사용자_가이드v1.0.md)
+  - [BOSH2 사용자 가이드](../../install-guide/bosh/PAAS-TA_BOSH2_INSTALL_GUIDE_V5.0.md)<br>
+  - [BOSH CLI V2 사용자 가이드](https://github.com/PaaS-TA/Guide-4.0-ROTELLE/blob/master/Use-Guide/Bosh/PaaS-TA_BOSH_CLI_V2_사용자_가이드v1.0.md)
 
 - bosh runtime-config를 확인하여 bosh-dns include deployments 에 paasta가 있는지 확인한다.<br>
  ※ bosh-dns include deployments에 paasta가 없다면 ~/workspace/paasta-5.0/deployment/bosh-deployment/runtime-configs 의 dns.yml 을 열어서 paasta를 추가하고, bosh runtime-config를 업데이트 해준다.    
@@ -140,7 +140,7 @@ Succeeded
 
 서비스 설치에 필요한 Deployment를 Git Repository에서 받아 서비스 설치 작업 경로로 위치시킨다.  
 
-- Portal Deployment Git Repository URL : https://github.com/PaaS-TA/portal-deployment/tree/v5.0.1
+- Portal Deployment Git Repository URL : https://github.com/PaaS-TA/portal-deployment/tree/v5.0.2
 
 ```
 # Deployment 다운로드 파일 위치 경로 생성 및 설치 경로 이동
@@ -148,7 +148,7 @@ $ mkdir -p ~/workspace/paasta-5.0/deployment
 $ cd ~/workspace/paasta-5.0/deployment
 
 # Deployment 파일 다운로드
-$ git clone https://github.com/PaaS-TA/portal-deployment.git -b v5.0.1
+$ git clone https://github.com/PaaS-TA/portal-deployment.git -b v5.0.2
 ```
 
 ### <div id="2.4"/> 2.4. Deployment 파일 수정
@@ -236,7 +236,7 @@ mariadb_azs: [z6]                                               # mariadb : azs
 mariadb_instances: 1                                            # mariadb : instances (1) 
 mariadb_vm_type: "minimal"                                      # mariadb : vm type
 mariadb_persistent_disk_type: "10GB"                            # mariadb : persistent disk type
-mariadb_port: "<MARIADB_PORT>"                                  # mariadb : database port (e.g. 3306)
+mariadb_port: "<MARIADB_PORT>"                                  # mariadb : database port (e.g. 13306) -- Do Not Use "3306"
 mariadb_admin_password: "<MARIADB_ADMIN_PASSWORD>"              # mariadb : database admin password (e.g. "Paasta@2019")
 
 # HAPROXY INFO
@@ -251,6 +251,7 @@ binary_storage_azs: [z6]                                        # binary storage
 binary_storage_instances: 1                                     # binary storage : instances (1)
 binary_storage_vm_type: "minimal"                               # binary storage : vm type
 binary_storage_persistent_disk_type: "10GB"                     # binary storage : persistent disk type
+binary_storage_auth_port: "<BINARY_STORAGE_AUTH_PORT>"          # binary storage : keystone port (e.g. 15001) -- Do Not Use "5000"
 binary_storage_username: "<BINARY_STORAGE_USERNAME>"            # binary storage : username (e.g. "paasta-portal")
 binary_storage_password: "<BINARY_STORAGE_PASSWORD>"            # binary storage : password (e.g. "paasta")
 binary_storage_tenantname: "<BINARY_STORAGE_TENANTNAME>"        # binary storage : tenantname (e.g. "paasta-portal")
@@ -300,7 +301,7 @@ mail_smtp_useremail: "<MAIL_SMTP_USER_EMAIL>"                   # mail-smtp : us
 mail_smtp_properties_auth: "true"                               # mail-smtp : properties auth
 mail_smtp_properties_starttls_enable: "true"                    # mail-smtp : properties starttls enable
 mail_smtp_properties_starttls_required: "true"                  # mail-smtp : properties starttls required
-mail_smtp_properties_subject: "MAIL_SMTP_PROPERTIES_SUBJECT"    # mail-smtp : properties subject (e.g. "PaaS-TA User Potal")
+mail_smtp_properties_subject: "<MAIL_SMTP_PROPERTIES_SUBJECT>"  # mail-smtp : properties subject (e.g. "PaaS-TA User Potal")
 ```
 
 ### <div id="2.5"/> 2.5. 서비스 설치
@@ -333,8 +334,7 @@ $ sh ./deploy.sh
 
 - 서비스 설치에 필요한 릴리즈 파일을 다운로드 받아 Local machine의 서비스 설치 작업 경로로 위치시킨다.  
   
-  - 설치 파일 다운로드 위치 : https://paas-ta.kr/download/package    
-  - 릴리즈 파일 : paasta-portal-api-release-2.0.tgz   
+  - 설치 릴리즈 파일 다운로드 : [paasta-portal-api-release-2.0.1.tgz](http://45.248.73.44/index.php/s/fYA8JBx45pKxWrD/download)
 
 ```
 # 릴리즈 다운로드 파일 위치 경로 생성
@@ -342,7 +342,7 @@ $ mkdir -p ~/workspace/paasta-5.0/release/portal
 
 # 릴리즈 파일 다운로드 및 파일 경로 확인
 $ ls ~/workspace/paasta-5.0/release/portal
-paasta-portal-api-release-2.0.tgz
+paasta-portal-api-release-2.0.1.tgz
 ```
   
 - 서버 환경에 맞추어 Deploy 스크립트 파일의 VARIABLES 설정을 수정하고 Option file 및 변수를 추가한다.  
