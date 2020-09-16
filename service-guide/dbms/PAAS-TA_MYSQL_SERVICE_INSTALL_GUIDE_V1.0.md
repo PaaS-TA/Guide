@@ -48,11 +48,12 @@ PaaS-TA 3.5 버전부터는 Bosh2.0 기반으로 deploy를 진행하며 기존 B
 
 | 구분 | Resource Pool | 스펙 |
 |--------|-------|-------|
-| paasta-mysql-broker | minimal | 1vCPU / 1GB RAM / 8GB Disk |
+| mysql-broker | minimal | 1vCPU / 1GB RAM / 8GB Disk |
 | proxy | minimal | 1vCPU / 1GB RAM / 8GB Disk |
 | mysql | minimal | 1vCPU / 1GB RAM / 8GB Disk +8GB(영구적 Disk) |
+| arbitrator | minimal | 1vCPU / 1GB RAM / 8GB Disk |
 
-### <div id='14'> 1.4. 참고자료
+### <div id='1.4'> 1.4. 참고자료
 [**http://bosh.io/docs**](http://bosh.io/docs)  
 [**http://docs.cloudfoundry.org/**](http://docs.cloudfoundry.org/)
 
@@ -85,7 +86,7 @@ Succeeded
 
 서비스 설치에 필요한 Deployment를 Git Repository에서 받아 서비스 설치 작업 경로로 위치시킨다.  
 
-- Service Deployment Git Repository URL : https://github.com/PaaS-TA/service-deployment/tree/v5.0.1
+- Service Deployment Git Repository URL : https://github.com/PaaS-TA/service-deployment/tree/v5.0.2
 
 ```
 # Deployment 다운로드 파일 위치 경로 생성 및 설치 경로 이동
@@ -93,7 +94,7 @@ $ mkdir -p ~/workspace/paasta-5.0/deployment
 $ cd ~/workspace/paasta-5.0/deployment
 
 # Deployment 파일 다운로드
-$ git clone https://github.com/PaaS-TA/service-deployment.git -b v5.0.1
+$ git clone https://github.com/PaaS-TA/service-deployment.git -b v5.0.2
 ```
 
 ### <div id="2.4"/> 2.4. Deployment 파일 수정
@@ -176,33 +177,27 @@ private_networks_name: "default"                                 # private netwo
 
 # MYSQL
 mysql_azs: [z4]                                                  # mysql azs
-mysql_instances: 1                                               # mysql instances (default : 1)
+mysql_instances: 1                                               # mysql instances (N)
 mysql_vm_type: "small"                                           # mysql vm type
 mysql_persistent_disk_type: "8GB"                                # mysql persistent disk type
-mysql_static_ip: "<MYSQL_PRIVATE_IP>"                            # mysql's private IP (e.g. "10.0.30.10")
+mysql_port: 13306                                                # mysql port (e.g. 13306) -- Do Not Use "3306"
 mysql_admin_password: "<MYSQL_ADMIN_PASSWORD>"                   # mysql admin password (e.g. "admin!Service")
+
+# ARBITRATOR
+arbitrator_azs: [z4]                                             # arbitrator azs 
+arbitrator_instances: 1                                          # arbitrator instances (1)
+arbitrator_vm_type: "small"                                      # arbitrator vm type
 
 # PROXY
 proxy_azs: [z4]                                                  # proxy azs
-proxy_instances: 1                                               # proxy instances (default : 1)
+proxy_instances: 1                                               # proxy instances (1)
 proxy_vm_type: "small"                                           # proxy vm type
-proxy_static_ip: "<PROXY_PRIVATE_IP>"                            # proxy's private IP (e.g. "10.0.30.11")
+proxy_mysql_port: 13307                                          # proxy mysql port (e.g. 13307) -- Do Not Use "3306"
 
 # MYSQL_BROKER
 mysql_broker_azs: [z4]                                           # mysql broker azs
-mysql_broker_instances: 1                                        # mysql broker instances (default : 1)
+mysql_broker_instances: 1                                        # mysql broker instances (1)
 mysql_broker_vm_type: "small"                                    # mysql broker vm type
-mysql_broker_static_ip: "<MYSQL_BROKER_PRIVATE_IP>"              # mysql broker's private IP (e.g. "10.0.30.12")
-
-# BROKER_REGISTRAR
-broker_registrar_broker_azs: [z4]                                # broker registrar azs
-broker_registrar_broker_instances: 1                             # broker registrar instances (default : 1)
-broker_registrar_broker_vm_type: "small"                         # broker registrar vm type
-
-# BROKER_DEREGISTRAR
-broker_deregistrar_broker_azs: [z4]                              # broker deregistrar azs
-broker_deregistrar_broker_instances: 1                           # broker deregistrar instances (default : 1)
-broker_deregistrar_broker_vm_type: "small"                       # broker deregistrar vm type
 ```
 
 ### <div id="2.5"/> 2.5. 서비스 설치
@@ -235,8 +230,7 @@ $ sh ./deploy.sh
 
 - 서비스 설치에 필요한 릴리즈 파일을 다운로드 받아 Local machine의 서비스 설치 작업 경로로 위치시킨다.  
   
-  - 설치 파일 다운로드 위치 : https://paas-ta.kr/download/package    
-  - 릴리즈 파일 : paasta-mysql-2.0.tgz  
+  - 설치 릴리즈 파일 다운로드 : [paasta-mysql-2.0.1.tgz](http://45.248.73.44/index.php/s/iAbN8WkGMRGrm2p/download)
 
 ```
 # 릴리즈 다운로드 파일 위치 경로 생성
@@ -244,7 +238,7 @@ $ mkdir -p ~/workspace/paasta-5.0/release/service
 
 # 릴리즈 파일 다운로드 및 파일 경로 확인
 $ ls ~/workspace/paasta-5.0/release/service
-paasta-mysql-2.0.tgz
+paasta-mysql-2.0.1.tgz
 ```
   
 - 서버 환경에 맞추어 Deploy 스크립트 파일의 VARIABLES 설정을 수정하고 Option file 및 변수를 추가한다.  
@@ -289,11 +283,11 @@ Task 4525. Done
 Deployment 'mysql'
 
 Instance                                                       Process State  AZ  IPs            VM CID                                   VM Type  Active  
-mysql/8a830154-25b6-432a-ad39-9ff09d015760                     running        z5  10.30.107.165  vm-214663a8-fcbc-4ae4-9aae-92027b9725a9  minimal  true  
-mysql/e8c52bf2-cd48-45d0-9553-f6367942a634                     running        z5  10.30.107.164  vm-81ecdc43-03d2-44f5-9b89-c6cdaa443d8b  minimal  true  
+arbitrator/2e190b67-e2b7-4e2d-a72d-872c2019c963                running        z5  10.30.107.165  vm-214663a8-fcbc-4ae4-9aae-92027b9725a9  minimal  true  
+mysql-broker/05c44b41-0fc1-41c0-b814-d79558850480              running        z5  10.30.107.167  vm-7c3edc00-3074-4e98-9c89-9e9ba83b47e4  minimal  true  
+mysql/fe6943ed-c0c1-4a99-8f4c-d209e165898a                     running        z5  10.30.107.164  vm-81ecdc43-03d2-44f5-9b89-c6cdaa443d8b  minimal  true  
 mysql/ea075ae6-6326-478b-a1ba-7fbb0b5b0bf5                     running        z5  10.30.107.166  vm-bee33ffa-3f65-456c-9250-1e74c7c97f64  minimal  true  
-paasta-mysql-java-broker/bb5676ca-efba-48fc-bc11-f464d0ae9c78  running        z5  10.30.107.167  vm-7c3edc00-3074-4e98-9c89-9e9ba83b47e4  minimal  true  
-proxy/023edddd-418e-46e4-8d40-db452c694e16                     running        z5  10.30.107.168  vm-e447eb75-1119-451f-adc9-71b0a6ef1a6a  minimal  true  
+proxy/5b883a78-eb43-417f-98a2-d44c13c29ed4                     running        z5  10.30.107.168  vm-e447eb75-1119-451f-adc9-71b0a6ef1a6a  minimal  true  
 
 5 vms
 
@@ -555,8 +549,8 @@ destination ips : mysql 인스턴스 ips.
 [
   {
     "protocol": "tcp",
-    "destination": "10.30.107.164 - 10.30.107.166",
-    "ports": "3306"
+    "destination": "10.30.107.168",
+    "ports": "13307"
   }
 ]
 ```
