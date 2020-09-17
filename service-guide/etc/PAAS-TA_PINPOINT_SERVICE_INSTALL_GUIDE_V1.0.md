@@ -147,7 +147,7 @@ Succeeded
 
 서비스 설치에 필요한 Deployment를 Git Repository에서 받아 서비스 설치 작업 경로로 위치시킨다.  
 
-- Service Deployment Git Repository URL : https://github.com/PaaS-TA/service-deployment/tree/v5.0.1
+- Service Deployment Git Repository URL : https://github.com/PaaS-TA/service-deployment/tree/v5.0.2
 
 ```
 # Deployment 다운로드 파일 위치 경로 생성 및 설치 경로 이동
@@ -155,7 +155,7 @@ $ mkdir -p ~/workspace/paasta-5.0/deployment
 $ cd ~/workspace/paasta-5.0/deployment
 
 # Deployment 파일 다운로드
-$ git clone https://github.com/PaaS-TA/service-deployment.git -b v5.0.1
+$ git clone https://github.com/PaaS-TA/service-deployment.git -b v5.0.2
 ```
 
 ### <div id="2.4"/> 2.4. Deployment 파일 수정
@@ -314,8 +314,7 @@ $ sh ./deploy.sh
 
 - 서비스 설치에 필요한 릴리즈 파일을 다운로드 받아 Local machine의 서비스 설치 작업 경로로 위치시킨다.  
   
-  - 설치 파일 다운로드 위치 : https://paas-ta.kr/download/package    
-  - 릴리즈 파일 : paasta-pinpoint-release.tgz  
+  - 설치 릴리즈 파일 다운로드 : [paasta-pinpoint-release.tgz](http://45.248.73.44/index.php/s/SJ6SoLksWEc3ckJ/download)
 
 ```
 # 릴리즈 다운로드 파일 위치 경로 생성
