@@ -183,7 +183,7 @@ mariadb_azs: [z3]                                                    # mariadb :
 mariadb_instances: 1                                                 # mariadb : instances (1) 
 mariadb_vm_type: "small"                                             # mariadb : vm type
 mariadb_persistent_disk_type: "10GB"                                 # mariadb : persistent disk type
-mariadb_port: "3306"                                                 # mariadb : database port (e.g. 3306)
+mariadb_port: "<MARIADB_PORT>"                                       # mariadb : database port (e.g. 31306) -- Do Not Use "3306"
 mariadb_admin_password: "<MARIADB_ADMIN_PASSWORD>"                   # mariadb : database admin password (e.g. "Paasta@2018")
 
 # SERVICE-BROKER
@@ -394,8 +394,7 @@ paasta-webide-service   webide       webide-shared                create succeed
 ## <div id='4'/> 4. WEB-IDE 에서 CF CLI 사용법
 
 ### <div id='4.1'/> 4.1. WEB-IDE New Project 화면
-***※ PaaS-TA 운영자 포탈 4.3.3 카탈로그 관리 서비스 가이드 참고***  
-https://github.com/PaaS-TA/Guide-5.0-RAVIOLI/blob/master/use-guide/portal/PAAS-TA_ADMIN_PORTAL_USE_GUIDE_V1.1.md#--433-%EC%B9%B4%ED%83%88%EB%A1%9C%EA%B7%B8-%EA%B4%80%EB%A6%AC-%EC%84%9C%EB%B9%84%EC%8A%A4
+***※ [PaaS-TA 운영자 포탈 4.3.3 카탈로그 관리 서비스 가이드](/use-guide/portal/PAAS-TA_ADMIN_PORTAL_USE_GUIDE_V1.1.md#4.3.3) 참고***  
 
 - 사용할 언어를 선택하고 Create workspace and project 로 새로운 프로젝트를 시작한다.
 
