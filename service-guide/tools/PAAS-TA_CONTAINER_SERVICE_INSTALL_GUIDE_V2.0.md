@@ -155,7 +155,7 @@ Succeeded
 
 서비스 설치에 필요한 Deployment를 Git Repository에서 받아 서비스 설치 작업 경로로 위치시킨다.  
 
-- Service Deployment Git Repository URL : https://github.com/PaaS-TA/service-deployment/tree/v5.0.1
+- Service Deployment Git Repository URL : https://github.com/PaaS-TA/service-deployment/tree/v5.0.2
 
 ```
 # Deployment 다운로드 파일 위치 경로 생성 및 설치 경로 이동
@@ -163,7 +163,7 @@ $ mkdir -p ~/workspace/paasta-5.0/deployment
 $ cd ~/workspace/paasta-5.0/deployment
 
 # Deployment 파일 다운로드
-$ git clone https://github.com/PaaS-TA/service-deployment.git -b v5.0.1
+$ git clone https://github.com/PaaS-TA/service-deployment.git -b v5.0.2
 ```
 
 ### <div id='2.4'/> 2.4. Deployment 파일 수정
@@ -283,11 +283,11 @@ haproxy_http_port: 8080                                                       # 
 haproxy_azs: [z7]                                                             # haproxy azs
 
 # MARIADB
-mariadb_port: "3306"                                                          # mariadb port
+mariadb_port: "13306"                                                         # mariadb port (e.g. 13306)-- Do Not Use "3306"
 mariadb_azs: [z5]                                                             # mariadb azs
 mariadb_persistent_disk_type: "10GB"                                          # mariadb persistent disk type
-mariadb_admin_user_id: "<MARIADB_ADMIN_USER_ID>"                              # mariadb admin user name
-mariadb_admin_user_password: "<MARIADB_ADMIN_USER_PASSWORD>"                  # mariadb admin user password
+mariadb_admin_user_id: "<MARIADB_ADMIN_USER_ID>"                              # mariadb admin user name (e.g. root)
+mariadb_admin_user_password: "<MARIADB_ADMIN_USER_PASSWORD>"                  # mariadb admin user password (e.g. paasta!admin)
 mariadb_role_set_administrator_code_name: "Administrator"                     # administrator role's code name (e.g. Administrator)
 mariadb_role_set_administrator_code: "RS0001"                                 # administrator role's code (e.g. RS0001)
 mariadb_role_set_regular_user_code_name: "Regular User"                       # regular user role's code name (e.g. Regular User)
@@ -320,9 +320,9 @@ caas_service_broker_instances: 1                                              # 
 caas_service_broker_port: 8888                                                # caas service broker port
 caas_service_broker_azs: [z6]                                                 # caas service broker azs
 
-#PRIVATE IMAGE REPOSITORY
+# PRIVATE IMAGE REPOSITORY
 private_image_repository_azs: [z7]                                                     # private image repository azs
-private_image_repository_port: 5000                                                    # private image repository port
+private_image_repository_port: 15001                                                   # private image repository port (e.g. 15001)-- Do Not Use "5000"
 private_image_repository_root_directory: "/var/vcap/data/private-image-repository"     # private image repository root directory
 private_image_repository_public_url: "<PRIVATE_IMAGE_REPOSITORY_PUBLIC_URL>"           # private image repository's public IP
 private_image_repository_persistent_disk_type: "10GB"                                  # private image repository's persistent disk type
@@ -337,7 +337,7 @@ caas_master_azs: [z7]                                                          #
 caas_master_persistent_disk_type: "50GB"                                       # caas master's persistent disk type
 
 # WORKER
-caas_worker_instances: 3                                                       # caas worker node instances
+caas_worker_instances: 3                                                       # caas worker node instances (N)
 caas_worker_azs: [z4,z5,z6]                                                    # caas worker node azs
 
 # JENKINS
@@ -394,8 +394,7 @@ $ sh ./deploy-{IAAS}.sh
 
 - 서비스 설치에 필요한 릴리즈 파일을 다운로드 받아 Local machine의 서비스 설치 작업 경로로 위치시킨다.  
   
-  - 설치 파일 다운로드 위치 : https://paas-ta.kr/download/package    
-  - 릴리즈 파일 : paasta-container-service-projects-release-2.0.tgz  
+  - 설치 릴리즈 파일 다운로드 : [paasta-container-service-projects-release-2.0.1.tgz](http://45.248.73.44/index.php/s/2Tc3Bca2md3f289/download)
 
 ```
 # 릴리즈 다운로드 파일 위치 경로 생성
@@ -403,7 +402,7 @@ $ mkdir -p ~/workspace/paasta-5.0/release/service
 
 # 릴리즈 파일 다운로드(paasta-container-service-projects-release-2.0.tgz) 및 파일 경로 확인
 $ ls ~/workspace/paasta-5.0/release/service
-paasta-container-service-projects-release-2.0.tgz
+paasta-container-service-projects-release-2.0.1.tgz
 ```
   
 - 서버 환경에 맞추어 Deploy 스크립트 파일의 VARIABLES 설정을 수정하고 Option file 및 변수를 추가한다.  
@@ -847,9 +846,8 @@ You are not currently authenticated to CredHub. Please log in to continue.
 $
 ```
 
-- CredHub 로그인
-CredHub에 로그인이 되어있지 않은 경우 아래 링크의 가이드를 참조한다.  
-https://github.com/PaaS-TA/Guide-5.0-Ravioli/blob/master/install-guide/bosh/PAAS-TA_BOSH2_INSTALL_GUIDE_V5.0.md#1029
+- CredHub 로그인  
+CredHub에 로그인이 되어있지 않은 경우 [**CredHub 가이드**](/install-guide/bosh/PAAS-TA_BOSH2_INSTALL_GUIDE_V5.0.md#1037)를 참조한다.  
 
 ### <div id='5'/> 5. 서비스 삭제
 서비스 삭제 시 CredHub에 로그인이 되어 있는 상태 에서 이하의 script를 실행하여 credHub의 credential 삭제 처리를 진행한다.
