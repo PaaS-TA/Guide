@@ -68,7 +68,7 @@ Succeeded
 
 서비스 설치에 필요한 Deployment를 Git Repository에서 받아 서비스 설치 작업 경로로 위치시킨다.  
 
-- Service Deployment Git Repository URL : https://github.com/PaaS-TA/service-deployment/tree/v5.0.1
+- Service Deployment Git Repository URL : https://github.com/PaaS-TA/service-deployment/tree/v5.0.2
 
 ```
 # Deployment 다운로드 파일 위치 경로 생성 및 설치 경로 이동
@@ -76,7 +76,7 @@ $ mkdir -p ~/workspace/paasta-5.0/deployment
 $ cd ~/workspace/paasta-5.0/deployment
 
 # Deployment 파일 다운로드
-$ git clone https://github.com/PaaS-TA/service-deployment.git -b v5.0.1
+$ git clone https://github.com/PaaS-TA/service-deployment.git -b v5.0.2
 ```
 
 ### <div id="2.4"/> 2.4. Deployment 파일 수정
@@ -161,21 +161,27 @@ private_networks_name: "default"                                 # private netwo
 public_networks_name: "vip"                                      # public network name
 
 
-# BINARY_STORAGE
-binary_azs: [z7]                                                 # binary storage azs
-binary_instances: 1                                              # binary storage instances (1)
-binary_persistent_disk_type: "10GB"                              # binary storage persistent disk type
-binary_vm_type: "medium"                                         # binary storage vm type
-binary_public_static_ips: "<BINARY_PUBLIC_STATIC_IPS>"           # binary storage's public IP
+# OBJECT_STORAGE
+object_storage_azs: [z7]                                         # object storage : azs
+object_storage_instances: 1                                      # object storage : instances (1)
+object_storage_persistent_disk_type: "10GB"                      # object storage : persistent disk type
+object_storage_vm_type: "medium"                                 # object storage : vm type
+object_storage_public_static_ips: "<BINARY_PUBLIC_STATIC_IPS>"   # object storage : public IP
+object_storage_auth_port: "<OBJECT_STORAGE_AUTH_PORT>"           # object storage : keystone port (e.g. 15001) -- Do Not Use "5000"
+object_storage_username: "paasta-marketplace"                    # object storage : username (e.g. "paasta-marketplace")
+object_storage_password: "paasta"                                # object storage : password (e.g. "paasta")
+object_storage_tenantname: "paasta-marketplace"                  # object storage : tenantname (e.g. "paasta-marketplace")
+object_storage_email: "email@email.com"                          # object storage : email (e.g. "paasta@paasta.com")
+object_storage_container: "marketplace-container"                # object storage : swift container (e.g. marketplace-container)
 
 
 # MARIA DB
-mariadb_azs: [z3]                                                # mariadb azs
-mariadb_instances: 1                                             # mariadb instances (1)
-maraidb_persistent_disk_type: "4GB"                              # mariadb persistent disk type
-mariadb_vm_type: "small"                                         # mariadb vm type
-mariadb_port: "<MARIADB_PORT>"                                   # mariadb port (e.g. "3306")
-mariadb_admin_password: "<MARIADB_ADMIN_PASSWORD>"               # mariadb admin password
+mariadb_azs: [z3]                                                # mariadb : azs
+mariadb_instances: 1                                             # mariadb : instances (1)
+maraidb_persistent_disk_type: "5GB"                              # mariadb : persistent disk type
+mariadb_vm_type: "small"                                         # mariadb : vm type
+mariadb_port: "<MARIADB_PORT>"                                   # mariadb : port (e.g. 13306) -- Do Not Use "3306"
+mariadb_admin_password: "<MARIADB_ADMIN_PASSWORD>"               # mariadb : admin password (e.g. admin@1234)
 ```
 
 ### <div id="2.5"/> 2.5. 서비스 설치
@@ -207,17 +213,15 @@ $ sh ./deploy.sh
 
 - 서비스 설치에 필요한 릴리즈 파일을 다운로드 받아 Local machine의 서비스 설치 작업 경로로 위치시킨다.  
   
-  - 설치 파일 다운로드 위치 : https://paas-ta.kr/download/package    
-  - 릴리즈 파일 : paasta-marketplace-env-release.tgz  
+  - 설치 릴리즈 파일 다운로드 : [paasta-marketplace-env-release-1.0.1.tgz](http://45.248.73.44/index.php/s/mDmMGB3qkN4MQjB/download)
 
 ```
-
 # 릴리즈 다운로드 파일 위치 경로 생성
 $ mkdir -p ~/workspace/paasta-5.0/release/service
 
 # 릴리즈 파일 다운로드 및 파일 경로 확인
 $ ls ~/workspace/paasta-5.0/release/service/marketplace
-paasta-marketplace-env-release.tgz
+paasta-marketplace-env-release-1.0.1.tgz
 ```
   
 - 서버 환경에 맞추어 Deploy 스크립트 파일의 VARIABLES 설정을 수정하고 Option file 및 변수를 추가한다.  

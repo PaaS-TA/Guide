@@ -49,14 +49,14 @@
 
 마켓플레이스 설치에 필요한 App 파일 및 Manifest 파일을 다운로드 받아 서비스 설치 작업 경로로 위치시킨다.
 
--	설치 파일 다운로드 위치 : https://paas-ta.kr/download/package  
+- 설치 파일 다운로드 위치 : https://paas-ta.kr/download/package  
 - 설치 작업 경로 및 디렉토리 (파일) 구성  
 ```  
 ### 설치 작업 경로  
-${HOME}/workspace/paasta-5.0/release/service/marketplace  
+$ {HOME}/workspace/paasta-5.0/release/service/marketplace  
 
 ### marketplace 설치 디렉토리 (파일)를 다운로드한다
-$wget --content-disposition http://45.248.73.44/index.php/s/wCtqT3RL5N5pqSm/download
+$ wget --content-disposition http://45.248.73.44/index.php/s/wCtqT3RL5N5pqSm/download
 
 ### 설치 디렉토리 (파일) 구성  
 marketplace
@@ -113,70 +113,37 @@ marketplace
 4) 마켓플레이스에 필요한 Object Storage(Swift) 및 DB 환경 정보를 확인한다.
 
   - 위 2.1 설치 전 준비사항에서 사전 설치한 마켓플레이스 환경 정보를 확인하여 Object Storage(Swift) 및 DB 정보를 추출한다.  
-    ++ [PaaS-TA Marketplace Environment Release 설치 가이드](https://github.com/PaaS-TA/PAAS-TA-MARKETPLACE-ENV-RELEASE/blob/master/README.md#-33-marketplace-environment-deployment-파일-수정-및-배포)
+    ++ [PaaS-TA Marketplace Environment 설치](./PAAS-TA_MARKETPLACE_ENVIRONMENT_INSTALL_GUIDE_V1.0.md)  
   ```
   ## 마켓플레이스에 필요한 Object Storage(Swift) 및 DB 접속 URL 확인
   
-  $ bosh -e micro-bosh -d paasta-marketplace-env vms
-  Deployment 'paasta-marketplace-env'
+  $ bosh -e micro-bosh -d marketplace vms
+  Deployment 'marketplace'
   
   Instance                                             Process State  AZ  IPs              VM CID                                   VM Type  Active
-binary_storage/66e5bf20-da8d-42b4-a325-fba5f6e326e8  running        z2  10.174.1.56      vm-a81d9fe1-e9e8-4729-9786-bbb5f1518234  medium   true
-mariadb/01ce2b6f-1038-468d-92f8-f68f72f7ea77         running        z2  10.174.1.57      vm-ce5deeed-ba4e-49d1-b6ab-1f07c779e776  small    true
+  binary_storage/66e5bf20-da8d-42b4-a325-fba5f6e326e8  running        z2  10.174.1.56      vm-a81d9fe1-e9e8-4729-9786-bbb5f1518234  medium   true
+  mariadb/01ce2b6f-1038-468d-92f8-f68f72f7ea77         running        z2  10.174.1.57      vm-ce5deeed-ba4e-49d1-b6ab-1f07c779e776  small    true
   
   ==========================================================================================
-  ## DB 접속 정보 확인 > PAAS-TA-MARKETPLACE-ENV-RELEASE :: deploy-paasta-marketplace-env.sh 
+  ## DB 접속 Port / Password 및 Object Storage(Swift) 접속 정보 확인:: service-deployment/marketplace/vars.yml 
   
-  $ cat PAAS-TA-MARKETPLACE-ENV-RELEASE/deployment/deploy-paasta-marketplace-env.sh
+  $ cat service-deployment/marketplace/vars.yml
   
-  bosh -e micro-bosh -d paasta-marketplace-env deploy paasta-marketplace-env.yml \
-    -v default_network_name=default \
-    -v stemcell_os=ubuntu-xenial \
-    -v vm_type_small=small \
-    -v vm_type_medium=medium \
-    -v db_port=3306 \                                  ## DB port 설정
-    -v db_admin_password="admin!password"              ## DB Admin 패스워드 설정
+  # OBJECT_STORAGE
+  object_storage_public_static_ips: "<BINARY_PUBLIC_STATIC_IPS>"   # object storage : public IP
+  object_storage_auth_port: "<OBJECT_STORAGE_AUTH_PORT>"           # object storage : keystone port (e.g. 15001) -- Do Not Use "5000"
+  object_storage_username: "paasta-marketplace"                    # object storage : username (e.g. "paasta-marketplace")
+  object_storage_password: "paasta"                                # object storage : password (e.g. "paasta")
+  object_storage_tenantname: "paasta-marketplace"                  # object storage : tenantname (e.g. "paasta-marketplace")
+  object_storage_email: "email@email.com"                          # object storage : email (e.g. "paasta@paasta.com")
+  object_storage_container: "marketplace-container"                # object storage : swift container (e.g. marketplace-container)
   
+  # MARIA DB
+  mariadb_port: "<MARIADB_PORT>"                                   # mariadb : port (e.g. 13306) -- Do Not Use "3306"
+  mariadb_admin_password: "<MARIADB_ADMIN_PASSWORD>"               # mariadb : admin password (e.g. admin@1234) 
   ==========================================================================================
-  ## Object Storage(Swift) 접속 정보 확인 > PAAS-TA-MARKETPLACE-ENV-RELEASE :: paasta-marketplace-env.yml 의 PROPERTIES 영역
-  
-  $ cat PAAS-TA-MARKETPLACE-ENV-RELEASE/deployment/paasta-marketplace-env.yml
-  
-  ######### PROPERTIES ##########
-  properties:
-  mariadb:                                                 # MARIA DB SERVER 설정 정보
-    port: ((db_port))
-    admin_user:
-      password: ((db_admin_password))                      # MARIA DB ADMIN USER PASSWORD
-  binary_storage:                                          # BINARY STORAGE SERVER 설정 정보
-    proxy_port: 10008                                      # 프록시 서버 Port(Object Storage 접속 Port)
-    auth_port: 5000
-    username:                                              # 최초 생성되는 유저이름(Object Storage 접속 유저이름)
-      - paasta-marketplace
-    password:                                              # 최초 생성되는 유저 비밀번호(Object Storage 접속 유저 비밀번호)
-      - paasta
-    tenantname:                                            # 최초 생성되는 테넌트 이름(Object Storage 접속 테넌트 이름)
-      - paasta-marketplace
-    email:                                                 # 최소 생성되는 유저의 이메일
-      - email@email.com
-    binary_desc:                                           # objectStorage_swift_container
-      - 'marketplace-container'                                 
+
   ``` 
-  
-  - **마켓플레이스 Object Storage(Swift) 및 DB 환경 정보**
-  ```
-  ## Object Storage(Swift)
-    OBJECT STORAGE TENANTNAME : paasta-marketplace
-    OBJECT STORAGE USERNAME : paasta-marketplace
-    OBJECT STORAGE PASSWORD : paasta
-    OBJECT STORAGE AUTHURL : http://<OBJECT_STORAGE_IP>:5000/v2.0/tokens
-    OBJECT STORAGE CONTAINER : marketplace-container
-    
-  ## DB 정보
-    DB PORT : 3306
-    DB ADMIN PASSWORD : "admin!password"
-  ``` 
-  
 ### <div id='222'/> 2.2.2. manifest 파일 설정
 - 마켓플레이스 manifest는 Components 요소 및 배포의 속성을 정의한 YAML 파일이다. manifest 파일에는 어떤 name, memory, instance, host, path, buildpack, env 등을 사용 할 것인지 정의가 되어 있다.
 
@@ -242,7 +209,7 @@ mariadb/01ce2b6f-1038-468d-92f8-f68f72f7ea77         running        z2  10.174.1
       objectStorage_swift_tenantName: <OBJECT_STORAGE_TENANTNAME>
       objectStorage_swift_username: <OBJECT_STORAGE_USERNAME>
       objectStorage_swift_password: <OBJECT_STORAGE_PASSWORD>
-      objectStorage_swift_authUrl: http://<OBJECT_STORAGE_IP>:5000/v2.0/tokens
+      objectStorage_swift_authUrl: http://<OBJECT_STORAGE_IP>:<OBJECT_STORAGE_AUTH_PORT>/v2.0/tokens
       objectStorage_swift_authMethod: keystone
       objectStorage_swift_preferredRegion: Public
       objectStorage_swift_container: <OBJECT_STORAGE_CONTAINER>
@@ -363,7 +330,7 @@ mariadb/01ce2b6f-1038-468d-92f8-f68f72f7ea77         running        z2  10.174.1
       objectStorage_swift_tenantName: <OBJECT_STORAGE_TENANTNAME>
       objectStorage_swift_username: <OBJECT_STORAGE_USERNAME>
       objectStorage_swift_password: <OBJECT_STORAGE_PASSWORD>
-      objectStorage_swift_authUrl: http://<OBJECT_STORAGE_IP>:5000/v2.0/tokens
+      objectStorage_swift_authUrl: http://<OBJECT_STORAGE_IP>:<OBJECT_STORAGE_AUTH_PORT>/v2.0/tokens
       objectStorage_swift_authMethod: keystone
       objectStorage_swift_preferredRegion: Public
       objectStorage_swift_container: <OBJECT_STORAGE_CONTAINER>
@@ -763,60 +730,38 @@ UAA 계정 등록 절차에 대한 순서를 확인한다.
   ```
 
 ### <div id='24'/> 2.4. 마켓플레이스 서비스 관리
+
 PaaS-TA 운영자 포탈을 통해 마켓플레이스 서비스를 등록 및 공개하면, PaaS-TA 운영자/사용자 포탈을 통해 진입 하여 사용할 수 있다.
 
->1. PaaS-TA 운영자 포탈에 접속하여 로그인한다.  
+- PaaS-TA 운영자 포탈에 접속후 "운영관리 > 코드관리" 메뉴로 이동하여 마켓플레이스 서비스 접근 URL을 등록한다.   
 
-![AdminPortal_login]
-<br>
+  >  - Group Table   
+      + 코드 ID : MARKET_PLACE_URL   
+      + 코드 이름 : 마켓플레이스 URL   
+  >  - Group Table > "MARKET_PLACE_URL" 의 Detail Table   
+      + Key : MARKET-USER   
+      + Value : http://marketplace-webuser.[DOMAIN]/index   
+      + 요약 : 사용자 마켓플레이스   
+      + 사용 : Y   
+      ------------------   
+      + Key : MARKET-SELLER   
+      + Value : http://marketplace-webseller.[DOMAIN]/index   
+      + 요약 : 판매자 마켓플레이스   
+      + 사용 : Y   
+    ========================================================================   
+  > - Group Table   
+      + 코드 ID : MARKET_ADMIN_URL   
+      + 코드 이름 : 마켓플레이스 어드민 URL   
+  > - Group Table > "MARKET_ADMIN_URL" 의 Detail Table   
+      + Key : MARKET-ADMIN   
+      + Value : http://marketplace-webadmin.[DOMAIN]/index   
+      + 요약 : 관리자 마켓플레이스   
+      + 사용 : Y     
 
->2. 운영관리 > 코드 관리 페이지에서 Group Table의 "등록" 버튼을 클릭한다.
+![AdminPortal_Market_Url]     
+![AdminPortal_Market_Admin_Url]     
 
-![AdminPortal_Group]
-<br>
-
->3. Group Table 코드 상세를 등록한다.
-
->3.1. 마켓플레이스 URL 항목을 등록한다.
-
-![AdminPortal_GroupUser]
-<br>
-
->3.2. 마켓플레이스 어드민 URL 항목을 등록한다.
-
-![AdminPortal_GroupAdmin]
-<br>
-
->4. 사용자/판매자 Group Table 항목을 클릭하고 Detail Table의 "등록" 버튼을 클릭한다.
-
-![AdminPortal_Detail]
-<br>
-
->5. Detail Table 코드 상세를 등록한다.
-
->5.1. 사용자 마켓플레이스 항목을 등록한다.  
-
-![AdminPortal_DetailUser]
-<br>
-
->5.2. 판매자 마켓플레이스 항목을 등록한다.  
-
-![AdminPortal_DetailSeller]
-<br>
-
->6. 관리자 Group Table의 Detail Table 코드 상세를 등록한다.
-
->6.1. 관리자 마켓플레이스 항목을 등록한다.
-
-![AdminPortal_DetailAdmin]
-<br>
 
 [Architecture]:./images/Market_Place_Architecture.png
-[AdminPortal_login]:./images/AdminPortal_login.png
-[AdminPortal_Group]:./images/AdminPortal_Group.png
-[AdminPortal_GroupUser]:./images/AdminPortal_GroupUser.png
-[AdminPortal_GroupAdmin]:./images/AdminPortal_GroupAdmin.png
-[AdminPortal_Detail]:./images/AdminPortal_Detail.png
-[AdminPortal_DetailUser]:./images/AdminPortal_DetailUser.png
-[AdminPortal_DetailSeller]:./images/AdminPortal_DetailSeller.png
-[AdminPortal_DetailAdmin]:./images/AdminPortal_DetailAdmin.png
+[AdminPortal_Market_Url]: ./images/AdminPortal_MarketURL.png
+[AdminPortal_Market_Admin_Url]: ./images/AdminPortal_MarketAdminURL.png
