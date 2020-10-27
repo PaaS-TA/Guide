@@ -290,7 +290,7 @@ $ sh ./deploy.sh
 
 - 서비스 설치에 필요한 릴리즈 파일을 다운로드 받아 Local machine의 서비스 설치 작업 경로로 위치시킨다.  
   
-  - 설치 릴리즈 파일 다운로드 : [paasta-portal-ui-release-2.0.1.tgz](http://45.248.73.44/index.php/s/2QaaPxfkjSHnYLH/download)
+  - 설치 릴리즈 파일 다운로드 : [paasta-portal-ui-release-2.1.0.tgz](http://45.248.73.44/index.php/s/gqmim6yZ5emjYtM/download)
 
 ```
 # 릴리즈 다운로드 파일 위치 경로 생성
@@ -298,7 +298,7 @@ $ mkdir -p ~/workspace/paasta-5.0/release/portal
 
 # 릴리즈 파일 다운로드 및 파일 경로 확인
 $ ls ~/workspace/paasta-5.0/release/portal
-paasta-portal-ui-release-2.0.1.tgz
+paasta-portal-ui-release-2.1.0.tgz
 ```
   
 - 서버 환경에 맞추어 Deploy 스크립트 파일의 VARIABLES 설정을 수정하고 Option file 및 변수를 추가한다.  
