@@ -92,7 +92,7 @@ bosh-stemcell-315.64-aws-xen-hvm-ubuntu-xenial-go_agent.tgz   bosh-stemcell-315.
 bosh-stemcell-315.64-azure-hyperv-ubuntu-xenial-go_agent.tgz  bosh-stemcell-315.64-vcloud-esxi-ubuntu-xenial-go_agent.tgz
 ```
 
-Stemcell은 배포 시 생성되는 PaaS-TA VM Base OS Image이며, PaaS-TA 5.0은 Ubuntu xenial stemcell 315.64를 기반으로 한다.  
+Stemcell은 배포 시 생성되는 PaaS-TA VM Base OS Image이며, PaaS-TA 5.0.2은 Ubuntu xenial stemcell 315.64를 기반으로 한다.  
 BOSH 로그인 후 다음 명령어를 수행하여 Stemcell을 올린다.  
 {director_name}은 BOSH 설치 시 사용한 Director 명이다.
 
