@@ -25,9 +25,7 @@
 　　3.6.3. [PaaS-TA 설치 Shell Scripts](#1023)  
 　　　●  [deploy-aws.sh](#1024)  
 　3.7. [PaaS-TA 설치](#1030)  
-　3.8. [PaaS-TA 설치 - 다운로드 된 Release 파일 이용 방식](#1031)  
-　3.9. [PaaS-TA 로그인](#1032)  
-● [통합 Monitoring을 적용한 PaaS-TA 5.0 설치](#1033)  
+　3.8. [PaaS-TA 로그인](#1032)  
 
 ## Executive Summary
 
@@ -988,7 +986,7 @@ Succeeded
 
 
 
-## <div id='1032'/>3.9.  PaaS-TA 로그인 
+## <div id='1032'/>3.8.  PaaS-TA 로그인 
 
 CF CLI를 설치하고 PaaS-TA에 로그인한다.
 CF API는 PaaS-TA 배포 시 지정했던 System Domain 명을 사용한다.
