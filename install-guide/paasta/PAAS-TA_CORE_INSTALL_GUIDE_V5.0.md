@@ -1084,7 +1084,7 @@ Select an org (or press enter to skip):
 
 [PaaSTa_BOSH_Use_Guide_Image1]:./images/bosh1.png
 [PaaSTa_BOSH_Use_Guide_Image2]:./images/bosh2.png
-[PaaSTa_FLAVOR_Image]:./images/flavor.png
+[PaaSTa_FLAVOR_Image]:./images/aws-vmtype.png
 [PaaSTa_UAA_LOGIN_Image]:./images/uaa-login.png
 [PaaSTa_UAA_LOGIN_Image2]:./images/uaa-login-2.png
 [PaaSTa_VALUE_Image]:./images/paasta-value.png
