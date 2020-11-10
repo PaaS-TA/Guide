@@ -66,8 +66,9 @@ Cloud Foundry Document: [https://docs.cloudfoundry.org](https://docs.cloudfoundr
 # <div id='105'/>2. BOSH
 BOSH는 초기에 Cloud Foundry PaaS를 위해 개발되었지만, 현재는 Jenkins, Hadoop 등 Yaml 파일 형식으로 소프트웨어를 쉽게 배포할 수 있으며, 수백 가지의 VM을 설치할 수 있고, 각각의 VM에 대해 모니터링, 장애 복구 등 라이프 사이클을 관리할 수 있는 통합 프로젝트이다.
 
-BOSH가 지원하는 IaaS는 VMware vSphere, Google Cloud Platform, AWS, OpenStack, MS Azure, VMware vCloud, RackHD, SoftLayer가 있다.  
-PaaS-TA는 VMware vSphere, Google Cloud Platform, AWS, OpenStack, MS Azure 등의 IaaS를 지원한다.
+BOSH가 지원하는 IaaS는 VMware vSphere, Google Cloud Platform, Amazon Web Services EC2, Microsoft Azure, OpenStack, Alibaba Cloud가 있다.  
+PaaS-TA는 VMware vSphere, Google Cloud Platform, Amazon Web Services EC2, OpenStack, Microsoft Azure 등의 IaaS를 지원한다.
+현재 PaaS-TA 5.0.2에서 검증한 IaaS 환경은 AWS 환경이다.
 
 PaaS-TA 3.1 버전까지는 Cloud Foundry BOSH1을 기준으로 설치했지만, PaaS-TA 3.5 버전부터 BOSH2를 기준으로 설치하였다.  
 PaaS-TA 5.0은 Cloud Foundry에서 제공하는 bosh-deployment를 활용하여 BOSH를 설치한다.
@@ -189,16 +190,16 @@ $ bosh -version
 
 - BOSH를 설치하기 위한 deployment가 존재하지 않는다면 다운로드 받는다
 ```
-$ cd ${HOME}/workspace/paasta-5.0/deployment
+$ cd ${HOME}/workspace/paasta/deployment
 $ git clone https://github.com/PaaS-TA/paasta-deployment.git –b v5.0.2
 ```
 
 ### <div id='1014'/>3.3.4.    BOSH 설치 파일
 
-- paasta-5.0/paasta-deployment 이하 디렉터리
+- paasta/deployment/paasta-deployment 이하 디렉터리
 
 ```
-$ cd ${HOME}/workspace/paasta-5.0/deployment/paasta-deployment
+$ cd ${HOME}/workspace/paasta/deployment/paasta-deployment
 $ ls
 bosh  cloud-config  paasta
 ```
@@ -220,7 +221,7 @@ bosh  cloud-config  paasta
 
 ### <div id='1015'/>3.3.5.    BOSH 환경 설정
 
-${HOME}/workspace/paasta-5.0/deployment/paasta-deployment/bosh 이하 디렉터리에는 BOSH 설치를 위한 IaaS별 Shell Script 파일이 존재한다.  
+${HOME}/workspace/paasta/deployment/paasta-deployment/bosh 이하 디렉터리에는 BOSH 설치를 위한 IaaS별 Shell Script 파일이 존재한다.  
 Shell Script 파일을 이용하여 BOSH를 설치한다.
 파일명은 deploy-{IaaS}.sh 로 만들어졌다.  
 또한 {IaaS}-vars.yml을 수정하여 BOSH 설치시 적용하는 변숫값을 변경할 수 있다.
@@ -231,52 +232,9 @@ Shell Script 파일을 이용하여 BOSH를 설치한다.
 <td>AWS 환경에 BOSH 설치시 적용하는 변숫값 설정 파일</td>
 </tr>
 <tr>
-<td>azure-vars.yml</td>
-<td>MS Azure 환경에 BOSH 설치시 적용하는 변숫값 설정 파일</td>
-</tr>
-<tr>
-<td>gcp-vars.yml</td>
-<td>GCP(Google Cloud Platform) 환경에 BOSH 설치시 적용하는 변숫값 설정 파일</td>
-</tr>
-<tr>
-<td>openstack-vars.yml</td>
-<td>OpenStack 환경에 BOSH 설치시 적용하는 변숫값 설정 파일</td>
-</tr>
-<tr>
-<td>vsphere-vars.yml</td>
-<td>VMware vSphere 환경에 BOSH 설치시 적용하는 변숫값 설정 파일</td>
-</tr>
-<tr>
-<td>bosh-lite-vars.yml</td>
-<td>Local Test 환경에 BOSH-LITE 설치시 적용하는 변숫값 설정 파일</td>
-</tr>
 <tr>
 <td>deploy-aws.sh</td>
 <td>AWS 환경에 BOSH 설치를 위한 Shell Script 파일</td>
-</tr>
-<tr>
-<td>deploy-azure.sh</td>
-<td>MS Azure 환경에 BOSH 설치를 위한 Shell Script 파일</td>
-</tr>
-<tr>
-<td>deploy-gcp.sh</td>
-<td>GCP(Google Cloud Platform) 환경에 BOSH 설치를 위한 Shell Script 파일</td>
-</tr>
-<tr>
-<td>deploy-openstack.sh</td>
-<td>OpenStack 환경에 BOSH 설치를 위한 Shell Script 파일</td>
-</tr>
-<tr>
-<td>deploy-vsphere.sh</td>
-<td>VMware vSphere 환경에 BOSH 설치를 위한 Shell Script 파일</td>
-</tr>
-<tr>
-<td>deploy-{IaaS}-monitoring.sh</td>
-<td>각 IaaS 환경에 PaaS-TA Monitoring을 설치하기 전에 BOSH 설치를 위한 Shell Script 파일</td>
-</tr>
-<tr>
-<td>deploy-bosh-lite.sh</td>
-<td>Local Test 용도로 BOSH-LITE 설치를 위한 Shell Script 파일</td>
 </tr>
 </table>
 
@@ -339,130 +297,6 @@ syslog_transport: "relp"				# Logsearch Protocol
 ```
 
 
-
-##### <div id='1018'/>● azure-vars.yml
-```
-# BOSH VARIABLE
-bosh_client_admin_id: "admin"				# Bosh Client Admin ID
-private_cidr: "10.0.1.0/24"				# Private IP Range
-private_gw: "10.0.1.1"					# Private IP Gateway
-bosh_url: "10.0.1.6"					# Private IP
-inception_os_user_name: "ubuntu"			# Home User Name
-director_name: "micro-bosh"				# BOSH Director Name
-vnet_name: "paasta-bosh-net"				# Azure VNet Name
-subnet_name: "paasta-subnet"				# Azure VNet Subnet Name
-subscription_id: "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX"	# Azure Subscription ID
-tenant_id: "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX"	# Azure Tenant ID
-client_id: "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX"	# Azure Client ID
-client_secret: "client-secret"				# Azure Client Secret
-resource_group_name: "paasta-bosh-group"		# Azure Resource Group
-storage_account_name: "paasta-store"			# Azure Storage Account
-default_security_group: "paasta-security"		# Azure Security Group
-
-# MONITORING VARIABLE(PaaS-TA Monitoring을 설치할 경우 향후 설치할 VM의 값으로 미리 수정)
-metric_url: "10.0.161.101"				# PaaS-TA Monitoring InfluxDB IP
-syslog_address: "10.0.121.100"				# Logsearch의 ls-router IP
-syslog_port: "2514"					# Logsearch의 ls-router Port
-syslog_transport: "relp"				# Logsearch Protocol
-```
-
-##### <div id='1019'/>● gcp-vars.yml
-```
-# BOSH VARIABLE
-bosh_client_admin_id: "admin"				# Bosh Client Admin ID
-inception_os_user_name: "ubuntu"			# Home User Name
-director_name: "micro-bosh"				# BOSH Director Name
-private_cidr: "10.0.1.0/24"				# Private IP Range
-private_gw: "10.0.1.1"					# Private IP Gateway
-bosh_url: "10.0.1.6"					# Private IP
-network: "public-bosh"					# GCP Network Name
-subnetwork: "public-bosh-subnet"			# GCP Subnet Name
-tags: ["paasta-security"]				# GCP Tags
-project_id: "paasta-project"				# GCP Project ID
-zone: "asia-northeast1-a"				# GCP Zone
-
-# MONITORING VARIABLE(PaaS-TA Monitoring을 설치할 경우 향후 설치할 VM의 값으로 미리 수정)
-metric_url: "10.0.161.101"				# PaaS-TA Monitoring InfluxDB IP
-syslog_address: "10.0.121.100"				# Logsearch의 ls-router IP
-syslog_port: "2514"					# Logsearch의 ls-router Port
-syslog_transport: "relp"				# Logsearch Protocol
-```
-
-
-##### <div id='1020'/>● openstack-vars.yml
-
-```
-# BOSH VARIABLE
-bosh_client_admin_id: "admin"				# Bosh Client Admin ID
-inception_os_user_name: "ubuntu"			# Home User Name
-director_name: "micro-bosh"				# BOSH Director Name
-private_cidr: "10.0.1.0/24"				# Private IP Range
-private_gw: "10.0.1.1"					# Private IP Gateway
-bosh_url: "10.0.1.6"					# Private IP 
-auth_url: "http://XX.XXX.XX.XX:XXXX/v3/"		# Openstack Keystone URL
-az: "nova"						# Openstack AZ Zone
-default_key_name: "paasta"				# Openstack Key Name
-default_security_groups: ["paasta"]			# Openstack Security Group
-net_id: "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX"		# Openstack Network ID
-openstack_password: "XXXXXX"				# Openstack User Password
-openstack_username: "XXXXXX"				# Openstack User Name
-openstack_domain: "XXXXXXX"				# Openstack Domain Name
-openstack_project: "PaaSTA"				# Openstack Project
-private_key: "~/.ssh/id_rsa.pem"			# Openstack Region
-region: "RegionOne"					# SSH Private Key Path
-
-# MONITORING VARIABLE(PaaS-TA Monitoring을 설치할 경우 향후 설치할 VM의 값으로 미리 수정)
-metric_url: "10.0.161.101"				# PaaS-TA Monitoring InfluxDB IP
-syslog_address: "10.0.121.100"				# Logsearch의 ls-router IP
-syslog_port: "2514"					# Logsearch의 ls-router Port
-syslog_transport: "relp"				# Logsearch Protocol
-```
-
-
-
-##### <div id='1021'/>● vsphere-vars.yml
-
-```
-# BOSH VARIABLE
-bosh_client_admin_id: "admin"				# Bosh Client Admin ID
-inception_os_user_name: "ubuntu"			# Home User Name
-director_name: "micro-bosh"				# BOSH Director Name
-private_cidr: "10.0.1.0/24"				# Private IP Range
-private_gw: "10.0.1.1"					# Private IP Gateway
-bosh_url: "10.0.1.6"					# Private IP 
-network_name: "PaaS-TA"					# Private Network Name (vCenter)
-vcenter_dc: "PaaS-TA-DC"				# vCenter Data Center Name
-vcenter_ds: "PaaS-TA-Storage"				# vCenter Data Storage Name
-vcenter_ip: "XX.XX.XXX.XX"				# vCenter Private IP
-vcenter_user: "XXXXX"					# vCenter User Name
-vcenter_password: "XXXXXX"				# vCenter User Password
-vcenter_templates: "PaaS-TA_Templates"			# vCenter Templates Name
-vcenter_vms: "PaaS-TA_VMs"				# vCenter VMS Name
-vcenter_disks: "PaaS-TA_Disks"				# vCenter Disk Name
-vcenter_cluster: "PaaS-TA"				# vCenter Cluster Name
-vcenter_rp: "PaaS-TA_Pool"				# vCenter Resource Pool Name
-
-# MONITORING VARIABLE(PaaS-TA Monitoring을 설치할 경우 향후 설치할 VM의 값으로 미리 수정)
-metric_url: "10.0.161.101"				# PaaS-TA Monitoring InfluxDB IP
-syslog_address: "10.0.121.100"				# Logsearch의 ls-router IP
-syslog_port: "2514"					# Logsearch의 ls-router Port
-syslog_transport: "relp"				# Logsearch Protocol
-```
-
-##### <div id='1022'/>● bosh-lite-vars.yml
-```
-# BOSH VARIABLE
-bosh_client_admin_id: "admin"				# Bosh Client Admin ID
-inception_os_user_name: 'ubuntu'			# Home User Name
-director_name: 'micro-bosh'				# BOSH Director Name
-private_cidr: '10.0.1.0/24'				# Private IP Range
-private_gw: '10.0.1.1'					# Private IP Gateway
-bosh_url: '10.0.1.6'					# Private IP 
-outbound_network_name: 'NatNetwork'			# Outbound Network Name
-```
-
-
-
 #### <div id='1023'/>3.3.5.2. BOSH 설치 Option 파일
 
 ##### <div id='1024'/>● BOSH Optional 파일
@@ -473,73 +307,18 @@ outbound_network_name: 'NatNetwork'			# Outbound Network Name
 <td>설명</td>
 </tr>
 <tr>
-<td>use-compiled-releases.yml</td>
-<td>다운로드 및 컴파일 없이 빠른 설치가 가능하다.</td>
-</tr>
-<tr>
-<td>use-compiled-releases-aws.yml</td>
-<td>다운로드 및 컴파일 없이 AWS-CPI의 릴리즈의 빠른 설치가 가능하다.</td>
-</tr>
-<tr>
-<td>use-compiled-releases-azure.yml</td>
-<td>다운로드 및 컴파일 없이 Azure-CPI의 릴리즈의 빠른 설치가 가능하다.</td>
-</tr>
-<tr>
-<td>use-compiled-releases-gcp.yml</td>
-<td>다운로드 및 컴파일 없이 GCP-CPI의 릴리즈의 빠른 설치가 가능하다.</td>
-</tr>
-<tr>
-<td>use-compiled-releases-openstack.yml</td>
-<td>다운로드 및 컴파일 없이 OpenStack-CPI의 릴리즈의 빠른 설치가 가능하다.</td>
-</tr>
-<tr>
-<td>use-compiled-releases-vsphere.yml</td>
-<td>다운로드 및 컴파일 없이 vSphere-CPI의 릴리즈의 빠른 설치가 가능하다.</td>
-</tr>
-<tr>
 <td>uaa.yml</td>
 <td>UAA 적용</td>
-</tr>
-<tr>
-<td>use-compiled-releases-uaa.yml</td>
-<td>다운로드 및 컴파일 없이 UAA의 빠른 설치가 가능하다.</td>
 </tr>
 <tr>
 <td>credhub.yml</td>
 <td>CredHub 적용</td>
 </tr>
 <tr>
-<td>use-compiled-releases-credhub.yml</td>
-<td>다운로드 및 컴파일 없이 CredHub의 빠른 설치가 가능하다.</td>
-</tr>
-<tr>
 <td>jumpbox.yml</td>
 <td>Jumpbox 적용</td>
 </tr>
-<tr>
-<td>use-compiled-releases-jumpbox.yml</td>
-<td>다운로드 및 컴파일 없이 Jumpbox의 빠른 설치가 가능하다.</td>
-</tr>
 </table>
-
-##### <div id='1025'/>● PaaS-TA Monitoring Operation 파일
-
-PaaS-TA Monitoring을 적용하기 위해서 BOSH 설치 시 아래 두 파일과 변숫값을 추가해야 한다.  
-만약 Monitoring을 사용하지 않는다면, 두 파일을 제거하고 설치한다.
-
-| 파일명 | 설명 | 요구사항 |
-|:---  |:---     |:---   |
-|paasta-addon/paasta-monitoring-agent.yml | PaaS-TA Monitoring Agent 적용 | Requries value:   -v metric_url  |
-|paasta-addon/use-compiled-releases-monitoring-agent.yml | 다운로드 및 컴파일 없이 PaaS-TA Monitoring Agent의 빠른 설치가 가능하다.	 | |
-|syslog.yml | Syslog 구성 적용 | Requries value: -v syslog_address   -v syslog_port -v syslog_transport |
-|use-compiled-releases-syslog.yml | 다운로드 및 컴파일 없이 Syslog의 빠른 설치가 가능하다.	 |  |
-
-PaaS-TA Monitoring Agent는 BOSH VM의 상태 정보(Metric data)를 paasta-monitoring의 InfluxDB에 전송한다.  
-Syslog Agent는 BOSH VM의 log 정보를 logsearch의 ls-router에 전송하는 역할을 한다.  
-BOSH 설치 전에 paasta-monitoring의 InfluxDB IP를 metric_url로 사용하기 위해 사전에 정의해야 한다.  
-마찬가지로 logsearch의 ls-router IP도 syslog_address로 연동하기 위해 사전에 정의해야 한다.
-
-
 
 
 
@@ -562,122 +341,12 @@ bosh create-env bosh.yml \
 	-o use-compiled-releases-jumpbox.yml \		# BOSH 설치시 Jumpbox 릴리즈 파일 Local 정보 
  	-l aws-vars.yml					# AWS 환경에 BOSH 설치시 적용하는 변숫값 설정 파일
 ```
-##### <div id='1028'/>● deploy-azure.sh
-```
-bosh create-env bosh.yml \                         
-	--state=azure/state.json \			# BOSH Latest Running State, 설치 시 생성, Backup 필요
-	--vars-store azure/creds.yml \			# BOSH Credentials and Certs, 설치 시 생성, Backup 필요   
-	-o use-compiled-releases.yml \			# BOSH 설치시 공통 릴리즈 파일 Local 정보
-	-o azure/cpi.yml \				# MS Azure CPI 적용
-	-o use-compiled-releases-azure.yml \		# BOSH 설치시 MS Azure CPI 릴리즈 파일 Local 정보
-	-o uaa.yml  \					# UAA 적용 
-	-o use-compiled-releases-uaa.yml \		# BOSH 설치시 UAA 릴리즈 파일 Local 정보
-	-o credhub.yml  \				# CredHub 적용
-	-o use-compiled-releases-credhub.yml \		# BOSH 설치시 CredHub 릴리즈 파일 Local 정보
-	-o jumpbox-user.yml  \				# Jumpbox 적용 
-	-o use-compiled-releases-jumpbox.yml \		# BOSH 설치시 Jumpbox 릴리즈 파일 Local 정보
-	-l azure-vars.yml				# MS Azure 환경에 BOSH 설치시 적용하는 변숫값 설정 파일
-```
-
-##### <div id='1029'/>● deploy-gcp.sh
-```
-bosh create-env bosh.yml \                         
-	--state=gcp/state.json \			# BOSH Latest Running State, 설치 시 생성, Backup 필요 
-	--vars-store gcp/creds.yml \			# BOSH Credentials and Certs, 설치 시 생성, Backup 필요
-	-o use-compiled-releases.yml \			# BOSH 설치시 공통 릴리즈 파일 Local 정보
-	-o gcp/cpi.yml \				# GCP CPI 적용
-	-o use-compiled-releases-gcp.yml \		# BOSH 설치시 GCP CPI 릴리즈 파일 Local 정보
-	-o uaa.yml  \					# UAA 적용  
-	-o use-compiled-releases-uaa.yml \		# BOSH 설치시 UAA 릴리즈 파일 Local 정보
-	-o credhub.yml  \				# CredHub 적용  
-	-o use-compiled-releases-credhub.yml \		# BOSH 설치시 CredHub 릴리즈 파일 Local 정보
-	-o jumpbox-user.yml  \				# Jumpbox 적용
-	-o use-compiled-releases-jumpbox.yml \		# BOSH 설치시 Jumpbox 릴리즈 파일 Local 정보 
-	--var-file gcp_credentials_json=~/.ssh/gcp.json \	# GCP Service Account Key      
-	-l vars-gcp.yml					# GCP 환경에 BOSH 설치시 적용하는 변숫값 설정 파일   
-
-```
-
-
-##### <div id='1030'/>● deploy-openstack.sh
-
-```
-bosh create-env bosh.yml \                       
-	--state=openstack/state.json \			# BOSH Latest Running State, 설치 시 생성, Backup 필요
-	--vars-store=openstack/creds.yml \		# BOSH Credentials and Certs, 설치 시 생성, Backup 필요
-	-o use-compiled-releases.yml \			# BOSH 설치시 공통 릴리즈 파일 Local 정보
-	-o openstack/cpi.yml \				# Openstack CPI 적용
-	-o use-compiled-releases-openstack.yml \	# BOSH 설치시 OpenStack CPI 릴리즈 파일 Local 정보
-	-o uaa.yml \					# UAA 적용
-	-o use-compiled-releases-uaa.yml \		# BOSH 설치시 UAA 릴리즈 파일 Local 정보
-	-o credhub.yml \				# CredHub 적용
-	-o use-compiled-releases-credhub.yml \		# BOSH 설치시 CredHub 릴리즈 파일 Local 정보
-	-o jumpbox-user.yml \				# Jumpbox 적용
-	-o use-compiled-releases-jumpbox.yml \		# BOSH 설치시 Jumpbox 릴리즈 파일 Local 정보
-	-o openstack/disable-readable-vm-names.yml \	# VM 명을 UUIDs로 적용
-	-l openstack-vars.yml				# OpenStack 환경에 BOSH 설치시 적용하는 변숫값 설정 파일
-```
-
-##### <div id='1031'/>● deploy-vsphere.sh
-
-```
-bosh create-env bosh.yml \                         
-	--state=vsphere/state.json \			# BOSH Latest Running State, 설치 시 생성, Backup 필요 
-	--vars-store=vsphere/creds.yml \		# BOSH Credentials and Certs, 설치 시 생성, Backup 필요 
-	-o use-compiled-releases.yml \			# BOSH 설치시 공통 릴리즈 파일 Local 정보    
-	-o vsphere/cpi.yml \				# vSphere CPI 적용 
-	-o use-compiled-releases-vsphere.yml \		# BOSH 설치시 vSphere CPI 릴리즈 파일 Local 정보
-	-o vsphere/resource-pool.yml  \			# vSphere Resource Pool 적용       
-	-o uaa.yml  \					# UAA 적용   
-	-o use-compiled-releases-uaa.yml \		# BOSH 설치시 UAA 릴리즈 파일 Local 정보
-	-o credhub.yml  \				# CredHub 적용 
-	-o use-compiled-releases-credhub.yml \		# BOSH 설치시 CredHub 릴리즈 파일 Local 정보
-	-o jumpbox-user.yml  \				# Jumpbox 적용  
-	-o use-compiled-releases-jumpbox.yml \		# BOSH 설치시 Jumpbox 릴리즈 파일 Local 정보
-	-l vars-vsphere.yml				# VMware vSphere 환경에 BOSH 설치시 적용하는 변숫값 설정 파일
-```
-
-##### <div id='1032'/>● deploy-{IaaS}-monitoring.sh
-
-```
-bosh create-env bosh.yml \                         
-	--state=vsphere/state.json \			# BOSH Latest Running State, 설치 시 생성, Backup 필요 
-	--vars-store=vsphere/creds.yml \		# BOSH Credentials and Certs, 설치 시 생성, Backup 필요 
-	......................................
-	......................................
-	-o syslog.yml \					# [MONITORING] Monitoring Logging Agent 적용
-	-o use-compiled-releases-syslog.yml \		# [MONITORING] Monitoring Logging Agent 적용시 필요한 릴리즈 파일 Local 정보
-	-o paasta-addon/paasta-monitoring-agent.yml \	# [MONITORING] Monitoring Metric Agent 적용    
-	-o paasta-addon/use-compiled-releases-monitoring-agent.yml \	# [MONITORING] Monitoring Metric Agent 적용시 필요한 릴리즈 파일 Local 정보
-	-l vars-{IaaS}.yml				# 각 IaaS 환경에 BOSH 설치시 적용하는 변숫값 설정 파일
-```
-
-
-
-##### <div id='1033'/>● deploy-bosh-lite.sh
-```
-bosh create-env bosh.yml \
-	--state=bosh-lite/state.json \			# BOSH Latest Running State, 설치 시 생성, Backup 필요   
-	--vars-store bosh-lite/creds.yml \		# BOSH Credentials and Certs, 설치 시 생성, Backup 필요   
-	-o use-compiled-releases.yml \			# BOSH 설치시 공통 릴리즈 파일 Local 정보
-	-o virtualbox/cpi.yml \				# Virtualbox CPI 적용 
-	-o virtualbox/outbound-network.yml \		# Virtualbox Outbound Network 적용
-	-o bosh-lite.yml \				# BOSH-LITE 적용    
-	-o use-compiled-releases-bosh-lite.yml \	# BOSH 설치시 BOSH-LITE 릴리즈 파일 Local 정보
-	-o uaa.yml \					# UAA 적용
-	-o use-compiled-releases-uaa.yml \		# BOSH 설치시 UAA 릴리즈 파일 Local 정보
-	-o credhub.yml \				# CredHub 적용
-	-o use-compiled-releases-credhub.yml \		# BOSH 설치시 CredHub 릴리즈 파일 Local 정보
-	-o jumpbox-user.yml \				# Jumpbox 적용
-	-o use-compiled-releases-jumpbox.yml \		# BOSH 설치시 Jumpbox 릴리즈 파일 Local 정보
-	-l vars-bosh-lite.yml				# BOSH-LITE 환경에 BOSH 설치시 적용하는 변숫값 설정 파일
-```
 
 
 - Shell Script 파일에 실행 권한 부여
 
 ```
-$ chmod +x ${HOME}/workspace/paasta-5.0/deployment/paasta-deployment/bosh/*.sh  
+$ chmod +x ${HOME}/workspace/paasta/deployment/paasta-deployment/bosh/*.sh  
 ```
 
 
@@ -685,7 +354,7 @@ $ chmod +x ${HOME}/workspace/paasta-5.0/deployment/paasta-deployment/bosh/*.sh
 
 - 서버 환경에 맞추어 Deploy 스크립트 파일의 설정을 수정한다. 
 
-> $ vi ~/workspace/paasta-5.0/deployment/paasta-deployment/bosh/deploy-aws.sh
+> $ vi ~/workspace/paasta/deployment/paasta-deployment/bosh/deploy-aws.sh
 ```                     
 bosh create-env bosh.yml \                         
 	--state=aws/state.json \	
@@ -700,87 +369,15 @@ bosh create-env bosh.yml \
 - BOSH 설치 Shell Script 파일 실행
 
 ```
-$ cd ${HOME}/workspace/paasta-5.0/deployment/paasta-deployment/bosh
+$ cd ${HOME}/workspace/paasta/deployment/paasta-deployment/bosh
 $ ./deploy-{iaas}.sh
 ```
 
 - BOSH 설치 중
 
 ```
-ubuntu@inception:~/workspace/paasta-5.0/deployment/paasta-deployment/bosh$ ./deploy-aws.sh
-Deployment manifest: '/home/ubuntu/workspace/paasta-5.0/deployment/paasta-deployment/bosh/bosh.yml'
-Deployment state: 'aws/state.json'
-
-Started validating
-  Validating release 'bosh'... Finished (00:00:01)
-  Validating release 'bpm'... Finished (00:00:01)
-  Validating release 'bosh-aws-cpi'... Finished (00:00:00)
-  Validating release 'uaa'... Finished (00:00:03)
-  Validating release 'credhub'...
-```
-
-- BOSH 설치 완료
-
-```
-  Compiling package 'uaa_utils/90097ea98715a560867052a2ff0916ec3460aabb'... Skipped [Package already compiled] (00:00:00)
-  Compiling package 'davcli/f8a86e0b88dd22cb03dec04e42bdca86b07f79c3'... Skipped [Package already compiled] (00:00:00)
-  Updating instance 'bosh/0'... Finished (00:01:44)
-  Waiting for instance 'bosh/0' to be running... Finished (00:02:16)
-  Running the post-start scripts 'bosh/0'... Finished (00:00:13)
-Finished deploying (00:11:54)
-
-Stopping registry... Finished (00:00:00)
-Cleaning up rendered CPI jobs... Finished (00:00:00)
-
-Succeeded
-```
-
-### <div id='1035'/>3.3.7. BOSH 설치 - 다운로드 된 Release 파일 이용 방식
-
-- 서비스 설치에 필요한 릴리즈 파일을 다운로드 받아 Local machine의 작업 경로로 위치시킨다.  
-  
-  - 설치 파일 다운로드 위치 : https://paas-ta.kr/download/package    
-
-```
-# 릴리즈 다운로드 파일 위치 경로 생성
-$ mkdir -p ~/workspace/paasta-5.0/release/bosh
-
-# 릴리즈 파일 다운로드 및 파일 경로 확인
-$ ls ~/workspace/paasta-5.0/release/bosh
-```
-
-
-- 서버 환경에 맞추어 Deploy 스크립트 파일의 설정을 수정한다. 
-
-> $ vi ~/workspace/paasta-5.0/deployment/paasta-deployment/bosh/deploy-aws.sh
-```                     
-bosh create-env bosh.yml \                         
-	--state=aws/state.json \
-	--vars-store=aws/creds.yml \
-	-o use-compiled-releases.yml \
-	-o aws/cpi.yml \
-	-o use-compiled-releases-aws.yml \
-	-o uaa.yml \
-	-o use-compiled-releases-uaa.yml \
-	-o credhub.yml \
-	-o use-compiled-releases-credhub.yml \
-	-o jumpbox-user.yml \
-	-o use-compiled-releases-jumpbox.yml \
- 	-l aws-vars.yml	
-```
-
-- BOSH 설치 Shell Script 파일 실행
-
-```
-$ cd ${HOME}/workspace/paasta-5.0/deployment/paasta-deployment/bosh
-$ ./deploy-{iaas}.sh
-```
-
-- BOSH 설치 중
-
-```
-ubuntu@inception:~/workspace/paasta-5.0/deployment/paasta-deployment/bosh$ ./deploy-aws.sh
-Deployment manifest: '/home/ubuntu/workspace/paasta-5.0/deployment/paasta-deployment/bosh/bosh.yml'
+ubuntu@inception:~/workspace/paasta/deployment/paasta-deployment/bosh$ ./deploy-aws.sh
+Deployment manifest: '/home/ubuntu/workspace/paasta/deployment/paasta-deployment/bosh/bosh.yml'
 Deployment state: 'aws/state.json'
 
 Started validating
@@ -814,7 +411,7 @@ creds.yml은 BOSH 인증정보를 가지고 있으며, creds.yml을 활용하여
 BOSH 로그인 후, BOSH CLI 명령어를 이용하여 PaaS-TA를 설치할 수 있다.
 
 ```
-$ cd ${HOME}/workspace/paasta-5.0/deployment/paasta-deployment/bosh
+$ cd ${HOME}/workspace/paasta/deployment/paasta-deployment/bosh
 $ export BOSH_CA_CERT=$(bosh int ./{iaas}/creds.yml --path /director_ssl/ca)
 $ export BOSH_CLIENT=admin
 $ export BOSH_CLIENT_SECRET=$(bosh int ./{iaas}/creds.yml --path /admin_password)
@@ -844,7 +441,7 @@ $ credhub –-version
 CredHub에 로그인하기 위해 BOSH를 설치한 bosh-deployment 디렉터리의 creds.yml을 활용하여 로그인한다.
 
 ```
-$ cd ${HOME}/workspace/paasta-5.0/deployment/paasta-deployment/bosh
+$ cd ${HOME}/workspace/paasta/deployment/paasta-deployment/bosh
 $ export CREDHUB_CLIENT=credhub-admin
 $ export CREDHUB_SECRET=$(bosh int --path /credhub_admin_client_secret {iaas}/creds.yml)
 $ export CREDHUB_CA_CERT=$(bosh int --path /credhub_tls/ca {iaas}/creds.yml)
@@ -868,14 +465,14 @@ Jumpbox는 BOSH VM에 접근하기 위한 인증을 적용하게 된다.
 BOSH VM에 이상이 있거나 상태를 체크할 때 Jumpbox를 활용하여 BOSH VM에 접근할 수 있다.
 
 ```
-$ cd ${HOME}/workspace/paasta-5.0/deployment/paasta-deployment/bosh
+$ cd ${HOME}/workspace/paasta/deployment/paasta-deployment/bosh
 $ bosh int {iaas}/creds.yml --path /jumpbox_ssh/private_key > jumpbox.key 
 $ chmod 600 jumpbox.key
 $ ssh jumpbox@{bosh_url} -i jumpbox.key
 ```
 
 ```
-ubuntu@inception:~/workspace/paasta-5.0/deployment/paasta-deployment/bosh$ ssh jumpbox@10.0.1.6 -i jumpbox.key
+ubuntu@inception:~/workspace/paasta/deployment/paasta-deployment/bosh$ ssh jumpbox@10.0.1.6 -i jumpbox.key
 Unauthorized use is strictly prohibited. All access and activity
 is subject to logging and monitoring.
 Welcome to Ubuntu 16.04.6 LTS (GNU/Linux 4.15.0-54-generic x86_64)
