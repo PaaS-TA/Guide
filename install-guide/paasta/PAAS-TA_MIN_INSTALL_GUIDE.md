@@ -26,9 +26,8 @@
 　　2.6.3. [PaaS-TA 설치 Shell Scripts](#1023)  
 　　　●  [deploy-aws-4vms.sh](#1024)  
 　　　●  [deploy-aws-7vms.sh](#1025)  
-　2.7. [PaaS-TA 설치](#1026)  
-　2.8. [PaaS-TA 설치 - 다운로드 된 Release 파일 이용 방식](#1027)  
-　2.9. [PaaS-TA 로그인](#1028)   
+　2.7. [PaaS-TA 설치](#1026)   
+　2.8. [PaaS-TA 로그인](#1028)   
 
 ## Executive Summary
 <br>
@@ -801,21 +800,11 @@ ex) uaa_client_admin_secret="admin-secret"
 <td>요구사항</td>
 </tr>
 <tr>
-<td>operations/use-compiled-releases.yml</td>
-<td>PaaS-TA release에서 제공하는 파일로 다운로드 및 컴파일 없이 빠른 설치가 가능하다.</td>
-<td></td>
-</tr>
-<tr>
 <td>operations/min-use-postgres.yml</td>
 <td>Database를 Postgres로 설치 <br> 
     - use-postgres.yml 미적용 시 MySQL 설치  <br>
     - 3.5 이전 버전에서 Migration 시 필수  
 </td>
-<td></td>
-</tr>
-<tr>
-<td>operations/use-compiled-releases-postgres.yml</td>
-<td>PaaS-TA release에서 제공하는 파일로 다운로드 및 컴파일 없이 Postgres의 빠른 설치가 가능하다.</td>
 <td></td>
 </tr>
 <tr>
@@ -837,11 +826,6 @@ ex) uaa_client_admin_secret="admin-secret"
     -v haproxy_public_ip <br>
     -v haproxy_public_network_name
 </td>
-</tr>
-<tr>
-<td>operations/use-compiled-releases-haproxy.yml</td>
-<td>PaaS-TA release에서 제공하는 파일로 다운로드 및 컴파일 없이 HAProxy의 빠른 설치가 가능하다.</td>
-<td></td>
 </tr>
 <tr>
 <td>operations/min-use-router-public-network.yml</td>
@@ -1028,134 +1012,8 @@ Succeeded
 
 
 
-## <div id='1027'/>2.8.  PaaS-TA 설치 - 다운로드 된 Release 파일 이용 방식
 
-
-- 서비스 설치에 필요한 릴리즈 파일을 다운로드 받아 Local machine의 작업 경로로 위치시킨다.  
-  
-  - 설치 파일 다운로드 위치 : https://paas-ta.kr/download/package    
-
-```
-# 릴리즈 다운로드 파일 위치 경로 생성
-$ mkdir -p ~/workspace/paasta/release/paasta
-
-# 릴리즈 파일 다운로드 및 파일 경로 확인
-$ cd ${HOME}/workspace/paasta/release/paasta
-$ ls
-binary-buildpack-1.0.32-ubuntu-xenial-315.64-20190703-010740-177773032.tgz       loggregator-105.5-ubuntu-xenial-315.64-20190703-011056-709229397.tgz
-bosh-dns-aliases-0.0.3-ubuntu-xenial-315.64-20190703-005917-45013255.tgz         loggregator-agent-3.9-ubuntu-xenial-315.64-20190703-011227-052700948.tgz
-bpm-1.1.0-ubuntu-xenial-315.64-20190703-011218-840878281.tgz                     nats-27-ubuntu-xenial-315.64-20190703-011012-08860186.tgz
-capi-1.83.0-ubuntu-xenial-315.64-20190703-011352-736036246.tgz                   nginx-buildpack-1.0.13-ubuntu-xenial-315.64-20190703-010158-078624017.tgz
-cf-cli-1.16.0-ubuntu-xenial-315.64-20190703-010458-731652087.tgz                 nodejs-buildpack-1.6.51-ubuntu-xenial-315.64-20190703-010707-741053575.tgz
-cf-networking-2.23.0-ubuntu-xenial-315.64-20190703-011056-823948638.tgz          php-buildpack-4.3.77-ubuntu-xenial-315.64-20190703-010303-196110232.tgz
-cf-smoke-tests-40.0.112-ubuntu-xenial-315.64-20190709-042410-146373383.tgz       postgres-release-38.tgz
-cf-syslog-drain-10.2-ubuntu-xenial-315.64-20190703-011055-842044104.tgz          pxc-0.18.0-ubuntu-xenial-315.64-20190705-211325-403851041.tgz
-cflinuxfs3-0.113.0-ubuntu-xenial-315.64-20190708-232200-368636766.tgz            python-buildpack-1.6.34-ubuntu-xenial-315.64-20190703-010525-033925777.tgz
-credhub-2.4.0-ubuntu-xenial-315.64-20190703-010939-442789426.tgz                 r-buildpack-1.0.10-ubuntu-xenial-315.64-20190703-010623-140937123.tgz
-diego-2.34.0-ubuntu-xenial-315.64-20190703-011616-899984623.tgz                  routing-0.188.0-ubuntu-xenial-315.64-20190703-011414-513071207.tgz
-dotnet-core-buildpack-2.2.12-ubuntu-xenial-315.64-20190703-010337-286489233.tgz  ruby-buildpack-1.7.40-ubuntu-xenial-315.64-20190703-010707-743703201.tgz
-garden-runc-1.19.3-ubuntu-xenial-315.64-20190703-011651-220994654.tgz            silk-2.23.0-ubuntu-xenial-315.64-20190703-011145-360645247.tgz
-go-buildpack-1.8.40-ubuntu-xenial-315.64-20190703-010359-639769006.tgz           staticfile-buildpack-1.4.43-ubuntu-xenial-315.64-20190703-010525-898602366.tgz
-haproxy-boshrelease-9.6.1.tgz                                                    statsd-injector-1.10.0-ubuntu-xenial-315.64-20190703-010549-761652392.tgz
-java-buildpack-4.19.1-ubuntu-xenial-315.64-20190709-145004-482509766.tgz         syslog-release-11.4.0.tgz
-log-cache-2.2.2-ubuntu-xenial-315.64-20190703-011152-163727753.tgz               uaa-72.0-ubuntu-xenial-315.64-20190703-011111-665316203.tgz
-```
-
-- 서버 환경에 맞추어 어떤 VM 타입으로 배포할지 결정한 뒤 Deploy 스크립트 파일의 설정을 수정한다.
-
-
-> $ vi ${HOME}/workspace/paasta/deployment/paasta-deployment/paasta/deploy-aws-4vm.sh
-
-```
-bosh -e micro-bosh bosh -d paasta -n deploy min-paasta-deployment.yml \	# PaaS-TA Manifest File
-		-o operations/min-aws.yml \				# AWS 설정
-		-o operations/min-use-router-public-network.yml \	# Router 외부 접근 설정
-		-o operations/min-use-postgres.yml \			# Database Type 설정 (3.5버전 이하에서 Migration 시 필수)
-		-o operations/min-rename-network-and-deployment.yml \	# Rename Network and Deployment
-		-o operations/use-compiled-releases.yml \		# PaaS-TA 설치시 공통 릴리즈 파일 Local 정보
-		-o operations/use-compiled-releases-haproxy.yml \	# PaaS-TA 설치시 HAProxy 릴리즈 파일 Local 정보
-		-o operations/use-compiled-releases-postgres.yml \	# PaaS-TA 설치시 Postgres 릴리즈 파일 Local 정보
-		-l aws-vars.yml \					# AWS 환경에 PaaS-TA 설치시 적용하는 변숫값 설정 파일
-		-l ../../common/common_vars.yml				# PaaS-TA 및 각종 Service 설치시 적용하는 공통 변수 설정 파일
-```
-
-> $ vi ${HOME}/workspace/paasta/deployment/paasta-deployment/paasta/deploy-aws-7vm.sh
-
-```
-bosh -e micro-bosh -d paasta -n deploy min-paasta-deployment.yml \	# PaaS-TA Manifest File
-		-o operations/min-aws.yml \				# AWS 설정
-		-o operations/min-create-vm-singleton-blobstore.yml \	# singleton-blobstore VM 배포
-		-o operations/min-create-vm-tcp-router.yml \		# tcp-router 
-		-o operations/min-use-haproxy.yml \			# HAProxy 적용
-		-o operations/use-haproxy-public-network.yml \		# HAProxy Public Network 적용
-		-o operations/min-use-postgres.yml \			# Database Type 설정 (3.5버전 이하에서 Migration 시 필수)
-		-o operations/min-rename-network-and-deployment.yml \	# Rename Network and Deployment
-		-o operations/min-option-network-and-deployment.yml \	# singleton-blobstore Rename Network and Deployment
-		-o operations/use-compiled-releases.yml \		# PaaS-TA 설치시 공통 릴리즈 파일 Local 정보
-		-o operations/use-compiled-releases-haproxy.yml \	# PaaS-TA 설치시 HAProxy 릴리즈 파일 Local 정보
-		-o operations/use-compiled-releases-postgres.yml \	# PaaS-TA 설치시 Postgres 릴리즈 파일 Local 정보
-		-l aws-vars.yml \					# AWS 환경에 PaaS-TA 설치시 적용하는 변숫값 설정 파일
-		-l ../../common/common_vars.yml				# PaaS-TA 및 각종 Service 설치시 적용하는 공통 변수 설정 파일
-```
-- PaaS-TA 설치 Shell Script 파일 실행 (BOSH 로그인 필요)
-
-```
-$ cd ${HOME}/workspace/paasta/deployment/paasta-deployment/paasta
-$ ./deploy-{IaaS}-{VMs_Number}.sh
-```
-
-- PaaS-TA 설치 확인
-
-> $ bosh -e {director_name} vms -d paasta
-
-```
-ubuntu@inception:~$ bosh -e micro-bosh vms -d paasta
-Using environment '10.0.1.6' as client 'admin'
-
-Task 134. Done
-
-Deployment 'paasta'
-
-Instance                                       Process State  AZ  IPs          VM CID               VM Type             Active
-compute/e154dcdc-a2c1-4a85-86b7-607a02a30acf   running        z1  10.0.31.235  i-0f92f55575bf2567e  small-highmem-16GB  true
-control/a18f5e97-098c-47ab-9147-77f594571bd6   running        z1  10.0.31.234  i-053cd8f71d99f1a15  small-highmem-16GB  true
-database/7ea28d82-5d5b-471f-bde6-a65d4809062e  running        z1  10.0.31.233  i-0b2e54deaf0734f59  small               true
-router/c01b1aa4-43c9-42f6-9003-cf8f8664d142    running        z7  10.0.30.204  i-0a449def3351877b3  minimal             true
-                                                                  54.180.53.80                                                     
-
-4 vms
-
-Succeeded
-```
-
-```
-ubuntu@inception:~$ bosh -e micro-bosh vms -d paasta
-Using environment '10.0.1.6' as client 'admin'
-
-Task 134. Done
-
-Deployment 'paasta'
-
-Instance                                                  Process State  AZ  IPs             VM CID               VM Type             Active  
-compute/c3f53aed-469f-47ab-aa9b-94be30ca3687              running        z1  10.0.21.156     i-0617a496567bd859e  small-highmem-16GB  true  
-control/acd880a6-b309-452e-b996-0ef4252f8dd3              running        z1  10.0.21.153     i-0d9fbf3f662dec9a0  small-highmem-16GB  true  
-database/c92fd45f-1165-4d71-8df4-9b4270abdd0a             running        z1  10.0.21.151     i-0ead4f61c9be951b9  small               true  
-haproxy/5ccc73dd-cf7e-4f4c-a204-1e933eddfcf8              running        z7  10.0.20.151     i-02e5277d6fd829f34  minimal             true  
-                                                                             54.180.53.80                                             
-router/4f58af5a-529c-41f7-866c-e2327978ea99               running        z1  10.0.21.154     i-0b5f2d42d2c2b9d06  minimal             true  
-singleton-blobstore/5ed376fe-1d84-45c8-a6e8-f938b7320a36  running        z1  10.0.21.152     i-08a432269ffb76663  small               true  
-tcp-router/f8fe5974-8340-4d16-ae02-0b7150828388           running        z1  10.0.21.155     i-04a845c8e7fc7cfb4  minimal             true  
-                                  
-
-7 vms
-
-Succeeded
-```
-
-
-
-
-## <div id='1028'/>2.9.  PaaS-TA 로그인 
+## <div id='1028'/>2.8.  PaaS-TA 로그인 
 
 CF CLI를 설치하고 PaaS-TA에 로그인한다.
 CF API는 PaaS-TA 배포 시 지정했던 System Domain 명을 사용한다.
