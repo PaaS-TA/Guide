@@ -874,8 +874,7 @@ PaaS-TA VM 중 singleton-blobstore, database의 AZs(zone)을 변경하면 조직
 
 PaaS-TA 5.0.2-min는 현재 AWS 환경에서만 지원한다.
 
-<b>※ PaaS-TA 설치 시 명령어는 deploy로 시작한다.</b><br>
-BOSH 명령어로 설치가 가능하며, IaaS 환경에 따라 Option이 달라진다.
+<b>※ PaaS-TA 설치 시 명령어는 BOSH deploy를 사용한다. (IaaS 환경에 따라 Option이 다름)</b><br>
 
 PaaS-TA 배포 BOSH 명령어 예시
 
