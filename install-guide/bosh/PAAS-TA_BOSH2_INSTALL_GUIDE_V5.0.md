@@ -55,7 +55,7 @@ Cloud Foundry Document: [https://docs.cloudfoundry.org](https://docs.cloudfoundr
 BOSH는 초기에 Cloud Foundry PaaS를 위해 개발되었지만, 현재는 Jenkins, Hadoop 등 Yaml 파일 형식으로 소프트웨어를 쉽게 배포할 수 있으며, 수백 가지의 VM을 설치할 수 있고, 각각의 VM에 대해 모니터링, 장애 복구 등 라이프 사이클을 관리할 수 있는 통합 프로젝트이다.
 
 BOSH가 지원하는 IaaS는 VMware vSphere, Google Cloud Platform, Amazon Web Services EC2, Microsoft Azure, OpenStack, Alibaba Cloud가 있다.  
-PaaS-TA는 VMware vSphere, Google Cloud Platform, Amazon Web Services EC2, OpenStack, Microsoft Azure 등의 IaaS를 지원한다.
+PaaS-TA는 VMware vSphere, Google Cloud Platform, Amazon Web Services EC2, OpenStack, Microsoft Azure 등의 IaaS를 지원한다.  
 현재 PaaS-TA 5.0.2에서 검증한 IaaS 환경은 AWS 환경이다.
 
 PaaS-TA 3.1 버전까지는 Cloud Foundry BOSH1을 기준으로 설치했지만, PaaS-TA 3.5 버전부터 BOSH2를 기준으로 설치하였다.  
