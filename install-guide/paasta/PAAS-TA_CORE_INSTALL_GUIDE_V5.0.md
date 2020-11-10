@@ -445,7 +445,7 @@ PaaS-TA를 설치하는 환경에 따라 다르게 설정해도 된다.
 
 ### <div id='1012'/>● VM Types
 
-VM Type은 IaaS에서 정의된 VM Type이다. 
+VM Type은 IaaS에서 정의된 VM Type이다.  
 ※ 다음은 AWS에서 정의한 Instance Type이다.
 ![PaaSTa_FLAVOR_Image]
 
