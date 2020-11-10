@@ -59,7 +59,7 @@ PaaS-TA는 VMware vSphere, Google Cloud Platform, Amazon Web Services EC2, OpenS
 현재 PaaS-TA 5.0.2에서 검증한 IaaS 환경은 AWS 환경이다.
 
 PaaS-TA 3.1 버전까지는 Cloud Foundry BOSH1을 기준으로 설치했지만, PaaS-TA 3.5 버전부터 BOSH2를 기준으로 설치하였다.  
-PaaS-TA 5.0은 Cloud Foundry에서 제공하는 bosh-deployment를 활용하여 BOSH를 설치한다.
+PaaS-TA 5.0.2는 Cloud Foundry에서 제공하는 bosh-deployment를 활용하여 BOSH를 설치한다.
 
 BOSH2는 BOSH2 CLI를 통하여 BOSH와 PaaS-TA를 모두 생성한다.  
 bosh-deployment를 이용하여 BOSH를 생성한 후, paasta-deployment로 PaaS-TA를 설치한다.  
