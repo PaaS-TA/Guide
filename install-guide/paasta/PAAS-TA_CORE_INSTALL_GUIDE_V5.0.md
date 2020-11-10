@@ -47,7 +47,7 @@
 본 문서는 cf-deployment v9.5.0을 기준으로 작성되었다.  
 PaaS-TA은 bosh-deployment를 기반으로 한 BOSH 환경에서 설치한다.  
 PaaS-TA 설치 시 필요한 Stemcell은 기존 ubuntu-xenial-315.36에서 ubuntu-xenial-315.64로 변경되었다.  
-PaaS-TA는 VMware vSphere, Google Cloud Platform, Amazon Web Services EC2, OpenStack, Microsoft Azure 등의 IaaS를 지원한다.
+PaaS-TA는 VMware vSphere, Google Cloud Platform, Amazon Web Services EC2, OpenStack, Microsoft Azure 등의 IaaS를 지원한다.  
 현재 PaaS-TA 5.0.2에서 검증한 IaaS 환경은 AWS 환경이다.
 
 ## <div id='104'/>● 참고 자료
