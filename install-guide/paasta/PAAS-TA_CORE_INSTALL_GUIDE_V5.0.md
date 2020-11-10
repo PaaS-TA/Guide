@@ -797,7 +797,7 @@ ex) uaa_client_admin_secret="admin-secret"
 </tr>
 <tr>
 <td>operations/use-compiled-releases.yml</td>
-<td>PaaS-TA release에서 제공하는 파일로 다운로드 및 컴파일 없이 빠른 설치가 가능하다.</td>
+<td>인터넷이 연결된 환경에서 컴파일 없이 빠른 설치가 가능하다.</td>
 <td></td>
 </tr>
 <tr>
@@ -806,11 +806,6 @@ ex) uaa_client_admin_secret="admin-secret"
     - use-postgres.yml 미적용 시 MySQL 설치  <br>
     - 3.5 이전 버전에서 Migration 시 필수  
 </td>
-<td></td>
-</tr>
-<tr>
-<td>operations/use-compiled-releases-postgres.yml</td>
-<td>PaaS-TA release에서 제공하는 파일로 다운로드 및 컴파일 없이 Postgres의 빠른 설치가 가능하다.</td>
 <td></td>
 </tr>
 <tr>
@@ -845,12 +840,6 @@ ex) uaa_client_admin_secret="admin-secret"
     -v haproxy_private_network_name
 </td>
 </tr>
-<tr>
-<td>operations/use-compiled-releases-haproxy.yml</td>
-<td>PaaS-TA release에서 제공하는 파일로 다운로드 및 컴파일 없이 HAProxy의 빠른 설치가 가능하다.</td>
-<td></td>
-</tr>
-
 </table>
 
 
