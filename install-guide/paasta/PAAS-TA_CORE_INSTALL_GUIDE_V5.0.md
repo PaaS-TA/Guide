@@ -425,7 +425,7 @@ vm_types:
 - Cloud Config 업데이트
 
 ```
-$ bosh –e {director_name} update-cloud-config ${HOME}/workspace/paasta-5.0/deployment/paasta-deployment/cloud-config/{iaas}-cloud-config.yml
+$ bosh –e {director_name} update-cloud-config ${HOME}/workspace/paasta/deployment/paasta-deployment/cloud-config/{iaas}-cloud-config.yml
 ```
 
 - Cloud Config 확인
