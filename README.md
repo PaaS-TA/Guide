@@ -8,7 +8,8 @@
     - ~~[플랫폼 설치 자동화 사용 메뉴얼](./use-guide/platform/PAAS-TA_PLATFORM_INSTALL_AUTOMATION_USE_MANUAL_v1.0.md)~~
   - PaaS-TA 플랫폼 수동 설치
     - [BOSH 설치(AWS, OpenStack, VMWare vSphere, GCP, MS Azure)](./install-guide/bosh/PAAS-TA_BOSH2_INSTALL_GUIDE_V5.0.md)
-    - [PaaS-TA 수동 설치(AWS, OpenStack, VMWare vSphere, GCP, MS Azure)](./install-guide/paasta/PAAS-TA_CORE_INSTALL_GUIDE_V5.0.md)
+    - [PaaS-TA 설치(AWS, OpenStack, VMWare vSphere, GCP, MS Azure)](./install-guide/paasta/PAAS-TA_CORE_INSTALL_GUIDE_V5.0.md)
+    - [PaaS-TA-min 설치(AWS)](./install-guide/paasta/PAAS-TA_MIN_INSTALL_GUIDE.md)
     - ~~[BOSH 및 PaaS-TA 설치(CLOUDit)](./use-guide/platform/PAAS-TA_PLATFORM_INSTALL_AUTOMATION_CLOUDIT_v1.0.md)~~
     - ~~[PaaS-TA 포털 수동 설치(CLOUDit)](./use-guide/platform/PAAS-TA_PLATFORM_INSTALL_AUTOMATION_CLOUDIT_PORTAL_v1.0.md)~~
 
