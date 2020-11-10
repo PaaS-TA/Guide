@@ -10,9 +10,9 @@
 
 # Deprecated
 
-## Executive Summary
-
 <b>※ 본 문서는 PaaS-TA 5.0.1 이하의 버전까지 지원한다.</b>
+
+## Executive Summary
 
 본 문서에서는 Inception VM Linux 환경(Ubuntu 16.04)을 기준으로 플랫폼 설치 자동화를 사용하는 방법에 대해 작성되었다.
 
