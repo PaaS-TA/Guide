@@ -1203,7 +1203,7 @@ Select an org (or press enter to skip):
 
 [PaaSTa_BOSH_Use_Guide_Image1]:https://github.com/PaaS-TA/Guide-5.0-Ravioli/blob/master/install-guide/paasta/images/bosh1.png?raw=true
 [PaaSTa_BOSH_Use_Guide_Image2]:https://github.com/PaaS-TA/Guide-5.0-Ravioli/blob/master/install-guide/paasta/images/bosh2.png?raw=true
-[PaaSTa_FLAVOR_Image]:https://github.com/PaaS-TA/Guide-5.0-Ravioli/blob/master/install-guide/paasta/images/flavor.png?raw=true
+[PaaSTa_FLAVOR_Image]:./images/aws-vmtype.PNG
 [PaaSTa_UAA_LOGIN_Image]:https://github.com/PaaS-TA/Guide-5.0-Ravioli/blob/master/install-guide/paasta/images/uaa-login.png?raw=true
 [PaaSTa_UAA_LOGIN_Image2]:https://raw.githubusercontent.com/PaaS-TA/Guide-5.0-Ravioli/master/install-guide/paasta/images/uaa-login-2.png
 [PaaSTa_VALUE_Image]:https://github.com/PaaS-TA/Guide-5.0-Ravioli/blob/master/install-guide/paasta/images/paasta-value.png?raw=true
