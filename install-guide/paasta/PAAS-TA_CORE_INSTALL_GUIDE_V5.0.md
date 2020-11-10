@@ -70,7 +70,7 @@ PaaS-TA 3.1 버전까지는 PaaS-TA Container, Controller를 각각의 deploymen
 
 ![PaaSTa_BOSH_Use_Guide_Image2]  
 
-# <div id='106'/>3. PaaS-TA 5.0 설치
+# <div id='106'/>3. PaaS-TA 5.0.2 설치
 
 ## <div id='107'/>3.1. Prerequisite
 
@@ -81,18 +81,18 @@ PaaS-TA 3.1 버전까지는 PaaS-TA Container, Controller를 각각의 deploymen
 ## <div id='108'/>3.2. 설치 파일 다운로드
 - PaaS-TA를 설치하기 위한 deployment가 존재하지 않는다면 다운로드 받는다
 ```
-$ cd ${HOME}/workspace/paasta-5.0/deployment
+$ cd ${HOME}/workspace/paasta/deployment
 $ git clone https://github.com/PaaS-TA/common.git –b v5.0.2  
 $ git clone https://github.com/PaaS-TA/paasta-deployment.git –b v5.0.2 
 ```
 
 ## <div id='109'/>3.3. Stemcell 업로드
 VM을 배포할 때 사용되는 Stemcell을 BOSH에 업로드할 경우 로컬 파일과 URL을 직접 입력하여 업로드, 두가지 방법을 사용할 수 있다.  
-로컬 파일을 사용할 경우 PaaS-TA 사이트에서 [PaaS-TA Stemcell](https://paas-ta.kr/download/package) 파일을 내려받아 ${HOME}/workspace/paasta-5.0/stemcell 이하 디렉터리에 압축을 푼다.  
-압축을 풀면 아래와 같이 ${HOME}/workspace/paasta-5.0/stemcell/paasta 디렉터리가 생성되며 릴리즈 파일(tgz)이 존재한다.
+로컬 파일을 사용할 경우 PaaS-TA 사이트에서 [PaaS-TA Stemcell](https://paas-ta.kr/download/package) 파일을 내려받아 ${HOME}/workspace/paasta/stemcell 이하 디렉터리에 압축을 푼다.  
+압축을 풀면 아래와 같이 ${HOME}/workspace/paasta/stemcell/paasta 디렉터리가 생성되며 릴리즈 파일(tgz)이 존재한다.
 
 ```
-$ cd ${HOME}/workspace/paasta-5.0/stemcell/paasta
+$ cd ${HOME}/workspace/paasta/stemcell/paasta
 $ ls
 bosh-stemcell-315.64-alicloud-kvm-ubuntu-xenial-go_agent.tgz  bosh-stemcell-315.64-google-kvm-ubuntu-xenial-go_agent.tgz     bosh-stemcell-315.64-vsphere-esxi-ubuntu-xenial-go_agent.tgz
 bosh-stemcell-315.64-aws-xen-hvm-ubuntu-xenial-go_agent.tgz   bosh-stemcell-315.64-openstack-kvm-ubuntu-xenial-go_agent.tgz  bosh-stemcell-315.64-warden-boshlite-ubuntu-xenial-go_agent.tgz
@@ -108,153 +108,53 @@ BOSH 로그인 후 다음 명령어를 수행하여 Stemcell을 올린다.
 
 ```
 (로컬파일)
-$ bosh -e {director_name} upload-stemcell ${HOME}/workspace/paasta-5.0/stemcell/paasta/bosh-stemcell-315.64-aws-xen-hvm-ubuntu-xenial-go_agent.tgz
+$ bosh -e {director_name} upload-stemcell ${HOME}/workspace/paasta/stemcell/paasta/bosh-stemcell-315.64-aws-xen-hvm-ubuntu-xenial-go_agent.tgz
 
 (URL)
 $ bosh -e {director_name} upload-stemcell https://s3.amazonaws.com/bosh-core-stemcells/315.64/bosh-stemcell-315.64-aws-xen-hvm-ubuntu-xenial-go_agent.tgz
 ```
 
-- MS Azure
-
-```
-(로컬파일)
-$ bosh -e {director_name} upload-stemcell ${HOME}/workspace/paasta-5.0/stemcell/paasta/bosh-stemcell-315.64-azure-hyperv-ubuntu-xenial-go_agent.tgz
-
-(URL)
-$ bosh -e {director_name} upload-stemcell https://bosh-core-stemcells.s3-accelerate.amazonaws.com/315.64/bosh-stemcell-315.64-azure-hyperv-ubuntu-xenial-go_agent.tgz
-```
-
-- Google Cloud Platform
-
-```
-(로컬파일)
-$ bosh -e {director_name} upload-stemcell ${HOME}/workspace/paasta-5.0/stemcell/paasta/bosh-stemcell-315.64-google-kvm-ubuntu-xenial-go_agent.tgz
-
-(URL)
-$ bosh -e {director_name} upload-stemcell https://bosh-core-stemcells.s3-accelerate.amazonaws.com/315.64/bosh-stemcell-315.64-google-kvm-ubuntu-xenial-go_agent.tgz
-```
-
-- OpenStack
-
-```
-(로컬파일)
-$ bosh -e {director_name} upload-stemcell ${HOME}/workspace/paasta-5.0/stemcell/paasta/bosh-stemcell-315.64-openstack-kvm-ubuntu-xenial-go_agent.tgz
-
-(URL)
-$ bosh -e {director_name} upload-stemcell https://s3.amazonaws.com/bosh-core-stemcells/315.64/bosh-stemcell-315.64-openstack-kvm-ubuntu-xenial-go_agent.tgz
-```
-
-- VMware vSphere
-
-```
-(로컬파일)
-$ bosh -e {director_name} upload-stemcell ${HOME}/workspace/paasta-5.0/stemcell/paasta/bosh-stemcell-315.64-vsphere-esxi-ubuntu-xenial-go_agent.tgz
-
-(URL)
-$ bosh -e {director_name} upload-stemcell https://s3.amazonaws.com/bosh-core-stemcells/315.64/bosh-stemcell-315.64-vsphere-esxi-ubuntu-xenial-go_agent.tgz
-```
-
-- BOSH-LITE
-
-```
-(로컬파일)
-$ bosh -e {director_name} upload-stemcell ${HOME}/workspace/paasta-5.0/stemcell/paasta/bosh-stemcell-315.64-warden-boshlite-ubuntu-xenial-go_agent.tgz
-
-(URL)
-$ bosh -e {director_name} upload-stemcell https://s3.amazonaws.com/bosh-core-stemcells/315.64/bosh-stemcell-315.64-warden-boshlite-ubuntu-xenial-go_agent.tgz
-```
-
 ## <div id='1010'/>3.4. Cloud Config 설정
 
 PaaS-TA를 설치하기 위한 IaaS 관련 Network, Storage, VM 관련 설정을 Cloud Config로 정의한다.  
-PaaS-TA 설치 파일을 내려받으면 ${HOME}/workspace/paasta-5.0/deployment/paasta-deployment/cloud-config 디렉터리 이하에 IaaS별 Cloud Config 예제를 확인할 수 있으며, 예제를 참고하여 cloud-config.yml을 IaaS에 맞게 수정한다.  
+PaaS-TA 설치 파일을 내려받으면 ${HOME}/workspace/paasta/deployment/paasta-deployment/cloud-config 디렉터리 이하에 IaaS별 Cloud Config 예제를 확인할 수 있으며, 예제를 참고하여 cloud-config.yml을 IaaS에 맞게 수정한다.  
 PaaS-TA 배포 전에 Cloud Config를 BOSH에 적용해야 한다. 
 
-- OpenStack을 기준으로 한 cloud-config.yml 예제
+- AWS을 기준으로 한 cloud-config.yml 예제
 
 ```
 ## azs :: 가용 영역(Availability Zone)을 정의한다.
 azs:
-- name: z1
-  cloud_properties:
-    availability_zone: zone1
-- name: z2
-  cloud_properties:
-    availability_zone: zone2
-- name: z3
-  cloud_properties:
-    availability_zone: zone3
-- name: z4
-  cloud_properties:
-    availability_zone: zone1
-- name: z5
-  cloud_properties:
-    availability_zone: zone2
-- name: z6
-  cloud_properties:
-    availability_zone: zone3
-
-## vm_type :: 가상머신 유형(VM Type)을 정의한다. (OpenStack의 경우, Flavor 설정)
-vm_types:
-- name: minimal
-  cloud_properties:
-    instance_type: m1.tiny
-- name: default 
-  cloud_properties:
-    instance_type: m1.medium
-- name: small
-  cloud_properties:
-    instance_type: m1.small
-- name: medium
-  cloud_properties:
-    instance_type: m1.medium
-- name: medium-memory-8GB
-  cloud_properties:
-    instance_type: m1.medium
-- name: large
-  cloud_properties:
-    instance_type: m1.large
-- name: xlarge
-  cloud_properties:
-    instance_type: m1.xlarge
-- name: small-50GB
-  cloud_properties:
-    instance_type: m1.medium
-- name: small-50GB-ephemeral-disk 
-  cloud_properties:
-    instance_type: m1.medium
-- name: small-100GB-ephemeral-disk
-  cloud_properties:
-    instance_type: m1.large
-- name: small-highmem-100GB-ephemeral-disk 
-  cloud_properties:
-    instance_type: m1.large
-- name: small-highmem-16GB
-  cloud_properties:
-    instance_type: m1.large
-- name: service_medium
-  cloud_properties:
-    instance_type: m1.medium
-- name: service_medium_2G
-  cloud_properties:
-    instance_type: m1.medium
-- name: portal_small
-  cloud_properties:
-    instance_type: m1.tiny
-- name: portal_medium
-  cloud_properties:
-    instance_type: m1.small
-- name: portal_large
-  cloud_properties:
-    instance_type: m1.small
+- cloud_properties:
+    availability_zone: ap-northeast-2a
+  name: z1
+- cloud_properties:
+    availability_zone: ap-northeast-2a
+  name: z2
+- cloud_properties:
+    availability_zone: ap-northeast-2a
+  name: z3
+- cloud_properties:
+    availability_zone: ap-northeast-2a
+  name: z4
+- cloud_properties:
+    availability_zone: ap-northeast-2a
+  name: z5
+- cloud_properties:
+    availability_zone: ap-northeast-2a
+  name: z6
+- cloud_properties:
+    availability_zone: ap-northeast-2a
+  name: z7
 
 ## compilation :: 컴파일 가상머신이 생성될 가용 영역 및 가상머신 유형 등을 정의한다.
 compilation:
-  az: z3
+  az: z4
   network: default
   reuse_compilation_vms: true
-  vm_type: large
+  vm_type: xlarge
   workers: 5
+
 
 ## disk_types :: 디스크 유형(Disk Type, Persistent Disk)을 정의한다.
 disk_types:
@@ -264,8 +164,6 @@ disk_types:
   name: 1GB
 - disk_size: 2048
   name: 2GB
-- disk_size: 4096
-  name: 4GB
 - disk_size: 5120
   name: 5GB
 - disk_size: 8192
@@ -280,24 +178,23 @@ disk_types:
   name: 50GB
 - disk_size: 102400
   name: 100GB
-- disk_size: 1048576
-  name: 1TB
-
+- disk_size: 512000
+  name: 500GB
 - cloud_properties:
-    type: SSD1 
-  disk_size: 2000
+    type: gp2
+  disk_size: 20000
   name: 2GB_GP2
 - cloud_properties:
-    type: SSD1 
-  disk_size: 5000
+    type: gp2
+  disk_size: 50000
   name: 5GB_GP2
 - cloud_properties:
-    type: SSD1 
-  disk_size: 10000
+    type: gp2
+  disk_size: 100000
   name: 10GB_GP2
 - cloud_properties:
-    type: SSD1 
-  disk_size: 50000
+    type: gp2
+  disk_size: 500000
   name: 50GB_GP2
 
 ## networks :: 네트워크(Network)를 정의한다. (OpenStack의 경우, Subnet 및 Security Group, DNS, Gateway 설정)
@@ -306,119 +203,230 @@ networks:
   subnets:
   - az: z1
     cloud_properties:
-      name: random
-      net_id: 51b96a68-aded-4e73-aa44-f44a812b9b30
-      security_groups:
-      - openpaas
+      security_groups: paasta-v50-security
+      subnet: subnet-XXXXXXXXXXXXXXXXX
     dns:
     - 8.8.8.8
-    gateway: 10.20.10.1
-    range: 10.20.10.0/24
+    gateway: 10.0.1.1
+    range: 10.0.1.0/24
     reserved:
-    - 10.20.10.2 - 10.20.10.10
+    - 10.0.1.2 - 10.0.1.9
     static:
-    - 10.20.10.11 - 10.20.10.30
+    - 10.0.1.10 - 10.0.1.120
   - az: z2
     cloud_properties:
-      name: random
-      net_id: 51b96a68-aded-4e73-aa44-f44a812b9b30
-      security_groups:
-      - openpaas
+      security_groups: paasta-v50-security
+      subnet: subnet-XXXXXXXXXXXXXXXXX
     dns:
     - 8.8.8.8
-    gateway: 10.20.20.1
-    range: 10.20.20.0/24
+    gateway: 10.1.41.1
+    range: 10.1.41.0/24
     reserved:
-    - 10.20.20.2 - 10.20.20.10
+    - 10.1.41.1 - 10.1.41.9
     static:
-    - 10.20.20.11 - 10.20.20.30
+    - 10.1.41.10 - 10.1.41.120
   - az: z3
     cloud_properties:
-      name: random
-      net_id: 51b96a68-aded-4e73-aa44-f44a812b9b30
-      security_groups:
-      - openpaas
+      security_groups: paasta-v50-security
+      subnet: subnet-XXXXXXXXXXXXXXXXX
     dns:
     - 8.8.8.8
-    gateway: 10.20.30.1
-    range: 10.20.30.0/24
+    gateway: 10.2.81.1
+    range: 10.2.81.0/24
     reserved:
-    - 10.20.30.2 - 10.20.30.10
+    - 10.2.81.1 - 10.2.81.9
     static:
-    - 10.20.30.11 - 10.20.30.30
+    - 10.2.81.10 - 10.2.81.120
   - az: z4
     cloud_properties:
-      name: random
-      net_id: 51b96a68-aded-4e73-aa44-f44a812b9b30
-      security_groups:
-      - openpaas
+      security_groups: paasta-v50-security
+      subnet: subnet-XXXXXXXXXXXXXXXXX
     dns:
     - 8.8.8.8
-    gateway: 10.20.40.1
-    range: 10.20.40.0/24
+    gateway: 10.3.121.1
+    range: 10.3.121.0/24
     reserved:
-    - 10.20.40.2 - 10.20.40.10
+    - 10.3.121.1 - 10.3.121.9
     static:
-    - 10.20.40.11 - 10.20.40.30
-  
-- name: vip 
-  type: vip
-
-- name: service_private
-  subnets:
+    - 10.3.121.10 - 10.3.121.120
   - az: z5
     cloud_properties:
-      name: random
-      net_id: 51b96a68-aded-4e73-aa44-f44a812b9b30
-      security_groups:
-      - openpaas
+      security_groups: paasta-v50-security
+      subnet: subnet-XXXXXXXXXXXXXXXXX
     dns:
     - 8.8.8.8
-    gateway: 10.20.50.1
-    range: 10.20.50.0/24
+    gateway: 10.4.161.1
+    range: 10.4.161.0/24
     reserved:
-    - 10.20.50.2 - 10.20.50.10
+    - 10.4.161.1 - 10.4.161.9
     static:
-    - 10.20.50.11 - 10.20.50.30
+    - 10.4.161.10 - 10.4.161.120
   - az: z6
     cloud_properties:
-      name: random
-      net_id: 51b96a68-aded-4e73-aa44-f44a812b9b30
-      security_groups:
-      - openpaas
+      security_groups: paasta-v50-security
+      subnet: subnet-XXXXXXXXXXXXXXXXX
     dns:
     - 8.8.8.8
-    gateway: 10.20.60.1
-    range: 10.20.60.0/24
+    gateway: 10.5.201.1
+    range: 10.5.201.0/24
     reserved:
-    - 10.20.60.2 - 10.20.60.10
+    - 10.5.201.1 - 10.5.201.9
     static:
-    - 10.20.60.11 - 10.20.60.30
+    - 10.5.201.10 - 10.5.201.120
+  - az: z7
+    cloud_properties:
+      security_groups: paasta-v50-security
+      subnet: subnet-XXXXXXXXXXXXXXXXX
+    dns:
+    - 8.8.8.8
+    gateway: 10.6.0.1
+    range: 10.6.0.0/24
+    reserved:
+    - 10.6.0.1 - 10.6.0.9
+    static:
+    - 10.6.0.10 - 10.6.0.120
+  type: manual
 
 - name: vip
   type: vip
 
+properties:
+  aws:
+    access_key_id: 'XXXXXXXXXXXXXXXXXXX'
+    default_key_name: aws-paasta-rnd-v50-inception.pem
+    default_security_groups:
+    - paasta-v50-security
+    region: ap-northeast-2
+    secret_access_key: 'XXXXXXXXXXXXXXXXXXXXXX'
+
 ## vm_extentions :: 임의의 특정 IaaS 구성을 지정하는 가상머신 구성을 정의한다. (Security Groups 및 Load Balancers 등)
 vm_extensions:
-- cloud_properties:
-    ports:
-    - host: 3306
-  name: mysql-proxy-lb
 - name: cf-router-network-properties
 - name: cf-tcp-router-network-properties
 - name: diego-ssh-proxy-network-properties
-- name: cf-haproxy-network-properties 
+- name: cf-haproxy-network-properties
 - cloud_properties:
     ephemeral_disk:
       size: 51200
       type: gp2
-  name: small-50GB 
+  name: 50GB_ephemeral_disk
 - cloud_properties:
     ephemeral_disk:
       size: 102400
       type: gp2
-  name: small-highmem-100GB 
+  name: 100GB_ephemeral_disk
 
+
+## vm_type :: 가상머신 유형(VM Type)을 정의한다. (OpenStack의 경우, Flavor 설정)
+vm_types:
+- cloud_properties:
+    ephemeral_disk:
+      size: 3000
+      type: gp2
+    instance_type: t2.small
+  name: minimal
+- cloud_properties:
+    ephemeral_disk:
+      size: 10000
+      type: gp2
+    instance_type: t2.small
+  name: small
+- cloud_properties:
+    ephemeral_disk:
+      size: 50000
+      type: gp2
+    instance_type: t2.medium
+  name: medium
+- cloud_properties:
+    ephemeral_disk:
+      size: 50000
+      type: gp2
+    instance_type: t2.large
+  name: large
+- cloud_properties:
+    ephemeral_disk:
+      size: 50000
+      type: gp2
+    instance_type: t2.xlarge
+  name: xlarge
+- cloud_properties:
+    ephemeral_disk:
+      size: 30000
+      type: gp2
+    instance_type: t2.xlarge
+  name: small-highmem-16GB
+- cloud_properties:
+    ephemeral_disk:
+      size: 30000
+      type: gp2
+    instance_type: t2.2xlarge
+  name: large-highmem-32GB
+- cloud_properties:
+    ephemeral_disk:
+      size: 3000
+      type: gp2
+    instance_type: t2.small
+  name: service_tiny
+- cloud_properties:
+    ephemeral_disk:
+      size: 3000
+      type: gp2
+    instance_type: t2.small
+  name: service_small
+- cloud_properties:
+    ephemeral_disk:
+      size: 10000
+      type: gp2
+    instance_type: t2.small
+  name: service_medium_1CPU_2G
+- cloud_properties:
+    ephemeral_disk:
+      size: 8000
+      type: gp2
+    instance_type: t2.medium
+  name: service_medium
+- cloud_properties:
+    ephemeral_disk:
+      size: 10000
+      type: gp2
+    instance_type: t2.medium
+  name: service_medium_2G
+- cloud_properties:
+    ephemeral_disk:
+      size: 3000
+      type: gp2
+    instance_type: t2.small
+  name: portal_tiny
+- cloud_properties:
+    ephemeral_disk:
+      size: 3000
+      type: gp2
+    instance_type: t2.small
+  name: portal_small
+- cloud_properties:
+    ephemeral_disk:
+      size: 4096
+      type: gp2
+    instance_type: t2.small
+  name: portal_medium
+- cloud_properties:
+    ephemeral_disk:
+      size: 4096
+      type: gp2
+    instance_type: t2.small
+  name: portal_large
+- cloud_properties:
+    ephemeral_dist:
+      size: 4096
+      type: gp2
+    instance_type: t2.small
+  name: caas_small
+- cloud_properties:
+    ephemeral_dist:
+      size: 30000
+      type: gp2
+    instance_type: m4.xlarge
+  name: caas_small_highmem
 ```
 
 - Cloud Config 업데이트
@@ -469,7 +477,7 @@ Networks는 AZ 별 Subnet Network, DNS, Security Groups, Network ID를 정의한
   - Runtime Config 업데이트  
 
   ```  
-  $ cd ${HOME}/workspace/paasta-5.0/deployment/paasta-deployment/bosh
+  $ cd ${HOME}/workspace/paasta/deployment/paasta-deployment/bosh
   $ bosh -e {director_name} update-runtime-config -n runtime-configs/dns.yml
   ```  
 
@@ -484,7 +492,7 @@ Networks는 AZ 별 Subnet Network, DNS, Security Groups, Network ID를 정의한
 
   - Runtime Config 업데이트  
   ```  
-  $ cd ${HOME}/workspace/paasta-5.0/deployment/paasta-deployment/bosh
+  $ cd ${HOME}/workspace/paasta/deployment/paasta-deployment/bosh
   $ bosh -e {director_name} update-runtime-config -n --name=os-conf runtime-configs/os-conf.yml
   ```  
   - Runtime Config 확인  
@@ -494,7 +502,7 @@ Networks는 AZ 별 Subnet Network, DNS, Security Groups, Network ID를 정의한
 
 ## <div id='1017'/>3.6.  PaaS-TA 환경 설정
 
-${HOME}/workspace/paasta-5.0/deployment/paasta-deployment 이하 디렉터리에는 IaaS별 PaaS-TA 설치 Shell Script 파일이 존재하며, 이를 실행하여 PaaS-TA를 설치한다.  
+${HOME}/workspace/paasta/deployment/paasta-deployment 이하 디렉터리에는 IaaS별 PaaS-TA 설치 Shell Script 파일이 존재하며, 이를 실행하여 PaaS-TA를 설치한다.  
 파일명은 deploy-{IaaS}.sh이다.  
 또한 common_vars.yml파일과 {IaaS}-vars.yml을 수정하여 BOSH 설치시 적용하는 변숫값을 변경할 수 있다.
 
@@ -600,7 +608,7 @@ PaaS-TA를 설치할 때는 system_domain, paasta_admin_username, paasta_admin_p
 # BOSH INFO
 bosh_url: "http://10.0.1.6"			# BOSH URL (e.g. "https://00.000.0.0")
 bosh_client_admin_id: "admin"			# BOSH Client Admin ID
-bosh_client_admin_secret: "ert7na4jpewscztsxz48"	# BOSH Client Admin Secret('echo $(bosh int ~/workspace/paasta-5.0/deployment/paasta-deployment/bosh/{iaas}/creds.yml —path /admin_password))' 명령어를 통해 확인 가능)
+bosh_client_admin_secret: "ert7na4jpewscztsxz48"	# BOSH Client Admin Secret('echo $(bosh int ~/workspace/paasta/deployment/paasta-deployment/bosh/{iaas}/creds.yml —path /admin_password))' 명령어를 통해 확인 가능)
 bosh_director_port: 25555			# BOSH Director Port
 bosh_oauth_port: 8443				# BOSH OAuth Port
 
@@ -948,80 +956,11 @@ bosh -e {director_name} -d paasta -n deploy paasta-deployment.yml \	# PaaS-TA Ma
 	-l aws-vars.yml \						# AWS 환경에 PaaS-TA 설치시 적용하는 변숫값 설정 파일
 	-l ../../common/common_vars.yml					# PaaS-TA 및 각종 Service 설치시 적용하는 공통 변수 설정 파일
 ```
-#### <div id='1025'/>● deploy-azure.sh
-```
-bosh -e {director_name} -d paasta -n deploy paasta-deployment.yml \	# PaaS-TA Manifest File
-	-o operations/azure.yml \					# MS Azure 설정
-	-o operations/use-compiled-releases.yml \			# PaaS-TA 설치시 공통 릴리즈 파일 Local 정보
-	-o operations/use-haproxy.yml \					# HAProxy 적용
-	-o operations/use-haproxy-public-network.yml \			# HAProxy Public Network 적용
-	-o operations/use-compiled-releases-haproxy.yml \		# PaaS-TA 설치시 HAProxy 릴리즈 파일 Local 정보
-	-o operations/use-postgres.yml \				# Database Type 설정 (3.5버전 이하에서 Migration 시 필수)
-	-o operations/use-compiled-releases-postgres.yml \		# PaaS-TA 설치시 Postgres 릴리즈 파일 Local 정보
-	-o operations/rename-network-and-deployment.yml \		# Rename Network and Deployment
-	-l azure-vars.yml \						# MS Azure 환경에 PaaS-TA 설치시 적용하는 변숫값 설정 파일
-	-l ../../common/common_vars.yml					# PaaS-TA 및 각종 Service 설치시 적용하는 공통 변수 설정 파일
-```
-
-#### <div id='1026'/>● deploy-gcp.sh
-```
-bosh -e {director_name} -d paasta deploy paasta-deployment.yml \	# PaaS-TA Manifest File
-	-o operations/use-compiled-releases.yml \			# PaaS-TA 설치시 공통 릴리즈 파일 Local 정보
-	-o operations/use-haproxy.yml \					# HAProxy 적용
-	-o operations/use-haproxy-public-network.yml \			# HAProxy Public Network 적용
-	-o operations/use-compiled-releases-haproxy.yml \		# PaaS-TA 설치시 HAProxy 릴리즈 파일 Local 정보
-	-o operations/use-postgres.yml \				# Database Type 설정 (3.5버전 이하에서 Migration 시 필수)
-	-o operations/use-compiled-releases-postgres.yml \		# PaaS-TA 설치시 Postgres 릴리즈 파일 Local 정보
-	-o operations/rename-network-and-deployment.yml \		# Rename Network and Deployment
-	-l gcp-vars.yml \						# GCP 환경에 PaaS-TA 설치시 적용하는 변숫값 설정 파일
-	-l ../../common/common_vars.yml					# PaaS-TA 및 각종 Service 설치시 적용하는 공통 변수 설정 파일
-```
-
-#### <div id='1027'/>● deploy-openstack.sh
-```
-bosh -e {director_name} -d paasta -n deploy paasta-deployment.yml \	# PaaS-TA Manifest File
-	-o operations/openstack.yml \					# OpenStack 설정
-	-o operations/use-compiled-releases.yml \			# PaaS-TA 설치시 공통 릴리즈 파일 Local 정보
-	-o operations/use-haproxy.yml \					# HAProxy 적용
-	-o operations/use-haproxy-public-network.yml \			# HAProxy Public Network 적용
-	-o operations/use-compiled-releases-haproxy.yml \		# PaaS-TA 설치시 HAProxy 릴리즈 파일 Local 정보
-	-o operations/use-postgres.yml \				# Database Type 설정 (3.5버전 이하에서 Migration 시 필수)
-	-o operations/use-compiled-releases-postgres.yml \		# PaaS-TA 설치시 Postgres 릴리즈 파일 Local 정보
-	-o operations/rename-network-and-deployment.yml \		# Rename Network and Deployment
-	-l openstack-vars.yml \						# OpenStack 환경에 PaaS-TA 설치시 적용하는 변숫값 설정 파일
-	-l ../../common/common_vars.yml					# PaaS-TA 및 각종 Service 설치시 적용하는 공통 변수 설정 파일
-```
-
-#### <div id='1028'/>● deploy-vsphere.sh
-```
-bosh -e {director_name} -d paasta -n deploy paasta-deployment.yml \	# PaaS-TA Manifest File
-	-o operations/use-compiled-releases.yml \			# PaaS-TA 설치시 공통 릴리즈 파일 Local 정보
-	-o operations/use-haproxy.yml \					# HAProxy 적용
-	-o operations/use-haproxy-public-network-vsphere.yml \		# HAProxy Public Network 적용
-	-o operations/use-compiled-releases-haproxy.yml \		# PaaS-TA 설치시 HAProxy 릴리즈 파일 Local 정보
-	-o operations/use-postgres.yml \				# Database Type 설정 (3.5버전 이하에서 Migration 시 필수)
-	-o operations/use-compiled-releases-postgres.yml \		# PaaS-TA 설치시 Postgres 릴리즈 파일 Local 정보
-	-o operations/rename-network-and-deployment.yml \		# Rename Network and Deployment
-	-l vsphere-vars.yml \						# vSphere 환경에 PaaS-TA 설치시 적용하는 변숫값 설정 파일
-	-l ../../common/common_vars.yml					# PaaS-TA 및 각종 Service 설치시 적용하는 공통 변수 설정 파일
-```
-
-#### <div id='1029'/>● deploy-bosh-lite.sh
-```
-bosh -e {director_name} -d paasta -n deploy paasta-deployment.yml \	# PaaS-TA manifest file
-	-o operations/bosh-lite.yml \					# BOSH-LITE 설정
-	-o operations/use-compiled-releases.yml \			# PaaS-TA 설치시 공통 릴리즈 파일 Local 정보
-	-o operations/use-postgres.yml \				# Database Type 설정 (3.5버전 이하에서 Migration 시 필수)
-	-o operations/use-compiled-releases-postgres.yml \		# PaaS-TA 설치시 Postgres 릴리즈 파일 Local 정보
-	-o operations/rename-network-and-deployment.yml \		# Rename Network and Deployment
-	-l bosh-lite-vars.yml \						# BOSH-LITE 환경에 PaaS-TA 설치시 적용하는 변숫값 설정 파일
-	-l ../../common_vars.yml					# PaaS-TA 및 각종 Service 설치시 적용하는 공통 변수 설정 파일
-```
 
 - Shell script 파일에 실행 권한 부여
 
 ```
-$ chmod +x ${HOME}/workspace/paasta-5.0/deployment/paasta-deployment/paasta/*.sh
+$ chmod +x ${HOME}/workspace/paasta/deployment/paasta-deployment/paasta/*.sh
 ```
 
 
@@ -1029,7 +968,7 @@ $ chmod +x ${HOME}/workspace/paasta-5.0/deployment/paasta-deployment/paasta/*.sh
 ## <div id='1030'/>3.7.  PaaS-TA 설치
 - 서버 환경에 맞추어 Deploy 스크립트 파일의 설정을 수정한다. 
 
-> $ vi ${HOME}/workspace/paasta-5.0/deployment/paasta-deployment/paasta/deploy-aws.sh
+> $ vi ${HOME}/workspace/paasta/deployment/paasta-deployment/paasta/deploy-aws.sh
 
 ```
 bosh -e {director_name} -d paasta -n deploy paasta-deployment.yml \	# PaaS-TA Manifest File
@@ -1044,7 +983,7 @@ bosh -e {director_name} -d paasta -n deploy paasta-deployment.yml \	# PaaS-TA Ma
 - PaaS-TA 설치 Shell Script 파일 실행 (BOSH 로그인 필요)
 
 ```
-$ cd ${HOME}/workspace/paasta-5.0/deployment/paasta-deployment/paasta
+$ cd ${HOME}/workspace/paasta/deployment/paasta-deployment/paasta
 $ ./deploy-{IaaS}.sh
 ```
 
@@ -1099,115 +1038,6 @@ uaa/d49ee04f-6f1f-4fbc-97ac-76419511b2e7                  running        z1  10.
 Succeeded
 ```
 
-
-
-## <div id='1031'/>3.8.  PaaS-TA 설치 - 다운로드 된 Release 파일 이용 방식
-
-
-- 서비스 설치에 필요한 릴리즈 파일을 다운로드 받아 Local machine의 작업 경로로 위치시킨다.  
-  
-  - 설치 파일 다운로드 위치 : https://paas-ta.kr/download/package    
-
-```
-# 릴리즈 다운로드 파일 위치 경로 생성
-$ mkdir -p ~/workspace/paasta-5.0/release/paasta
-
-# 릴리즈 파일 다운로드 및 파일 경로 확인
-$ cd ${HOME}/workspace/paasta-5.0/release/paasta
-$ ls
-binary-buildpack-1.0.32-ubuntu-xenial-315.64-20190703-010740-177773032.tgz       loggregator-105.5-ubuntu-xenial-315.64-20190703-011056-709229397.tgz
-bosh-dns-aliases-0.0.3-ubuntu-xenial-315.64-20190703-005917-45013255.tgz         loggregator-agent-3.9-ubuntu-xenial-315.64-20190703-011227-052700948.tgz
-bpm-1.1.0-ubuntu-xenial-315.64-20190703-011218-840878281.tgz                     nats-27-ubuntu-xenial-315.64-20190703-011012-08860186.tgz
-capi-1.83.0-ubuntu-xenial-315.64-20190703-011352-736036246.tgz                   nginx-buildpack-1.0.13-ubuntu-xenial-315.64-20190703-010158-078624017.tgz
-cf-cli-1.16.0-ubuntu-xenial-315.64-20190703-010458-731652087.tgz                 nodejs-buildpack-1.6.51-ubuntu-xenial-315.64-20190703-010707-741053575.tgz
-cf-networking-2.23.0-ubuntu-xenial-315.64-20190703-011056-823948638.tgz          php-buildpack-4.3.77-ubuntu-xenial-315.64-20190703-010303-196110232.tgz
-cf-smoke-tests-40.0.112-ubuntu-xenial-315.64-20190709-042410-146373383.tgz       postgres-release-38.tgz
-cf-syslog-drain-10.2-ubuntu-xenial-315.64-20190703-011055-842044104.tgz          pxc-0.18.0-ubuntu-xenial-315.64-20190705-211325-403851041.tgz
-cflinuxfs3-0.113.0-ubuntu-xenial-315.64-20190708-232200-368636766.tgz            python-buildpack-1.6.34-ubuntu-xenial-315.64-20190703-010525-033925777.tgz
-credhub-2.4.0-ubuntu-xenial-315.64-20190703-010939-442789426.tgz                 r-buildpack-1.0.10-ubuntu-xenial-315.64-20190703-010623-140937123.tgz
-diego-2.34.0-ubuntu-xenial-315.64-20190703-011616-899984623.tgz                  routing-0.188.0-ubuntu-xenial-315.64-20190703-011414-513071207.tgz
-dotnet-core-buildpack-2.2.12-ubuntu-xenial-315.64-20190703-010337-286489233.tgz  ruby-buildpack-1.7.40-ubuntu-xenial-315.64-20190703-010707-743703201.tgz
-garden-runc-1.19.3-ubuntu-xenial-315.64-20190703-011651-220994654.tgz            silk-2.23.0-ubuntu-xenial-315.64-20190703-011145-360645247.tgz
-go-buildpack-1.8.40-ubuntu-xenial-315.64-20190703-010359-639769006.tgz           staticfile-buildpack-1.4.43-ubuntu-xenial-315.64-20190703-010525-898602366.tgz
-haproxy-boshrelease-9.6.1.tgz                                                    statsd-injector-1.10.0-ubuntu-xenial-315.64-20190703-010549-761652392.tgz
-java-buildpack-4.19.1-ubuntu-xenial-315.64-20190709-145004-482509766.tgz         syslog-release-11.4.0.tgz
-log-cache-2.2.2-ubuntu-xenial-315.64-20190703-011152-163727753.tgz               uaa-72.0-ubuntu-xenial-315.64-20190703-011111-665316203.tgz
-```
-
-- 서버 환경에 맞추어 Deploy 스크립트 파일의 설정을 수정한다. 
-
-> $ vi ${HOME}/workspace/paasta-5.0/deployment/paasta-deployment/paasta/deploy-aws.sh
-
-```
-bosh -e {director_name} -d paasta -n deploy paasta-deployment.yml \
-	-o operations/aws.yml \						
-	-o operations/use-compiled-releases.yml \
-	-o operations/use-haproxy.yml \					
-	-o operations/use-haproxy-public-network.yml \			
-	-o operations/use-compiled-releases-haproxy.yml \
-	-o operations/use-postgres.yml \				
-	-o operations/use-compiled-releases-postgres.yml \
-	-o operations/rename-network-and-deployment.yml \		
-	-l aws-vars.yml \						
-	-l ../../common/common_vars.yml					
-```
-- PaaS-TA 설치 Shell Script 파일 실행 (BOSH 로그인 필요)
-
-```
-$ cd ${HOME}/workspace/paasta-5.0/deployment/paasta-deployment/paasta
-$ ./deploy-{IaaS}.sh
-```
-
-- PaaS-TA 설치 확인
-
-> $ bosh -e {director_name} vms -d paasta
-
-```
-ubuntu@inception:~$ bosh -e micro-bosh vms -d paasta
-Using environment '10.0.1.6' as client 'admin'
-
-Task 134. Done
-
-Deployment 'paasta'
-
-Instance                                                  Process State  AZ  IPs           VM CID               VM Type             Active
-adapter/58948983-7e9b-4761-89bf-6f88a6b9c7e2              running        z1  10.0.1.123    i-076d0dfa6ec1f7d98  small               true
-adapter/ffca4d6c-6ce4-4cf0-8084-39326e68c9eb              running        z2  10.0.41.122   i-0a61fc33453ec64d0  small               true
-api/4b7cff7b-1e44-44eb-840b-732c754b921c                  running        z1  10.0.1.128    i-05767b58d1d4b957c  medium              true
-api/da8ca5bd-e310-44b6-b54a-21865f7132bd                  running        z2  10.0.41.125   i-0ad626de643f5acb4  medium              true
-cc-worker/7babe563-bc7a-434d-85a2-4fd67081cfd7            running        z2  10.0.41.126   i-01b845e22ffc1eb48  medium              true
-cc-worker/a5475b17-af99-44dc-9241-1feb087010f3            running        z1  10.0.1.129    i-0c7e1f4e89871c8d7  medium              true
-credhub/27d026fe-a409-4f4e-8a22-61f121a2aba8              running        z2  10.0.41.134   i-0570c6ce731340f08  small               true
-credhub/c58fa66a-cff6-4532-9abd-d4ba3b31f60e              running        z1  10.0.1.137    i-048b62105a7373a3d  small               true
-database/d4449c40-25e4-4422-ac33-3584fe70f7c3             running        z1  10.0.1.124    i-0408dcd38fb9e7346  medium              true
-diego-api/3211715c-c2e3-4356-a9b0-30b5da9fb3b4            running        z2  10.0.41.123   i-09ab4c691aeb20d6a  small               true
-diego-api/77e870de-e4fb-4737-82c5-5504e63df0a4            running        z1  10.0.1.125    i-097475fa6e44911ab  small               true
-diego-cell/bd7cde8e-5424-4ded-8e6e-5f0513af7641           running        z2  10.0.41.132   i-0de8bdd034aaca50c  large-highmem-32GB  true
-diego-cell/c14318c5-cd0f-4c9f-acd4-8ab8908c169e           running        z1  10.0.1.135    i-00feefaa1eb37afb0  large-highmem-32GB  true
-doppler/10344617-d442-4e22-9af9-8cc35d8bf314              running        z2  10.0.41.130   i-0a831bffcf5d6c172  medium              true
-doppler/45bbbd94-3d5f-44df-9f01-11f8cdeb48ea              running        z1  10.0.1.133    i-07ad774745c4c6ab7  medium              true
-doppler/61fd7584-11be-442f-9c8a-2df1424121d8              running        z1  10.0.1.134    i-0ee286945a1939220  medium              true
-doppler/89adaeb7-16ac-431e-9ba3-754e74308af7              running        z2  10.0.41.131   i-0f47381253fddd716  medium              true
-haproxy/d645b06f-36eb-40d7-a828-8115794ca035              running        z7  10.0.0.121    i-0d3b17f8414573ebe  minimal             true
-                                                                             54.180.53.80
-log-api/c6d866b5-8350-427b-b873-cb7fbd5da943              running        z2  10.0.41.133   i-0c7de5da28f58f302  small               true
-log-api/d8376424-360a-4f1b-9488-503f49fd8550              running        z1  10.0.1.136    i-07d78c5dc6d854f8e  small               true
-nats/154e1623-9dfe-425f-8bea-90d9b444e1d7                 running        z1  10.0.1.122    i-0d2e6c416bd23047c  small               true
-nats/9d8f7df6-c22c-4f8e-ae28-83dbe9fa0de1                 running        z2  10.0.41.121   i-0c2169e16e77af947  small               true
-router/202e4d16-8044-4b47-8e7b-b6e827502b04               running        z1  10.0.1.131    i-0e08bd4fa4c54739c  small               true
-router/bd268bbd-1619-441c-a401-72d3cd9e18da               running        z2  10.0.41.128   i-0d6ca756c81fec386  small               true
-scheduler/33b5f3e2-83b4-4998-9e81-71cf60aaf82d            running        z1  10.0.1.130    i-0bbf05c84fc31e235  medium              true
-scheduler/a0dbe4d2-6f81-4df6-992b-111e10014609            running        z2  10.0.41.127   i-0a8b481db3cd80036  medium              true
-singleton-blobstore/d0aa4103-50f9-474d-b309-c0a0c402ad5c  running        z1  10.0.1.127    i-028ef29ff1c5c18ca  medium              true
-tcp-router/7998c2be-d535-49ca-bba6-5477c6018d78           running        z1  10.0.1.132    i-027e51e7407ada6cd  small               true
-tcp-router/e55653ea-cc33-4ead-b1d6-4b5f33fdb78b           running        z2  10.0.41.129   i-00fe2dda763b39cc9  small               true
-uaa/6ea05760-f851-413a-b03d-cfe83885d935                  running        z2  10.0.41.124   i-0577911096858aa61  medium              true
-uaa/d49ee04f-6f1f-4fbc-97ac-76419511b2e7                  running        z1  10.0.1.126    i-07938b838ca591170  medium              true
-
-31 vms
-
-Succeeded
-```
 
 
 
@@ -1256,9 +1086,6 @@ OK
 
 Select an org (or press enter to skip):
 ```
-
-### <div id='1033'/> ● 통합 Monitoring을 적용한 PaaS-TA 5.0 설치
-- [통합 Monitoring을 적용한 PaaS-TA 5.0 설치](../paasta-monitoring/PAAS-TA_CORE_MONITORING_INSTALL_GUIDE_V5.0.md)
 
 [PaaSTa_BOSH_Use_Guide_Image1]:./images/bosh1.png
 [PaaSTa_BOSH_Use_Guide_Image2]:./images/bosh2.png
