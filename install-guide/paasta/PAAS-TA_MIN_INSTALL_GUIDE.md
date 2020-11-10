@@ -70,19 +70,19 @@ CF Deployment: [https://github.com/cloudfoundry/cf-deployment](https://github.co
 ## <div id='108'/>2.2. 설치 파일 다운로드
 - PaaS-TA를 설치하기 위한 deployment가 존재하지 않는다면 다운로드 받는다
 ```
-$ cd ${HOME}/workspace/paasta-5.0.2/deployment
+$ cd ${HOME}/workspace/paasta/deployment
 $ git clone https://github.com/PaaS-TA/common.git
 $ git clone https://github.com/PaaS-TA/paasta-deployment.git -b paasta-min
 ```
 
 ## <div id='109'/>2.3. Stemcell 업로드
 VM을 배포할 때 사용되는 Stemcell을 BOSH에 업로드할 경우 로컬 파일과 URL을 직접 입력하여 업로드, 두가지 방법을 사용할 수 있다.  
-로컬 파일을 사용할 경우 PaaS-TA 사이트에서 [PaaS-TA Stemcell](https://paas-ta.kr/download/package) 파일을 내려받아 ${HOME}/workspace/paasta-5.0.2/stemcell 이하 디렉터리에 압축을 푼다.  
-압축을 풀면 아래와 같이 ${HOME}/workspace/paasta-5.0.2/stemcell/paasta 디렉터리가 생성되며 릴리즈 파일(tgz)이 존재한다.
+로컬 파일을 사용할 경우 PaaS-TA 사이트에서 [PaaS-TA Stemcell](https://paas-ta.kr/download/package) 파일을 내려받아 ${HOME}/workspace/paasta/stemcell 이하 디렉터리에 압축을 푼다.  
+압축을 풀면 아래와 같이 ${HOME}/workspace/paasta/stemcell/paasta 디렉터리가 생성되며 릴리즈 파일(tgz)이 존재한다.
 
 
 ```
-$ cd ${HOME}/workspace/paasta-5.0.2/stemcell/paasta
+$ cd ${HOME}/workspace/paasta/stemcell/paasta
 $ ls
 bosh-stemcell-315.64-alicloud-kvm-ubuntu-xenial-go_agent.tgz  bosh-stemcell-315.64-google-kvm-ubuntu-xenial-go_agent.tgz     bosh-stemcell-315.64-vsphere-esxi-ubuntu-xenial-go_agent.tgz
 bosh-stemcell-315.64-aws-xen-hvm-ubuntu-xenial-go_agent.tgz   bosh-stemcell-315.64-openstack-kvm-ubuntu-xenial-go_agent.tgz  bosh-stemcell-315.64-warden-boshlite-ubuntu-xenial-go_agent.tgz
@@ -99,7 +99,7 @@ BOSH 로그인 후 다음 명령어를 수행하여 Stemcell을 올린다.
 
 ```
 (로컬파일)
-$ bosh -e {director_name} upload-stemcell ${HOME}/workspace/paasta-5.0.2/stemcell/paasta/bosh-stemcell-315.64-aws-xen-hvm-ubuntu-xenial-go_agent.tgz
+$ bosh -e {director_name} upload-stemcell ${HOME}/workspace/paasta/stemcell/paasta/bosh-stemcell-315.64-aws-xen-hvm-ubuntu-xenial-go_agent.tgz
 
 (URL)
 $ bosh -e {director_name} upload-stemcell https://s3.amazonaws.com/bosh-core-stemcells/315.64/bosh-stemcell-315.64-aws-xen-hvm-ubuntu-xenial-go_agent.tgz
@@ -109,7 +109,7 @@ $ bosh -e {director_name} upload-stemcell https://s3.amazonaws.com/bosh-core-ste
 ## <div id='1010'/>2.4. Cloud Config 설정
 
 PaaS-TA를 설치하기 위한 IaaS 관련 Network, Storage, VM 관련 설정을 Cloud Config로 정의한다.  
-PaaS-TA 설치 파일을 내려받으면 ${HOME}/workspace/paasta-5.0.2/deployment/paasta-deployment/cloud-config 디렉터리 이하에 IaaS별 Cloud Config 예제를 확인할 수 있으며, 예제를 참고하여 cloud-config.yml을 IaaS에 맞게 수정한다.  
+PaaS-TA 설치 파일을 내려받으면 ${HOME}/workspace/paasta/deployment/paasta-deployment/cloud-config 디렉터리 이하에 IaaS별 Cloud Config 예제를 확인할 수 있으며, 예제를 참고하여 cloud-config.yml을 IaaS에 맞게 수정한다.  
 PaaS-TA 배포 전에 Cloud Config를 BOSH에 적용해야 한다. 
 
 - AWS을 기준으로 한 cloud-config.yml 예제
@@ -430,7 +430,7 @@ vm_types:
 - Cloud Config 업데이트
 
 ```
-$ bosh –e {director_name} update-cloud-config ${HOME}/workspace/paasta-5.0.2/deployment/paasta-deployment/cloud-config/{iaas}-cloud-config.yml
+$ bosh –e {director_name} update-cloud-config ${HOME}/workspace/paasta/deployment/paasta-deployment/cloud-config/{iaas}-cloud-config.yml
 ```
 
 - Cloud Config 확인
@@ -474,7 +474,7 @@ Networks는 AZ 별 Subnet Network, DNS, Security Groups, Network ID를 정의한
   - Runtime Config 업데이트  
 
   ```  
-  $ cd ${HOME}/workspace/paasta-5.0.2/deployment/paasta-deployment/bosh
+  $ cd ${HOME}/workspace/paasta/deployment/paasta-deployment/bosh
   $ bosh -e {director_name} update-runtime-config -n runtime-configs/dns.yml
   ```  
 
@@ -489,7 +489,7 @@ Networks는 AZ 별 Subnet Network, DNS, Security Groups, Network ID를 정의한
 
   - Runtime Config 업데이트  
   ```  
-  $ cd ${HOME}/workspace/paasta-5.0.2/deployment/paasta-deployment/bosh
+  $ cd ${HOME}/workspace/paasta/deployment/paasta-deployment/bosh
   $ bosh -e {director_name} update-runtime-config -n --name=os-conf runtime-configs/os-conf.yml
   ```  
   - Runtime Config 확인  
@@ -538,7 +538,7 @@ PaaS-TA를 설치할 때는 system_domain, paasta_admin_username, paasta_admin_p
 bosh_ip: "10.0.1.6"					# BOSH IP
 bosh_url: "http://10.0.1.6"				# BOSH URL (e.g. "https://00.000.0.0")
 bosh_client_admin_id: "admin"				# BOSH Client Admin ID
-bosh_client_admin_secret: "ert7na4jpewscztsxz48"	# BOSH Client Admin Secret('echo $(bosh int ~/workspace/paasta-5.0.2/deployment/paasta-deployment/bosh/{iaas}/creds.yml —path /admin_password))' 명령어를 통해 확인 가능)
+bosh_client_admin_secret: "ert7na4jpewscztsxz48"	# BOSH Client Admin Secret('echo $(bosh int ~/workspace/paasta/deployment/paasta-deployment/bosh/{iaas}/creds.yml —path /admin_password))' 명령어를 통해 확인 가능)
 bosh_director_port: 25555				# BOSH Director Port
 bosh_oauth_port: 8443					# BOSH OAuth Port
 
@@ -935,7 +935,7 @@ bosh -e micro-bosh -d paasta -n deploy min-paasta-deployment.yml \	# PaaS-TA Man
 - Shell script 파일에 실행 권한 부여
 
 ```
-$ chmod +x ${HOME}/workspace/paasta-5.0.2/deployment/paasta-deployment/paasta/*.sh
+$ chmod +x ${HOME}/workspace/paasta/deployment/paasta-deployment/paasta/*.sh
 ```
 
 
@@ -944,7 +944,7 @@ $ chmod +x ${HOME}/workspace/paasta-5.0.2/deployment/paasta-deployment/paasta/*.
 - 서버 환경에 맞추어 어떤 VM 타입으로 배포할지 결정한 뒤 Deploy 스크립트 파일의 설정을 수정한다.
 
 
-> $ vi ${HOME}/workspace/paasta-5.0.2/deployment/paasta-deployment/paasta/deploy-aws-4vm.sh
+> $ vi ${HOME}/workspace/paasta/deployment/paasta-deployment/paasta/deploy-aws-4vm.sh
 
 ```
 bosh -e micro-bosh bosh -d paasta -n deploy min-paasta-deployment.yml \	# PaaS-TA Manifest File
@@ -956,7 +956,7 @@ bosh -e micro-bosh bosh -d paasta -n deploy min-paasta-deployment.yml \	# PaaS-T
 		-l ../../common/common_vars.yml				# PaaS-TA 및 각종 Service 설치시 적용하는 공통 변수 설정 파일
 ```
 
-> $ vi ${HOME}/workspace/paasta-5.0.2/deployment/paasta-deployment/paasta/deploy-aws-7vm.sh
+> $ vi ${HOME}/workspace/paasta/deployment/paasta-deployment/paasta/deploy-aws-7vm.sh
 
 ```
 bosh -e micro-bosh -d paasta -n deploy min-paasta-deployment.yml \	# PaaS-TA Manifest File
@@ -974,7 +974,7 @@ bosh -e micro-bosh -d paasta -n deploy min-paasta-deployment.yml \	# PaaS-TA Man
 - PaaS-TA 설치 Shell Script 파일 실행 (BOSH 로그인 필요)
 
 ```
-$ cd ${HOME}/workspace/paasta-5.0.2/deployment/paasta-deployment/paasta
+$ cd ${HOME}/workspace/paasta/deployment/paasta-deployment/paasta
 $ ./deploy-{IaaS}-{VMs_Number}.sh
 ```
 
@@ -1037,10 +1037,10 @@ Succeeded
 
 ```
 # 릴리즈 다운로드 파일 위치 경로 생성
-$ mkdir -p ~/workspace/paasta-5.0.2/release/paasta
+$ mkdir -p ~/workspace/paasta/release/paasta
 
 # 릴리즈 파일 다운로드 및 파일 경로 확인
-$ cd ${HOME}/workspace/paasta-5.0.2/release/paasta
+$ cd ${HOME}/workspace/paasta/release/paasta
 $ ls
 binary-buildpack-1.0.32-ubuntu-xenial-315.64-20190703-010740-177773032.tgz       loggregator-105.5-ubuntu-xenial-315.64-20190703-011056-709229397.tgz
 bosh-dns-aliases-0.0.3-ubuntu-xenial-315.64-20190703-005917-45013255.tgz         loggregator-agent-3.9-ubuntu-xenial-315.64-20190703-011227-052700948.tgz
@@ -1064,7 +1064,7 @@ log-cache-2.2.2-ubuntu-xenial-315.64-20190703-011152-163727753.tgz              
 - 서버 환경에 맞추어 어떤 VM 타입으로 배포할지 결정한 뒤 Deploy 스크립트 파일의 설정을 수정한다.
 
 
-> $ vi ${HOME}/workspace/paasta-5.0.2/deployment/paasta-deployment/paasta/deploy-aws-4vm.sh
+> $ vi ${HOME}/workspace/paasta/deployment/paasta-deployment/paasta/deploy-aws-4vm.sh
 
 ```
 bosh -e micro-bosh bosh -d paasta -n deploy min-paasta-deployment.yml \	# PaaS-TA Manifest File
@@ -1079,7 +1079,7 @@ bosh -e micro-bosh bosh -d paasta -n deploy min-paasta-deployment.yml \	# PaaS-T
 		-l ../../common/common_vars.yml				# PaaS-TA 및 각종 Service 설치시 적용하는 공통 변수 설정 파일
 ```
 
-> $ vi ${HOME}/workspace/paasta-5.0.2/deployment/paasta-deployment/paasta/deploy-aws-7vm.sh
+> $ vi ${HOME}/workspace/paasta/deployment/paasta-deployment/paasta/deploy-aws-7vm.sh
 
 ```
 bosh -e micro-bosh -d paasta -n deploy min-paasta-deployment.yml \	# PaaS-TA Manifest File
@@ -1100,7 +1100,7 @@ bosh -e micro-bosh -d paasta -n deploy min-paasta-deployment.yml \	# PaaS-TA Man
 - PaaS-TA 설치 Shell Script 파일 실행 (BOSH 로그인 필요)
 
 ```
-$ cd ${HOME}/workspace/paasta-5.0.2/deployment/paasta-deployment/paasta
+$ cd ${HOME}/workspace/paasta/deployment/paasta-deployment/paasta
 $ ./deploy-{IaaS}-{VMs_Number}.sh
 ```
 
