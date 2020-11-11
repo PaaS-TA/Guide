@@ -21,12 +21,11 @@
 　　　3.3.4.3. [BOSH 설치 Shell Script](#1026)  
 　　　　● [deploy-aws.sh](#1027)  
 　　3.3.5. [BOSH 설치](#1034)  
-　　3.3.6. [BOSH 설치 - 다운로드 된 Release 파일 이용 방식](#1035)  
-　　3.3.7. [BOSH 로그인](#1036)  
-　　3.3.8. [CredHub](#1037)  
-　　　3.3.8.1. [CredHub CLI 설치](#1038)  
-　　　3.3.8.2. [CredHub 로그인](#1039)  
-　　3.3.9. [Jumpbox](#1040)  
+　　3.3.6. [BOSH 로그인](#1036)  
+　　3.3.7. [CredHub](#1037)  
+　　　3.3.7.1. [CredHub CLI 설치](#1038)  
+　　　3.3.7.2. [CredHub 로그인](#1039)  
+　　3.3.8. [Jumpbox](#1040)  
 
 ## Executive Summary
 
@@ -338,7 +337,7 @@ $ chmod +x ${HOME}/workspace/paasta/deployment/paasta-deployment/bosh/*.sh
 ```
 
 
-### <div id='1034'/>3.3.6. BOSH 설치
+### <div id='1034'/>3.3.5. BOSH 설치
 
 - 서버 환경에 맞추어 Deploy 스크립트 파일의 설정을 수정한다. 
 
@@ -393,7 +392,7 @@ Succeeded
 ```
 
 
-### <div id='1036'/>3.3.7. BOSH 로그인
+### <div id='1036'/>3.3.6. BOSH 로그인
 BOSH가 설치되면, BOSH 설치 디렉터리 이하 {iaas}/creds.yml 파일이 생성된다.  
 creds.yml은 BOSH 인증정보를 가지고 있으며, creds.yml을 활용하여 BOSH에 로그인한다.  
 BOSH 로그인 후, BOSH CLI 명령어를 이용하여 PaaS-TA를 설치할 수 있다.
@@ -407,13 +406,13 @@ $ bosh alias-env {director_name} -e {bosh_url} --ca-cert <(bosh int ./{iaas}/cre
 $ bosh –e {director_name} env
 ```
 
-### <div id='1037'/>3.3.8. CredHub
+### <div id='1037'/>3.3.7. CredHub
 CredHub은 인증정보 저장소이다.  
 BOSH 설치 시 Operation 파일로 credhub.yml을 추가하였다.  
 BOSH 설치 시 credhub.yml을 적용하면, PaaS-TA 설치 시 PaaS-TA에서 사용하는 인증정보(Certificate, Password)를 CredHub에 저장한다.  
 PaaS-TA 인증정보가 필요할 때 CredHub을 사용하며, CredHub CLI를 통해 CredHub에 로그인하여 인증정보 조회, 수정, 삭제를 할 수 있다.
 
-#### <div id='1038'/>3.3.8.1. CredHub CLI 설치
+#### <div id='1038'/>3.3.7.1. CredHub CLI 설치
 
 CredHub CLI는 BOSH를 설치한 Inception(설치환경)에 설치한다.
 
@@ -425,7 +424,7 @@ $ sudo mv credhub /usr/local/bin/credhub
 $ credhub –-version
 ```
 
-#### <div id='1039'/>3.3.8.2. CredHub 로그인
+#### <div id='1039'/>3.3.7.2. CredHub 로그인
 CredHub에 로그인하기 위해 BOSH를 설치한 bosh-deployment 디렉터리의 creds.yml을 활용하여 로그인한다.
 
 ```
@@ -446,7 +445,7 @@ PaaS-TA를 설치하면 인증 정보가 저장되어 조회할 수 있다.
 $ credhub get -n /{director}/{deployment}/uaa_ca
 ```
 
-### <div id='1040'/>3.3.9. Jumpbox
+### <div id='1040'/>3.3.8. Jumpbox
 BOSH 설치 시 Operation 파일로 jumpbox-user.yml을 추가하였다.  
 Jumpbox는 BOSH VM에 접근하기 위한 인증을 적용하게 된다.  
 인증키는 BOSH에서 자체적으로 생성하며, 인증키를 통해 BOSH VM에 접근할 수 있다.  
