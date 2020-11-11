@@ -13,7 +13,7 @@
 　　3.3.1. [Prerequisite](#1011)  
 　　3.3.2. [BOSH CLI 및 Dependency 설치](#1012)  
 　　3.3.3. [설치 파일 다운로드](#1013)  
-　　3.3.4. [BOSH 환경 설정](#1015)  
+　　3.3.4. [BOSH 설치 ](#1015)  
 　　　3.3.4.1. [BOSH 설치 Variable 파일](#1016)  
 　　　　● [aws-vars.yml](#1017)  
 　　　3.3.4.2. [BOSH 설치 Option 파일](#1023)  
@@ -205,7 +205,7 @@ bosh  cloud-config  paasta
 </table>
 
 
-### <div id='1015'/>3.3.4.    BOSH 환경 설정
+### <div id='1015'/>3.3.4.    BOSH 설치 파일
 
 ${HOME}/workspace/paasta/deployment/paasta-deployment/bosh 이하 디렉터리에는 BOSH 설치를 위한 IaaS별 Shell Script 파일이 존재한다.  
 Shell Script 파일을 이용하여 BOSH를 설치한다.
