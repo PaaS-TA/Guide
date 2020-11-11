@@ -74,15 +74,11 @@ PaaS-TA 3.1 버전까지는 PaaS-TA Container, Controller를 각각의 deploymen
 ## <div id='108'/>3.2. 설치 파일 다운로드
 - PaaS-TA를 설치하기 위한 deployment가 존재하지 않는다면 다운로드 받는다
 ```
+$ mkdir -p ${HOME}/workspace/paasta/deployment
 $ cd ${HOME}/workspace/paasta/deployment
-$ git clone https://github.com/PaaS-TA/common.git
-$ cd ${HOME}/workspace/paasta/deployment/common
-$ git checkout tags/v5.0.1
-
+$ git clone https://github.com/PaaS-TA/common.git -b v5.0.1
 $ cd ${HOME}/workspace/paasta/deployment
-$ git clone https://github.com/PaaS-TA/paasta-deployment.git
-$ cd ${HOME}/workspace/paasta/deployment/paasta-deployment
-$ git checkout tags/v5.0.2
+$ git clone https://github.com/PaaS-TA/paasta-deployment.git -b v5.0.2
 ```
 
 ## <div id='109'/>3.3. Stemcell 업로드
