@@ -13,7 +13,6 @@
 　　3.3.1. [Prerequisite](#1011)  
 　　3.3.2. [BOSH CLI 및 Dependency 설치](#1012)  
 　　3.3.3. [설치 파일 다운로드](#1013)  
-　　3.3.4. [BOSH 설치 파일](#1014)  
 　　3.3.5. [BOSH 환경 설정](#1015)  
 　　　3.3.5.1. [BOSH 설치 Variable 파일](#1016)  
 　　　　● [aws-vars.yml](#1017)  
@@ -183,8 +182,6 @@ $ cd ${HOME}/workspace/paasta/deployment
 $ git clone https://github.com/PaaS-TA/paasta-deployment.git -b v5.0.2
 ```
 
-### <div id='1014'/>3.3.4.    BOSH 설치 파일
-
 - paasta/deployment/paasta-deployment 이하 디렉터리
 
 ```
@@ -208,7 +205,8 @@ bosh  cloud-config  paasta
 </tr>
 </table>
 
-### <div id='1015'/>3.3.5.    BOSH 환경 설정
+
+### <div id='1015'/>3.3.4.    BOSH 환경 설정
 
 ${HOME}/workspace/paasta/deployment/paasta-deployment/bosh 이하 디렉터리에는 BOSH 설치를 위한 IaaS별 Shell Script 파일이 존재한다.  
 Shell Script 파일을 이용하여 BOSH를 설치한다.
@@ -234,7 +232,7 @@ Shell Script 파일을 이용하여 BOSH를 설치한다.
 
 
 
-#### <div id='1016'/>3.3.5.1. BOSH 설치 Variable File
+#### <div id='1016'/>3.3.4.1. BOSH 설치 Variable File
 
 ##### <div id='1017'/>● aws-vars.yml
 
@@ -263,7 +261,7 @@ syslog_transport: "relp"				# Logsearch Protocol
 ```
 
 
-#### <div id='1023'/>3.3.5.2. BOSH 설치 Option 파일
+#### <div id='1023'/>3.3.4.2. BOSH 설치 Option 파일
 
 ##### <div id='1024'/>● BOSH Optional 파일
 
@@ -288,7 +286,7 @@ syslog_transport: "relp"				# Logsearch Protocol
 
 
 
-#### <div id='1026'/>3.3.5.3. BOSH 설치 Shell Script
+#### <div id='1026'/>3.3.4.3. BOSH 설치 Shell Script
 
 BOSH 설치 명령어는 create-env로 시작한다.  
 Shell이 아닌 BOSH Command로 실행 가능하며, 설치하는 IaaS 환경에 따라 Option이 달라진다.  
@@ -340,7 +338,7 @@ $ chmod +x ${HOME}/workspace/paasta/deployment/paasta-deployment/bosh/*.sh
 ```
 
 
-### <div id='1034'/>3.3.6. BOSH 설치
+### <div id='1034'/>3.3.5. BOSH 설치
 
 - 서버 환경에 맞추어 Deploy 스크립트 파일의 설정을 수정한다. 
 
@@ -395,7 +393,7 @@ Succeeded
 ```
 
 
-### <div id='1036'/>3.3.8. BOSH 로그인
+### <div id='1036'/>3.3.6. BOSH 로그인
 BOSH가 설치되면, BOSH 설치 디렉터리 이하 {iaas}/creds.yml 파일이 생성된다.  
 creds.yml은 BOSH 인증정보를 가지고 있으며, creds.yml을 활용하여 BOSH에 로그인한다.  
 BOSH 로그인 후, BOSH CLI 명령어를 이용하여 PaaS-TA를 설치할 수 있다.
@@ -409,13 +407,13 @@ $ bosh alias-env {director_name} -e {bosh_url} --ca-cert <(bosh int ./{iaas}/cre
 $ bosh –e {director_name} env
 ```
 
-### <div id='1037'/>3.3.9. CredHub
+### <div id='1037'/>3.3.7. CredHub
 CredHub은 인증정보 저장소이다.  
 BOSH 설치 시 Operation 파일로 credhub.yml을 추가하였다.  
 BOSH 설치 시 credhub.yml을 적용하면, PaaS-TA 설치 시 PaaS-TA에서 사용하는 인증정보(Certificate, Password)를 CredHub에 저장한다.  
 PaaS-TA 인증정보가 필요할 때 CredHub을 사용하며, CredHub CLI를 통해 CredHub에 로그인하여 인증정보 조회, 수정, 삭제를 할 수 있다.
 
-#### <div id='1038'/>3.3.9.1. CredHub CLI 설치
+#### <div id='1038'/>3.3.8.1. CredHub CLI 설치
 
 CredHub CLI는 BOSH를 설치한 Inception(설치환경)에 설치한다.
 
@@ -427,7 +425,7 @@ $ sudo mv credhub /usr/local/bin/credhub
 $ credhub –-version
 ```
 
-#### <div id='1039'/>3.3.9.2. CredHub 로그인
+#### <div id='1039'/>3.3.8.2. CredHub 로그인
 CredHub에 로그인하기 위해 BOSH를 설치한 bosh-deployment 디렉터리의 creds.yml을 활용하여 로그인한다.
 
 ```
@@ -448,7 +446,7 @@ PaaS-TA를 설치하면 인증 정보가 저장되어 조회할 수 있다.
 $ credhub get -n /{director}/{deployment}/uaa_ca
 ```
 
-### <div id='1040'/>3.3.10. Jumpbox
+### <div id='1040'/>3.3.9. Jumpbox
 BOSH 설치 시 Operation 파일로 jumpbox-user.yml을 추가하였다.  
 Jumpbox는 BOSH VM에 접근하기 위한 인증을 적용하게 된다.  
 인증키는 BOSH에서 자체적으로 생성하며, 인증키를 통해 BOSH VM에 접근할 수 있다.  
