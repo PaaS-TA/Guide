@@ -180,7 +180,7 @@ $ bosh -version
 ```
 $ mkdir -p ${HOME}/workspace/paasta/deployment
 $ cd ${HOME}/workspace/paasta/deployment
-$ git clone https://github.com/PaaS-TA/paasta-deployment.git -b v5.0.2-min
+$ git clone https://github.com/PaaS-TA/paasta-deployment.git -b v5.0.2
 ```
 
 ### <div id='1014'/>3.3.4.    BOSH 설치 파일
