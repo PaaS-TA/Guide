@@ -312,7 +312,7 @@ vm_extensions:
   name: 100GB_ephemeral_disk
 
 
-## vm_type :: 가상머신 유형(VM Type)을 정의한다. (OpenStack의 경우, Flavor 설정)
+## vm_type :: 가상머신 유형(VM Type)을 정의한다. (AWS 경우, Instance type 설정)
 vm_types:
 - cloud_properties:
     ephemeral_disk:
@@ -527,6 +527,7 @@ PaaS-TA를 설치할 때는 system_domain, paasta_admin_username, paasta_admin_p
 
 ```
 # BOSH INFO
+bosh_ip: "10.0.1.6"				# BOSH IP
 bosh_url: "http://10.0.1.6"			# BOSH URL (e.g. "https://00.000.0.0")
 bosh_client_admin_id: "admin"			# BOSH Client Admin ID
 bosh_client_admin_secret: "ert7na4jpewscztsxz48"	# BOSH Client Admin Secret('echo $(bosh int ~/workspace/paasta/deployment/paasta-deployment/bosh/{iaas}/creds.yml —path /admin_password))' 명령어를 통해 확인 가능)
@@ -796,11 +797,6 @@ ex) uaa_client_admin_secret="admin-secret"
 <td>요구사항</td>
 </tr>
 <tr>
-<td>operations/use-compiled-releases.yml</td>
-<td>인터넷이 연결된 환경에서 컴파일 없이 빠른 설치가 가능하다.</td>
-<td></td>
-</tr>
-<tr>
 <td>operations/use-postgres.yml</td>
 <td>Database를 Postgres로 설치 <br> 
     - use-postgres.yml 미적용 시 MySQL 설치  <br>
@@ -852,7 +848,7 @@ PaaS-TA VM 중 singleton-blobstore, database의 AZs(zone)을 변경하면 조직
 
 이미 설치된 PaaS-TA의 재배포 시, singleton-blobstore, database의 AZs(zone)을 변경하면 조직(ORG), 공간(SPACE), 앱(APP) 정보가 모두 삭제된다.
 
-PaaS-TA 5.0.2는 현재 AWS 환경에서만 지원한다.
+현재 PaaS-TA 5.0.2에서 검증한 IaaS 환경은 AWS 환경이다.
 
 <b>※ PaaS-TA 설치 시 명령어는 BOSH deploy를 사용한다. (IaaS 환경에 따라 Option이 다름)</b><br>
 
@@ -892,12 +888,9 @@ PaaS-TA 배포 시, 설치 Option을 추가해야 한다. 설치 Option에 대�
 ```
 bosh -e {director_name} -d paasta -n deploy paasta-deployment.yml \	# PaaS-TA Manifest File
 	-o operations/aws.yml \						# AWS 설정
-	-o operations/use-compiled-releases.yml \			# PaaS-TA 설치시 공통 릴리즈 파일 Local 정보
 	-o operations/use-haproxy.yml \					# HAProxy 적용
 	-o operations/use-haproxy-public-network.yml \			# HAProxy Public Network 적용
-	-o operations/use-compiled-releases-haproxy.yml \		# PaaS-TA 설치시 HAProxy 릴리즈 파일 Local 정보
 	-o operations/use-postgres.yml \				# Database Type 설정 (3.5버전 이하에서 Migration 시 필수)
-	-o operations/use-compiled-releases-postgres.yml \		# PaaS-TA 설치시 Postgres 릴리즈 파일 Local 정보
 	-o operations/rename-network-and-deployment.yml \		# Rename Network and Deployment
 	-l aws-vars.yml \						# AWS 환경에 PaaS-TA 설치시 적용하는 변숫값 설정 파일
 	-l ../../common/common_vars.yml					# PaaS-TA 및 각종 Service 설치시 적용하는 공통 변수 설정 파일
