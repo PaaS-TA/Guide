@@ -848,8 +848,6 @@ PaaS-TA VM 중 singleton-blobstore, database의 AZs(zone)을 변경하면 조직
 
 이미 설치된 PaaS-TA의 재배포 시, singleton-blobstore, database의 AZs(zone)을 변경하면 조직(ORG), 공간(SPACE), 앱(APP) 정보가 모두 삭제된다.
 
-현재 PaaS-TA 5.0.2에서 검증한 IaaS 환경은 AWS 환경이다.
-
 <b>※ PaaS-TA 설치 시 명령어는 BOSH deploy를 사용한다. (IaaS 환경에 따라 Option이 다름)</b><br>
 
 PaaS-TA 배포 BOSH 명령어 예시
