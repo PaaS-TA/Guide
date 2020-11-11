@@ -54,16 +54,16 @@ BOSH는 초기에 Cloud Foundry PaaS를 위해 개발되었지만, 현재는 Jen
 
 BOSH가 지원하는 IaaS는 VMware vSphere, Google Cloud Platform, Amazon Web Services EC2, Microsoft Azure, OpenStack, Alibaba Cloud가 있다.  
 PaaS-TA는 VMware vSphere, Google Cloud Platform, Amazon Web Services EC2, OpenStack, Microsoft Azure 등의 IaaS를 지원한다.  
-현재 PaaS-TA 5.0.2에서 검증한 IaaS 환경은 AWS 환경이다.
+현재 PaaS-TA 5.1에서 검증한 IaaS 환경은 AWS 환경이다.
 
 PaaS-TA 3.1 버전까지는 Cloud Foundry BOSH1을 기준으로 설치했지만, PaaS-TA 3.5 버전부터 BOSH2를 기준으로 설치하였다.  
-PaaS-TA 5.0.2는 Cloud Foundry에서 제공하는 bosh-deployment를 활용하여 BOSH를 설치한다.
+PaaS-TA 5.1은 Cloud Foundry에서 제공하는 bosh-deployment를 활용하여 BOSH를 설치한다.
 
 BOSH2는 BOSH2 CLI를 통하여 BOSH와 PaaS-TA를 모두 생성한다.  
 bosh-deployment를 이용하여 BOSH를 생성한 후, paasta-deployment로 PaaS-TA를 설치한다.  
 PaaS-TA 3.1 버전까지는 PaaS-TA Container, Controller를 별도의 deployment로 설치했지만, PaaS-TA 3.5 버전부터는 paasta-deployment 하나로 통합되어 한 번에 PaaS-TA를 설치한다.
 
-![PaaSTa_BOSH_Use_Guide_Image2](https://github.com/PaaS-TA/Guide-5.0-Ravioli/blob/master/install-guide/bosh/images/bosh2.png)
+![PaaSTa_BOSH_Use_Guide_Image2](./images/bosh2-1.png)
 
 ## <div id='106'/>● BOSH 컴포넌트 구성
 
@@ -99,7 +99,7 @@ BOSH 및 PaaS-TA 설치를 위해 Inception 서버에 구성해야 할 컴포넌
 - BOSH CLI 6.1.x 이상 
 - BOSH Dependency : ruby, ruby-dev, openssl 등
 - BOSH Deployment: BOSH 설치를 위한 manifest deployment  
-- PaaS-TA Deployment : PaaS-TA 설치를 위한 manifest deployment (cf-deployment v9.5.0 기준)
+- PaaS-TA Deployment : PaaS-TA 설치를 위한 manifest deployment (cf-deployment v13.12.0 기준)
 
 ## <div id='1010'/>3.3.  BOSH 설치
 
@@ -178,7 +178,7 @@ $ bosh -version
 ```
 $ mkdir -p ${HOME}/workspace/paasta/deployment
 $ cd ${HOME}/workspace/paasta/deployment
-$ git clone https://github.com/PaaS-TA/paasta-deployment.git -b v5.0.2
+$ git clone https://github.com/PaaS-TA/paasta-deployment.git -b v5.1
 ```
 
 - paasta/deployment/paasta-deployment 이하 디렉터리
@@ -342,16 +342,17 @@ $ chmod +x ${HOME}/workspace/paasta/deployment/paasta-deployment/bosh/*.sh
 - 서버 환경에 맞추어 Deploy 스크립트 파일의 설정을 수정한다. 
 
 > $ vi ~/workspace/paasta/deployment/paasta-deployment/bosh/deploy-aws.sh
-```                     
-bosh create-env bosh.yml \                         
-	--state=aws/state.json \	
-	--vars-store=aws/creds.yml \ 
-	-o aws/cpi.yml \
-	-o uaa.yml \
-	-o credhub.yml \
-	-o jumpbox-user.yml \
- 	-l aws-vars.yml
 ```
+bosh create-env bosh.yml \                         
+		--state=aws/state.json \	
+		--vars-store=aws/creds.yml \ 
+		-o aws/cpi.yml \
+		-o uaa.yml \
+		-o credhub.yml \
+		-o jumpbox-user.yml \
+		-l aws-vars.yml
+```
+
 
 - BOSH 설치 Shell Script 파일 실행
 
@@ -373,6 +374,7 @@ Started validating
   Validating release 'bosh-aws-cpi'... Finished (00:00:00)
   Validating release 'uaa'... Finished (00:00:03)
   Validating release 'credhub'...
+
 ```
 
 - BOSH 설치 완료
@@ -471,3 +473,8 @@ Last login: Thu Oct 17 03:57:48 UTC 2019 from 10.0.0.9 on pts/0
 Last login: Fri Oct 25 07:05:42 2019 from 10.0.0.9
 bosh/0:~$
 ```
+
+```
+
+```
+
