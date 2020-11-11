@@ -319,15 +319,10 @@ syslog_transport: "relp"				# Logsearch Protocol
 bosh create-env bosh.yml \                         
 	--state=aws/state.json \			# BOSH Latest Running State, 설치 시 생성, Backup 필요
 	--vars-store=aws/creds.yml \			# BOSH Credentials and Certs, 설치 시 생성, Backup 필요 
-	-o use-compiled-releases.yml \			# BOSH 설치시 공통 릴리즈 파일 Local 정보
 	-o aws/cpi.yml \				# AWS CPI 적용
-	-o use-compiled-releases-aws.yml \		# BOSH 설치시 AWS CPI 릴리즈 파일 Local 정보
 	-o uaa.yml \					# UAA 적용      
-	-o use-compiled-releases-uaa.yml \		# BOSH 설치시 UAA 릴리즈 파일 Local 정보
 	-o credhub.yml \				# CredHub 적용    
-	-o use-compiled-releases-credhub.yml \		# BOSH 설치시 CredHub 릴리즈 파일 Local 정보
 	-o jumpbox-user.yml \				# Jumpbox 적용  
-	-o use-compiled-releases-jumpbox.yml \		# BOSH 설치시 Jumpbox 릴리즈 파일 Local 정보 
  	-l aws-vars.yml					# AWS 환경에 BOSH 설치시 적용하는 변숫값 설정 파일
 ```
 
