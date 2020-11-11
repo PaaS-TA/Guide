@@ -1,35 +1,38 @@
+
+
 ## Table of Contents
 
 1. [개요](#101)  
 　● [목적](#102)  
 　● [범위](#103)  
 　● [참고 자료](#104)  
-2. [PaaS-TA 5.0.2](#105)  
-3. [PaaS-TA 5.0.2 설치](#106)  
-　3.1. [Prerequisite](#107)  
-　3.2. [설치 파일 다운로드](#108)  
-　3.3. [Stemcell 업로드](#109)  
-　3.4. [Cloud Config 설정](#1010)  
+2. [PaaS-TA 5.0.2 설치](#106)  
+　2.1. [Prerequisite](#107)  
+　2.2. [설치 파일 다운로드](#108)  
+　2.3. [Stemcell 업로드](#109)  
+　2.4. [Cloud Config 설정](#1010)  
 　　●  [AZs](#1011)  
 　　●  [VM types](#1012)  
 　　●  [Compilation](#1013)  
 　　●  [Disk Size](#1014)  
 　　●  [Networks](#1015)  
-　3.5. [Runtime Config 설정](#1016)  
-　3.6. [PaaS-TA 설치 파일](#1017)  
-　　3.6.1. [PaaS-TA 설치 Variable 파일](#1018)    
+　2.5. [Runtime Config 설정](#1016)  
+　2.6. [PaaS-TA 설치 파일](#1017)  
+　　2.6.1. [PaaS-TA 설치 Variable 파일](#1018)    
 　　　●  [common_vars.yml](#1019)  
 　　　●  [{IaaS}-vars.yml](#1020)  
 　　　●  [PaaS-TA 그외 Variable List](#1021)  
-　　3.6.2. [PaaS-TA Operation 파일](#1022)  
-　　3.6.3. [PaaS-TA 설치 Shell Scripts](#1023)  
-　　　●  [deploy-aws.sh](#1024)  
-　3.7. [PaaS-TA 설치](#1030)  
-　3.8. [PaaS-TA 로그인](#1032)  
+　　2.6.2. [PaaS-TA Operation 파일](#1022)  
+　　2.6.3. [PaaS-TA 설치 Shell Scripts](#1023)  
+　　　●  [deploy-aws-4vms.sh](#1024)  
+　　　●  [deploy-aws-7vms.sh](#1025)  
+　2.7. [PaaS-TA 설치](#1026)   
+　2.8. [PaaS-TA 로그인](#1028)   
 
 ## Executive Summary
-
-본 문서는 PaaS-TA 5.0.2(이하 PaaS-TA)을 수동으로 설치하기 위한 가이드를 제공하는 데 그 목적이 있다.
+<br>
+본 문서는 PaaS-TA 5.0.2-min(이하 PaaS-TA)을 수동으로 설치하기 위한 가이드를 제공하는 데 그 목적이 있다.  
+<br>
 
 # <div id='101'/>1.  문서 개요 
 
@@ -39,8 +42,8 @@
 ## <div id='103'/>● 범위
 본 문서는 cf-deployment v9.5.0을 기준으로 작성되었다.  
 PaaS-TA은 bosh-deployment를 기반으로 한 BOSH 환경에서 설치한다.  
-PaaS-TA 설치 시 필요한 Stemcell은 기존 ubuntu-xenial-315.36에서 ubuntu-xenial-315.64로 변경되었다.  
-PaaS-TA는 VMware vSphere, Google Cloud Platform, Amazon Web Services EC2, OpenStack, Microsoft Azure 등의 IaaS를 지원한다.  
+PaaS-TA 5.0.2-min 설치 시 필요한 Stemcell은 기존 PaaS-TA 5.0.2 설치와 동일한 ubuntu-xenial-315.64을 사용하였다.  
+PaaS-TA는 VMware vSphere, Google Cloud Platform, Amazon Web Services EC2, OpenStack, Microsoft Azure 등의 IaaS를 지원한다.
 현재 PaaS-TA 5.0.2에서 검증한 IaaS 환경은 AWS 환경이다.
 
 ## <div id='104'/>● 참고 자료
@@ -55,36 +58,30 @@ BOSH Deployment: [https://github.com/cloudfoundry/bosh-deployment](https://githu
 
 CF Deployment: [https://github.com/cloudfoundry/cf-deployment](https://github.com/cloudfoundry/cf-deployment)
 
-# <div id='105'/>2. PaaS-TA 5.0.2
 
-PaaS-TA는 BOSH를 기반으로 설치된다. BOSH CLI를 사용하여 BOSH를 생성한 후, paasta-deployment로 PaaS-TA를 배포한다. 
+# <div id='106'/>2. PaaS-TA 5.0.2
 
-PaaS-TA 3.1 버전까지는 PaaS-TA Container, Controller를 각각의 deployment로 설치했지만, PaaS-TA 3.5 버전부터 paasta-deployment 하나로 통합되었으며, 한 번에 PaaS-TA를 설치한다. 
-
-![PaaSTa_BOSH_Use_Guide_Image2]  
-
-# <div id='106'/>3. PaaS-TA 5.0.2 설치
-
-## <div id='107'/>3.1. Prerequisite
+## <div id='107'/>2.1. Prerequisite
 
 - BOSH2 기반의 BOSH를 설치한다.
 - PaaS-TA 설치는 BOSH를 설치한 Inception(설치 환경)에서 작업한다.
 
 
-## <div id='108'/>3.2. 설치 파일 다운로드
+## <div id='108'/>2.2. 설치 파일 다운로드
 - PaaS-TA를 설치하기 위한 deployment가 존재하지 않는다면 다운로드 받는다
 ```
 $ mkdir -p ${HOME}/workspace/paasta/deployment
 $ cd ${HOME}/workspace/paasta/deployment
 $ git clone https://github.com/PaaS-TA/common.git -b v5.0.1
 $ cd ${HOME}/workspace/paasta/deployment
-$ git clone https://github.com/PaaS-TA/paasta-deployment.git -b v5.0.2
+$ git clone https://github.com/PaaS-TA/paasta-deployment.git -b v5.0.2-min
 ```
 
-## <div id='109'/>3.3. Stemcell 업로드
+## <div id='109'/>2.3. Stemcell 업로드
 VM을 배포할 때 사용되는 Stemcell을 BOSH에 업로드할 경우 로컬 파일과 URL을 직접 입력하여 업로드, 두가지 방법을 사용할 수 있다.  
 로컬 파일을 사용할 경우 PaaS-TA 사이트에서 [PaaS-TA Stemcell](https://paas-ta.kr/download/package) 파일을 내려받아 ${HOME}/workspace/paasta/stemcell 이하 디렉터리에 압축을 푼다.  
 압축을 풀면 아래와 같이 ${HOME}/workspace/paasta/stemcell/paasta 디렉터리가 생성되며 릴리즈 파일(tgz)이 존재한다.
+
 
 ```
 $ cd ${HOME}/workspace/paasta/stemcell/paasta
@@ -99,6 +96,7 @@ BOSH 로그인 후 다음 명령어를 수행하여 Stemcell을 올린다.
 {director_name}은 BOSH 설치 시 사용한 Director 명이다.
 
 
+
 - AWS
 
 ```
@@ -109,7 +107,8 @@ $ bosh -e {director_name} upload-stemcell ${HOME}/workspace/paasta/stemcell/paas
 $ bosh -e {director_name} upload-stemcell https://s3.amazonaws.com/bosh-core-stemcells/315.64/bosh-stemcell-315.64-aws-xen-hvm-ubuntu-xenial-go_agent.tgz
 ```
 
-## <div id='1010'/>3.4. Cloud Config 설정
+
+## <div id='1010'/>2.4. Cloud Config 설정
 
 PaaS-TA를 설치하기 위한 IaaS 관련 Network, Storage, VM 관련 설정을 Cloud Config로 정의한다.  
 PaaS-TA 설치 파일을 내려받으면 ${HOME}/workspace/paasta/deployment/paasta-deployment/cloud-config 디렉터리 이하에 IaaS별 Cloud Config 예제를 확인할 수 있으며, 예제를 참고하여 cloud-config.yml을 IaaS에 맞게 수정한다.  
@@ -310,7 +309,12 @@ vm_extensions:
       size: 102400
       type: gp2
   name: 100GB_ephemeral_disk
-
+- name: ssh-proxy-and-router-lb
+  cloud_properties:
+    ports:
+    - host: 80
+    - host: 443
+    - host: 2222
 
 ## vm_type :: 가상머신 유형(VM Type)을 정의한다. (AWS 경우, Instance type 설정)
 vm_types:
@@ -424,6 +428,7 @@ vm_types:
   name: caas_small_highmem
 ```
 
+
 - Cloud Config 업데이트
 
 ```
@@ -462,7 +467,7 @@ PaaS-TA 및 서비스가 설치되는 VM의 Persistent Disk Size이다.
 Networks는 AZ 별 Subnet Network, DNS, Security Groups, Network ID를 정의한다.  
 보통 AZ 별로 256개의 IP를 정의할 수 있도록 Range Cider를 정의한다.
 
-## <div id='1016'/>3.5. Runtime Config 설정  
+## <div id='1016'/>2.5. Runtime Config 설정  
 
 - DNS Runtime Config  
   PaaS-TA 4.0부터 적용되는 부분으로 PaaS-TA Component에서 Consul이 대체된 Component이다.  
@@ -494,7 +499,7 @@ Networks는 AZ 별 Subnet Network, DNS, Security Groups, Network ID를 정의한
   $ bosh –e {director_name} runtime-config --name=os-conf
   ```  
 
-## <div id='1017'/>3.6.  PaaS-TA 설치 파일
+## <div id='1017'/>2.6.  PaaS-TA 설치 파일
 
 common_vars.yml파일과 {IaaS}-vars.yml을 수정하여 PaaS-TA 설치시 적용하는 변수를 설정할 수 있다.
 
@@ -505,19 +510,24 @@ common_vars.yml파일과 {IaaS}-vars.yml을 수정하여 PaaS-TA 설치시 적�
 </tr>
 <tr>
 <td>aws-vars.yml</td>
-<td>AWS 환경에 PaaS-TA 설치시 적용하는 변수 설정 파일</td>
+<td>AWS 환경에 PaaS-TA 설치시 적용하는 변 설정 파일</td>
 </tr>
 <tr>
-<td>deploy-aws.sh</td>
-<td>AWS 환경에 PaaS-TA 설치를 위한 Shell Script 파일</td>
+<td>deploy-aws-4vms.sh</td>
+<td>각 IaaS 환경에 PaaS-TA-min 4vm 설치를 위한 Shell Script 파일</td>
 </tr>
 <tr>
-<td>paasta-deployment.yml</td>
-<td>PaaS-TA을 배포하는 Manifest 파일</td>
+<td>deploy-aws-7vms.sh</td>
+<td>각 IaaS 환경에 PaaS-TA-min 7vm 설치를 위한 Shell Script 파일</td>
+</tr>
+<tr>
+<td>min-paasta-deployment.yml</td>
+<td>PaaS-TA-min을 배포하는 Manifest 파일</td>
 </tr>
 </table>
 
-### <div id='1018'/>3.6.1. PaaS-TA 설치 Variable File
+
+### <div id='1018'/>2.6.1. PaaS-TA 설치 Variable File
 
 
 #### <div id='1019'/>● common_vars.yml
@@ -527,43 +537,43 @@ PaaS-TA를 설치할 때는 system_domain, paasta_admin_username, paasta_admin_p
 
 ```
 # BOSH INFO
-bosh_ip: "10.0.1.6"				# BOSH IP
-bosh_url: "http://10.0.1.6"			# BOSH URL (e.g. "https://00.000.0.0")
-bosh_client_admin_id: "admin"			# BOSH Client Admin ID
-bosh_client_admin_secret: "ert7na4xz48"		# BOSH Client Admin Secret('echo $(bosh int ~/workspace/paasta/deployment/paasta-deployment/bosh/{iaas}/creds.yml —path /admin_password))' 명령어를 통해 확인 가능)
-bosh_director_port: 25555			# BOSH Director Port
-bosh_oauth_port: 8443				# BOSH OAuth Port
+bosh_ip: "10.0.1.6"					# BOSH IP
+bosh_url: "http://10.0.1.6"				# BOSH URL (e.g. "https://00.000.0.0")
+bosh_client_admin_id: "admin"				# BOSH Client Admin ID
+bosh_client_admin_secret: "ert7na4jpewscztsxz48"	# BOSH Client Admin Secret('echo $(bosh int ~/workspace/paasta/deployment/paasta-deployment/bosh/{iaas}/creds.yml —path /admin_password))' 명령어를 통해 확인 가능)
+bosh_director_port: 25555				# BOSH Director Port
+bosh_oauth_port: 8443					# BOSH OAuth Port
 
 # PAAS-TA INFO
-system_domain: "xx.xx.xxx.xxx.xip.io"		# Domain (xip.io를 사용하는 경우 HAProxy Public IP와 동일)
-paasta_admin_username: "admin"			# PaaS-TA Admin Username
-paasta_admin_password: "admin"			# PaaS-TA Admin Password
-paasta_nats_ip: "xx.xx.xxx.xxx"			# PaaS-TA Nats IP(e.g. "10.0.1.123")
-paasta_nats_port: 4222				# PaaS-TA Nats Port(e.g. "4222")
-paasta_nats_user: "nats"			# PaaS-TA Nats User(e.g. "nats")
-paasta_nats_password: "7EZB5ZkMLMqT73h2J"	# PaaS-TA Nats Password (CredHub 로그인후 'credhub get -n /micro-bosh/paasta/nats_password' 명령어를 통해 확인 가능)
-paasta_nats_private_networks_name: "default"	# PaaS-TA Nats 의 Network 이름
-paasta_database_ips: "xx.xx.xxx.xxx"		# PaaS-TA Database IP(e.g. "10.0.1.123")
-paasta_database_port: 5524			# PaaS-TA Database Port(e.g. 5524)
-paasta_cc_db_id: "cloud_controller"		# CCDB ID(e.g. "cloud_controller")
-paasta_cc_db_password: "cc_admin"		# CCDB Password(e.g. "cc_admin")
-paasta_uaa_db_id: "uaa"				# UAADB ID(e.g. "uaa")
-paasta_uaa_db_password: "uaa_admin"		# UAADB Password(e.g. "uaa_admin")
+system_domain: "xx.xx.xxx.xxx.xip.io"			# Domain (xip.io를 사용하는 경우 HAProxy Public IP와 동일)
+paasta_admin_username: "admin"				# PaaS-TA Admin Username
+paasta_admin_password: "admin"				# PaaS-TA Admin Password
+paasta_nats_ip: "xx.xx.xxx.xxx"				# PaaS-TA Nats IP(e.g. "10.0.1.121")
+paasta_nats_port: 4222					# PaaS-TA Nats Port(e.g. "4222")
+paasta_nats_user: "nats"				# PaaS-TA Nats user(e.g. "nats")
+paasta_nats_password: "7EZB5ZkMLMqT73h2JtxPv1fvh3UsqO"	# PaaS-TA Nats Password (CredHub 로그인후 'credhub get -n /micro-bosh/paasta/nats_password' 명령어를 통해 확인 가능)
+paasta_nats_private_networks_name: "default"		# PaaS-TA Nats 의 Network 이름
+paasta_database_ips: "xx.xx.xxx.xxx"			# PaaS-TA Database IP(e.g. "10.0.1.123")
+paasta_database_port: 5524				# PaaS-TA Database Port(e.g. 5524)
+paasta_cc_db_id: "cloud_controller"			# CCDB ID(e.g. "cloud_controller")
+paasta_cc_db_password: "cc_admin"			# CCDB Password(e.g. "cc_admin")
+paasta_uaa_db_id: "uaa"					# UAADB ID(e.g. "uaa")
+paasta_uaa_db_password: "uaa_admin"			# UAADB Password(e.g. "uaa_admin")
 paasta_api_version: "v3"
 
 
 # UAAC INFO
-uaa_client_admin_id: "admin"			# UAAC Admin Client Admin ID
-uaa_client_admin_secret: "admin-secret"		# UAAC Admin Client에 접근하기 위한 Secret 변수
-uaa_client_portal_secret: "clientsecret"	# UAAC Portal Client에 접근하기 위한 Secret 변수
+uaa_client_admin_id: "admin"				# UAAC Admin Client Admin ID
+uaa_client_admin_secret: "admin-secret"			# UAAC Admin Client에 접근하기 위한 Secret 변수
+uaa_client_portal_secret: "clientsecret"		# UAAC Portal Client에 접근하기 위한 Secret 변수
 
 # Monitoring INFO
-metric_url: "xx.xx.xxx.xxx"			# Monitoring InfluxDB IP
-syslog_address: "xx.xx.xxx.xxx"            	# Logsearch의 ls-router IP
-syslog_port: "2514"                          	# Logsearch의 ls-router Port
-syslog_transport: "relp"                        # Logsearch Protocol
-saas_monitoring_url: "xx.xx.xxx.xxx"	   	# Pinpoint HAProxy WEBUI의 Public IP
-monitoring_api_url: "xx.xx.xxx.xxx"        	# Monitoring-WEB의 Public IP
+metric_url: "xx.xx.xxx.xxx"				# Monitoring InfluxDB IP
+syslog_address: "xx.xx.xxx.xxx"            		# Logsearch의 ls-router IP
+syslog_port: "2514"                         		# Logsearch의 ls-router Port
+syslog_transport: "relp"                    		# Logsearch Protocol
+saas_monitoring_url: "xx.xx.xxx.xxx"	   		# Pinpoint HAProxy WEBUI의 Public IP
+monitoring_api_url: "xx.xx.xxx.xxx"        		# Monitoring-WEB의 Public IP
 
 ### Portal INFO
 portal_web_user_ip: "xx.xx.xxx.xxx"
@@ -579,27 +589,23 @@ PaaS-TA를 설치 할 때 적용되는 각종 변수값이나 배포 될 VM의 �
 
 ```
 # SERVICE VARIABLE
-deployment_name: paasta					# Deployment Name
-network_name: default					# Default Network Name
-inception_os_user_name: ubuntu				# Home User Name (Release File Path 설정 시 필요)
-network_name: default					# 지정하지 않은 Default 네트워크
-private_ip: "xx.xx.xxx.xxx"				# Proxy IP (BOSH-LITE 환경에서 설치 시 사용)
-haproxy_public_ip: xx.xx.xxx.xxx			# HAProxy IP (Public IP)
-haproxy_public_network_name: vip			# PaaS-TA Public Network Name
-haproxy_private_network_name: "private"			# PaaS-TA Private Network name(vSphere 환경에서 설치 중 use-haproxy-public-network-vsphere.yml 옵션 사용시 적용)	
-cc_db_encryption_key: db-encryption-key			# Database Encryption Key (Version Upgrade 시 동일 KEY 필수)
-uaa_database_password: uaa_admin			# UAA Database Password
-cc_database_password: cc_admin				# CC Database Password
-cert_days: 3650						# PaaS-TA 인증서 유효기간
-uaa_login_logout_redirect_parameter_disable: false	
-uaa_login_logout_redirect_parameter_whitelist: ["http://portal-web-user.xx.xx.xxx.xxx.xip.io","http://portal-web-user.xx.xx.xxx.xxx.xip.io/callback","http://portal-web-user.xx.xx.xxx.xxx.xip.io/login"]	# 포탈 페이지 이동을 위한 UAA Redirect Whitelist 등록 변수
-uaa_login_branding_company_name: "PaaS-TA R&D"		# UAA 페이지 타이틀 명
+deployment_name: "paasta"			# Deployment Name
+network_name: "default"				# VM에 별도로 지정하지 않는 Default Network Name
+inception_os_user_name: "ubuntu"		# Home User Name (Release File Path 설정 시 필요)
+haproxy_public_ip: "xx.xx.xxx.xxx"		# HAProxy IP (Public IP)
+haproxy_public_network_name: "vip"		# PaaS-TA Public Network Name
+cc_db_encryption_key: "db-encryption-key"	# Database Encryption Key (Version Upgrade 시 동일 KEY 필수)
+cert_days: 3650					# PaaS-TA 인증서 유효기간
+uaa_login_logout_redirect_parameter_disable: "false"	
+uaa_login_logout_redirect_parameter_whitelist: ["http://portal-web-user.xx.xx.xxx.xxx.xip.io","http://portal-web-user.xx.xx.xxx.xxx.xip.io/callback","http://portal-web-user.xx.xx.xxx.xxx.xip.io/login"]		# 포탈 페이지 이동을 위한 UAA Redirect Whitelist 등록 변수
+uaa_login_branding_company_name: "PaaS-TA R&D"	# UAA 페이지 타이틀 명
 uaa_login_branding_footer_legal_text: "Copyright © PaaS-TA R&D Foundation, Inc. 2017. All Rights Reserved."	# UAA 페이지 하단 영역 텍스트 
-uaa_login_branding_product_logo: "iVBORw0KGgoAAAANSUhEUgAAAM0AAAAdCAYAAAAJguhGAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMy1jMDExIDY2LjE0NTY2MSwgMjAxMi8wMi8wNi0xNDo1NjoyNyAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNiAoV2luZG93cykiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6QUNDMTA1MTZCRDNBMTFFNjkzMTVEQjMxRkE5QjkxNUMiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6QUNDMTA1MTdCRDNBMTFFNjkzMTVEQjMxRkE5QjkxNUMiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDpBQ0MxMDUxNEJEM0ExMUU2OTMxNURCMzFGQTlCOTE1QyIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDpBQ0MxMDUxNUJEM0ExMUU2OTMxNURCMzFGQTlCOTE1QyIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/Piy2YkgAAA9pSURBVHja7FwJeBRF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"	 		# UAA 페이지 로고 이미지 (Base64)
+uaa_login_branding_product_logo: "iVBORw0KGgoAAAANSUhEUgAAAM0AAAAdCAYAAAAJguhGAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMy1jMDExIDY2LjE0NTY2MSwgMjAxMi8wMi8wNi0xNDo1NjoyNyAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNiAoV2luZG93cykiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6QUNDMTA1MTZCRDNBMTFFNjkzMTVEQjMxRkE5QjkxNUMiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6QUNDMTA1MTdCRDNBMTFFNjkzMTVEQjMxRkE5QjkxNUMiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDpBQ0MxMDUxNEJEM0ExMUU2OTMxNURCMzFGQTlCOTE1QyIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDpBQ0MxMDUxNUJEM0ExMUU2OTMxNURCMzFGQTlCOTE1QyIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/Piy2YkgAAA9pSURBVHja7FwJeBRFFq7umUwmkJCIIJADEKLgrqyi6+qCt/speC4iC154oOCBB7viuQsq4se63y6IiojIIYrueoIsKiphPZFL1nNBVEhCEghHQJJJZqan9n89ryc1nZ4jpwmm+B5V3VVd3V39/nrv/VUZTdiSb1aeV9PEcEEixAnIe0DoX7kQ8nvkH6J+Keo+Sh1TLEV7ak8/s6RFA6bnxQDGDIAiD4d7ZEirRt5Nc0mX0NHYJaXQ5U7UlwItpZpLrED9XM+V2w+0D2V7+tmBxvdEz4k4egSgEcLQKmWN1hEgEcKFyjBgzLKZ6xI5zrvMfBOO70P51ZThZe2Wpz39PEDje7zn2Si9ZTphIVkjD+ipZo2rFixOwLGdKwBwxgI4W9qHtT0d1KABYDzINwEkvQkoslITslqLAks0eKKsDB9HgFOF8zcDOAvah7Y9HayJIDES0ts6IWvwn4Hc0MxchOzHABXlBufmcbhOBrUOIqjND7zcfXbgle4p7cPbng7G5IZcEnXGX8sNSNNfk9HHkqxK+KyG/6QkS8PH+D98jRgHi3MkgHMJrM6etjAQ1XPyOiFLxwuUe8cVBZqq33PPu+BoZF1iVO+GbF/+7zf2tHVFwnu6+D1Jp3bhnWqaot9bbp1A36VPAy+nKX/zYzOnVye4Byn9cfQ90HZrMu5ZKfLuZgxDBmO7bnIBYRcsOpZxOtYotnGpLpsa65gU9TAA5/PW9pFrnskdALwPx7ueiacdiDydZwaSr/H/c8jneG8s2t0IRboO2dNJNP0CMg8yF8p2oA0BhbSGliZugAyGeJXq/0GWQZ7AO21tIGA6I6MY+ZBGPOZmSH+AQca5z/3IJkNosjwWbb9O5J51i0KRB6oUtFywMFYjrpnDcbjMLhpdF4w67oP2q2FxRrcKoMzPddfMy70SgFmLw895oE4xLUx0+gXkYchW36y8Cb5ZPV0NvOXgJNsNgEyHfAtFPK2NAKYjsrcgL0HOsgGGUn/IHaS0aPunBt4ms5GAodQTkhIHMGQd7+RDajcpGUtjmOBhSyOC8oBR6E4PEwCwHG6FDNAVixNh0aKJgjqWh4/RjmbSW2F1KlscLAtyyHMchaebgryv5XFKyZbFZEAiPmhUWYbrV6A8LO3mwqp6KhYRIlfx4Ty2KOqERR/sRMjpfGw9wUjMzi+1ctAsQXahcmoT5BMIjVEPyO8gGUr9FLzTpPreB0p9AbLjY1RPVsoPONTTWK6A5fgkTv9TkP3Zds3R8awNgaYIeW4ENLgmVK4H5X7dLVSWzNUA4OjRLBvKNLCXAjiftRhgFuYMwCvNhgyKgKP+oKHyEoDm940AzTAozesx2uUzqE7hUz7IUWi/rZUChp7zfT6sYpAvc7BE90LuYc1ajTa/bcrngMJHXC4oudaA67OQFTl4GgvR39Xx3LNP7SddXUMh4ZbsgimuGrljIcVVCwp2x4TFnoXPRVy2aJYN5X4orYG7dn9zs2v+Z3PcAAz5qhsgg5qgy4swwQxpjmeFMm3hmfldPpUGeag1GxqlfI8dMPxOlZD72HV7QhA51PrSLQpgvmTigNKVAFR+PNAsqWt/hMeVa+w3YRwUHKtY5Xh0dG3ZzG30NIPJzWZ1PYAzqFkAsyinF7L/8H3cTdj15c319aBgfmRjlA83gmfr1ph6KOWPErxXAWQ8pFWRQQAFgeWPNgC9qOBiYqxrSaFeY+rz0CjcpIhO7jyjIljkytKMMJLChLLludjoaMnHMlxn+jU4J1y1rg65b0xJk6tGwe+HAM585PfBZStrIsBcjOwZSFYSzctFSF8l/V6fCHoQdOqdhDvo0txV2UIznGaaI5vzQ0KxCgGUj1E8GZIK6cuEher2kBUiYuUipkkJWMS4rYe8DFkM6cWu0afoc3YMF4vIDmL3zobksMNdCFlJriKu24g2ZB3IpZqK42+Vy3fYrM560fbSeEVHPoU7tgpA2knhA7uT1+J4Ks4X1rE0aeMLacAfcwx4vDLL3cvYI4mFjlicsAtmuWMR9yzEx8ksgrL7Zj0csUbssnVpMFiey9Yg5I69kgRgvpTVKTOMHZ23Gns6j5CV6aNlIPUiGUw9Q/rTTw1Vd8sXRsd9DtdVtcDHVCnuTjZFJxeO6FsCwlBmPmnG7A45D0IT0Lc8BuSTP4lr+tr68EKeZHdkAuSXPF4ZXKYZ9zO0eZ3vQzHZ32zPqMZmD6LtfI7L2kQCGGjiURm9+zku+prZQMugTIzlngkelK2OwEmVnVP6BPcij8Q2YTrZ2T2ru3tAq3XvjKjdA+Z5Nlbp7EptBXCmQQ6rF2Cezya68182NsUp7ZAB113B7Vklxp7022EJT4jVUAazMhVXyUotQWAco5RLFGUfQUwQRB2bLRyQb7dRrAOU4wylD9oy9bYIr6tYTgMt/K2BrOVyJIZTylk2i0hs1BTl1NVMl6+D3MsLuq05jRO1C87rAZa3lLppSnksANbDETSwNjSDXq/wRnYn7hB3X6NG7xw6IA3Vyog6JIDTcZg8UC2PpsQ/mnpXcjXughQDOC9DhkDirpH4F2eTctNLX5JgoBYaxR2nGaXpk9glScTG47lcmo2KfK6ZWalhonZL0zYo5/cKu/a8oujkQvVH/RGQ0yC57Eb9N8EtHoGcyuUAW5osXH8i5Dfsot/J0WsiV5LG8RrIXuU0UcNTiVrHM/8AmQbp18qsDE0cdyunoggXAIgmxqV8SG3viGVpRNrNhcTcPBznfqmu7ka6Oz9YKtwIWAx215JdBA3FXQS1z+nErNFK85uQMgBnAW3JgXS3AaY3z7TxFgT34z6jAt9leGVAn87ATCJREGaoJ2ZjctnQjIA5jt0rK82wfViLbVxOoIfSbrIp8WpmCTfE6P9wdr2sCeB8XDND3e6CchWEvI4LY06g0fdcwJaNLNcHtmt68wT4De69GHJoK8HNtaJ2Qf9zRyIs2oreyAugUUSAmsi9Odpmmu3uWo+UI4KhUIVeYux05ZgAsBMEMkwIUGgZIQxkeOJW9qdFSjIyhUoFxpHUhf1qc70DwKGPM1L69cG0zUXEXzHeLA+4LgtuT3sU/Q6u19C6KqUys6+2+cBNCRbaVzWWmRwLGKT4j3M9gXyYouzjoKxGDCWuQvsb2N2ypxHKJPkC2q6IA4Y30c+LHBQnAg7FxE+R4JrDOLYi/TlHhHcJaNzPINSfhPZlyqyfwy6vx9YtTaFDMOuvaWIrQ+P7FxUcTttrcG4d2q5gj8SKf+5xBE3aTYWGb1beZSi+I+Kvbeh6VihHPyTkD+3XS0Plek+4appmB4oD02aVnYHDrJvLcZKrMj+Ooc1HrDQzCXfsA6Mk5dbQPs8LUJX+9RpdWBjNva8KD9WRFXgoLLGvkd/sGSjN47ZzGfZgn2e/IVAuy0XqoyjVOpwvTqDEa3GfUhstLDjIdwrkY6XXkgGN7d472VrOZ7BfwVayCzN6jzF41Zjt6higaQ6KmpYMsq0JFfJqnLaTFTd+PED0V4CpwsnSADhFVdVP5p3LccJJCR7Co2eGeumZhpR+bUtot95B+vTsOpS0ZEqawWCWAY6w5eGd0jgnXRFCWgXON5BnAZR3MJRXoa+1TMfGS3MC36TOlYa+HIDpUa9h1YNCT91Nv4fQleOIcZhMmmLrT+cE9RSE02QwybZDWF2t3pvkvfY7gKaDrT6ZPhpDn1ey9VnOjB59s/NtM7pkd7MlYhm3jSiajPuHYrVH3Wpc8z7HgPQNbrdYNt3pAu+NRUS3nsUBZ1JzM9y2fFeOke3OD1S4c4Mr9YzQEuj/e4hnttVzERTttSUoTwBATkY+FXIag+WWBIAhV2G0f2PqSzKgveugOPFfwuML6B3KfUIL7SK/HuNwBSaRptort4dZLku2MWP1T/KbIXlQtLscttQXKeVf8xb8eO5epnDeSq9aqIFJPO/AOPfom2yMgvcpUtg9L68z/RRphEKybFWoZZHA2ljpdl4Qjb1a7r0BFmd23lDm6q+px8NlAUBnurxG+A9uwhv5FsmQtk34tQoZ1AImN6OJAADjM/9WVEdk5JY+zQPIuGQe6o4FSEZC/h4L2A6J3KhRNRs83dDfShFnZ2tdsNSEtLSqXUI3NuJwFmQZ3t9o4o82JtbeswRKVwxFI2t7FFur6ziGiJUmxnj3t3m2NBWA1mrQ974YoMgS0avlwkZ9E71/AOXBiVb60aYbu2bmxIH2vpZGC5Rdt6wEpwdgSRJ+X17w/JhDFZqMaEF0WtwtJlAc2tpxbfWcvALkj4qGbdPuBxD002gvm5sJA41Mk8VQKeG21qDf5fAzzTnNc0WJ/8cJh9OsNpQJjSOZ3aEAtasCQLIkZZo7WK518O/TUoJvCldwlXdsUY1onekRhVmbCUUsg/ItcVBQWn+4N0YfFKd+xbENKfJStL8Y/ey29dGFGaWuMfrJV9zGArQfhT7eiWP1FovafSHLf6LxGy5qd3MU1XPpYAqzuOaEBBA9mtS+LCjTouqn84hNmF7f4LCZ0yqiOz2Xl0To14zpPxBh8B7LwZIWsntxLgfNr0Mh32blLmO3g77LCXEsloFraPvNx+zikq/+Hc7NJYKBpy76M4Uxou6uXzXN5HsNYMu3An3Qd6AtPLSuRJakO8fDxHhaC6Pk5k5q6YHjv8pUt/4/DAsSTPZ6WvhEH2t5bOl9xyXr+gjv9UU7vNcXE7N2XAxuuyUTbXe40HNZyRmQTeIgT1B4yaBRx/0cdiWJAfqHDTA1MfrZwFa4gk9lMp36AluE2xTA+G1slhrgU7y7Wqk/XYQpcrIkBdzfbQpgfqTvhWt/+AmG70zIrxS2bl4D+lDXbe7W63u197riz1LHFNPflfRnt2FHCw4AfXT6IZABnktL3mgD+v6djV5tDHDIgtJ6zWhmo5wSbZykhcm7lftvtvVTwC7aUyJ624yVfFxHGzqtn+NaauujXIQ3ld5kIyrsqZJj4n64ZmUzjO8XttwpqRPIg7Ac/gbcZ5moXTQOaI196pr5ubQyMxjG/TyIGUtoGjPHVoyixi2JYhrr2PpjMKl9zzPYopQ/lK4RbSjBbUlhV6Ys3mJiA/vOZxcpky3HRvVv8VFPMUkFzgXi9JHKbpS1y5kYvXUMUKon95222eyK0wd9rWMYZNlMLu3l+GltU/3ARgzXi2Js2j70CcCwN047miQOQ5uCRt6LJooPtaZ+kZqFORkAxEAo/vEAwRGmvx3+TTW6KS3mdbSB5kdTaCbWZBnK9GMcW1D1FWRjyoiyNv9LLe3p4Er/F2AAB6uWe3ERzfoAAAAASUVORK5CYII="	 # UAA 페이지 로고 이미지 (Base64)
 uaa_login_branding_square_logo: "iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyhpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMTMyIDc5LjE1OTI4NCwgMjAxNi8wNC8xOS0xMzoxMzo0MCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6QkIwMjA5M0U5NEQ0MTFFNjk1M0FFQ0UxNkIxNEZFNjciIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6QkIwMjA5M0Q5NEQ0MTFFNjk1M0FFQ0UxNkIxNEZFNjciIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIDIwMTUuNSAoV2luZG93cykiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDpEMzRGNDdCNTgxNEIxMUU2QjJFODk1MEQzM0EzNkMxOSIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDpEMzRGNDdCNjgxNEIxMUU2QjJFODk1MEQzM0EzNkMxOSIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/Psx4+gAAAASbSURBVHja7FZ9aFVlGP8973vOud9Tt7nl1lzNOWailKkV/iEohYn2Vx/QHxKCQkUUmEFhREXQvxJGhSFRlERFhEk1K9PUjJk0dZJzzuGc+3B3997tfp3zfvScu0X4T1AQ/nPP5eGce17e5/l9PO9zL1lrcTMvgZt8VQFUAVQBVAE4KHbDZIYWq1P7dpiJwQ7HdYxZsOyiXLzmYxGvOwJZD6ICDFxQKQeKNgEyi6A8BYcUSE0CJKCpDkExikgyBmTLQJzXhIaVSejxfsjaZtDkeaD3M9iVu6ByKbiNc+GYsUtt5R/fPIzxoSaSUZhIADM9sN5c/WG707Z2r+jc8gJFvAz0/zOyhTrf9RImBptsOQ4bSA4P0Alma8hcOLAtOPnaT7pwbQXJ2H+vQsRaRzkis8+ci5wZAHb4+EYpErBFbgdWzpYJ1p8NHQeNnVuuj7/epca6N89spH9ZOAb+vZsf9B18Juj97osgkznk9+zfY0ojbeEaFd9tT0OV55lhycwJFGOpoxbkcoSAIxZClmHiXkCdD7/qLtr6BkSa/Z74xx6gFBOwvtSXf9mp+r5+mrJDt5IRMNIB+T5MtHHUXfvyFvnKltUbbP7KbRRzoDMSxHBp9hNetnLnTaE/6d/XmdLwUjuvuRtOKiNCALpQYWopDqMcOB43q/Zggusd6rf3PjF9X26ncr5GOGyxGwUZJiq4TmkyqXOjHXLXi8/l7eCRR0WUi3gWekowKxGaMyvjXzd+z0wp27tUjZ18TFiboljdALleNlTAEjdw4MKJp2CvdW/2T+/5VEz03FmRee4S8NECpljSUqTiv5U+53N9spM/o3TsrYN06dCDSDCLPCcb4apBaAdXjhkg3OOZmYgISLfMCdiWRPN1arz7Qzm//aCNd5wIVEPeyXZvs6d2v0N+UZhIDUztWqgreYjRiywk53QjHFzD9oI6H/mIrD4Pk0svKH+zo8tJX1hqonwCmLyeZFlzrET4pVJYQ3isgxf2iOZ3mokXWBkNlWyHbX3oLBVL31P//mcpKMFG50PVb4Y+fQZycoDJJBkAd75gFeU4bFPT2ei6nRvJls9W5qEZOrYoOLHvADIXOxHzWB62RGnoosfyJhlAimW07CNHRCK0TM6tBSX4BAlen7gASp8GBQo62XLF1G4S9ujRZuQGYNkWwX1C0Qh0jeu7i5Z/7tz7xPNCmOEZAIbP3/QgjK9a/F/3vY+x7vtlCMrjQoI3Oi4XTUE5c2CcGsDlo8XKRHhC2uJViOkxBltkLdirhnu+dToff0qd6LnDz11/wHHVLcKUha5bOCXdfA9aFh7y6u46g4aFQG4QfwPI9LGsNbD5aaHT57bq/sNPYuryCjLTDEJUpLbcmCTNjC0cllvFWrYHcWbd2idvX/+2bNq0m8HY4PhRFNrXYI6bBQpp2LZVMP2HYVIJuBEe541tQP4qnBsGh1FhIeO0rN6L1pUfmNFz99HIHxtsYXCZ1qoO0taTKgs+a4xAjguZmaLaVSNINHS5NUu+Eqn6HFTAeYIQGdtRRGW6KR/w+VkrXtM3zqrq3/IqgCqAKoCbDeBPAQYAvdcfKsxKtoUAAAAASUVORK5CYII="	# UAA 페이지 타이틀 로고 이미지 (Base64)
 uaa_login_links_passwd: "http://portal-web-user.xx.xx.xxx.xxx.xip.io/resetpasswd"	# UAA 페이지에서 Reset Password 누를 시 이동하는 링크 주소
 uaa_login_links_signup: "http://portal-web-user.xx.xx.xxx.xxx.xip.io/createuser"	# UAA 페이지에서 Create Account 누를 시 이동하는 링크 주소
-uaa_client_portal_redirect_uri: "http://portal-web-user.xx.xx.xxx.xxx.xip.io,http://portal-web-user.xx.xx.xxx.xxx.xip.io/callback"	# UAA Portal Client의 Redirect URL 지정 변수, 포탈에서 로그인 버튼 클릭 후 UAA 페이지에서 성공적으로 로그인했을 경우 이동하는 URI 경로
+uaa_client_portal_redirect_uri: "http://portal-web-user.xx.xx.xxx.xxx.xip.io,http://portal-web-user.xx.xx.xxx.xxx.xip.io/callback"	# UAA Portal Client의 Redirect URI 지정 변수, 포탈에서 로그인 버튼 클릭 후 UAA 페이지에서 성공적으로 로그인했을 경우 이동하는 URI 경로
+
 
 
 # STEMCELL
@@ -607,119 +613,119 @@ stemcell_os: "ubuntu-xenial"				# Stemcell OS
 stemcell_version: "315.64"				# Stemcell Version
 
 # SMOKE-TEST
-smoke_tests_azs: [z1]					# Smoke-Test 가용 존
+smoke_tests_azs: ["z1"]					# Smoke-Test 가용 존
 smoke_tests_instances: 1				# Smoke-Test 인스턴스 수
-smoke_tests_vm_type: minimal				# Smoke-Test VM 종류
-smoke_tests_network: default				# Smoke-Test 네트워크
+smoke_tests_vm_type: "minimal"				# Smoke-Test VM 종류
+smoke_tests_network: "default"				# Smoke-Test 네트워크
 
 # NATS
-nats_azs: [z1, z2]					# NATS 가용 존
-nats_instances: 2					# NATS 인스턴스 수
-nats_vm_type: minimal					# NATS VM 종류
-nats_network: default					# NATS 네트워크
+nats_azs: ["z1", "z2"]					# Nats 가용 존
+nats_instances: 2					# Nats 인스턴스 수
+nats_vm_type: "minimal"					# Nats VM 종류
+nats_network: "default"					# Nats 네트워크
 
 # ADAPTER
-adapter_azs: [z1, z2]					# ADAPTER 가용 존
-adapter_instances: 2					# ADAPTER 인스턴스 수
-adapter_vm_type: minimal				# ADAPTER VM 종류
-adapter_network: default				# ADAPTER 네트워크
+adapter_azs: ["z1", "z2"]				# Adapter 가용 존
+adapter_instances: 2					# Adapter 인스턴스 수
+adapter_vm_type: "minimal"				# Adapter VM 종류
+adapter_network: "default"				# Adapter 네트워크
 
 # DATABASE
-database_azs: [z1]					# DATABASE 가용 존
-database_instances: 1					# DATABASE 인스턴스 수
-database_vm_type: small					# DATABASE VM 종류
-database_network: default				# DATABASE 네트워크
-database_persistent_disk_type: 10GB			# DATABASE 영구 Disk 종류
+database_azs: ["z1"]					# Database 가용 존
+database_instances: 1					# Database 인스턴스 수
+database_vm_type: "small"				# Database VM 종류
+database_network: "default"				# Database 네트워크
+database_persistent_disk_type: "10GB"			# Database 영구 Disk 종류
 
 # DIEGO-API
-diego_api_azs: [z1, z2]					# DIEGO-API 가용 존
-diego_api_instances: 2					# DIEGO-API 인스턴스 수
-diego_api_vm_type: small				# DIEGO-API VM 종류
-diego_api_network: default				# DIEGO-API 네트워크
+diego_api_azs: ["z1", "z2"]				# Diego-API 가용 존
+diego_api_instances: 2					# Diego-API 인스턴스 수
+diego_api_vm_type: "small"				# Diego-API VM 종류
+diego_api_network: "default"				# Diego-API 네트워크
 
 # UAA
-uaa_azs: [z1, z2]					# UAA 가용 존
+uaa_azs: ["z1", "z2"]					# UAA 가용 존
 uaa_instances: 2					# UAA 인스턴스 수
-uaa_vm_type: minimal					# UAA VM 종류
-uaa_network: default					# UAA 네트워크
+uaa_vm_type: "minimal"					# UAA VM 종류
+uaa_network: "default"					# UAA 네트워크
 
 # SINGLETON-BLOBSTORE
-singleton_blobstore_azs: [z1]				# SINGLETON-BLOBSTORE 가용 존
-singleton_blobstore_instances: 1			# SINGLETON-BLOBSTORE 인스턴스 수
-singleton_blobstore_vm_type: small			# SINGLETON-BLOBSTORE VM 종류
-singleton_blobstore_network: default			# SINGLETON-BLOBSTORE 네트워크
-singleton_blobstore_persistent_disk_type: 100GB		# SINGLETON-BLOBSTORE 영구 Disk 종류
+singleton_blobstore_azs: ["z1"]				# Singleton-Blobstore 가용 존
+singleton_blobstore_instances: 1			# Singleton-Blobstore 인스턴스 수
+singleton_blobstore_vm_type: "small"			# Singleton-Blobstore VM 종류
+singleton_blobstore_network: "default"			# Singleton-Blobstore 네트워크
+singleton_blobstore_persistent_disk_type: "100GB"	# Singleton-Blobstore 영구 Disk 종류
 
 # API
-api_azs: [z1, z2]					# API 가용 존
+api_azs: ["z1", "z2"]					# API 가용 존
 api_instances: 2					# API 인스턴스 수
-api_vm_type: small					# API VM 종류
-api_network: default					# API 네트워크
-api_vm_extensions: [50GB_ephemeral_disk]		# API 영구 Disk 종류
+api_vm_type: "small"					# API VM 종류
+api_network: "default"					# API 네트워크
+api_vm_extensions: ["50GB_ephemeral_disk"]		# API VM 확장
 
 # CC-WORKER
-cc_worker_azs: [z1, z2]					# CC-WORKER 가용 존
-cc_worker_instances: 2					# CC-WORKER 인스턴스 수
-cc_worker_vm_type: minimal				# CC-WORKER VM 종류
-cc_worker_network: default				# CC-WORKER 네트워크
+cc_worker_azs: ["z1", "z2"]				# CC-Worker 가용 존
+cc_worker_instances: 2					# CC-Worker 인스턴스 수
+cc_worker_vm_type: "minimal"				# CC-Worker VM 종류
+cc_worker_network: "default"				# CC-Worker 네트워크
 
 # SCHEDULER
-scheduler_azs: [z1, z2]					# SCHEDULER 가용 존
-scheduler_instances: 2					# SCHEDULER 인스턴스 수
-scheduler_vm_type: minimal				# SCHEDULER VM 종류
-scheduler_network: default				# SCHEDULER 네트워크
-scheduler_vm_extensions: [diego-ssh-proxy-network-properties] # SCHEDULER 영구 Disk 종류
+scheduler_azs: ["z1", "z2"]				# Scheduler 가용 존
+scheduler_instances: 2					# Scheduler 인스턴스 수
+scheduler_vm_type: "minimal"				# Scheduler VM 종류
+scheduler_network: "default"				# Scheduler 네트워크
+scheduler_vm_extensions: ["diego-ssh-proxy-network-properties"] # Scheduler VM 확장
 
 # ROUTER
-router_azs: [z1, z2]					# ROUTER 가용 존
-router_instances: 2					# ROUTER 인스턴스 수
-router_vm_type: minimal					# ROUTER VM 종류
-router_network: default					# ROUTER 네트워크
-router_vm_extensions: [cf-router-network-properties]	# ROUTER 영구 Disk 종류
+router_azs: ["z1", "z2"]				# Router 가용 존
+router_instances: 2					# Router 인스턴스 수
+router_vm_type: "minimal"				# Router VM 종류
+router_network: "default"				# Router 네트워크
+router_vm_extensions: ["cf-router-network-properties"]	# Router VM 확장
 
 # TCP-ROUTER
-tcp_router_azs: [z1, z2]				# TCP-ROUTER 가용 존
-tcp_router_instances: 2					# TCP-ROUTER 인스턴스 수
-tcp_router_vm_type: minimal				# TCP-ROUTER VM 종류
-tcp_router_network: default				# TCP-ROUTER 네트워크
-tcp_router_vm_extensions: [cf-tcp-router-network-properties]	# TCP-ROUTER 영구 Disk 종류
+tcp_router_azs: ["z1", "z2"]				# TCP-Router 가용 존
+tcp_router_instances: 2					# TCP-Router 인스턴스 수
+tcp_router_vm_type: "minimal"				# TCP-Router VM 종류
+tcp_router_network: "default"				# TCP-Router 네트워크
+tcp_router_vm_extensions: ["cf-tcp-router-network-properties"]	# TCP-Router VM 확장
 
 # DOPPLER
-doppler_azs: [z1, z2]					# DOPPLER 가용 존
-doppler_instances: 4					# DOPPLER 인스턴스 수
-doppler_vm_type: minimal				# DOPPLER VM 종류
-doppler_network: default				# DOPPLER 네트워크
+doppler_azs: ["z1", "z2"]				# Doppler 가용 존
+doppler_instances: 4					# Doppler 인스턴스 수
+doppler_vm_type: "minimal"				# Doppler VM 종류
+doppler_network: "default"				# Doppler 네트워크
 
 # DIEGO-CELL
-diego_cell_azs: [z1, z2]				# DIEGO-CELL 가용 존
-diego_cell_instances: 2					# DIEGO-CELL 인스턴스 수
-diego_cell_vm_type: small-highmem-16GB			# DIEGO-CELL VM 종류
-diego_cell_network: default				# DIEGO-CELL 네트워크
-diego_cell_vm_extensions: [100GB_ephemeral_disk]	# DIEGO-CELL 영구 Disk 종류
+diego_cell_azs: ["z1", "z2"]				# Diego-Cell 가용 존
+diego_cell_instances: 2					# Diego-Cell 인스턴스 수
+diego_cell_vm_type: "small-highmem-16GB"		# Diego-Cell VM 종류
+diego_cell_network: "default"				# Diego-Cell 네트워크
+diego_cell_vm_extensions: ["100GB_ephemeral_disk"]	# Diego-Cell VM 확장
 
 # LOG-API
-log_api_azs: [z1, z2]					# LOG-API 가용 존
-log_api_instances: 2					# LOG-API 인스턴스 수
-log_api_vm_type: minimal				# LOG-API VM 종류
-log_api_network: default				# LOG-API 네트워크
+log_api_azs: ["z1", "z2"]				# Log-API 가용 존
+log_api_instances: 2					# Log-API 인스턴스 수
+log_api_vm_type: "minimal"				# Log-API VM 종류
+log_api_network: "default"				# Log-API 네트워크
 
-# CREDHUB
-credhub_azs: [z1, z2]					# CREDHUB 가용 존
-credhub_instances: 2					# CREDHUB 인스턴스 수
-credhub_vm_type: minimal				# CREDHUB VM 종류
-credhub_network: default				# CREDHUB 네트워크
+# CREDHUB	
+credhub_azs: ["z1", "z2"]				# CredHub 가용 존
+credhub_instances: 2					# CredHub 인스턴스 수
+credhub_vm_type: "minimal"				# CredHub VM 종류
+credhub_network: "default"				# CredHub 네트워크
 
 # ROTATE-CC-DATABASE-KEY
-rotate_cc_database_key_azs: [z1]			# ROTATE-CC-DATABASE-KEY 가용 존
-rotate_cc_database_key_instances: 1			# ROTATE-CC-DATABASE-KEY 인스턴스 수
-rotate_cc_database_key_vm_type: minimal			# ROTATE-CC-DATABASE-KEY VM 종류
-rotate_cc_database_key_network: default			# ROTATE-CC-DATABASE-KEY 네트워크
+rotate_cc_database_key_azs: ["z1"]			# Rotate-CC-Database-Key 가용 존
+rotate_cc_database_key_instances: 1			# Rotate-CC-Database-Key 인스턴스 수
+rotate_cc_database_key_vm_type: "minimal"		# Rotate-CC-Database-Key VM 종류
+rotate_cc_database_key_network: "default"		# Rotate-CC-Database-Key 네트워크
 
 # HAPROXY
-haproxy_azs: [z7]					# HAPROXY 가용 존
-haproxy_instances: 1					# HAPROXY 인스턴스 수
-haproxy_vm_type: minimal				# HAPROXY VM 종류
-haproxy_network: default				# HAPROXY 네트워크
+haproxy_azs: ["z7"]					# HAProxy 가용 존
+haproxy_instances: 1					# HAProxy 인스턴스 수
+haproxy_vm_type: "minimal"				# HAProxy VM 종류
+haproxy_network: "default"				# HAProxy 네트워크
 ```
 
 
@@ -788,7 +794,7 @@ ex) uaa_client_admin_secret="admin-secret"
 
 
 
-### <div id='1022'/>3.6.2. PaaS-TA Operation 파일
+### <div id='1022'/>2.6.2. PaaS-TA Operation 파일
 
 <table>
 <tr>
@@ -797,7 +803,7 @@ ex) uaa_client_admin_secret="admin-secret"
 <td>요구사항</td>
 </tr>
 <tr>
-<td>operations/use-postgres.yml</td>
+<td>operations/min-use-postgres.yml</td>
 <td>Database를 Postgres로 설치 <br> 
     - use-postgres.yml 미적용 시 MySQL 설치  <br>
     - 3.5 이전 버전에서 Migration 시 필수  
@@ -805,7 +811,7 @@ ex) uaa_client_admin_secret="admin-secret"
 <td></td>
 </tr>
 <tr>
-<td>operations/use-haproxy.yml</td>
+<td>operations/min-use-haproxy.yml</td>
 <td>HAProxy 적용 <br>
     - IaaS에서 제공하는 LB를 사용하여 PaaS-TA 설치 시, Operation 파일을 제거하고 설치한다.
 </td>
@@ -825,28 +831,31 @@ ex) uaa_client_admin_secret="admin-secret"
 </td>
 </tr>
 <tr>
-<td>operations/use-haproxy-public-network-vsphere.yml</td>
-<td>HAProxy Public Network 설정 <br>
-    - vsphere에서 사용하며, IaaS에서 제공하는 LB를 사용하여 PaaS-TA 설치 시, Operation 파일을 제거하고 설치한다.
-</td>
-<td>Requires: use-haproxy.yml <br>
-    Requires Value :  <br>
-    -v haproxy_public_ip <br>
-    -v haproxy_public_network_name <br>
-    -v haproxy_private_network_name
-</td>
+<td>operations/min-use-router-public-network.yml</td>
+<td>router를 외부 접근을 가능하게 수정한다.</td>
+<td>4VMs 배포시 사용</td>
+</tr>
+<tr>
+<td>operations/min-create-vm-singleton-blobstore.yml</td>
+<td>4VMs에서 사용되는 database의 singleton-blobstore를 단일 VM으로 배포한다.</td>
+<td>7VMs 배포시 사용 <br>Requires operation file: min-option-network-and-deployment.yml</td>
+</tr>
+<tr>
+<td>operations/min-create-vm-tcp-router.yml</td>
+<td>4VMs에서 사용되는 router의 tcp-router를 단일 VM으로 배포한다.</td>
+<td>7VMs 배포시 사용</td>
 </tr>
 </table>
 
 
 
 
-### <div id='1023'/>3.6.3.   PaaS-TA 설치 Shell Scripts
+### <div id='1023'/>2.6.3.   PaaS-TA 설치 Shell Scripts
 
-paasta-deployment.yml 파일은 PaaS-TA를 배포하는 Manifest 파일이며, PaaS-TA VM에 대한 설치 정의를 하게 된다.  
+min-paasta-deployment.yml 파일은 PaaS-TA-min를 배포하는 Manifest 파일이며, PaaS-TA VM에 대한 설치 정의를 하게 된다.  
 PaaS-TA VM 중 singleton-blobstore, database의 AZs(zone)을 변경하면 조직(ORG), 스페이스(SPACE), 앱(APP) 정보가 모두 삭제된다. 
 
-이미 설치된 PaaS-TA의 재배포 시, singleton-blobstore, database의 AZs(zone)을 변경하면 조직(ORG), 공간(SPACE), 앱(APP) 정보가 모두 삭제된다.
+이미 설치된 PaaS-TA의 재배포 시, singleton-blobstore, database의 AZs(zone)을 변경하면 조직(ORG), 공간(SPACE), 앱(APP) 정보가 모두 삭제된다.  
 
 <b>※ PaaS-TA 설치 시 명령어는 BOSH deploy를 사용한다. (IaaS 환경에 따라 Option이 다름)</b><br>
 
@@ -882,16 +891,29 @@ PaaS-TA 배포 시, 설치 Option을 추가해야 한다. 설치 Option에 대�
 </tr>
 </table>
 
-#### <div id='1024'/>● deploy-aws.sh
+#### <div id='1024'/>● deploy-aws-4vms.sh
 ```
-bosh -e {director_name} -d paasta -n deploy paasta-deployment.yml \	# PaaS-TA Manifest File
-	-o operations/aws.yml \						# AWS 설정
-	-o operations/use-haproxy.yml \					# HAProxy 적용
-	-o operations/use-haproxy-public-network.yml \			# HAProxy Public Network 적용
-	-o operations/use-postgres.yml \				# Database Type 설정 (3.5버전 이하에서 Migration 시 필수)
-	-o operations/rename-network-and-deployment.yml \		# Rename Network and Deployment
-	-l aws-vars.yml \						# AWS 환경에 PaaS-TA 설치시 적용하는 변수 설정 파일
-	-l ../../common/common_vars.yml					# PaaS-TA 및 각종 Service 설치시 적용하는 공통 변수 설정 파일
+bosh -e micro-bosh bosh -d paasta -n deploy min-paasta-deployment.yml \	# PaaS-TA Manifest File
+		-o operations/min-aws.yml \				# AWS 설정
+		-o operations/min-use-router-public-network.yml \	# Router 외부 접근 설정
+		-o operations/min-use-postgres.yml \			# Database Type 설정 (3.5버전 이하에서 Migration 시 필수)
+		-o operations/min-rename-network-and-deployment.yml \	# Rename Network and Deployment
+		-l aws-vars.yml \					# AWS 환경에 PaaS-TA 설치시 적용하는 변수 설정 파일
+		-l ../../common/common_vars.yml				# PaaS-TA 및 각종 Service 설치시 적용하는 공통 변수 설정 파일
+```
+#### <div id='1025'/>● deploy-aws-7vms.sh
+```
+bosh -e micro-bosh -d paasta -n deploy min-paasta-deployment.yml \	# PaaS-TA Manifest File
+		-o operations/min-aws.yml \				# AWS 설정
+		-o operations/min-create-vm-singleton-blobstore.yml \	# singleton-blobstore VM 배포
+		-o operations/min-create-vm-tcp-router.yml \		# tcp-router 
+		-o operations/min-use-haproxy.yml \			# HAProxy 적용
+		-o operations/use-haproxy-public-network.yml \		# HAProxy Public Network 적용
+		-o operations/min-use-postgres.yml \			# Database Type 설정 (3.5버전 이하에서 Migration 시 필수)
+		-o operations/min-rename-network-and-deployment.yml \	# Rename Network and Deployment
+		-o operations/min-option-network-and-deployment.yml \	# singleton-blobstore Rename Network and Deployment
+		-l aws-vars.yml \					# AWS 환경에 PaaS-TA 설치시 적용하는 변수 설정 파일
+		-l ../../common/common_vars.yml				# PaaS-TA 및 각종 Service 설치시 적용하는 공통 변수 설정 파일
 ```
 
 - Shell script 파일에 실행 권한 부여
@@ -902,26 +924,42 @@ $ chmod +x ${HOME}/workspace/paasta/deployment/paasta-deployment/paasta/*.sh
 
 
 
-## <div id='1030'/>3.7.  PaaS-TA 설치
-- 서버 환경에 맞추어 Deploy 스크립트 파일의 설정을 수정한다. 
+## <div id='1026'/>2.7.  PaaS-TA 설치
+- 서버 환경에 맞추어 어떤 VM 타입으로 배포할지 결정한 뒤 Deploy 스크립트 파일의 설정을 수정한다.
 
-> $ vi ${HOME}/workspace/paasta/deployment/paasta-deployment/paasta/deploy-aws.sh
+
+> $ vi ${HOME}/workspace/paasta/deployment/paasta-deployment/paasta/deploy-aws-4vm.sh
 
 ```
-bosh -e {director_name} -d paasta -n deploy paasta-deployment.yml \	# PaaS-TA Manifest File
-	-o operations/aws.yml \						# AWS 설정
-	-o operations/use-haproxy.yml \					# HAProxy 적용
-	-o operations/use-haproxy-public-network.yml \			# HAProxy Public Network 적용
-	-o operations/use-postgres.yml \				# Database Type 설정 (3.5버전 이하에서 Migration 시 필수)
-	-o operations/rename-network-and-deployment.yml \		# Rename Network and Deployment
-	-l aws-vars.yml \						# AWS 환경에 PaaS-TA 설치시 적용하는 변수 설정 파일
-	-l ../../common/common_vars.yml					# PaaS-TA 및 각종 Service 설치시 적용하는 공통 변수 설정 파일
+bosh -e micro-bosh bosh -d paasta -n deploy min-paasta-deployment.yml \	# PaaS-TA Manifest File
+		-o operations/min-aws.yml \				# AWS 설정
+		-o operations/min-use-router-public-network.yml \	# Router 외부 접근 설정
+		-o operations/min-use-postgres.yml \			# Database Type 설정 (3.5버전 이하에서 Migration 시 필수)
+		-o operations/min-rename-network-and-deployment.yml \	# Rename Network and Deployment
+		-l aws-vars.yml \					# AWS 환경에 PaaS-TA 설치시 적용하는 변수 설정 파일
+		-l ../../common/common_vars.yml				# PaaS-TA 및 각종 Service 설치시 적용하는 공통 변수 설정 파일
+```
+
+> $ vi ${HOME}/workspace/paasta/deployment/paasta-deployment/paasta/deploy-aws-7vm.sh
+
+```
+bosh -e micro-bosh -d paasta -n deploy min-paasta-deployment.yml \	# PaaS-TA Manifest File
+		-o operations/min-aws.yml \				# AWS 설정
+		-o operations/min-create-vm-singleton-blobstore.yml \	# singleton-blobstore VM 배포
+		-o operations/min-create-vm-tcp-router.yml \		# tcp-router 
+		-o operations/min-use-haproxy.yml \			# HAProxy 적용
+		-o operations/use-haproxy-public-network.yml \		# HAProxy Public Network 적용
+		-o operations/min-use-postgres.yml \			# Database Type 설정 (3.5버전 이하에서 Migration 시 필수)
+		-o operations/min-rename-network-and-deployment.yml \	# Rename Network and Deployment
+		-o operations/min-option-network-and-deployment.yml \	# singleton-blobstore Rename Network and Deployment
+		-l aws-vars.yml \					# AWS 환경에 PaaS-TA 설치시 적용하는 변수 설정 파일
+		-l ../../common/common_vars.yml				# PaaS-TA 및 각종 Service 설치시 적용하는 공통 변수 설정 파일
 ```
 - PaaS-TA 설치 Shell Script 파일 실행 (BOSH 로그인 필요)
 
 ```
 $ cd ${HOME}/workspace/paasta/deployment/paasta-deployment/paasta
-$ ./deploy-{IaaS}.sh
+$ ./deploy-{IaaS}-{VMs_Number}.sh
 ```
 
 - PaaS-TA 설치 확인
@@ -936,41 +974,38 @@ Task 134. Done
 
 Deployment 'paasta'
 
-Instance                                                  Process State  AZ  IPs           VM CID               VM Type             Active
-adapter/58948983-7e9b-4761-89bf-6f88a6b9c7e2              running        z1  10.0.1.123    i-076d0dfa6ec1f7d98  small               true
-adapter/ffca4d6c-6ce4-4cf0-8084-39326e68c9eb              running        z2  10.0.41.122   i-0a61fc33453ec64d0  small               true
-api/4b7cff7b-1e44-44eb-840b-732c754b921c                  running        z1  10.0.1.128    i-05767b58d1d4b957c  medium              true
-api/da8ca5bd-e310-44b6-b54a-21865f7132bd                  running        z2  10.0.41.125   i-0ad626de643f5acb4  medium              true
-cc-worker/7babe563-bc7a-434d-85a2-4fd67081cfd7            running        z2  10.0.41.126   i-01b845e22ffc1eb48  medium              true
-cc-worker/a5475b17-af99-44dc-9241-1feb087010f3            running        z1  10.0.1.129    i-0c7e1f4e89871c8d7  medium              true
-credhub/27d026fe-a409-4f4e-8a22-61f121a2aba8              running        z2  10.0.41.134   i-0570c6ce731340f08  small               true
-credhub/c58fa66a-cff6-4532-9abd-d4ba3b31f60e              running        z1  10.0.1.137    i-048b62105a7373a3d  small               true
-database/d4449c40-25e4-4422-ac33-3584fe70f7c3             running        z1  10.0.1.124    i-0408dcd38fb9e7346  medium              true
-diego-api/3211715c-c2e3-4356-a9b0-30b5da9fb3b4            running        z2  10.0.41.123   i-09ab4c691aeb20d6a  small               true
-diego-api/77e870de-e4fb-4737-82c5-5504e63df0a4            running        z1  10.0.1.125    i-097475fa6e44911ab  small               true
-diego-cell/bd7cde8e-5424-4ded-8e6e-5f0513af7641           running        z2  10.0.41.132   i-0de8bdd034aaca50c  large-highmem-32GB  true
-diego-cell/c14318c5-cd0f-4c9f-acd4-8ab8908c169e           running        z1  10.0.1.135    i-00feefaa1eb37afb0  large-highmem-32GB  true
-doppler/10344617-d442-4e22-9af9-8cc35d8bf314              running        z2  10.0.41.130   i-0a831bffcf5d6c172  medium              true
-doppler/45bbbd94-3d5f-44df-9f01-11f8cdeb48ea              running        z1  10.0.1.133    i-07ad774745c4c6ab7  medium              true
-doppler/61fd7584-11be-442f-9c8a-2df1424121d8              running        z1  10.0.1.134    i-0ee286945a1939220  medium              true
-doppler/89adaeb7-16ac-431e-9ba3-754e74308af7              running        z2  10.0.41.131   i-0f47381253fddd716  medium              true
-haproxy/d645b06f-36eb-40d7-a828-8115794ca035              running        z7  10.0.0.121    i-0d3b17f8414573ebe  minimal             true
-                                                                             54.180.53.80
-log-api/c6d866b5-8350-427b-b873-cb7fbd5da943              running        z2  10.0.41.133   i-0c7de5da28f58f302  small               true
-log-api/d8376424-360a-4f1b-9488-503f49fd8550              running        z1  10.0.1.136    i-07d78c5dc6d854f8e  small               true
-nats/154e1623-9dfe-425f-8bea-90d9b444e1d7                 running        z1  10.0.1.122    i-0d2e6c416bd23047c  small               true
-nats/9d8f7df6-c22c-4f8e-ae28-83dbe9fa0de1                 running        z2  10.0.41.121   i-0c2169e16e77af947  small               true
-router/202e4d16-8044-4b47-8e7b-b6e827502b04               running        z1  10.0.1.131    i-0e08bd4fa4c54739c  small               true
-router/bd268bbd-1619-441c-a401-72d3cd9e18da               running        z2  10.0.41.128   i-0d6ca756c81fec386  small               true
-scheduler/33b5f3e2-83b4-4998-9e81-71cf60aaf82d            running        z1  10.0.1.130    i-0bbf05c84fc31e235  medium              true
-scheduler/a0dbe4d2-6f81-4df6-992b-111e10014609            running        z2  10.0.41.127   i-0a8b481db3cd80036  medium              true
-singleton-blobstore/d0aa4103-50f9-474d-b309-c0a0c402ad5c  running        z1  10.0.1.127    i-028ef29ff1c5c18ca  medium              true
-tcp-router/7998c2be-d535-49ca-bba6-5477c6018d78           running        z1  10.0.1.132    i-027e51e7407ada6cd  small               true
-tcp-router/e55653ea-cc33-4ead-b1d6-4b5f33fdb78b           running        z2  10.0.41.129   i-00fe2dda763b39cc9  small               true
-uaa/6ea05760-f851-413a-b03d-cfe83885d935                  running        z2  10.0.41.124   i-0577911096858aa61  medium              true
-uaa/d49ee04f-6f1f-4fbc-97ac-76419511b2e7                  running        z1  10.0.1.126    i-07938b838ca591170  medium              true
+Instance                                       Process State  AZ  IPs          VM CID               VM Type             Active
+compute/e154dcdc-a2c1-4a85-86b7-607a02a30acf   running        z1  10.0.31.235  i-0f92f55575bf2567e  small-highmem-16GB  true
+control/a18f5e97-098c-47ab-9147-77f594571bd6   running        z1  10.0.31.234  i-053cd8f71d99f1a15  small-highmem-16GB  true
+database/7ea28d82-5d5b-471f-bde6-a65d4809062e  running        z1  10.0.31.233  i-0b2e54deaf0734f59  small               true
+router/c01b1aa4-43c9-42f6-9003-cf8f8664d142    running        z7  10.0.30.204  i-0a449def3351877b3  minimal             true
+                                                                  54.180.53.80                                                     
 
-31 vms
+4 vms
+
+Succeeded
+```
+
+```
+ubuntu@inception:~$ bosh -e micro-bosh vms -d paasta
+Using environment '10.0.1.6' as client 'admin'
+
+Task 134. Done
+
+Deployment 'paasta'
+
+Instance                                                  Process State  AZ  IPs             VM CID               VM Type             Active  
+compute/c3f53aed-469f-47ab-aa9b-94be30ca3687              running        z1  10.0.21.156     i-0617a496567bd859e  small-highmem-16GB  true  
+control/acd880a6-b309-452e-b996-0ef4252f8dd3              running        z1  10.0.21.153     i-0d9fbf3f662dec9a0  small-highmem-16GB  true  
+database/c92fd45f-1165-4d71-8df4-9b4270abdd0a             running        z1  10.0.21.151     i-0ead4f61c9be951b9  small               true  
+haproxy/5ccc73dd-cf7e-4f4c-a204-1e933eddfcf8              running        z7  10.0.20.151     i-02e5277d6fd829f34  minimal             true  
+                                                                             54.180.53.80                                             
+router/4f58af5a-529c-41f7-866c-e2327978ea99               running        z1  10.0.21.154     i-0b5f2d42d2c2b9d06  minimal             true  
+singleton-blobstore/5ed376fe-1d84-45c8-a6e8-f938b7320a36  running        z1  10.0.21.152     i-08a432269ffb76663  small               true  
+tcp-router/f8fe5974-8340-4d16-ae02-0b7150828388           running        z1  10.0.21.155     i-04a845c8e7fc7cfb4  minimal             true  
+                                  
+
+7 vms
 
 Succeeded
 ```
@@ -978,8 +1013,7 @@ Succeeded
 
 
 
-
-## <div id='1032'/>3.8.  PaaS-TA 로그인 
+## <div id='1028'/>2.8.  PaaS-TA 로그인 
 
 CF CLI를 설치하고 PaaS-TA에 로그인한다.
 CF API는 PaaS-TA 배포 시 지정했던 System Domain 명을 사용한다.
@@ -1024,9 +1058,9 @@ OK
 Select an org (or press enter to skip):
 ```
 
-[PaaSTa_BOSH_Use_Guide_Image1]:./images/bosh1.png
-[PaaSTa_BOSH_Use_Guide_Image2]:./images/bosh2.png
+[PaaSTa_BOSH_Use_Guide_Image1]:https://github.com/PaaS-TA/Guide-5.0-Ravioli/blob/master/install-guide/paasta/images/bosh1.png?raw=true
+[PaaSTa_BOSH_Use_Guide_Image2]:https://github.com/PaaS-TA/Guide-5.0-Ravioli/blob/master/install-guide/paasta/images/bosh2.png?raw=true
 [PaaSTa_FLAVOR_Image]:./images/aws-vmtype.PNG
-[PaaSTa_UAA_LOGIN_Image]:./images/uaa-login.png
-[PaaSTa_UAA_LOGIN_Image2]:./images/uaa-login-2.png
-[PaaSTa_VALUE_Image]:./images/paasta-value.png
+[PaaSTa_UAA_LOGIN_Image]:https://github.com/PaaS-TA/Guide-5.0-Ravioli/blob/master/install-guide/paasta/images/uaa-login.png?raw=true
+[PaaSTa_UAA_LOGIN_Image2]:https://raw.githubusercontent.com/PaaS-TA/Guide-5.0-Ravioli/master/install-guide/paasta/images/uaa-login-2.png
+[PaaSTa_VALUE_Image]:https://github.com/PaaS-TA/Guide-5.0-Ravioli/blob/master/install-guide/paasta/images/paasta-value.png?raw=true
