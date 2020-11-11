@@ -338,7 +338,7 @@ $ chmod +x ${HOME}/workspace/paasta/deployment/paasta-deployment/bosh/*.sh
 ```
 
 
-### <div id='1034'/>3.3.5. BOSH 설치
+### <div id='1034'/>3.3.6. BOSH 설치
 
 - 서버 환경에 맞추어 Deploy 스크립트 파일의 설정을 수정한다. 
 
@@ -393,7 +393,7 @@ Succeeded
 ```
 
 
-### <div id='1036'/>3.3.6. BOSH 로그인
+### <div id='1036'/>3.3.7. BOSH 로그인
 BOSH가 설치되면, BOSH 설치 디렉터리 이하 {iaas}/creds.yml 파일이 생성된다.  
 creds.yml은 BOSH 인증정보를 가지고 있으며, creds.yml을 활용하여 BOSH에 로그인한다.  
 BOSH 로그인 후, BOSH CLI 명령어를 이용하여 PaaS-TA를 설치할 수 있다.
@@ -407,7 +407,7 @@ $ bosh alias-env {director_name} -e {bosh_url} --ca-cert <(bosh int ./{iaas}/cre
 $ bosh –e {director_name} env
 ```
 
-### <div id='1037'/>3.3.7. CredHub
+### <div id='1037'/>3.3.8. CredHub
 CredHub은 인증정보 저장소이다.  
 BOSH 설치 시 Operation 파일로 credhub.yml을 추가하였다.  
 BOSH 설치 시 credhub.yml을 적용하면, PaaS-TA 설치 시 PaaS-TA에서 사용하는 인증정보(Certificate, Password)를 CredHub에 저장한다.  
