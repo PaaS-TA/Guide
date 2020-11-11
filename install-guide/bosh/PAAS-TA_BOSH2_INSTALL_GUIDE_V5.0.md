@@ -225,36 +225,13 @@ Shell Script 파일을 이용하여 BOSH를 설치한다.
 <td>deploy-aws.sh</td>
 <td>AWS 환경에 BOSH 설치를 위한 Shell Script 파일</td>
 </tr>
-</table>
-
-BOSH 설치 명령어는 create-env로 시작한다.  
-Shell이 아닌 BOSH Command로 실행 가능하며, 설치하는 IaaS 환경에 따라 Option이 달라진다.  
-BOSH 삭제 시 delete-env 명령어를 사용하여 설치된 BOSH를 삭제할 수 있다.
-
-BOSH 설치 Option은 아래와 같다.
-
-<table>
 <tr>
-<td>--state</td>
-<td>BOSH 설치 명령어 실행 시 생성되는 파일로, 설치된 BOSH의 IaaS 설정 정보가 저장된다. (Backup 필요)</td>
-</tr>
-<tr>
-<td>--vars-store</td>
-<td>BOSH 설치 명령어 실행 시 생성되는 파일로, 설치된 BOSH의 내부 컴포넌트가 사용하는 인증서 및 인증정보가 저장된다. (Backup 필요)</td>
-</tr>   
-<tr>
-<td>-o</td>
-<td>BOSH 설치 시 적용하는 Operation 파일을 설정할 경우 사용한다. IaaS별 CPI 또는 Jumpbox, CredHub 등의 설정을 적용할 수 있다.</td>
-</tr>
-<tr>
-<td>-v</td>
-<td>BOSH 설치 시 적용하는 변숫값 또는 Operation 파일에 변숫값을 설정할 경우 사용한다. Operation 파일 속성에 따라 필수 또는 선택 항목으로 나뉜다.</td>
-</tr>
-<tr>
-<td>-l, --var-file</td>
-<td>YAML파일에 작성한 변수를 읽어올때 사용한다.</td>
+<td>bosh.yml</td>
+<td>BOSH를 생성하는 Manifest 파일</td>
 </tr>
 </table>
+
+
 
 
 #### <div id='1016'/>3.3.5.1. BOSH 설치 Variable File
@@ -312,6 +289,35 @@ syslog_transport: "relp"				# Logsearch Protocol
 
 
 #### <div id='1026'/>3.3.5.3. BOSH 설치 Shell Script
+
+BOSH 설치 명령어는 create-env로 시작한다.  
+Shell이 아닌 BOSH Command로 실행 가능하며, 설치하는 IaaS 환경에 따라 Option이 달라진다.  
+BOSH 삭제 시 delete-env 명령어를 사용하여 설치된 BOSH를 삭제할 수 있다.
+
+BOSH 설치 Option은 아래와 같다.
+
+<table>
+<tr>
+<td>--state</td>
+<td>BOSH 설치 명령어 실행 시 생성되는 파일로, 설치된 BOSH의 IaaS 설정 정보가 저장된다. (Backup 필요)</td>
+</tr>
+<tr>
+<td>--vars-store</td>
+<td>BOSH 설치 명령어 실행 시 생성되는 파일로, 설치된 BOSH의 내부 컴포넌트가 사용하는 인증서 및 인증정보가 저장된다. (Backup 필요)</td>
+</tr>   
+<tr>
+<td>-o</td>
+<td>BOSH 설치 시 적용하는 Operation 파일을 설정할 경우 사용한다. IaaS별 CPI 또는 Jumpbox, CredHub 등의 설정을 적용할 수 있다.</td>
+</tr>
+<tr>
+<td>-v</td>
+<td>BOSH 설치 시 적용하는 변숫값 또는 Operation 파일에 변숫값을 설정할 경우 사용한다. Operation 파일 속성에 따라 필수 또는 선택 항목으로 나뉜다.</td>
+</tr>
+<tr>
+<td>-l, --var-file</td>
+<td>YAML파일에 작성한 변수를 읽어올때 사용한다.</td>
+</tr>
+</table>
 
 ##### <div id='1027'/>● deploy-aws.sh
 
