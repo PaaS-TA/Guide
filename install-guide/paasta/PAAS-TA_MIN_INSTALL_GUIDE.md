@@ -190,7 +190,7 @@ disk_types:
   disk_size: 500000
   name: 50GB_GP2
 
-## networks :: 네트워크(Network)를 정의한다. (OpenStack의 경우, Subnet 및 Security Group, DNS, Gateway 설정)
+## networks :: 네트워크(Network)를 정의한다. (AWS 경우, Subnet 및 Security Group, DNS, Gateway 등 설정)
 networks:
 - name: default
   subnets:
@@ -315,7 +315,7 @@ vm_extensions:
     - host: 443
     - host: 2222
 
-## vm_type :: 가상머신 유형(VM Type)을 정의한다. (OpenStack의 경우, Flavor 설정)
+## vm_type :: 가상머신 유형(VM Type)을 정의한다. (AWS 경우, Instance type 설정)
 vm_types:
 - cloud_properties:
     ephemeral_disk:
