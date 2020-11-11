@@ -43,7 +43,7 @@
 본 문서는 cf-deployment v9.5.0을 기준으로 작성되었다.  
 PaaS-TA은 bosh-deployment를 기반으로 한 BOSH 환경에서 설치한다.  
 PaaS-TA 5.0.2-min 설치 시 필요한 Stemcell은 기존 PaaS-TA 5.0.2 설치와 동일한 ubuntu-xenial-315.64을 사용하였다.  
-PaaS-TA 5.0.2-min는 현재 AWS 환경에서만 지원한다.
+현재 PaaS-TA 5.0.2에서 검증한 IaaS 환경은 AWS 환경이다.
 
 ## <div id='104'/>● 참고 자료
 
@@ -857,7 +857,7 @@ PaaS-TA VM 중 singleton-blobstore, database의 AZs(zone)을 변경하면 조직
 이미 설치된 PaaS-TA의 재배포 시, singleton-blobstore, database의 AZs(zone)을 변경하면 조직(ORG), 공간(SPACE), 앱(APP) 정보가 모두 삭제된다.  
 
 
-PaaS-TA 5.0.2-min는 현재 AWS 환경에서만 지원한다.
+현재 PaaS-TA 5.0.2에서 검증한 IaaS 환경은 AWS 환경이다.
 
 <b>※ PaaS-TA 설치 시 명령어는 BOSH deploy를 사용한다. (IaaS 환경에 따라 Option이 다름)</b><br>
 
