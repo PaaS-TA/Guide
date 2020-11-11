@@ -994,8 +994,8 @@ Succeeded
 
 ## <div id='1032'/>3.8.  PaaS-TA 로그인 
 
-CF CLI를 설치하고 PaaS-TA에 로그인한다.
-CF CLI는 v6과 v7중 선택해서 설치를 한다.
+CF CLI를 설치하고 PaaS-TA에 로그인한다.  
+CF CLI는 v6과 v7중 선택해서 설치를 한다.  
 CF API는 PaaS-TA 배포 시 지정했던 System Domain 명을 사용한다.
 
 - CF CLI v6 설치
