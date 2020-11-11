@@ -253,8 +253,8 @@ subnet_id: "paasta-subnet"				# AWS Subnet
 private_key: "~/.ssh/aws-paasta.pem"			# SSH Private Key Path
 
 # MONITORING VARIABLE(PaaS-TA Monitoring을 설치할 경우 향후 설치할 VM의 값으로 미리 수정)
-metric_url: "10.0.161.101"				# PaaS-TA Monitoring InfluxDB IP
-syslog_address: "10.0.121.100"				# Logsearch의 ls-router IP
+metric_url: "xx.xx.xxx.xxx"				# PaaS-TA Monitoring InfluxDB IP
+syslog_address: "xx.xx.xxx.xxx"				# Logsearch의 ls-router IP
 syslog_port: "2514"					# Logsearch의 ls-router Port
 syslog_transport: "relp"				# Logsearch Protocol
 ```
