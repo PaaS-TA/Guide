@@ -71,7 +71,13 @@ CF Deployment: [https://github.com/cloudfoundry/cf-deployment](https://github.co
 ```
 $ cd ${HOME}/workspace/paasta/deployment
 $ git clone https://github.com/PaaS-TA/common.git
-$ git clone https://github.com/PaaS-TA/paasta-deployment.git -b paasta-min
+$ cd ${HOME}/workspace/paasta/deployment/common
+$ git checkout tags/v5.0.1
+
+$ cd ${HOME}/workspace/paasta/deployment
+$ git clone https://github.com/PaaS-TA/paasta-deployment.git
+$ cd ${HOME}/workspace/paasta/deployment/paasta-deployment
+$ git checkout tags/v5.0.2-min
 ```
 
 ## <div id='109'/>2.3. Stemcell 업로드
