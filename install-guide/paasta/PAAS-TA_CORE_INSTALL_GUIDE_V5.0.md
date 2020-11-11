@@ -16,7 +16,7 @@
 　　●  [Disk Size](#1014)  
 　　●  [Networks](#1015)  
 　3.5. [Runtime Config 설정](#1016)  
-　3.6. [PaaS-TA 환경 설정](#1017)  
+　3.6. [PaaS-TA 설치 파일](#1017)  
 　　3.6.1. [PaaS-TA 설치 Variable 파일](#1018)    
 　　　●  [common_vars.yml](#1019)  
 　　　●  [{IaaS}-vars.yml](#1020)  
