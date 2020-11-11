@@ -496,7 +496,7 @@ Networks는 AZ 별 Subnet Network, DNS, Security Groups, Network ID를 정의한
 
 ## <div id='1017'/>3.6.  PaaS-TA 설치 파일
 
-common_vars.yml파일과 {IaaS}-vars.yml을 수정하여 BOSH 설치시 적용하는 변숫값을 변경할 수 있다.
+common_vars.yml파일과 {IaaS}-vars.yml을 수정하여 PaaS-TA 설치시 적용하는 변수를 설정할 수 있다.
 
 <table>
 <tr>
@@ -505,7 +505,7 @@ common_vars.yml파일과 {IaaS}-vars.yml을 수정하여 BOSH 설치시 적용�
 </tr>
 <tr>
 <td>aws-vars.yml</td>
-<td>AWS 환경에 PaaS-TA 설치시 적용하는 변숫값 설정 파일</td>
+<td>AWS 환경에 PaaS-TA 설치시 적용하는 변수 설정 파일</td>
 </tr>
 <tr>
 <td>deploy-aws.sh</td>
@@ -874,7 +874,7 @@ PaaS-TA 배포 시, 설치 Option을 추가해야 한다. 설치 Option에 대�
 </tr>
 <tr>
 <td>-v</td>
-<td>PaaS-TA 설치 시 적용하는 변숫값 또는 Option 파일에 변숫값을 설정할 경우 사용한다. Option 파일 속성에 따라 필수 또는 선택 항목으로 나뉜다.</td>
+<td>PaaS-TA 설치 시 적용하는 변수 또는 Option 파일에 변수를 설정할 경우 사용한다. Option 파일 속성에 따라 필수 또는 선택 항목으로 나뉜다.</td>
 </tr>
 <tr>
 <td>-l, --var-file</td>
@@ -890,7 +890,7 @@ bosh -e {director_name} -d paasta -n deploy paasta-deployment.yml \	# PaaS-TA Ma
 	-o operations/use-haproxy-public-network.yml \			# HAProxy Public Network 적용
 	-o operations/use-postgres.yml \				# Database Type 설정 (3.5버전 이하에서 Migration 시 필수)
 	-o operations/rename-network-and-deployment.yml \		# Rename Network and Deployment
-	-l aws-vars.yml \						# AWS 환경에 PaaS-TA 설치시 적용하는 변숫값 설정 파일
+	-l aws-vars.yml \						# AWS 환경에 PaaS-TA 설치시 적용하는 변수 설정 파일
 	-l ../../common/common_vars.yml					# PaaS-TA 및 각종 Service 설치시 적용하는 공통 변수 설정 파일
 ```
 
@@ -914,7 +914,7 @@ bosh -e {director_name} -d paasta -n deploy paasta-deployment.yml \	# PaaS-TA Ma
 	-o operations/use-haproxy-public-network.yml \			# HAProxy Public Network 적용
 	-o operations/use-postgres.yml \				# Database Type 설정 (3.5버전 이하에서 Migration 시 필수)
 	-o operations/rename-network-and-deployment.yml \		# Rename Network and Deployment
-	-l aws-vars.yml \						# AWS 환경에 PaaS-TA 설치시 적용하는 변숫값 설정 파일
+	-l aws-vars.yml \						# AWS 환경에 PaaS-TA 설치시 적용하는 변수 설정 파일
 	-l ../../common/common_vars.yml					# PaaS-TA 및 각종 Service 설치시 적용하는 공통 변수 설정 파일
 ```
 - PaaS-TA 설치 Shell Script 파일 실행 (BOSH 로그인 필요)
