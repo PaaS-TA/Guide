@@ -210,12 +210,12 @@ bosh  cloud-config  paasta
 ${HOME}/workspace/paasta/deployment/paasta-deployment/bosh 이하 디렉터리에는 BOSH 설치를 위한 IaaS별 Shell Script 파일이 존재한다.  
 Shell Script 파일을 이용하여 BOSH를 설치한다.
 파일명은 deploy-{IaaS}.sh 로 만들어졌다.  
-또한 {IaaS}-vars.yml을 수정하여 BOSH 설치시 적용하는 변숫값을 변경할 수 있다.
+또한 {IaaS}-vars.yml을 수정하여 BOSH 설치시 적용하는 변수을 설정할 수 있다.
 
 <table>
 <tr>
 <td>aws-vars.yml</td>
-<td>AWS 환경에 BOSH 설치시 적용하는 변숫값 설정 파일</td>
+<td>AWS 환경에 BOSH 설치시 적용하는 변수 설정 파일</td>
 </tr>
 <tr>
 <tr>
@@ -308,7 +308,7 @@ BOSH 설치 Option은 아래와 같다.
 </tr>
 <tr>
 <td>-v</td>
-<td>BOSH 설치 시 적용하는 변숫값 또는 Operation 파일에 변숫값을 설정할 경우 사용한다. Operation 파일 속성에 따라 필수 또는 선택 항목으로 나뉜다.</td>
+<td>BOSH 설치 시 적용하는 변수 또는 Operation 파일에 변수를 설정할 경우 사용한다. Operation 파일 속성에 따라 필수 또는 선택 항목으로 나뉜다.</td>
 </tr>
 <tr>
 <td>-l, --var-file</td>
@@ -326,7 +326,7 @@ bosh create-env bosh.yml \
 	-o uaa.yml \					# UAA 적용      
 	-o credhub.yml \				# CredHub 적용    
 	-o jumpbox-user.yml \				# Jumpbox 적용  
- 	-l aws-vars.yml					# AWS 환경에 BOSH 설치시 적용하는 변숫값 설정 파일
+ 	-l aws-vars.yml					# AWS 환경에 BOSH 설치시 적용하는 변수 설정 파일
 ```
 
 
