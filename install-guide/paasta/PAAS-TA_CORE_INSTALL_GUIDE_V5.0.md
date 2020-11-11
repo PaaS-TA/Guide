@@ -93,7 +93,6 @@ BOSH 로그인 후 다음 명령어를 수행하여 Stemcell을 올린다.
 - AWS
 
 ```
-(URL)
 $ bosh -e {director_name} upload-stemcell https://s3.amazonaws.com/bosh-core-stemcells/621.78/bosh-stemcell-621.78-aws-xen-hvm-ubuntu-xenial-go_agent.tgz
 ```
 
