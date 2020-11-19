@@ -140,7 +140,7 @@ Succeeded
 
 서비스 설치에 필요한 Deployment를 Git Repository에서 받아 서비스 설치 작업 경로로 위치시킨다.  
 
-- Portal Deployment Git Repository URL : https://github.com/PaaS-TA/portal-deployment/tree/v5.0.2
+- Portal Deployment Git Repository URL : https://github.com/PaaS-TA/portal-deployment/tree/v5.0.3
 
 ```
 # Deployment 다운로드 파일 위치 경로 생성 및 설치 경로 이동
@@ -148,7 +148,7 @@ $ mkdir -p ~/workspace/paasta-5.0/deployment
 $ cd ~/workspace/paasta-5.0/deployment
 
 # Deployment 파일 다운로드
-$ git clone https://github.com/PaaS-TA/portal-deployment.git -b v5.0.2
+$ git clone https://github.com/PaaS-TA/portal-deployment.git -b v5.0.3
 ```
 
 ### <div id="2.4"/> 2.4. Deployment 파일 수정
@@ -313,9 +313,9 @@ mail_smtp_properties_subject: "<MAIL_SMTP_PROPERTIES_SUBJECT>"  # mail-smtp : pr
 #!/bin/bash
   
 # VARIABLES
-BOSH_NAME="micro-bosh"                                # bosh name (e.g. micro-bosh)
-IAAS="openstack"                                      # IaaS (e.g. aws/azure/gcp/openstack/vsphere)
-COMMON_VARS_PATH="<COMMON_VARS_FILE_PATH>"            # common_vars.yml File Path (e.g. /home/ubuntu/paasta-5.0/common/common_vars.yml)
+BOSH_NAME="<BOSH_NAME>"                                # bosh name (e.g. micro-bosh)
+IAAS="<IAAS_NAME>"                                     # IaaS (e.g. aws/azure/gcp/openstack/vsphere)
+COMMON_VARS_PATH="<COMMON_VARS_FILE_PATH>"             # common_vars.yml File Path (e.g. /home/ubuntu/paasta-5.0/common/common_vars.yml)
 
 # DEPLOY
 bosh -e ${BOSH_NAME} -n -d portal-api deploy --no-redact portal-api.yml \
@@ -355,9 +355,9 @@ paasta-portal-api-release-2.1.0.tgz
 #!/bin/bash
   
 # VARIABLES
-BOSH_NAME="micro-bosh"                                # bosh name (e.g. micro-bosh)
-IAAS="openstack"                                      # IaaS (e.g. aws/azure/gcp/openstack/vsphere)
-COMMON_VARS_PATH="<COMMON_VARS_FILE_PATH>"            # common_vars.yml File Path (e.g. /home/ubuntu/paasta-5.0/common/common_vars.yml)
+BOSH_NAME="<BOSH_NAME>"                                # bosh name (e.g. micro-bosh)
+IAAS="<IAAS_NAME>"                                     # IaaS (e.g. aws/azure/gcp/openstack/vsphere)
+COMMON_VARS_PATH="<COMMON_VARS_FILE_PATH>"             # common_vars.yml File Path (e.g. /home/ubuntu/paasta-5.0/common/common_vars.yml)
 
 # DEPLOY
 bosh -e ${BOSH_NAME} -n -d portal-api deploy --no-redact portal-api.yml \

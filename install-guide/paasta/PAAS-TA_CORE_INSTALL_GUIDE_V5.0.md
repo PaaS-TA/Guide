@@ -545,6 +545,8 @@ paasta_nats_password: "7EZB5ZkMLMqT73h2J"	# PaaS-TA Nats Password (CredHub 로�
 paasta_nats_private_networks_name: "default"	# PaaS-TA Nats 의 Network 이름
 paasta_database_ips: "xx.xx.xxx.xxx"		# PaaS-TA Database IP(e.g. "10.0.1.123")
 paasta_database_port: 5524			# PaaS-TA Database Port(e.g. 5524)
+paasta_database_type: "postgresql"                      # PaaS-TA Database Type (e.g. "postgresql" or "mysql")
+paasta_database_driver_class: "org.postgresql.Driver"   # PaaS-TA Database driver-class (e.g. "org.postgresql.Driver" or "com.mysql.jdbc.Driver")
 paasta_cc_db_id: "cloud_controller"		# CCDB ID(e.g. "cloud_controller")
 paasta_cc_db_password: "cc_admin"		# CCDB Password(e.g. "cc_admin")
 paasta_uaa_db_id: "uaa"				# UAADB ID(e.g. "uaa")
