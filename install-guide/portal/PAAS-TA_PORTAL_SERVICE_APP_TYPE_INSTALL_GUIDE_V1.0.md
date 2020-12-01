@@ -44,8 +44,7 @@
 
 | 구분 | Resource Pool | 스펙 |
 |--------|-------|-------|
-| binary_storage | portal_small | 1vCPU / 512MB RAM / 4GB Disk 10GB(영구적 Disk) |
-| mariadb | portal_small | 1vCPU / 512MB RAM / 4GB Disk +10GB(영구적 Disk) |
+| infra (mariadb / binary storage) | small | 1vCPU / 512MB RAM / 10GB Disk 20GB(영구적 Disk) |
 
 * Paas-TA Portal App 
 
