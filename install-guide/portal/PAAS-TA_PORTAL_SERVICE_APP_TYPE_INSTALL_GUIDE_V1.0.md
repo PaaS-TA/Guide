@@ -328,6 +328,7 @@ portal-app
 │   ├── manifest.yml
 │   └── paas-ta-portal-webadmin.war
 └── portal-web-user-2.1.0
+    ├── config
     ├── manifest.yml
     └── paas-ta-portal-webuser
  ```
@@ -413,16 +414,16 @@ applications:
       eureka_client_serviceUrl_defaultZone: http://${vcap.application.uris[0]}/eureka/
 ```
 
-- Portal App 설정 파일 수정  
-  : portal-web-user  
+- Portal App 설정 파일 수정 및 적용  
+  : portal-web-user   
 ```
-$ vi ~/workspace/paasta-5.0/release/portal/portal-app/portal-web-user-2.1.0/paas-ta-portal-webuser/assets/resources/env/config.json
-
-## 설정 파일을 환경에 맞게 수정한다. 
+### 설정 파일을 환경에 맞게 수정한다.
+$ cd ~/workspace/paasta-5.0/release/portal/portal-app/portal-web-user-2.1.0/config
+$ vi config.json
 
 {
-  "clientId": "portalclient",
-  "clientSecret": "clientsecret",
+  "clientId": "<UAAC_PORTAL_CLIENT_ID>",
+  "clientSecret": "<UAAC_PORTAL_CLIENT_SECRET>",
   "redirectUri": "/callback",
   "logoutredirectUri": "/login",
   "scope": "openid cloud_controller_service_permissions.read cloud_controller.read cloud_controller.write",
@@ -440,6 +441,10 @@ $ vi ~/workspace/paasta-5.0/release/portal/portal-app/portal-web-user-2.1.0/paas
   "apiversion": "v3",
   "webadminUri": "http://portal-web-admin.<DOMAIN>"
 }
+
+### applyChangeConfig.sh 를 실행하여 설정 정보를 적용한다. 
+$ cd ~/workspace/paasta-5.0/release/portal/portal-app/portal-web-user-2.1.0/config
+$ sh applyChangeConfig.sh
 
 ```
 ### <div id="3.3"/> 3.3. Portal App 배포  
