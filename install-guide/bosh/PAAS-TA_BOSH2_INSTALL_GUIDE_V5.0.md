@@ -222,7 +222,6 @@ Shell Script 파일을 이용하여 BOSH를 설치한다.
 <td>OpenStack 환경에 BOSH 설치시 적용하는 변수 설정 파일</td>
 </tr>
 <tr>
-<tr>
 <td>deploy-aws.sh</td>
 <td>AWS 환경에 BOSH 설치를 위한 Shell Script 파일</td>
 </tr>
@@ -406,7 +405,7 @@ bosh create-env bosh.yml \
 	-o jumpbox-user.yml \				# Jumpbox 적용
 	-o syslog.yml \					# [MONITORING] Monitoring Logging Agent 적용
 	-o paasta-addon/paasta-monitoring-agent.yml \	# [MONITORING] Monitoring Metric Agent 적용
- 	-l openstack-vars.yml				# AWS 환경에 BOSH 설치시 적용하는 변수 설정 파일
+ 	-l openstack-vars.yml				# Openstack 환경에 BOSH 설치시 적용하는 변수 설정 파일
 ```
 
 - Shell Script 파일에 실행 권한 부여
