@@ -426,6 +426,8 @@ vm_types:
   name: caas_small_highmem
 ```
 
+
+
 - OpenStack을 기준으로 한 cloud-config.yml 예제
 
 ```
@@ -753,7 +755,7 @@ Networks는 AZ 별 Subnet Network, DNS, Security Groups, Network ID를 정의한
 
 ## <div id='1017'/>3.6.  PaaS-TA 설치 파일
 
-common_vars.yml파일과 {IaaS}-vars.yml을 수정하여 PaaS-TA 설치시 적용하는 변수를 설정할 수 있다. monitoring 옵션이 적용된 파일은 deploy-{IaaS}-monitoring.sh이다.
+common_vars.yml파일과 {IaaS}-vars.yml을 수정하여 PaaS-TA 설치시 적용하는 변수를 설정할 수 있다. Monitoring 옵션이 적용된 파일은 deploy-{IaaS}-monitoring.sh이다.
 
 <table>
 <tr>
@@ -774,7 +776,7 @@ common_vars.yml파일과 {IaaS}-vars.yml을 수정하여 PaaS-TA 설치시 적�
 </tr>
 <tr>
 <td>deploy-openstack-monitoring.sh</td>
-<td>OpenStack 환경에 monitoring 옵션이 적용된 PaaS-TA 설치를 위한 Shell Script 파일</td>
+<td>OpenStack 환경에 Monitoring 옵션이 적용된 PaaS-TA 설치를 위한 Shell Script 파일</td>
 </tr>
 <tr>
 <td>paasta-deployment.yml</td>
@@ -1254,7 +1256,7 @@ bosh -e {director_name} -d paasta -n deploy paasta-deployment.yml \	# PaaS-TA Ma
 	-l ../../common/common_vars.yml					# PaaS-TA 및 각종 Service 설치시 적용하는 공통 변수 설정 파일
 ```
 
-- monitoring 옵션을 추가한 PaaS-TA 설치 시 Deploy 스크립트 파일의 설정을 수정한다.
+- Monitoring 옵션을 추가한 PaaS-TA 설치 시 Deploy 스크립트 파일의 설정을 수정한다.
 
 > $ vi ${HOME}/workspace/paasta/deployment/paasta-deployment/paasta/deploy-openstack-monitoring.sh
 
