@@ -16,7 +16,7 @@
 　　●  [Disk Size](#1014)  
 　　●  [Networks](#1015)  
 　3.5. [Runtime Config 설정](#1016)  
-　3.6. [PaaS-TA 설치 파일](#1017)  
+  3.6. [PaaS-TA 설치 파일](#1017)  
   3.7. [PaaS-TA 설치 Shell Scripts](#1018)  
     ●  [deploy-aws-monitoring.sh](#1019)  
     ●  [deploy-azure-monitoring.sh](#1020)  
