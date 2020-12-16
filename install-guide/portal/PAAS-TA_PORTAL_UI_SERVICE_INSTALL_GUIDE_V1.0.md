@@ -135,7 +135,7 @@ Succeeded
 
 서비스 설치에 필요한 Deployment를 Git Repository에서 받아 서비스 설치 작업 경로로 위치시킨다.  
 
-- Portal Deployment Git Repository URL : https://github.com/PaaS-TA/portal-deployment/tree/v5.0.4
+- Portal Deployment Git Repository URL : https://github.com/PaaS-TA/portal-deployment/tree/v5.0.5
 
 ```
 # Deployment 다운로드 파일 위치 경로 생성 및 설치 경로 이동
@@ -143,7 +143,7 @@ $ mkdir -p ~/workspace/paasta-5.0/deployment
 $ cd ~/workspace/paasta-5.0/deployment
 
 # Deployment 파일 다운로드
-$ git clone https://github.com/PaaS-TA/portal-deployment.git -b v5.0.4
+$ git clone https://github.com/PaaS-TA/portal-deployment.git -b v5.0.5
 ```
 
 ### <div id="2.4"/> 2.4. Deployment 파일 수정
@@ -290,7 +290,7 @@ $ sh ./deploy.sh
 
 - 서비스 설치에 필요한 릴리즈 파일을 다운로드 받아 Local machine의 서비스 설치 작업 경로로 위치시킨다.  
   
-  - 설치 릴리즈 파일 다운로드 : [paasta-portal-ui-release-2.2.0.tgz](http://45.248.73.44/index.php/s/FqygsF7pE3DS7Cf/download)
+  - 설치 릴리즈 파일 다운로드 : [paasta-portal-ui-release-2.3.0.tgz](http://45.248.73.44/index.php/s/LMHjieK6HT8W4wB/download)
 
 ```
 # 릴리즈 다운로드 파일 위치 경로 생성
@@ -298,7 +298,7 @@ $ mkdir -p ~/workspace/paasta-5.0/release/portal
 
 # 릴리즈 파일 다운로드 및 파일 경로 확인
 $ ls ~/workspace/paasta-5.0/release/portal
-paasta-portal-ui-release-2.2.0.tgz
+paasta-portal-ui-release-2.3.0.tgz
 ```
   
 - 서버 환경에 맞추어 Deploy 스크립트 파일의 VARIABLES 설정을 수정하고 Option file 및 변수를 추가한다.  

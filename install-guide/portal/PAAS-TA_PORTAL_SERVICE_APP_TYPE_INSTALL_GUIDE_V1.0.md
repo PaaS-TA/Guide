@@ -90,7 +90,7 @@ Succeeded
 
 서비스 설치에 필요한 Deployment를 Git Repository에서 받아 서비스 설치 작업 경로로 위치시킨다.  
 
-- Portal Deployment Git Repository URL : https://github.com/PaaS-TA/portal-deployment/tree/v5.0.4
+- Portal Deployment Git Repository URL : https://github.com/PaaS-TA/portal-deployment/tree/v5.0.5
 
 ```
 # Deployment 다운로드 파일 위치 경로 생성 및 설치 경로 이동
@@ -98,7 +98,7 @@ $ mkdir -p ~/workspace/paasta-5.0/deployment
 $ cd ~/workspace/paasta-5.0/deployment
 
 # Deployment 파일 다운로드
-$ git clone https://github.com/PaaS-TA/portal-deployment.git -b v5.0.4
+$ git clone https://github.com/PaaS-TA/portal-deployment.git -b v5.0.5
 ```
 
 ### <div id="2.4"/> 2.4. Deployment 파일 수정  
@@ -231,7 +231,7 @@ $ sh ./deploy.sh
 
 - 서비스 설치에 필요한 릴리즈 파일을 다운로드 받아 Local machine의 서비스 설치 작업 경로로 위치시킨다.  
   
-  - 설치 릴리즈 파일 다운로드 : [paasta-portal-api-release-2.2.0-ctn.tgz](http://45.248.73.44/index.php/s/wWK764XYdHTAbwt/download)
+  - 설치 릴리즈 파일 다운로드 : [paasta-portal-api-release-2.3.0-ctn.tgz](http://45.248.73.44/index.php/s/eKf8XWwt8Wy9HrA/download)
 
 ```
 # 릴리즈 다운로드 파일 위치 경로 생성
@@ -239,7 +239,7 @@ $ mkdir -p ~/workspace/paasta-5.0/release/portal
 
 # 릴리즈 파일 다운로드 및 파일 경로 확인
 $ ls ~/workspace/paasta-5.0/release/portal
-paasta-portal-api-release-2.2.0-ctn.tgz
+paasta-portal-api-release-2.3.0-ctn.tgz
 ```
   
 - 서버 환경에 맞추어 Deploy 스크립트 파일의 VARIABLES 설정을 수정하고 Option file 및 변수를 추가한다.  
@@ -301,12 +301,12 @@ Portal 설치에 필요한 App 파일 및 Manifest 파일을 다운로드 받아
 $ cd ~/workspace/paasta-5.0/release/portal
 
 ### portal app 파일을 다운로드한다
-$ wget --content-disposition http://45.248.73.44/index.php/s/TKPRcPiGnb67obw/download
+$ wget --content-disposition http://45.248.73.44/index.php/s/6LqkkyTBqtWoDme/download
 $ unzip portal-app.zip 
 
 ### 설치 디렉토리 (파일) 구성  
 portal-app
-├── portal-api-2.1.0
+├── portal-api-2.2.0
 │   ├── manifest.yml
 │   └── paas-ta-portal-api.jar
 ├── portal-common-api-2.1.0
@@ -324,10 +324,10 @@ portal-app
 ├── portal-storage-api-2.1.0
 │   ├── manifest.yml
 │   └── paas-ta-portal-storage-api.jar
-├── portal-web-admin-2.1.0
+├── portal-web-admin-2.2.0
 │   ├── manifest.yml
 │   └── paas-ta-portal-webadmin.war
-└── portal-web-user-2.1.0
+└── portal-web-user-2.2.0
     ├── config
     ├── manifest.yml
     └── paas-ta-portal-webuser
@@ -418,7 +418,7 @@ applications:
   : portal-web-user   
 ```
 ### 설정 파일을 환경에 맞게 수정한다.
-$ cd ~/workspace/paasta-5.0/release/portal/portal-app/portal-web-user-2.1.0/config
+$ cd ~/workspace/paasta-5.0/release/portal/portal-app/portal-web-user-2.2.0/config
 $ vi config.json
 
 {
@@ -443,7 +443,7 @@ $ vi config.json
 }
 
 ### applyChangeConfig.sh 를 실행하여 설정 정보를 적용한다. 
-$ cd ~/workspace/paasta-5.0/release/portal/portal-app/portal-web-user-2.1.0/config
+$ cd ~/workspace/paasta-5.0/release/portal/portal-app/portal-web-user-2.2.0/config
 $ sh applyChangeConfig.sh
 
 ```
@@ -559,13 +559,13 @@ start command:   JAVA_OPTS="-agentpath:$PWD/.java-buildpack/open_jdk_jre/bin/jvm
 ```
   3. portal-api 배포 
 ```
-$ cd ~/workspace/paasta-5.0/release/portal/portal-app/portal-api-2.1.0
+$ cd ~/workspace/paasta-5.0/release/portal/portal-app/portal-api-2.2.0
 $ cf push
 
 Getting app info...
 Creating app with these attributes...
 + name:         portal-api
-  path:         /home/ubuntu/workspace/paasta-5.0/release/portal/portal-app/portal-api-2.1.0/paas-ta-portal-api.jar
+  path:         /home/ubuntu/workspace/paasta-5.0/release/portal/portal-app/portal-api-2.2.0/paas-ta-portal-api.jar
   buildpacks:
 +   java_buildpack
 + instances:    1
@@ -720,13 +720,13 @@ start command:   JAVA_OPTS="-agentpath:$PWD/.java-buildpack/open_jdk_jre/bin/jvm
 ```
   7. portal-web-admin 배포 
 ```
-$ cd ~/workspace/paasta-5.0/release/portal/portal-app/portal-web-admin-2.1.0
+$ cd ~/workspace/paasta-5.0/release/portal/portal-app/portal-web-admin-2.2.0
 $ cf push
 
 Getting app info...
 Creating app with these attributes...
 + name:         portal-web-admin
-  path:         /home/ubuntu/workspace/paasta-5.0/release/portal/portal-app/portal-web-admin-2.1.0/paas-ta-portal-webadmin.war
+  path:         /home/ubuntu/workspace/paasta-5.0/release/portal/portal-app/portal-web-admin-2.2.0/paas-ta-portal-webadmin.war
   buildpacks:
 +   java_buildpack
 + instances:    1
@@ -756,13 +756,13 @@ start command:   JAVA_OPTS="-agentpath:$PWD/.java-buildpack/open_jdk_jre/bin/jvm
 ```
   8. portal-web-user 배포 
 ```
-$ cd ~/workspace/paasta-5.0/release/portal/portal-app/portal-web-user-2.1.0
+$ cd ~/workspace/paasta-5.0/release/portal/portal-app/portal-web-user-2.2.0
 $ cf push
 
 Getting app info...
 Creating app with these attributes...
 + name:         portal-web-user
-  path:         /home/ubuntu/workspace/paasta-5.0/release/portal/portal-app/portal-web-user-2.1.0/paas-ta-portal-webuser
+  path:         /home/ubuntu/workspace/paasta-5.0/release/portal/portal-app/portal-web-user-2.2.0/paas-ta-portal-webuser
   buildpacks:
 +   staticfile_buildpack
 + instances:    1
