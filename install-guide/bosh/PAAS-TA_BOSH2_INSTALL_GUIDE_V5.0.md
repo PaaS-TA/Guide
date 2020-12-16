@@ -29,7 +29,7 @@
 　　3.3.9. [CredHub](#1037)  
 　　　3.3.9.1. [CredHub CLI 설치](#1038)  
 　　　3.3.9.2. [CredHub 로그인](#1039)  
-　　3.3.9. [Jumpbox](#1040)  
+　　3.3.10. [Jumpbox](#1040)  
 
 ## Executive Summary
 
