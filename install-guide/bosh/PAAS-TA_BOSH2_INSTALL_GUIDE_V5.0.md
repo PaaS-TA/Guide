@@ -178,7 +178,7 @@ $ bosh -version
 ```
 $ mkdir -p ${HOME}/workspace/paasta/deployment
 $ cd ${HOME}/workspace/paasta/deployment
-$ git clone https://github.com/PaaS-TA/paasta-deployment.git -b v5.1
+$ git clone https://github.com/PaaS-TA/paasta-deployment.git -b v5.1.0
 ```
 
 - paasta/deployment/paasta-deployment 이하 디렉터리
