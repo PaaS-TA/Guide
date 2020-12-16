@@ -550,7 +550,7 @@ $ chmod +x ${HOME}/workspace/paasta-5.0/deployment/bosh-deployment/*.sh
 
 ### <div id='1031'/>3.3.6. BOSH 설치 Option 파일 
 
-#### <div id='1032'/>3.3.6.1 BOSH Optional 파일
+#### <div id='1032'/>3.3.6.1. BOSH Optional 파일
 
 <table>
 <tr>
@@ -607,7 +607,7 @@ $ chmod +x ${HOME}/workspace/paasta-5.0/deployment/bosh-deployment/*.sh
 </tr>
 </table>
 
-##### <div id='1033'/>3.3.6.2. PaaS-TA Monitoring Operation 파일
+#### <div id='1033'/>3.3.6.2. PaaS-TA Monitoring Operation 파일
 
 PaaS-TA Monitoring을 적용하기 위해서 BOSH 설치 시 아래 두 파일과 변숫값을 추가해야 한다.  
 만약 Monitoring을 사용하지 않는다면, 두 파일을 제거하고 설치한다.
