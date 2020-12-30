@@ -1,4 +1,4 @@
-# PaaS-TA 5.0.0 가이드 문서
+# PaaS-TA 5.1 가이드 문서
 
 ## 플랫폼 설치 가이드
 - [설치 파일 다운로드 받기](https://paas-ta.kr/download/package)
@@ -7,8 +7,8 @@
     - (Deprecated) ~~[플랫폼 설치 자동화  설치](./use-guide/platform/PAAS-TA_PLATFORM_INSTALL_AUTOMATION_INSTALL_GUIDE_v1.0.md)~~
     - (Deprecated) ~~[플랫폼 설치 자동화 사용 메뉴얼](./use-guide/platform/PAAS-TA_PLATFORM_INSTALL_AUTOMATION_USE_MANUAL_v1.0.md)~~
   - PaaS-TA 플랫폼 수동 설치
-    - [BOSH 설치(AWS)](./install-guide/bosh/PAAS-TA_BOSH2_INSTALL_GUIDE_V5.0.md)
-    - [PaaS-TA 설치(AWS)](./install-guide/paasta/PAAS-TA_CORE_INSTALL_GUIDE_V5.0.md)
+    - [BOSH 설치(AWS, OpenStack)](./install-guide/bosh/PAAS-TA_BOSH2_INSTALL_GUIDE_V5.0.md)
+    - [PaaS-TA 설치(AWS, OpenStack)](./install-guide/paasta/PAAS-TA_CORE_INSTALL_GUIDE_V5.0.md)
     - [PaaS-TA-min 설치(AWS)](./install-guide/paasta/PAAS-TA_MIN_INSTALL_GUIDE.md)
     - (Deprecated) ~~[BOSH 및 PaaS-TA 설치(CLOUDit)](./use-guide/platform/PAAS-TA_PLATFORM_INSTALL_AUTOMATION_CLOUDIT_v1.0.md)~~
     - (Deprecated) ~~[PaaS-TA 포털 수동 설치(CLOUDit)](./use-guide/platform/PAAS-TA_PLATFORM_INSTALL_AUTOMATION_CLOUDIT_PORTAL_v1.0.md)~~
