@@ -76,7 +76,7 @@ Succeeded
 
 서비스 설치에 필요한 Deployment를 Git Repository에서 받아 서비스 설치 작업 경로로 위치시킨다.  
 
-- Service Deployment Git Repository URL : https://github.com/PaaS-TA/service-deployment/tree/v5.0.1
+- Service Deployment Git Repository URL : https://github.com/PaaS-TA/service-deployment/tree/v5.0.3
 
 ```
 # Deployment 다운로드 파일 위치 경로 생성 및 설치 경로 이동
@@ -84,7 +84,7 @@ $ mkdir -p ~/workspace/paasta-5.0/deployment
 $ cd ~/workspace/paasta-5.0/deployment
 
 # Deployment 파일 다운로드
-$ git clone https://github.com/PaaS-TA/service-deployment.git -b v5.0.1
+$ git clone https://github.com/PaaS-TA/service-deployment.git -b v5.0.3
 ```
 
 ### <div id="2.4"/> 2.4. Deployment 파일 수정
@@ -175,7 +175,7 @@ public_networks_name: "vip"                                          # public ne
 mariadb_azs: [z3]                                                    # mariadb : azs
 mariadb_instances: 1                                                 # mariadb : instances (1) 
 mariadb_persistent_disk_type: "10GB"                                 # mariadb : persistent disk type 
-mariadb_port: "<MARIADB_PORT>"                                       # mariadb : database port (e.g. 3306)
+mariadb_port: "<MARIADB_PORT>"                                       # mariadb : database port (e.g. 31306) -- Do Not Use "3306"
 mariadb_admin_password: "<MARIADB_ADMIN_PASSWORD>"                   # mariadb : database admin password (e.g. "paas-ta!admin")
 mariadb_broker_username: "<MARIADB_BROKER_USERNAME>"                 # mariadb : service-broker-user id (e.g. "apigateway")
 mariadb_broker_password: "<MARIADB_BROKER_PASSWORD>"                 # mariadb : service-broker-user password (e.g. "broker!admin")
@@ -229,8 +229,7 @@ $ sh ./deploy.sh
 
 - 서비스 설치에 필요한 릴리즈 파일을 다운로드 받아 Local machine의 서비스 설치 작업 경로로 위치시킨다.  
   
-  - 설치 파일 다운로드 위치 : https://paas-ta.kr/download/package    
-  - 릴리즈 파일 : paasta-api-gateway-service-release.tgz  
+  - 설치 릴리즈 파일 다운로드 : [paasta-api-gateway-service-release.tgz](http://45.248.73.44/index.php/s/9q5gyTL5txPdLS3/download)
 
 ```
 # 릴리즈 다운로드 파일 위치 경로 생성

@@ -89,7 +89,7 @@ Succeeded
 
 서비스 설치에 필요한 Deployment를 Git Repository에서 받아 서비스 설치 작업 경로로 위치시킨다.  
 
-- Service Deployment Git Repository URL : https://github.com/PaaS-TA/service-deployment/tree/v5.0.1
+- Service Deployment Git Repository URL : https://github.com/PaaS-TA/service-deployment/tree/v5.0.3
 
 ```
 # Deployment 다운로드 파일 위치 경로 생성 및 설치 경로 이동
@@ -97,7 +97,7 @@ $ mkdir -p ~/workspace/paasta-5.0/deployment
 $ cd ~/workspace/paasta-5.0/deployment
 
 # Deployment 파일 다운로드
-$ git clone https://github.com/PaaS-TA/service-deployment.git -b v5.0.1
+$ git clone https://github.com/PaaS-TA/service-deployment.git -b v5.0.3
 ```
 
 ### <div id="2.4"/> 2.4. Deployment 파일 수정
@@ -215,8 +215,7 @@ COMMON_VARS_PATH="<COMMON_VARS_FILE_PATH>"       # common_vars.yml File Path (e.
 # DEPLOY
 bosh -e ${BOSH_NAME} -n -d cubrid deploy --no-redact cubrid.yml \
     -l ${COMMON_VARS_PATH} \
-    -l vars.yml \
-    -l operations/${IAAS}-pem.yml
+    -l vars.yml
 ```
 
 - 서비스를 설치한다.  
@@ -229,8 +228,7 @@ $ sh ./deploy.sh
 
 - 서비스 설치에 필요한 릴리즈 파일을 다운로드 받아 Local machine의 서비스 설치 작업 경로로 위치시킨다.  
   
-  - 설치 파일 다운로드 위치 : https://paas-ta.kr/download/package    
-  - 릴리즈 파일 : paasta-cubrid.tgz  
+  - 설치 릴리즈 파일 다운로드 : [paasta-cubrid-2.0.1.tgz](http://45.248.73.44/index.php/s/ic6tB9gcgdL3XQK/download)
 
 ```
 # 릴리즈 다운로드 파일 위치 경로 생성
@@ -238,7 +236,7 @@ $ mkdir -p ~/workspace/paasta-5.0/release/service
 
 # 릴리즈 파일 다운로드 및 파일 경로 확인
 $ ls ~/workspace/paasta-5.0/release/service
-paasta-cubrid.tgz
+paasta-cubrid-2.0.1.tgz
 ```
   
 - 서버 환경에 맞추어 Deploy 스크립트 파일의 VARIABLES 설정을 수정하고 Option file 및 변수를 추가한다.  
@@ -260,7 +258,6 @@ bosh -e ${BOSH_NAME} -n -d cubrid deploy --no-redact cubrid.yml \
     -o operations/use-compiled-releases.yml \
     -l ${COMMON_VARS_PATH} \
     -l vars.yml \
-    -l operations/${IAAS}-pem.yml \
     -v inception_os_user_name="ubuntu"
 ```  
 

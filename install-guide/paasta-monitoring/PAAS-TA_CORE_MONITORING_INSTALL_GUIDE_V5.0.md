@@ -4,8 +4,8 @@
 　● [목적](#102)  
 　● [범위](#103)  
 　● [참고 자료](#104)  
-2. [PaaS-TA 5.0](#105)  
-3. [PaaS-TA 5.0 설치](#106)  
+2. [PaaS-TA 5.0.1](#105)  
+3. [PaaS-TA 5.0.1 설치](#106)  
 　3.1. [Prerequisite](#107)  
 　3.2. [설치 파일 다운로드](#108)  
 　3.3. [Stemcell 업로드](#109)  
@@ -31,7 +31,7 @@
 
 ## Executive Summary
 
-본 문서는 통합 Monitoring을 적용한 PaaS-TA 5.0(이하 PaaS-TA)을 수동으로 설치하기 위한 가이드를 제공하는 데 그 목적이 있다.
+본 문서는 통합 Monitoring을 적용한 PaaS-TA 5.0.1(이하 PaaS-TA)을 수동으로 설치하기 위한 가이드를 제공하는 데 그 목적이 있다.
 
 # <div id='101'/>1.  문서 개요 
 
@@ -56,15 +56,15 @@ BOSH Deployment: [https://github.com/cloudfoundry/bosh-deployment](https://githu
 
 CF Deployment: [https://github.com/cloudfoundry/cf-deployment](https://github.com/cloudfoundry/cf-deployment)
 
-# <div id='105'/>2. PaaS-TA 5.0
+# <div id='105'/>2. PaaS-TA 5.0.1
 
 PaaS-TA는 BOSH를 기반으로 설치된다. BOSH CLI를 사용하여 BOSH를 생성한 후, paasta-deployment로 PaaS-TA를 배포한다. 
 
 PaaS-TA 3.1 버전까지는  PaaS-TA Container, Controller를 각각의 deployment로 설치했지만, PaaS-TA 3.5 버전부터 paasta-deployment 하나로 통합되었으며, 한 번에 PaaS-TA를 설치한다. 
 
-![PaaSTa_BOSH_Use_Guide_Image2](https://github.com/PaaS-TA/Guide-5.0-Ravioli/blob/master/install-guide/paasta-monitoring/images/bosh2.png)
+![PaaSTa_BOSH_Use_Guide_Image2]  
 
-# <div id='106'/>3.   PaaS-TA 5.0 설치
+# <div id='106'/>3.   PaaS-TA 5.0.1 설치
 
 ## <div id='107'/>3.1.    Prerequisite
 
@@ -126,7 +126,7 @@ bosh-stemcell-315.36-aws-xen-hvm-ubuntu-xenial-go_agent.tgz   bosh-stemcell-315.
 bosh-stemcell-315.36-azure-hyperv-ubuntu-xenial-go_agent.tgz  bosh-stemcell-315.36-vcloud-esxi-ubuntu-xenial-go_agent.tgz
 ```
 
-Stemcell은 배포 시 생성되는 PaaS-TA VM Base OS Image이며, 통합 Monitoring을 적용한 PaaS-TA 5.0는 Ubuntu xenial stemcell 315.36를 기반으로 한다.  
+Stemcell은 배포 시 생성되는 PaaS-TA VM Base OS Image이며, 통합 Monitoring을 적용한 PaaS-TA 5.0.1는 Ubuntu xenial stemcell 315.36를 기반으로 한다.  
 BOSH 로그인 후 다음 명령어를 수행하여 Stemcell을 올린다.  
 {director_name}은 BOSH 설치 시 사용한 Director 명이다.
 
@@ -461,7 +461,7 @@ PaaS-TA를 설치하는 환경에 따라 다르게 설정해도 된다.
 VM Type은 IaaS에서 정의된 VM Type이다. Openstack의 경우에는 Flavor Type이다.
 
 ※ 다음은 OpenStack에서 정의한 Flavor Type이다.
-![PaaSTa_FLAVOR_Image](https://github.com/PaaS-TA/Guide-5.0-Ravioli/blob/master/install-guide/paasta-monitoring/images/flavor.png)
+![PaaSTa_FLAVOR_Image]  
 
 ### <div id='1013'/>● Compilation
 PaaS-TA 및 서비스 설치 시, PaaS-TA는 Compile VM을 생성하여 소스를 컴파일하고, PaaS-TA VM을 생성하여 컴파일된 파일을 대상 VM에 설치한다.  
@@ -477,6 +477,7 @@ Networks는 AZ 별 Subnet Network, DNS, Security Groups, Network ID를 정의한
 보통 AZ 별로 256개의 IP를 정의할 수 있도록 Range Cider를 정의한다.
 
 ## <div id='1016'/>3.5.  Runtime Config 설정
+
 PaaS-TA 4.0부터 적용되는 부분으로 PaaS-TA Component에서 Consul이 대체된 Component이다.  
 PaaS-TA Component 간의 통신을 위해 BOSH DNS 배포가 선행되어야 한다.
 

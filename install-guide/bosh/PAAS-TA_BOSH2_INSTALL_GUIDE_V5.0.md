@@ -56,11 +56,12 @@ Cloud Foundry Document: [https://docs.cloudfoundry.org](https://docs.cloudfoundr
 # <div id='105'/>2. BOSH
 BOSH는 초기에 Cloud Foundry PaaS를 위해 개발되었지만, 현재는 Jenkins, Hadoop 등 Yaml 파일 형식으로 소프트웨어를 쉽게 배포할 수 있으며, 수백 가지의 VM을 설치할 수 있고, 각각의 VM에 대해 모니터링, 장애 복구 등 라이프 사이클을 관리할 수 있는 통합 프로젝트이다.
 
-BOSH가 지원하는 IaaS는 VMware vSphere, Google Cloud Platform, AWS, OpenStack, MS Azure, VMware vCloud, RackHD, SoftLayer가 있다.  
-PaaS-TA는 VMware vSphere, Google Cloud Platform, AWS, OpenStack, MS Azure 등의 IaaS를 지원한다.
+BOSH가 지원하는 IaaS는 VMware vSphere, Google Cloud Platform, Amazon Web Services EC2, Microsoft Azure, OpenStack, Alibaba Cloud가 있다.  
+PaaS-TA는 VMware vSphere, Google Cloud Platform, Amazon Web Services EC2, OpenStack, Microsoft Azure 등의 IaaS를 지원한다.  
+현재 PaaS-TA 5.0.2에서 검증한 IaaS 환경은 AWS 환경이다.
 
 PaaS-TA 3.1 버전까지는 Cloud Foundry BOSH1을 기준으로 설치했지만, PaaS-TA 3.5 버전부터 BOSH2를 기준으로 설치하였다.  
-PaaS-TA 5.0은 Cloud Foundry에서 제공하는 bosh-deployment를 활용하여 BOSH를 설치한다.
+PaaS-TA 5.0.2는 Cloud Foundry에서 제공하는 bosh-deployment를 활용하여 BOSH를 설치한다.
 
 BOSH2는 BOSH2 CLI를 통하여 BOSH와 PaaS-TA를 모두 생성한다.  
 bosh-deployment를 이용하여 BOSH를 생성한 후, paasta-deployment로 PaaS-TA를 설치한다.  
@@ -108,7 +109,13 @@ BOSH 및 PaaS-TA 설치를 위해 Inception 서버에 구성해야 할 컴포넌
 
 ### <div id='1011'/>3.3.1.    Prerequisite
 
-- 본 설치 가이드는 Ubuntu 18.04 버전을 기준으로 한다.
+- 본 설치 가이드는 Ubuntu 18.04 버전을 기준으로 한다.  
+
+- IaaS Security Group의 inbound 의 ICMP types 13 (timestamp request), types 14 (timestamp response) Rule을 비활성화 한다. (CVE-1999-0524 ICMP timestamp response 보안 이슈 적용)  
+
+  예 - AWS security group config)  
+  ![Security_Group_ICMP_Image1](./images/security-group-icmp-01.png)  
+
 
 ### <div id='1012'/>3.3.2.    BOSH CLI 및 Dependency 설치
 
@@ -174,9 +181,11 @@ $ bosh -version
 [설치 파일 다운로드](https://paas-ta.kr/download/package)
 - 디렉터리 생성 (내려받은 파일이 위치할 경로)
 ```
+
 $ mkdir -p ${HOME}/workspace/paasta-5.0/deployment
 $ mkdir -p ${HOME}/workspace/paasta-5.0/release
 $ mkdir -p ${HOME}/workspace/paasta-5.0/stemcell
+
 ```
 - PaaS-TA 사이트에서 [PaaS-TA Deployment] 파일을 다운로드해 ${HOME}/workspace/paasta-5.0/deployment 이하 디렉터리에 압축을 푼다.
 - PaaS-TA 사이트에서 [PaaS-TA Release] 파일을 다운로드해 ${HOME}/workspace/paasta-5.0/release 이하 디렉터리에 압축을 푼다.
@@ -189,6 +198,7 @@ $ mkdir -p ${HOME}/workspace/paasta-5.0/stemcell
 ```
 $ cd ${HOME}/workspace/paasta-5.0$ ls
 deployment release stemcell
+
 ```
 
 <table>
@@ -295,64 +305,18 @@ Shell Script 파일을 이용하여 BOSH를 설치한다.
 파일명은 deploy-{IaaS}.sh 로 만들어졌다.  
 
 <table>
+
 <tr>
 <td>deploy-aws.sh</td>
 <td>AWS 환경에 BOSH 설치를 위한 Shell Script 파일</td>
 </tr>
 <tr>
-<td>deploy-azure.sh</td>
-<td>MS Azure 환경에 BOSH 설치를 위한 Shell Script 파일</td>
-</tr>
-<tr>
-<td>deploy-gcp.sh</td>
-<td>GCP(Google Cloud Platform) 환경에 BOSH 설치를 위한 Shell Script 파일</td>
-</tr>
-<tr>
-<td>deploy-openstack.sh</td>
-<td>OpenStack 환경에 BOSH 설치를 위한 Shell Script 파일</td>
-</tr>
-<tr>
-<td>deploy-vsphere.sh</td>
-<td>VMware vSphere 환경에 BOSH 설치를 위한 Shell Script 파일</td>
-</tr>
-<tr>
-<td>deploy-{IaaS}-monitoring.sh</td>
-<td>각 IaaS 환경에 PaaS-TA Monitoring을 설치하기 전에 BOSH 설치를 위한 Shell Script 파일</td>
-</tr>
-<tr>
-<td>deploy-bosh-lite.sh</td>
-<td>Local Test 용도로 BOSH-LITE 설치를 위한 Shell Script 파일</td>
+<td>bosh.yml</td>
+<td>BOSH를 생성하는 Manifest 파일</td>
 </tr>
 </table>
 
-BOSH 설치 명령어는 create-env로 시작한다.  
-Shell이 아닌 BOSH Command로 실행 가능하며, 설치하는 IaaS 환경에 따라 Option이 달라진다.  
-BOSH 삭제 시 delete-env 명령어를 사용하여 설치된 BOSH를 삭제할 수 있다.
 
-BOSH 설치 Option은 아래와 같다.
-
-<table>
-<tr>
-<td>--state</td>
-<td>BOSH 설치 명령어 실행 시 생성되는 파일로, 설치된 BOSH의 IaaS 설정 정보가 저장된다. (Backup 필요)</td>
-</tr>
-<tr>
-<td>--vars-store</td>
-<td>BOSH 설치 명령어 실행 시 생성되는 파일로, 설치된 BOSH의 내부 컴포넌트가 사용하는 인증서 및 인증정보가 저장된다. (Backup 필요)</td>
-</tr>   
-<tr>
-<td>-o</td>
-<td>BOSH 설치 시 적용하는 Operation 파일을 설정할 경우 사용한다. IaaS별 CPI 또는 Jumpbox, CredHub 등의 설정을 적용할 수 있다.</td>
-</tr>
-<tr>
-<td>-v</td>
-<td>BOSH 설치 시 적용하는 변숫값 또는 Operation 파일에 변숫값을 설정할 경우 사용한다. Operation 파일 속성에 따라 필수 또는 선택 항목으로 나뉜다.</td>
-</tr>
-<tr>
-<td>-l, --var-file</td>
-<td>YAML파일에 작성한 변수를 읽어올때 사용한다.</td>
-</tr>
-</table>
 
 ##### <div id='1024'/>● OpenStack BOSH 환경 설정
 
@@ -540,7 +504,6 @@ bosh create-env bosh.yml \
     -v outbound_network_name='NatNetwork'               # outbound network name
 ```
 
-
 - Shell Script 파일에 실행 권한 부여
 
 ```
@@ -550,6 +513,7 @@ $ chmod +x ${HOME}/workspace/paasta-5.0/deployment/bosh-deployment/*.sh
 
 ### <div id='1031'/>3.3.6. BOSH 설치 Option 파일 
 
+
 #### <div id='1032'/>3.3.6.1. BOSH Optional 파일
 
 <table>
@@ -558,54 +522,19 @@ $ chmod +x ${HOME}/workspace/paasta-5.0/deployment/bosh-deployment/*.sh
 <td>설명</td>
 </tr>
 <tr>
-<td>use-compiled-releases.yml</td>
-<td>다운로드 및 컴파일 없이 빠른 설치가 가능하다.</td>
-</tr>
-<tr>
-<td>use-compiled-releases-aws.yml</td>
-<td>다운로드 및 컴파일 없이 AWS-CPI의 릴리즈의 빠른 설치가 가능하다.</td>
-</tr>
-<tr>
-<td>use-compiled-releases-azure.yml</td>
-<td>다운로드 및 컴파일 없이 Azure-CPI의 릴리즈의 빠른 설치가 가능하다.</td>
-</tr>
-<tr>
-<td>use-compiled-releases-gcp.yml</td>
-<td>다운로드 및 컴파일 없이 GCP-CPI의 릴리즈의 빠른 설치가 가능하다.</td>
-</tr>
-<tr>
-<td>use-compiled-releases-openstack.yml</td>
-<td>다운로드 및 컴파일 없이 OpenStack-CPI의 릴리즈의 빠른 설치가 가능하다.</td>
-</tr>
-<tr>
-<td>use-compiled-releases-vsphere.yml</td>
-<td>다운로드 및 컴파일 없이 vSphere-CPI의 릴리즈의 빠른 설치가 가능하다.</td>
-</tr>
-<tr>
 <td>uaa.yml</td>
 <td>UAA 적용</td>
-</tr>
-<tr>
-<td>use-compiled-releases-uaa.yml</td>
-<td>다운로드 및 컴파일 없이 UAA의 빠른 설치가 가능하다.</td>
 </tr>
 <tr>
 <td>credhub.yml</td>
 <td>CredHub 적용</td>
 </tr>
 <tr>
-<td>use-compiled-releases-credhub.yml</td>
-<td>다운로드 및 컴파일 없이 CredHub의 빠른 설치가 가능하다.</td>
-</tr>
-<tr>
 <td>jumpbox.yml</td>
 <td>Jumpbox 적용</td>
 </tr>
-<tr>
-<td>use-compiled-releases-jumpbox.yml</td>
-<td>다운로드 및 컴파일 없이 Jumpbox의 빠른 설치가 가능하다.</td>
-</tr>
 </table>
+
 
 #### <div id='1033'/>3.3.6.2. PaaS-TA Monitoring Operation 파일
 
@@ -630,6 +559,7 @@ BOSH 설치 전에 paasta-monitoring의 InfluxDB IP를 metric_url로 사용하�
 - 서버 환경에 맞추어 Deploy 스크립트 파일의 설정을 수정한다. 
 
 > $ vi ~/workspace/paasta-5.0/deployment/bosh-deployment/deploy-aws.sh
+
 ```                     
 bosh create-env bosh.yml \                         
 	--state=aws/state.json \	
@@ -680,6 +610,7 @@ Succeeded
 ```
 
 ### <div id='1036'/>3.3.8. BOSH 로그인
+
 BOSH가 설치되면, BOSH 설치 디렉터리 이하 {iaas}/creds.yml 파일이 생성된다.  
 creds.yml은 BOSH 인증정보를 가지고 있으며, creds.yml을 활용하여 BOSH에 로그인한다.  
 BOSH 로그인 후, BOSH CLI 명령어를 이용하여 PaaS-TA를 설치할 수 있다.
@@ -693,13 +624,13 @@ $ bosh alias-env {director_name} -e {bosh_url} --ca-cert <(bosh int ./{iaas}/cre
 $ bosh –e {director_name} env
 ```
 
-### <div id='1037'/>3.3.9. CredHub
+### <div id='1037'/>3.3.7. CredHub
 CredHub은 인증정보 저장소이다.  
 BOSH 설치 시 Operation 파일로 credhub.yml을 추가하였다.  
 BOSH 설치 시 credhub.yml을 적용하면, PaaS-TA 설치 시 PaaS-TA에서 사용하는 인증정보(Certificate, Password)를 CredHub에 저장한다.  
 PaaS-TA 인증정보가 필요할 때 CredHub을 사용하며, CredHub CLI를 통해 CredHub에 로그인하여 인증정보 조회, 수정, 삭제를 할 수 있다.
 
-#### <div id='1038'/>3.3.9.1. CredHub CLI 설치
+#### <div id='1038'/>3.3.7.1. CredHub CLI 설치
 
 CredHub CLI는 BOSH를 설치한 Inception(설치환경)에 설치한다.
 
@@ -711,7 +642,7 @@ $ sudo mv credhub /usr/local/bin/credhub
 $ credhub –-version
 ```
 
-#### <div id='1039'/>3.3.9.2. CredHub 로그인
+#### <div id='1039'/>3.3.7.2. CredHub 로그인
 CredHub에 로그인하기 위해 BOSH를 설치한 bosh-deployment 디렉터리의 creds.yml을 활용하여 로그인한다.
 
 ```
@@ -732,7 +663,7 @@ PaaS-TA를 설치하면 인증 정보가 저장되어 조회할 수 있다.
 $ credhub get -n /{director}/{deployment}/uaa_ca
 ```
 
-### <div id='1040'/>3.3.10. Jumpbox
+### <div id='1040'/>3.3.8. Jumpbox
 BOSH 설치 시 Operation 파일로 jumpbox-user.yml을 추가하였다.  
 Jumpbox는 BOSH VM에 접근하기 위한 인증을 적용하게 된다.  
 인증키는 BOSH에서 자체적으로 생성하며, 인증키를 통해 BOSH VM에 접근할 수 있다.  

@@ -97,7 +97,7 @@ Succeeded
 
 서비스 설치에 필요한 Deployment를 Git Repository에서 받아 서비스 설치 작업 경로로 위치시킨다.  
 
-- Service Deployment Git Repository URL : https://github.com/PaaS-TA/service-deployment/tree/v5.0.1
+- Service Deployment Git Repository URL : https://github.com/PaaS-TA/service-deployment/tree/v5.0.3
 
 ```
 # Deployment 다운로드 파일 위치 경로 생성 및 설치 경로 이동
@@ -105,7 +105,7 @@ $ mkdir -p ~/workspace/paasta-5.0/deployment
 $ cd ~/workspace/paasta-5.0/deployment
 
 # Deployment 파일 다운로드
-$ git clone https://github.com/PaaS-TA/service-deployment.git -b v5.0.1
+$ git clone https://github.com/PaaS-TA/service-deployment.git -b v5.0.3
 ```
 
 ### <div id="2.4"/> 2.4. Deployment 파일 수정
@@ -196,64 +196,64 @@ mongodb_slave1_azs: [z3]                                         # mongodb slave
 mongodb_slave1_instances: 2                                      # mongodb slave1 instances
 mongodb_slave1_vm_type: "medium"                                 # mongodb slave1 vm type
 mongodb_slave1_persistent_disk_type: "10GB"                      # mongodb slave1 persistent disk type
-mongodb_slave1_static_ips: "<MONGODB_SLAVE1_PRIVATE_IPS>"        # mongodb slave1's private IPs (e.g. ["10.0.11.11","10.0.11.12"])
+mongodb_slave1_static_ips: "<MONGODB_SLAVE1_PRIVATE_IPS>"        # mongodb slave1's private IPs (e.g. ["10.0.81.11","10.0.81.12"])
 
 # MONGODB_SLAVE2
 mongodb_slave2_azs: [z3]                                         # mongodb slave2 azs
 mongodb_slave2_instances: 2                                      # mongodb slave2 instances
 mongodb_slave2_vm_type: "medium"                                 # mongodb slave2 vm type
 mongodb_slave2_persistent_disk_type: "10GB"                      # mongodb slave2 persistent disk type
-mongodb_slave2_static_ips: "<MONGODB_SLAVE2_PRIVATE_IPS>"        # mongodb slave2's private IPs (e.g. ["10.0.11.14","10.0.11.15"])
+mongodb_slave2_static_ips: "<MONGODB_SLAVE2_PRIVATE_IPS>"        # mongodb slave2's private IPs (e.g. ["10.0.81.14","10.0.81.15"])
 
 # MONGODB_SLAVE3
 mongodb_slave3_azs: [z3]                                         # mongodb slave3 azs
 mongodb_slave3_instances: 2                                      # mongodb slave3 instances
 mongodb_slave3_vm_type: "medium"                                 # mongodb slave3 vm type
 mongodb_slave3_persistent_disk_type: "10GB"                      # mongodb slave3 persistent disk type
-mongodb_slave3_static_ips: "<MONGODB_SLAVE3_PRIVATE_IPS>"        # mongodb slave3's private IPs (e.g. ["10.0.11.17","10.0.11.18"])
+mongodb_slave3_static_ips: "<MONGODB_SLAVE3_PRIVATE_IPS>"        # mongodb slave3's private IPs (e.g. ["10.0.81.17","10.0.81.18"])
 
 # MONGODB_MASTER1
 mongodb_master1_azs: [z3]                                                # mongodb master1 azs
 mongodb_master1_instances: 1                                             # mongodb master1 instances
 mongodb_master1_vm_type: "medium"                                        # mongodb master1 vm type
 mongodb_master1_persistent_disk_type: "10GB"                             # mongodb master1 persistent disk type
-mongodb_master1_static_ips: "<MONGODB_MASTER1_PRIVATE_IP>"               # mongodb master1's private IP (e.g. "10.0.11.10")
-mongodb_master1_replSet_hosts: "<MONGODB_MASTER1_REPLSET_HOSTS>"         # 첫번째 Host는 replicaSet1 의master1 ip, 차례대로 slave1 의 ips. (e.g. ["10.0.11.10", "10.0.11.11","10.0.11.12"])
+mongodb_master1_static_ips: "<MONGODB_MASTER1_PRIVATE_IP>"               # mongodb master1's private IP (e.g. "10.0.81.10")
+mongodb_master1_replSet_hosts: "<MONGODB_MASTER1_REPLSET_HOSTS>"         # 첫번째 Host는 replicaSet1 의master1 ip, 차례대로 slave1 의 ips. (e.g. ["10.0.81.10", "10.0.81.11","10.0.81.12"])
 
 # MONGODB_MASTER2
 mongodb_master2_azs: [z3]                                                # mongodb master2 azs
 mongodb_master2_instances: 1                                             # mongodb master2 instances
 mongodb_master2_vm_type: "medium"                                        # mongodb master2 vm type
 mongodb_master2_persistent_disk_type: "10GB"                             # mongodb master2 persistent disk type
-mongodb_master2_static_ips: "<MONGODB_MASTER2_PRIVATE_IP>"                                 # mongodb master2's private IP (e.g. "10.0.11.13")
-mongodb_master2_replSet_hosts: "<MONGODB_MASTER2_REPLSET_HOSTS>"         # 첫번째 Host는 replicaSet2 의master2 ip, 차례대로 slave2 의 ips. (e.g. ["10.0.11.13", "10.0.11.14","10.0.11.15"])
+mongodb_master2_static_ips: "<MONGODB_MASTER2_PRIVATE_IP>"               # mongodb master2's private IP (e.g. "10.0.81.13")
+mongodb_master2_replSet_hosts: "<MONGODB_MASTER2_REPLSET_HOSTS>"         # 첫번째 Host는 replicaSet2 의master2 ip, 차례대로 slave2 의 ips. (e.g. ["10.0.81.13", "10.0.81.14","10.0.81.15"])
 
 # MONGODB_MASTER3
 mongodb_master3_azs: [z3]                                                # mongodb master3 azs
 mongodb_master3_instances: 1                                             # mongodb master3 instances
 mongodb_master3_vm_type: "medium"                                        # mongodb master3 vm type
 mongodb_master3_persistent_disk_type: "10GB"                             # mongodb master3 persistent disk type
-mongodb_master3_static_ips: "<MONGODB_MASTER3_PRIVATE_IP>"               # mongodb master3's private IP (e.g. "10.0.11.16")
-mongodb_master3_replSet_hosts: "<MONGODB_MASTER3_REPLSET_HOSTS>"         # 첫번째 Host는 replicaSet3 의master3 ip, 차례대로 slave3 의 ips. (e.g. ["10.0.11.16", "10.0.11.17","10.0.11.18"])
+mongodb_master3_static_ips: "<MONGODB_MASTER3_PRIVATE_IP>"               # mongodb master3's private IP (e.g. "10.0.81.16")
+mongodb_master3_replSet_hosts: "<MONGODB_MASTER3_REPLSET_HOSTS>"         # 첫번째 Host는 replicaSet3 의master3 ip, 차례대로 slave3 의 ips. (e.g. ["10.0.81.16", "10.0.81.17","10.0.81.18"])
 
 # MONGODB_CONFIG
 mongodb_config_azs: [z3]                                                 # mongodb config azs
 mongodb_config_instances: 3                                              # mongodb config instances
 mongodb_config_vm_type: "medium"                                         # mongodb config vm type
 mongodb_config_persistent_disk_type: "10GB"                              # mongodb config persistent disk type
-mongodb_config_static_ips: "<MONGODB_CONFIG_PRIVATE_IPS>"                # mongodb config's private IPs (e.g. ["10.0.11.19", "10.0.11.20","10.0.11.21"])
+mongodb_config_static_ips: "<MONGODB_CONFIG_PRIVATE_IPS>"                # mongodb config's private IPs (e.g. ["10.0.81.19", "10.0.81.20","10.0.81.21"])
 
 # MONGODB_SHARD
 mongodb_shard_azs: [z3]                                                  # mongodb shard azs
 mongodb_shard_instances: 1                                               # mongodb shard instances
 mongodb_shard_vm_type: "medium"                                          # mongodb shard vm type
-mongodb_shard_static_ips: "<MONGODB_SHARD_PRIVATE_IP>"                   # mongodb shard's private IP (e.g. "10.0.11.22")
+mongodb_shard_static_ips: "<MONGODB_SHARD_PRIVATE_IP>"                   # mongodb shard's private IP (e.g. "10.0.81.22")
 
 # MONGODB_BROKER
 mongodb_broker_azs: [z3]                                                 # mongodb broker azs
 mongodb_broker_instances: 1                                              # mongodb broker instances
 mongodb_broker_vm_type: "medium"                                         # mongodb broker vm type
-mongodb_broker_static_ips: "<MONGODB_BROKER_PRIVATE_IP>"                 # mongodb broker's private IP (e.g. "10.0.11.23")
+mongodb_broker_static_ips: "<MONGODB_BROKER_PRIVATE_IP>"                 # mongodb broker's private IP (e.g. "10.0.81.23")
 
 # BROKER_REGISTRAR
 broker_registrar_broker_azs: [z3]                                        # broker registrar azs
@@ -298,8 +298,7 @@ $ sh ./deploy.sh
 
 - 서비스 설치에 필요한 릴리즈 파일을 다운로드 받아 Local machine의 서비스 설치 작업 경로로 위치시킨다.  
   
-  - 설치 파일 다운로드 위치 : https://paas-ta.kr/download/package    
-  - 릴리즈 파일 : paasta-mongodb-shard-2.0.tgz  
+  - 설치 릴리즈 파일 다운로드 : [paasta-mongodb-shard-2.0.1.tgz](http://45.248.73.44/index.php/s/7DyiWNWD2N8pT8J/download)
 
 ```
 # 릴리즈 다운로드 파일 위치 경로 생성
@@ -307,7 +306,7 @@ $ mkdir -p ~/workspace/paasta-5.0/release/service
 
 # 릴리즈 파일 다운로드 및 파일 경로 확인
 $ ls ~/workspace/paasta-5.0/release/service
-paasta-mongodb-shard-2.0.tgz
+paasta-mongodb-shard-2.0.1.tgz
 ```
   
 - 서버 환경에 맞추어 Deploy 스크립트 파일의 VARIABLES 설정을 수정하고 Option file 및 변수를 추가한다.  

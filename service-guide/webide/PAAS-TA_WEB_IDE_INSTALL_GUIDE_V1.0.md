@@ -81,7 +81,7 @@ Succeeded
 
 서비스 설치에 필요한 Deployment를 Git Repository에서 받아 서비스 설치 작업 경로로 위치시킨다.  
 
-- Service Deployment Git Repository URL : https://github.com/PaaS-TA/service-deployment/tree/v5.0.1
+- Service Deployment Git Repository URL : https://github.com/PaaS-TA/service-deployment/tree/v5.0.3
 
 ```
 # Deployment 다운로드 파일 위치 경로 생성 및 설치 경로 이동
@@ -89,7 +89,7 @@ $ mkdir -p ~/workspace/paasta-5.0/deployment
 $ cd ~/workspace/paasta-5.0/deployment
 
 # Deployment 파일 다운로드
-$ git clone https://github.com/PaaS-TA/service-deployment.git -b v5.0.1
+$ git clone https://github.com/PaaS-TA/service-deployment.git -b v5.0.3
 ```
 
 ### <div id="2.4"/> 2.4. Deployment 파일 수정
@@ -183,7 +183,7 @@ mariadb_azs: [z3]                                                    # mariadb :
 mariadb_instances: 1                                                 # mariadb : instances (1) 
 mariadb_vm_type: "small"                                             # mariadb : vm type
 mariadb_persistent_disk_type: "10GB"                                 # mariadb : persistent disk type
-mariadb_port: "3306"                                                 # mariadb : database port (e.g. 3306)
+mariadb_port: "<MARIADB_PORT>"                                       # mariadb : database port (e.g. 31306) -- Do Not Use "3306"
 mariadb_admin_password: "<MARIADB_ADMIN_PASSWORD>"                   # mariadb : database admin password (e.g. "Paasta@2018")
 
 # SERVICE-BROKER
@@ -226,8 +226,7 @@ $ sh ./deploy.sh
 
 - 서비스 설치에 필요한 릴리즈 파일을 다운로드 받아 Local machine의 서비스 설치 작업 경로로 위치시킨다.  
   
-  - 설치 파일 다운로드 위치 : https://paas-ta.kr/download/package    
-  - 릴리즈 파일 : paasta-web-ide-1.0.tgz
+  - 설치 릴리즈 파일 다운로드 : [paasta-webide-release-1.0.tgz](http://45.248.73.44/index.php/s/q7fBcXokm7FSNdW/download)
 
 ```
 # 릴리즈 다운로드 파일 위치 경로 생성
@@ -235,7 +234,7 @@ $ mkdir -p ~/workspace/paasta-5.0/release/service
 
 # 릴리즈 파일 다운로드 및 파일 경로 확인
 $ ls ~/workspace/paasta-5.0/release/service
-paasta-web-ide-1.0.tgz
+paasta-webide-release-1.0.tgz
 ```
   
 - 서버 환경에 맞추어 Deploy 스크립트 파일의 VARIABLES 설정을 수정하고 Option file 및 변수를 추가한다.  
@@ -395,8 +394,7 @@ paasta-webide-service   webide       webide-shared                create succeed
 ## <div id='4'/> 4. WEB-IDE 에서 CF CLI 사용법
 
 ### <div id='4.1'/> 4.1. WEB-IDE New Project 화면
-***※ PaaS-TA 운영자 포탈 4.3.3 카탈로그 관리 서비스 가이드 참고***  
-https://github.com/PaaS-TA/Guide-5.0-RAVIOLI/blob/master/use-guide/portal/PAAS-TA_ADMIN_PORTAL_USE_GUIDE_V1.1.md#--433-%EC%B9%B4%ED%83%88%EB%A1%9C%EA%B7%B8-%EA%B4%80%EB%A6%AC-%EC%84%9C%EB%B9%84%EC%8A%A4
+***※ [PaaS-TA 운영자 포탈 4.3.3 카탈로그 관리 서비스 가이드](/use-guide/portal/PAAS-TA_ADMIN_PORTAL_USE_GUIDE_V1.1.md#4.3.3) 참고***  
 
 - 사용할 언어를 선택하고 Create workspace and project 로 새로운 프로젝트를 시작한다.
 

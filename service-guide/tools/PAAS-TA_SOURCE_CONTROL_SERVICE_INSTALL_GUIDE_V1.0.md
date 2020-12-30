@@ -68,7 +68,7 @@ Succeeded
 
 서비스 설치에 필요한 Deployment를 Git Repository에서 받아 서비스 설치 작업 경로로 위치시킨다.  
 
-- Service Deployment Git Repository URL : https://github.com/PaaS-TA/service-deployment/tree/v5.0.1  
+- Service Deployment Git Repository URL : https://github.com/PaaS-TA/service-deployment/tree/v5.0.3  
 
 ```
 # Deployment 다운로드 파일 위치 경로 생성 및 설치 경로 이동
@@ -76,7 +76,7 @@ $ mkdir -p ~/workspace/paasta-5.0/deployment
 $ cd ~/workspace/paasta-5.0/deployment
 
 # Deployment 파일 다운로드
-$ git clone https://github.com/PaaS-TA/service-deployment.git -b v5.0.1
+$ git clone https://github.com/PaaS-TA/service-deployment.git -b v5.0.3
 ```
 
 ### <div id="2.4"/> 2.4. Deployment 파일 수정
@@ -166,14 +166,14 @@ public_networks_name: "vip"                                    # public network 
 scm_azs: [z3]                                                  # scm : azs
 scm_instances: 1                                               # scm : instances (1)
 scm_persistent_disk_type: "30GB"                               # scm : persistent disk type
-scm_private_ips: "<SCM_PRIVATE_IPS>"                           # scm : private ips (e.g. "10.0.81.21")
+scm_private_ips: "<SCM_PRIVATE_IPS>"                           # scm : private ips (e.g. "10.0.81.41")
 
 # MARIA-DB# MARIA_DB
 mariadb_azs: [z3]                                              # mariadb : azs
 mariadb_instances: 1                                           # mariadb : instances (1) 
 mariadb_persistent_disk_type: "2GB"                            # mariadb : persistent disk type 
-mariadb_private_ips: "<MARIADB_PRIVATE_IPS>"                   # mariadb : private ips (e.g. "10.0.81.22")
-mariadb_port: "<MARIADB_PORT>"                                 # mariadb : database port (e.g. 31306)
+mariadb_private_ips: "<MARIADB_PRIVATE_IPS>"                   # mariadb : private ips (e.g. "10.0.81.42")
+mariadb_port: "<MARIADB_PORT>"                                 # mariadb : database port (e.g. 31306) -- Do Not Use "3306"
 mariadb_admin_password: "<MARIADB_ADMIN_PASSWORD>"             # mariadb : database admin password (e.g. "!paas_ta202")
 mariadb_broker_username: "<MARIADB_BROKER_USERNAME>"           # mariadb : service-broker-user id (e.g. "sourcecontrol")
 mariadb_broker_password: "<MARIADB_BROKER_PASSWORD>"           # mariadb : service-broker-user password (e.g. "!scadmin2017")
@@ -182,26 +182,26 @@ mariadb_broker_password: "<MARIADB_BROKER_PASSWORD>"           # mariadb : servi
 haproxy_azs: [z7]                                              # haproxy : azs
 haproxy_instances: 1                                           # haproxy : instances (1)
 haproxy_persistent_disk_type: "2GB"                            # haproxy : persistent disk type
-haproxy_private_ips: "<HAPROXY_PRIVATE_IPS>"                   # haproxy : private ips (e.g. "10.0.0.103")
+haproxy_private_ips: "<HAPROXY_PRIVATE_IPS>"                   # haproxy : private ips (e.g. "10.0.0.31")
 haproxy_public_ips: "<HAPROXY_PUBLIC_IPS>"                     # haproxy : public ips (e.g. "101.101.101.5")
 
 # WEB-UI
 web_ui_azs: [z3]                                               # web-ui : azs
 web_ui_instances: 1                                            # web-ui : instances (1)
 web_ui_persistent_disk_type: "2GB"                             # web-ui : persistent disk type
-web_ui_private_ips: "<WEB_UI_PRIVATE_IPS>"                     # web-ui : private ips (e.g. "10.0.81.24")
+web_ui_private_ips: "<WEB_UI_PRIVATE_IPS>"                     # web-ui : private ips (e.g. "10.0.81.44")
 
 # SCM-API
 api_azs: [z3]                                                  # scm-api : azs
 api_instances: 1                                               # scm-api : instances (1)
 api_persistent_disk_type: "2GB"                                # scm-api : persistent disk type
-api_private_ips: "<API_PRIVATE_IPS>"                           # scm-api : private ips (e.g. "10.0.81.25")
+api_private_ips: "<API_PRIVATE_IPS>"                           # scm-api : private ips (e.g. "10.0.81.45")
 
 # SERVICE-BROKER
 broker_azs: [z3]                                               # service-broker : azs
 broker_instances: 1                                            # service-broker : instances (1)
 broker_persistent_disk_type: "2GB"                             # service-broker : persistent disk type
-broker_private_ips: "<BROKER_PRIVATE_IPS>"                     # service-broker : private ips (e.g. "10.0.81.26")
+broker_private_ips: "<BROKER_PRIVATE_IPS>"                     # service-broker : private ips (e.g. "10.0.81.46")
 
 # UAAC
 uaa_client_sc_id: "scclient"                                   # source-control-service uaa client id
@@ -218,9 +218,9 @@ uaa_client_sc_secret: "clientsecret"                           # source-control-
 #!/bin/bash
   
 # VARIABLES
-BOSH_NAME="micro-bosh"                           # bosh name (e.g. micro-bosh)
-IAAS="openstack"                                 # IaaS (e.g. aws/azure/gcp/openstack/vsphere)
-COMMON_VARS_PATH="<COMMON_VARS_FILE_PATH>"       # common_vars.yml File Path (e.g. /home/ubuntu/paasta-5.0/common/common_vars.yml)
+BOSH_NAME="<BOSH_NAME>"                           # bosh name (e.g. micro-bosh)
+IAAS="<IAAS_NAME>"                                # IaaS (e.g. aws/azure/gcp/openstack/vsphere)
+COMMON_VARS_PATH="<COMMON_VARS_FILE_PATH>"        # common_vars.yml File Path (e.g. /home/ubuntu/paasta-5.0/common/common_vars.yml)
 
 # DEPLOY
 bosh -e ${BOSH_NAME} -n -d source-control-service deploy --no-redact source-control-service.yml \
@@ -239,8 +239,7 @@ $ sh ./deploy.sh
 
 - 서비스 설치에 필요한 릴리즈 파일을 다운로드 받아 Local machine의 서비스 설치 작업 경로로 위치시킨다.  
   
-  - 설치 파일 다운로드 위치 : https://paas-ta.kr/download/package    
-  - 릴리즈 파일 : paasta-sourcecontrol-release-1.0.tgz  
+  - 설치 릴리즈 파일 다운로드 : [paasta-sourcecontrol-release-1.0.1.tgz](http://45.248.73.44/index.php/s/4tXpCPCoRtbTXrK/download)
 
 ```
 # 릴리즈 다운로드 파일 위치 경로 생성
@@ -248,7 +247,7 @@ $ mkdir -p ~/workspace/paasta-5.0/release/service
 
 # 릴리즈 파일 다운로드 및 파일 경로 확인
 $ ls ~/workspace/paasta-5.0/release/service
-paasta-sourcecontrol-release-1.0.tgz
+paasta-sourcecontrol-release-1.0.1.tgz
 ```
   
 - 서버 환경에 맞추어 Deploy 스크립트 파일의 VARIABLES 설정을 수정하고 Option file 및 변수를 추가한다.  
@@ -261,16 +260,9 @@ paasta-sourcecontrol-release-1.0.tgz
 #!/bin/bash
 
 # VARIABLES
-BOSH_NAME="micro-bosh"                           # bosh name (e.g. micro-bosh)
-IAAS="openstack"                                 # IaaS (e.g. aws/azure/gcp/openstack/vsphere)
-COMMON_VARS_PATH="<COMMON_VARS_FILE_PATH>"       # common_vars.yml File Path (e.g. /home/ubuntu/paasta-5.0/common/common_vars.yml)
-
-#!/bin/bash
-  
-# VARIABLES
-BOSH_NAME="micro-bosh"                           # bosh name (e.g. micro-bosh)
-IAAS="openstack"                                 # IaaS (e.g. aws/azure/gcp/openstack/vsphere)
-COMMON_VARS_PATH="<COMMON_VARS_FILE_PATH>"       # common_vars.yml File Path (e.g. /home/ubuntu/paasta-5.0/common/common_vars.yml)
+BOSH_NAME="<BOSH_NAME>"                           # bosh name (e.g. micro-bosh)
+IAAS="<IAAS_NAME>"                                # IaaS (e.g. aws/azure/gcp/openstack/vsphere)
+COMMON_VARS_PATH="<COMMON_VARS_FILE_PATH>"        # common_vars.yml File Path (e.g. /home/ubuntu/paasta-5.0/common/common_vars.yml)
 
 # DEPLOY
 bosh -e ${BOSH_NAME} -n -d source-control-service deploy --no-redact source-control-service.yml \

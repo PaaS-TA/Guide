@@ -169,7 +169,7 @@ Succeeded
 
 서비스 설치에 필요한 Deployment를 Git Repository에서 받아 서비스 설치 작업 경로로 위치시킨다.  
 
-- Service Deployment Git Repository URL : https://github.com/PaaS-TA/service-deployment/tree/v5.0.1
+- Service Deployment Git Repository URL : https://github.com/PaaS-TA/service-deployment/tree/v5.0.3
 
 ```
 # Deployment 다운로드 파일 위치 경로 생성 및 설치 경로 이동
@@ -177,10 +177,10 @@ $ mkdir -p ~/workspace/paasta-5.0/deployment
 $ cd ~/workspace/paasta-5.0/deployment
 
 # Deployment 파일 다운로드
-$ git clone https://github.com/PaaS-TA/service-deployment.git -b v5.0.1
+$ git clone https://github.com/PaaS-TA/service-deployment.git -b v5.0.3
 ```
 
-### <div id='24'/> 2.4. Deployment 파일 수정
+### <div id='2.4'/> 2.4. Deployment 파일 수정
 
 BOSH Deployment manifest는 Components 요소 및 배포의 속성을 정의한 YAML 파일이다.
 Deployment 파일에서 사용하는 network, vm_type, disk_type 등은 Cloud config를 활용하고, 활용 방법은 BOSH 2.0 가이드를 참고한다.   
@@ -265,7 +265,7 @@ pipeline_clinet_id: "pipeclient"                                 # pipeline clie
 pipeline_clinet_secret: "clientsecret"                           # pipeline client password for UAA
 
 # MARIADB
-mariadb_port: "3306"                                             # mariadb database port (default : 3306)
+mariadb_port: "13306"                                            # mariadb database port (default : 13306) -- Do Not Use "3306"
 mariadb_azs: [z5]                                                # mariadb azs
 mariadb_instances: 1                                             # mariadb instances
 mariadb_persistent_disk_type: "2GB"                              # mariadb persistent disk type
@@ -274,7 +274,7 @@ mariadb_internal_static_ips: "<MARIADB_PRIVATE_IP>"              # mariadb's pri
 mariadb_admin_password: "<MARIADB_ADMIN_PASSWORD>"               # mariadb admin password (e.g. "admin!Service")
 
 # POSTGRES
-postgres_port: "5432"                                            # postgresql port (default : 5432)
+postgres_port: "5532"                                            # postgresql port (default : 5532) -- Do Not Use "5432"
 postgres_azs: [z5]                                               # postgresql azs
 postgres_instances: 1                                            # postgresql instances
 postgres_persistent_disk_type: "2GB"                             # postgresql persistent disk type
@@ -304,7 +304,7 @@ ci_server_vm_type: "small"                                                    # 
 ci_server_shared_internal_static_ip: "<CI_SERVER_SHARD_PRIVATE_IP>"           # ci server(Jenkins)'s private IP for shared (e.g. "10.0.161.33")
 ci_server_dedicated_internal_static_ip: "<CI_SERVER_DEDICATED_PRIVATE_IP>"    # ci server(Jenkins)'s public IP for dedicated (e.g. "10.0.161.34")
 ci_server_password: "<CI_SERVER_PASSWORD>"                                    # ci server(Jenkins) password (e.g. "admin!@#")
-ci_server_admin_user_username: "<CI_SERVER_ADMIN_USERNAME>"                   # ci server(Jenkins) admin username
+ci_server_admin_user_username: "<CI_SERVER_ADMIN_USERNAME>"                   # ci server(Jenkins) admin username (e.g. "admin")
 ci_server_admin_user_password: "<CI_SERVER_ADMIN_PASSWORD>"                   # ci server(Jenkins) admin password (e.g. "admin!@#")
 ci_server_http_url: "<CI_SERVER_HTTP_URL>"                                    # ci server(Jenkins) 내부 IP 앞 두자리 입력 (e.g. 10.110.10.10 의 경우, "10.110" 입력)
 
@@ -315,6 +315,7 @@ binary_storage_persistent_disk_type: "5GB"                         # binary stor
 binary_storage_vm_type: "small"                                    # binary storage vm type
 binary_storage_internal_static_ips: "<BINARY_STORAGE_PRIVATE_IP>"  # binary storage's private IP (e.g. "10.0.161.35")
 binary_storage_proxy_port: "10008"                                 # binary storage 프록시 서버 Port(Object Storage 접속 Port) (default : 10008)
+binary_storage_auth_port: 15001                                    # binary storage keystone port (e.g. 15001) -- Do Not Use "5000"
 binary_storage_username: "paasta-pipeline"                         # binary storage 최초 생성되는 유저이름(Object Storage 접속 유저이름)
 binary_storage_password: "paasta-pipeline"                         # binary storage 최초 생성되는 유저 비밀번호(Object Storage 접속 유저 비밀번호)
 binary_storage_tenantname: "paasta-pipeline"                       # binary storage 최초 생성되는 테넌트 이름(Object Storage 접속 테넌트 이름)
@@ -374,7 +375,7 @@ scheduler_vm_type: "small"                                       # scheduler vm 
 scheduler_internal_static_ips: "<SCHEDULER_PRIVATE_IP>"          # scheduler's private IP (e.g. "10.0.161.42")
 ```
 
-### <div id='25'/> 2.5. 서비스 설치
+### <div id='2.5'/> 2.5. 서비스 설치
 
 - 서버 환경에 맞추어 Deploy 스크립트 파일의 VARIABLES 설정을 수정한다. 
 
@@ -402,12 +403,11 @@ $ sh ./deploy.sh
 ```
 
 
-### <div id='26'/> 2.6. 서비스 설치 - 다운로드 된 PaaS-TA Release 파일 이용 방식
+### <div id='2.6'/> 2.6. 서비스 설치 - 다운로드 된 PaaS-TA Release 파일 이용 방식
 
 - 서비스 설치에 필요한 릴리즈 파일을 다운로드 받아 Local machine의 서비스 설치 작업 경로로 위치시킨다.  
   
-  - 설치 파일 다운로드 위치 : https://paas-ta.kr/download/package    
-  - 릴리즈 파일 : paasta-delivery-pipeline-release.tgz  
+  - 설치 릴리즈 파일 다운로드 : [paasta-delivery-pipeline-release-1.0.2.tgz](http://45.248.73.44/index.php/s/maQQNLmYNEAG78y/download)
 
 ```
 # 릴리즈 다운로드 파일 위치 경로 생성
@@ -415,7 +415,7 @@ $ mkdir -p ~/workspace/paasta-5.0/release/service
 
 # 릴리즈 파일 다운로드(paasta-delivery-pipeline-release.tgz) 및 파일 경로 확인
 $ ls ~/workspace/paasta-5.0/release/service
-paasta-delivery-pipeline-release.tgz
+paasta-delivery-pipeline-release-1.0.2.tgz
 ```
   
 - 서버 환경에 맞추어 Deploy 스크립트 파일의 VARIABLES 설정을 수정하고 Option file 및 변수를 추가한다.  
@@ -447,7 +447,7 @@ $ cd ~/workspace/paasta-5.0/deployment/service-deployment/pipeline-service
 $ sh ./deploy.sh  
 ```
 
-### <div id='27'/> 2.7. 서비스 설치 확인
+### <div id='2.7'/> 2.7. 서비스 설치 확인
 
 설치 된 서비스를 확인한다.  
 
