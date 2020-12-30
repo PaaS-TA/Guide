@@ -4,8 +4,8 @@
 　● [목적](#102)  
 　● [범위](#103)  
 　● [참고 자료](#104)  
-2. [PaaS-TA 5.0](#105)  
-3. [PaaS-TA 5.0 설치](#106)  
+2. [PaaS-TA 5.0.1](#105)  
+3. [PaaS-TA 5.0.1 설치](#106)  
 　3.1. [Prerequisite](#107)  
 　3.2. [설치 파일 다운로드](#108)  
 　3.3. [Stemcell 업로드](#109)  
@@ -34,7 +34,7 @@
 
 ## Executive Summary
 
-본 문서는 통합 Monitoring을 적용한 PaaS-TA 5.0(이하 PaaS-TA)을 수동으로 설치하기 위한 가이드를 제공하는 데 그 목적이 있다.
+본 문서는 통합 Monitoring을 적용한 PaaS-TA 5.0.1(이하 PaaS-TA)을 수동으로 설치하기 위한 가이드를 제공하는 데 그 목적이 있다.
 
 # <div id='101'/>1.  문서 개요 
 
@@ -59,7 +59,7 @@ BOSH Deployment: [https://github.com/cloudfoundry/bosh-deployment](https://githu
 
 CF Deployment: [https://github.com/cloudfoundry/cf-deployment](https://github.com/cloudfoundry/cf-deployment)
 
-# <div id='105'/>2. PaaS-TA 5.0
+# <div id='105'/>2. PaaS-TA 5.0.1
 
 PaaS-TA는 BOSH를 기반으로 설치된다. BOSH CLI를 사용하여 BOSH를 생성한 후, paasta-deployment로 PaaS-TA를 배포한다. 
 
@@ -67,7 +67,7 @@ PaaS-TA 3.1 버전까지는  PaaS-TA Container, Controller를 각각의 deployme
 
 ![PaaSTa_BOSH_Use_Guide_Image2]  
 
-# <div id='106'/>3.   PaaS-TA 5.0 설치
+# <div id='106'/>3.   PaaS-TA 5.0.1 설치
 
 ## <div id='107'/>3.1.    Prerequisite
 
@@ -97,7 +97,7 @@ bosh-stemcell-315.36-aws-xen-hvm-ubuntu-xenial-go_agent.tgz   bosh-stemcell-315.
 bosh-stemcell-315.36-azure-hyperv-ubuntu-xenial-go_agent.tgz  bosh-stemcell-315.36-vcloud-esxi-ubuntu-xenial-go_agent.tgz
 ```
 
-Stemcell은 배포 시 생성되는 PaaS-TA VM Base OS Image이며, 통합 Monitoring을 적용한 PaaS-TA 5.0는 Ubuntu xenial stemcell 315.36를 기반으로 한다.  
+Stemcell은 배포 시 생성되는 PaaS-TA VM Base OS Image이며, 통합 Monitoring을 적용한 PaaS-TA 5.0.1는 Ubuntu xenial stemcell 315.36를 기반으로 한다.  
 BOSH 로그인 후 다음 명령어를 수행하여 Stemcell을 올린다.  
 {director_name}은 BOSH 설치 시 사용한 Director 명이다.
 
