@@ -17,8 +17,12 @@
 - [CF Migration 가이드 (3.1 to 4.0)](../../../Guide-4.0-ROTELLE/blob/master/PaaS_TA_4.0_migration.md)
   
 ## 포털 설치 가이드
-- [PaaS-TA 포털 UI](./install-guide/portal/PAAS-TA_PORTAL_UI_SERVICE_INSTALL_GUIDE_V1.0.md)
-- [PaaS-TA 포털 API](./install-guide/portal/PAAS-TA_PORTAL_API_SERVICE_INSTALL_GUIDE_V1.0.md)
+**VM Type 배포/ App Type 배포 중 배포 방식을 선택하여 설치한다.**
+- BOSH를 이용한 VM Type 배포
+  - [PaaS-TA 포털 UI](./install-guide/portal/PAAS-TA_PORTAL_UI_SERVICE_INSTALL_GUIDE_V1.0.md)
+  - [PaaS-TA 포털 API](./install-guide/portal/PAAS-TA_PORTAL_API_SERVICE_INSTALL_GUIDE_V1.0.md)
+- PaaS-TA 컨테이너에 App Type 배포
+  - [PaaS-TA 포털](./install-guide/portal/PAAS-TA_PORTAL_SERVICE_APP_TYPE_INSTALL_GUIDE_V1.0.md)
 
 ## 서비스 설치 가이드
 **아래 서비스 설치 전에 BOSH, PaaS-TA, PaaS-TA 포털이 설치되어 있어야 한다.**

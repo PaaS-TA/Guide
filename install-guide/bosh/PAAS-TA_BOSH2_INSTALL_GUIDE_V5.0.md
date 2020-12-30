@@ -13,19 +13,23 @@
 　　3.3.1. [Prerequisite](#1011)  
 　　3.3.2. [BOSH CLI 및 Dependency 설치](#1012)  
 　　3.3.3. [설치 파일 다운로드](#1013)  
-　　3.3.4. [BOSH 설치 ](#1015)  
-　　　3.3.4.1. [BOSH 설치 Variable 파일](#1016)  
-　　　　● [aws-vars.yml](#1017)  
-　　　3.3.4.2. [BOSH 설치 Option 파일](#1023)  
-　　　　● [BOSH Optional 파일](#1024)  
-　　　3.3.4.3. [BOSH 설치 Shell Script](#1026)  
-　　　　● [deploy-aws.sh](#1027)  
-　　3.3.5. [BOSH 설치](#1034)  
-　　3.3.6. [BOSH 로그인](#1036)  
-　　3.3.7. [CredHub](#1037)  
-　　　3.3.7.1. [CredHub CLI 설치](#1038)  
-　　　3.3.7.2. [CredHub 로그인](#1039)  
-　　3.3.8. [Jumpbox](#1040)  
+　　3.3.4. [BOSH 설치 파일](#1014)  
+　　3.3.5. [BOSH 환경 설정](#1015)  
+　　　　● [OpenStack BOSH 환경 설정](#1024)  
+　　　　● [AWS BOSH 환경 설정](#1025)   
+　　　　● [VMware vSphere BOSH 환경 설정](#1026)  
+　　　　● [MS Azure BOSH 환경 설정](#1027)  
+　　　　● [GCP BOSH 환경 설정](#1028)  
+　　　　● [BOSH-LITE 환경 설정](#1030)  
+　　3.3.6. [BOSH 설치 Option](#1031)  
+  　　　3.3.6.1. [BOSH 설치 Optional 파일](#1032)  
+  　　　3.3.6.2. [PaaS-TA Monitoring Operation 파일](#1033)  
+　　3.3.7. [BOSH 설치](#1034)  
+　　3.3.8. [BOSH 로그인](#1036)  
+　　3.3.9. [CredHub](#1037)  
+　　　3.3.9.1. [CredHub CLI 설치](#1038)  
+　　　3.3.9.2. [CredHub 로그인](#1039)  
+　　3.3.10. [Jumpbox](#1040)  
 
 ## Executive Summary
 
@@ -174,48 +178,117 @@ $ bosh -version
 
 ### <div id='1013'/>3.3.3.    설치 파일 다운로드
 
-- BOSH를 설치하기 위한 deployment가 존재하지 않는다면 다운로드 받는다
+[설치 파일 다운로드](https://paas-ta.kr/download/package)
+- 디렉터리 생성 (내려받은 파일이 위치할 경로)
 ```
 $ mkdir -p ${HOME}/workspace/paasta/deployment
 $ cd ${HOME}/workspace/paasta/deployment
 $ git clone https://github.com/PaaS-TA/paasta-deployment.git -b v5.1
 ```
+- PaaS-TA 사이트에서 [PaaS-TA Deployment] 파일을 다운로드해 ${HOME}/workspace/paasta-5.0/deployment 이하 디렉터리에 압축을 푼다.
+- PaaS-TA 사이트에서 [PaaS-TA Release] 파일을 다운로드해 ${HOME}/workspace/paasta-5.0/release 이하 디렉터리에 압축을 푼다.
+- PaaS-TA 사이트에서 [PaaS-TA Stemcell] 파일을 다운로드해 ${HOME}/workspace/paasta-5.0/stemcell 이하 디렉터리에 압축을 푼다.
 
-- paasta/deployment/paasta-deployment 이하 디렉터리
+### <div id='1014'/>3.3.4.    BOSH 설치 파일
+
+- paasta-5.0 이하 디렉터리
 
 ```
-$ cd ${HOME}/workspace/paasta/deployment/paasta-deployment
-$ ls
-bosh  cloud-config  paasta
+$ cd ${HOME}/workspace/paasta-5.0$ ls
+deployment release stemcell
+
+```
+
+<table>
+<tr>
+<td>deployment</td>
+<td>deployment 및 cloud-config가 존재한다.</td>
+</tr>
+<tr>
+<td>release</td>
+<td>release 파일이 존재한다.</td>
+</tr>
+<tr>
+<td>stemcell</td>
+<td>IaaS별 stemcell 파일이 존재한다.</td>
+</tr>
+</table>
+
+- paasta-5.0/deployment 이하 디렉터리
+
+```
+$ cd ${HOME}/workspace/paasta-5.0/deployment$ ls
+bosh-deployment  cloud-config  paasta-deployment  paasta-deployment-monitoring  portal-deployment  service-deployment
+```
+
+<table>
+<tr>
+<td>bosh-deployment</td>
+<td>BOSH 설치를 위한 manifest 및 설치 파일이 존재하는 디렉터리</td>
+</tr>
+<tr>
+<td>cloud-config</td>
+<td>PaaS-TA 설치를 위한 IaaS network/storage/vm 관련 설정 파일이 존재하는 디렉터리</td>
+</tr>
+<tr>
+<td>paasta-deployment</td>
+<td>PaaS-TA 설치를 위한 manifest 및 설치 파일이 존재하는 디렉터리</td>
+</tr>
+<tr>
+<td>paasta-deployment-monitoring</td>
+<td>PaaS-TA 및 Monitoring 설치를 위한 manifest 및 설치 파일이 존재하는 디렉터리</td>
+</tr>
+<tr>
+<td>portal-deployment</td>
+<td>PaaS-TA Portal 설치를 위한 manifest 및 설치 파일이 존재하는 디렉터리</td>
+</tr>
+<tr>
+<td>service-deployment</td>
+<td>PaaS-TA Service (mysql, glusterfs 등) 설치를 위한 manifest 및 설치 파일이 존재하는 디렉터리</td>
+</tr>
+</table>
+
+- paasta-5.0/release 이하 디렉터리
+
+```
+$ cd ${HOME}/workspace/paasta-5.0/release$ ls
+bosh paasta paasta-monitoring portal service
 ```
 
 <table>
 <tr>
 <td>bosh</td>
-<td>BOSH 설치를 위한 manifest 및 설치 파일이 존재하는 디렉터리</td>
-</tr>
-<tr>
-<td>cloud-config</td>
-<td>PaaS-TA 설치를 위한 IaaS network, storage, vm 관련 설정 파일이 존재하는 디렉터리</td>
+<td>BOSH 설치 시 필요한 release 파일이 존재하는 디렉터리</td>
 </tr>
 <tr>
 <td>paasta</td>
-<td>PaaS-TA 설치를 위한 manifest 및 설치 파일이 존재하는 디렉터리</td>
+<td>PaaS-TA 설치 시 필요한 release 파일이 존재하는 디렉터리</td>
+</tr>
+<tr>
+<td>paasta-monitoring</td>
+<td>PaaS-TA 및 Monitoring 설치 시 필요한 release 파일이 존재하는 디렉터리</td>
+</tr>
+<tr>
+<td>portal</td>
+<td>PaaS-TA Portal 설치 시 필요한 release 파일이 존재하는 디렉터리</td>
+</tr>
+<tr>
+<td>service</td>
+<td>Paas-TA Service (mysql, glusterfs 등) 설치 시 필요한 release 파일이 존재하는 디렉터리</td>
 </tr>
 </table>
 
+- paasta-5.0 이하 디렉터리
 
-### <div id='1015'/>3.3.4.    BOSH 설치 파일
-
-${HOME}/workspace/paasta/deployment/paasta-deployment/bosh 이하 디렉터리에는 BOSH 설치를 위한 IaaS별 Shell Script 파일이 존재한다.  
-Shell Script 파일을 이용하여 BOSH를 설치한다.
-파일명은 deploy-{IaaS}.sh 로 만들어졌다.  
-또한 {IaaS}-vars.yml을 수정하여 BOSH 설치시 적용하는 변수을 설정할 수 있다.
+```
+$ cd ${HOME}/workspace/paasta-5.0$ ls
+deployment release stemcell
+```
 
 <table>
 <tr>
-<td>aws-vars.yml</td>
-<td>AWS 환경에 BOSH 설치시 적용하는 변수 설정 파일</td>
+<td>paasta</td>
+<td>PaaS-TA 및 PaaS-TA Service 설치 시 필요한 stemcell 파일이 존재하는 디렉터리</td>
 </tr>
 <tr>
 <td>openstack-vars.yml</td>
@@ -237,33 +310,196 @@ Shell Script 파일을 이용하여 BOSH를 설치한다.
 
 
 
-
-#### <div id='1016'/>3.3.4.1. BOSH 설치 Variable File
-
-##### <div id='1017'/>● aws-vars.yml
+##### <div id='1024'/>● OpenStack BOSH 환경 설정
 
 ```
-# BOSH VARIABLE
-bosh_client_admin_id: "admin"				# Bosh Client Admin ID
-private_cidr: "10.0.1.0/24"				# Private IP Range
-private_gw: "10.0.1.1"					# Private IP Gateway
-bosh_url: "10.0.1.6"					# Private IP 
-inception_os_user_name: "ubuntu"			# Home User Name
-director_name: "micro-bosh"				# BOSH Director Name
-access_key_id: "XXXXXXXXXXXXXXX"			# AWS Access Key
-secret_access_key: "XXXXXXXXXXXXX"			# AWS Secret Key
-region: "ap-northeast-2"				# AWS Region
-az: "ap-northeast-2a"					# AWS AZ Zone
-default_key_name: "aws-paasta.pem"			# AWS Key Name
-default_security_groups: ["bosh"]			# AWS Security-Group
-subnet_id: "paasta-subnet"				# AWS Subnet
-private_key: "~/.ssh/aws-paasta.pem"			# SSH Private Key Path
+bosh create-env bosh.yml \
+    --state=openstack/state.json \                      # BOSH latest running state, 설치 시 생성, Backup 필요
+    --vars-store=openstack/creds.yml \                  # BOSH credentials and certs, 설치 시 생성, Backup 필요
+    -o openstack/cpi.yml \                              # openstack cpi 적용
+    -o openstack/disable-readable-vm-names.yml \        # VM 명을 UUIDs로 적용
+    -o uaa.yml \                                        # uaa 적용
+    -o credhub.yml \                                    # credhub 적용
+    -o jumpbox-user.yml \                               # jumpbox 적용
+    -o syslog.yml \                                     # [MONITORING] monitoring logging agent 적용
+    -o paasta-addon/paasta-monitoring-agent.yml \       # [MONITORING] monitoring metric agent 적용
+    -v metric_url='10.0.161.101:8059' \                 # [MONITORING] monitoring agent가 BOSH 상태 정보 (Cpu/Memory/Disk...)를 모니터링 influxdb에 전송할 influxdb ip
+    -v syslog_address='10.0.121.100' \                  # [MONITORING] log agent가 BOSH log 정보를 logsearch의 ls-router에 전송할 log ip
+    -v syslog_port='2514' \                             # [MONITORING] log agent가 BOSH log 정보를 logsearch의 ls-router에 전송할 log port
+    -v syslog_transport='relp' \                        # [MONITORING] log agent가 BOSH log 정보를 logsearch의 ls-router에 전송할 때 사용하는 logsearch protocol
+    -v inception_os_user_name='ubuntu' \                # home user name
+    -v director_name='micro-bosh' \                     # BOSH director name
+    -v internal_cidr='10.0.1.0/24' \                    # internal ip range
+    -v internal_gw='10.0.1.1' \                         # internal ip gateway
+    -v internal_ip='10.0.1.6' \                         # internal ip 
+    -v auth_url=http://xxx.xxx.xxx.xxx:5000/v3/  \      # openstack keystone url
+    -v az='zone1' \                                     # openstack az zone
+    -v default_key_name='openpaas' \                    # openstack key name
+    -v default_security_groups=[openpaas] \             # openstack security group
+    -v net_id='51b96a68-aded-4e73-aa44-f44a812b9b30' \  # openstack network id
+    -v multizone=true \                                 # openstack compute node의 Multizone 설정(Ceph)
+    -v openstack_password='xxxx' \                      # openstack user password
+    -v openstack_username='xxxx'\                       # openstack user name
+    -v openstack_domain='default' \                     # openstack domain name
+    -v openstack_project='monitoring' \                 # openstack project
+    -v region='RegionOne' \                             # openstack region
+    -v private_key=~/.ssh/OpenPaas.pem                  # ssh private key path
+```
+##### <div id='1025'/>● AWS BOSH 환경 설정
+```
+bosh create-env bosh.yml \
+    --state=aws/state.json \                            # BOSH latest running state, 설치 시 생성, Backup 필요
+    --vars-store aws/creds.yml \                        # BOSH credentials and certs, 설치 시 생성, Backup 필요
+    -o aws/cpi.yml \                                    # aws cpi 적용
+    -o uaa.yml \                                        # uaa 적용
+    -o credhub.yml \                                    # credhub 적용
+    -o jumpbox-user.yml \                               # jumpbox 적용
+    -o syslog.yml \                                     # [MONITORING] monitoring logging agent 적용
+    -o paasta-addon/paasta-monitoring-agent.yml \       # [MONITORING] monitoring metric agent 적용
+    -v metric_url='10.0.161.101:8059' \                 # [MONITORING] monitoring agent가 BOSH 상태 정보 (Cpu/Memory/Disk...)를 모니터링 influxdb에 전송할 influxdb ip
+    -v syslog_address='10.0.121.100' \                  # [MONITORING] log agent가 BOSH log 정보를 logsearch의 ls-router에 전송할 log ip
+    -v syslog_port='2514' \                             # [MONITORING] log agent가 BOSH log 정보를 logsearch의 ls-router에 전송할 log port
+    -v syslog_transport='relp' \                        # [MONITORING] log agent가 BOSH log 정보를 logsearch의 ls-router에 전송할 때 사용하는 logsearch protocol
+    -v inception_os_user_name='ubuntu' \                # home user name
+    -v director_name='micro-bosh' \                     # BOSH director name
+    -v internal_cidr='10.0.1.0/24' \                    # internal ip range
+    -v internal_gw='10.0.1.1' \                         # internal ip gateway
+    -v internal_ip='10.0.1.6' \                         # internal ip 
+    -v access_key_id='xxxxx' \                          # aws access key
+    -v secret_access_key='xxxxx' \                      # aws secret key
+    -v region='ap-northeast-1' \                        # aws region
+    -v az='ap-northeast-1a' \                           # aws az zone
+    -v default_key_name='paasta' \                      # aws key name
+    -v default_security_groups=[paasta-rnd] \           # aws security-group
+    -v subnet_id='subnet-ba1e15f3' \                    # aws subnet
+    -v private_key=~/.ssh/paasta.pem                    # ssh private key path
+```
 
-# MONITORING VARIABLE(PaaS-TA Monitoring을 설치할 경우 향후 설치할 VM의 값으로 미리 수정)
-metric_url: "xx.xx.xxx.xxx"				# PaaS-TA Monitoring InfluxDB IP
-syslog_address: "xx.xx.xxx.xxx"				# Logsearch의 ls-router IP
-syslog_port: "2514"					# Logsearch의 ls-router Port
-syslog_transport: "relp"				# Logsearch Protocol
+##### <div id='1026'/>● VMware vSphere BOSH 환경 설정
+```
+bosh create-env bosh.yml \
+    --state=vsphere/state.json \                        # BOSH latest running state, 설치 시 생성, Backup 필요
+    --vars-store=vsphere/creds.yml \                    # BOSH credentials and certs, 설치 시 생성, Backup 필요
+    -o vsphere/cpi.yml \                                # vsphere cpi 적용
+    -o vsphere/resource-pool.yml \                      # vsphere resource pool 적용    
+    -o uaa.yml \                                        # uaa 적용
+    -o credhub.yml \                                    # credhub 적용
+    -o jumpbox-user.yml \                               # jumpbox 적용
+    -o syslog.yml \                                     # [MONITORING] monitoring logging agent 적용
+    -o paasta-addon/paasta-monitoring-agent.yml \       # [MONITORING] monitoring metric agent 적용
+    -v metric_url='10.0.161.101:8059' \                 # [MONITORING] monitoring agent가 BOSH 상태 정보 (Cpu/Memory/Disk...)를 모니터링 influxdb에 전송할 influxdb ip
+    -v syslog_address='10.0.121.100' \                  # [MONITORING] log agent가 BOSH log 정보를 logsearch의 ls-router에 전송할 log ip
+    -v syslog_port='2514' \                             # [MONITORING] log agent가 BOSH log 정보를 logsearch의 ls-router에 전송할 log port
+    -v syslog_transport='relp' \                        # [MONITORING] log agent가 BOSH log 정보를 logsearch의 ls-router에 전송할 때 사용하는 logsearch protocol
+    -v inception_os_user_name='inception' \             # home user name
+    -v director_name='micro-bosh' \                     # BOSH director name
+    -v internal_cidr='10.30.0.0/16' \                   # internal ip range
+    -v internal_gw='10.30.20.23' \                      # internal ip gateway
+    -v internal_ip='10.30.40.111' \                     # internal ip 
+    -v network_name="internal" \                        # internal network name (vcenter)
+    -v vcenter_dc='datacenter' \                        # vcenter data center name
+    -v vcenter_ds='storage' \                           # vcenter data storage name
+    -v vcenter_ip='10.30.20.22' \                       # vcenter internal ip
+    -v vcenter_user='xxxx' \                            # vcenter user name
+    -v vcenter_password='xxxx' \                        # vcenter user password
+    -v vcenter_templates='templates' \                  # vcenter templates name
+    -v vcenter_vms='vms' \                              # vcenter vms name
+    -v vcenter_disks='disks' \                          # vcenter disk name
+    -v vcenter_cluster='cluster' \                      # vcenter cluster name
+    -v vcenter_rp='resourcepool'                        # vcenter resource pool name
+
+```
+
+##### <div id='1027'/>● MS Azure BOSH 환경 설정
+```
+bosh create-env bosh.yml \
+    --state=azure/state.json \                          # BOSH latest running state, 설치 시 생성, Backup 필요
+    --vars-store azure/creds.yml \                      # BOSH credentials and certs, 설치 시 생성, Backup 필요
+    -o azure/cpi.yml \                                  # azure cpi 적용
+    -o uaa.yml \                                        # uaa 적용
+    -o credhub.yml \                                    # credhub 적용
+    -o jumpbox-user.yml \                               # jumpbox 적용
+    -o syslog.yml \                                     # [MONITORING] monitoring logging agent 적용
+    -o paasta-addon/paasta-monitoring-agent.yml \       # [MONITORING] monitoring metric agent 적용
+    -v metric_url='10.0.161.101:8059' \                 # [MONITORING] monitoring agent가 BOSH 상태 정보 (Cpu/Memory/Disk...)를 모니터링 influxdb에 전송할 influxdb ip
+    -v syslog_address='10.0.121.100' \                  # [MONITORING] log agent가 BOSH log 정보를 logsearch의 ls-router에 전송할 log ip
+    -v syslog_port='2514' \                             # [MONITORING] log agent가 BOSH log 정보를 logsearch의 ls-router에 전송할 log port
+    -v syslog_transport='relp' \                        # [MONITORING] log agent가 BOSH log 정보를 logsearch의 ls-router에 전송할 때 사용하는 logsearch protocol
+    -v inception_os_user_name='ubuntu' \                # home user name
+    -v director_name='micro-bosh' \                     # BOSH director name
+    -v internal_cidr='10.0.1.0/24' \                    # internal ip range
+    -v internal_gw='10.0.1.1' \                         # internal ip gateway
+    -v internal_ip='10.0.1.6' \                         # internal ip
+    -v vnet_name='paasta-net' \                         # azure vnet name
+    -v subnet_name='bosh-net' \                         # azure vnet subnet name
+    -v subscription_id='xxxx' \                         # azure subscription id
+    -v tenant_id='xxxx' \                               # azure tenant id
+    -v client_id='xxxx' \                               # azure client id
+    -v client_secret='xxxx' \                           # azure client secret
+    -v resource_group_name='resoureceGorup' \           # azure resource group
+    -v storage_account_name='paasta' \                  # azure storage account
+    -v default_security_group='bosh-security'           # azure security group
+```
+
+##### <div id='1028'/>● GCP BOSH 환경 설정
+```
+bosh create-env bosh.yml \
+    --state=gcp/state.json \                            # BOSH latest running state, 설치 시 생성, Backup 필요
+    --vars-store gcp/creds.yml \                        # BOSH credentials and certs, 설치 시 생성, Backup 필요
+    -o gcp/cpi.yml \                                    # gcp cpi 적용
+    -o uaa.yml \                                        # uaa 적용
+    -o credhub.yml \                                    # credhub 적용
+    -o jumpbox-user.yml \                               # jumpbox 적용
+    -o syslog.yml \                                     # [MONITORING] monitoring logging agent 적용
+    -o paasta-addon/paasta-monitoring-agent.yml \       # [MONITORING] monitoring metric agent 적용
+    -v metric_url='10.0.161.101:8059' \                 # [MONITORING] monitoring agent가 BOSH 상태 정보 (Cpu/Memory/Disk...)를 모니터링 influxdb에 전송할 influxdb ip
+    -v syslog_address='10.0.121.100' \                  # [MONITORING] log agent가 BOSH log 정보를 logsearch의 ls-router에 전송할 log ip
+    -v syslog_port='2514' \                             # [MONITORING] log agent가 BOSH log 정보를 logsearch의 ls-router에 전송할 log port
+    -v syslog_transport='relp' \                        # [MONITORING] log agent가 BOSH log 정보를 logsearch의 ls-router에 전송할 때 사용하는 logsearch protocol
+    -v inception_os_user_name='ubuntu' \                # home user name
+    -v director_name='micro-bosh' \                     # BOSH director name
+    -v internal_cidr='10.0.1.0/24' \                    # internal ip range
+    -v internal_gw='10.0.1.1' \                         # internal ip gateway
+    -v internal_ip='10.0.1.6' \                         # internal ip
+    -v network='paas-ta-network' \                      # gcp network name
+    -v subnetwork='bosh-net' \                          # gcp subnet name
+    -v tags=[bosh-security] \                           # gcp tags
+    -v project_id='paas-ta-198701' \                    # gcp project id
+    -v zone='asia-northeast1-a' \                       # gcp zone
+    -v private_key=~/.ssh/vcap.pem \                    # ssh private key path
+    --var-file gcp_credentials_json=~/.ssh/a54132.json  # gcp service account key
+```
+
+##### <div id='1030'/>● BOSH-LITE 환경 설정
+```
+bosh create-env bosh.yml \
+    --state=warden/state.json \                         # BOSH latest running state, 설치 시 생성, Backup 필요
+    --vars-store warden/creds.yml \                     # BOSH credentials and certs, 설치 시 생성, Backup 필요
+    -o virtualbox/cpi.yml \                             # virtualbox cpi 적용
+    -o virtualbox/outbound-network.yml \                # virtualbox outbound network 적용
+    -o bosh-lite.yml \                                  # BOSH lite 적용
+    -o uaa.yml \                                        # uaa 적용
+    -o credhub.yml \                                    # credhub 적용
+    -o jumpbox-user.yml \                               # jumpbox 적용
+    -o syslog.yml \                                     # [MONITORING] monitoring logging agent 적용
+    -o paasta-addon/paasta-monitoring-agent.yml \       # [MONITORING] monitoring metric agent 적용
+    -v metric_url='10.0.161.101:8059' \                 # [MONITORING] monitoring agent가 BOSH 상태 정보 (Cpu/Memory/Disk...)를 모니터링 influxdb에 전송할 influxdb ip
+    -v syslog_address='10.0.121.100' \                  # [MONITORING] log agent가 BOSH log 정보를 logsearch의 ls-router에 전송할 log ip
+    -v syslog_port='2514' \                             # [MONITORING] log agent가 BOSH log 정보를 logsearch의 ls-router에 전송할 log port
+    -v syslog_transport='relp' \                        # [MONITORING] log agent가 BOSH log 정보를 logsearch의 ls-router에 전송할 때 사용하는 logsearch protocol
+    -v inception_os_user_name='ubuntu' \                # home user name
+    -v director_name='vbox' \                           # BOSH director name
+    -v internal_ip='192.168.150.4' \                    # internal ip range
+    -v internal_gw='192.168.150.1' \                    # internal gateway
+    -v internal_cidr='192.168.150.0/24' \               # internal ip rang
+    -v network_name='vboxnet0' \                        # internal network name
+    -v outbound_network_name='NatNetwork'               # outbound network name
+```
+
+- Shell Script 파일에 실행 권한 부여
+
+```
+$ chmod +x ${HOME}/workspace/paasta-5.0/deployment/bosh-deployment/*.sh  
 ```
 
 ##### <div id='1017'/>● openstack-vars.yml
@@ -296,9 +532,10 @@ syslog_transport: "relp"				# Logsearch Protocol
 ```
 
 
-#### <div id='1023'/>3.3.4.2. BOSH 설치 Option 파일
+### <div id='1031'/>3.3.6. BOSH 설치 Option 파일 
 
-##### <div id='1024'/>● BOSH Optional 파일
+
+#### <div id='1032'/>3.3.6.1. BOSH Optional 파일
 
 <table>
 <tr>
@@ -319,6 +556,8 @@ syslog_transport: "relp"				# Logsearch Protocol
 </tr>
 </table>
 
+
+#### <div id='1033'/>3.3.6.2. PaaS-TA Monitoring Operation 파일
 
 
 ##### <div id='1024'/>● PaaS-TA Monitoring Operation 파일
@@ -351,34 +590,18 @@ BOSH 설치 전에 paasta-monitoring의 InfluxDB IP를 metric_url로 사용하�
 
 #### <div id='1026'/>3.3.4.3. BOSH 설치 Shell Script
 
-BOSH 설치 명령어는 create-env로 시작한다.  
-Shell이 아닌 BOSH Command로 실행 가능하며, 설치하는 IaaS 환경에 따라 Option이 달라진다.  
-BOSH 삭제 시 delete-env 명령어를 사용하여 설치된 BOSH를 삭제할 수 있다.
+| 파일명 | 설명 | 요구사항 |
+|:---  |:---     |:---   |
+|paasta-addon/paasta-monitoring-agent.yml | PaaS-TA Monitoring Agent 적용 | Requries value:   -v metric_url  |
+|paasta-addon/use-compiled-releases-monitoring-agent.yml | 다운로드 및 컴파일 없이 PaaS-TA Monitoring Agent의 빠른 설치가 가능하다.	 | |
+|syslog.yml | Syslog 구성 적용 | Requries value: -v syslog_address   -v syslog_port -v syslog_transport |
+|use-compiled-releases-syslog.yml | 다운로드 및 컴파일 없이 Syslog의 빠른 설치가 가능하다.	 |  |
 
-BOSH 설치 Option은 아래와 같다.
+PaaS-TA Monitoring Agent는 BOSH VM의 상태 정보(Metric data)를 paasta-monitoring의 InfluxDB에 전송한다.  
+Syslog Agent는 BOSH VM의 log 정보를 logsearch의 ls-router에 전송하는 역할을 한다.  
+BOSH 설치 전에 paasta-monitoring의 InfluxDB IP를 metric_url로 사용하기 위해 사전에 정의해야 한다.  
+마찬가지로 logsearch의 ls-router IP도 syslog_address로 연동하기 위해 사전에 정의해야 한다.
 
-<table>
-<tr>
-<td>--state</td>
-<td>BOSH 설치 명령어 실행 시 생성되는 파일로, 설치된 BOSH의 IaaS 설정 정보가 저장된다. (Backup 필요)</td>
-</tr>
-<tr>
-<td>--vars-store</td>
-<td>BOSH 설치 명령어 실행 시 생성되는 파일로, 설치된 BOSH의 내부 컴포넌트가 사용하는 인증서 및 인증정보가 저장된다. (Backup 필요)</td>
-</tr>   
-<tr>
-<td>-o</td>
-<td>BOSH 설치 시 적용하는 Operation 파일을 설정할 경우 사용한다. IaaS별 CPI 또는 Jumpbox, CredHub 등의 설정을 적용할 수 있다.</td>
-</tr>
-<tr>
-<td>-v</td>
-<td>BOSH 설치 시 적용하는 변수 또는 Operation 파일에 변수를 설정할 경우 사용한다. Operation 파일 속성에 따라 필수 또는 선택 항목으로 나뉜다.</td>
-</tr>
-<tr>
-<td>-l, --var-file</td>
-<td>YAML파일에 작성한 변수를 읽어올때 사용한다.</td>
-</tr>
-</table>
 
 ##### <div id='1027'/>● deploy-aws.sh
 
@@ -448,15 +671,15 @@ bosh create-env bosh.yml \
 - BOSH 설치 Shell Script 파일 실행
 
 ```
-$ cd ${HOME}/workspace/paasta/deployment/paasta-deployment/bosh
+$ cd ${HOME}/workspace/paasta-5.0/deployment/bosh-deployment
 $ ./deploy-{iaas}.sh
 ```
 
 - BOSH 설치 중
 
 ```
-ubuntu@inception:~/workspace/paasta/deployment/paasta-deployment/bosh$ ./deploy-aws.sh
-Deployment manifest: '/home/ubuntu/workspace/paasta/deployment/paasta-deployment/bosh/bosh.yml'
+ubuntu@inception:~/workspace/paasta-5.0/deployment/bosh-deployment$ ./deploy-aws.sh
+Deployment manifest: '/home/ubuntu/workspace/paasta-5.0/deployment/bosh-deployment/bosh.yml'
 Deployment state: 'aws/state.json'
 
 Started validating
@@ -484,14 +707,14 @@ Cleaning up rendered CPI jobs... Finished (00:00:00)
 Succeeded
 ```
 
+### <div id='1036'/>3.3.8. BOSH 로그인
 
-### <div id='1036'/>3.3.6. BOSH 로그인
 BOSH가 설치되면, BOSH 설치 디렉터리 이하 {iaas}/creds.yml 파일이 생성된다.  
 creds.yml은 BOSH 인증정보를 가지고 있으며, creds.yml을 활용하여 BOSH에 로그인한다.  
 BOSH 로그인 후, BOSH CLI 명령어를 이용하여 PaaS-TA를 설치할 수 있다.
 
 ```
-$ cd ${HOME}/workspace/paasta/deployment/paasta-deployment/bosh
+$ cd ${HOME}/workspace/paasta-5.0/deployment/bosh-deployment
 $ export BOSH_CA_CERT=$(bosh int ./{iaas}/creds.yml --path /director_ssl/ca)
 $ export BOSH_CLIENT=admin
 $ export BOSH_CLIENT_SECRET=$(bosh int ./{iaas}/creds.yml --path /admin_password)
@@ -521,7 +744,7 @@ $ credhub –-version
 CredHub에 로그인하기 위해 BOSH를 설치한 bosh-deployment 디렉터리의 creds.yml을 활용하여 로그인한다.
 
 ```
-$ cd ${HOME}/workspace/paasta/deployment/paasta-deployment/bosh
+$ cd ${HOME}/workspace/paasta-5.0/deployment/bosh-deployment
 $ export CREDHUB_CLIENT=credhub-admin
 $ export CREDHUB_SECRET=$(bosh int --path /credhub_admin_client_secret {iaas}/creds.yml)
 $ export CREDHUB_CA_CERT=$(bosh int --path /credhub_tls/ca {iaas}/creds.yml)
@@ -545,14 +768,14 @@ Jumpbox는 BOSH VM에 접근하기 위한 인증을 적용하게 된다.
 BOSH VM에 이상이 있거나 상태를 체크할 때 Jumpbox를 활용하여 BOSH VM에 접근할 수 있다.
 
 ```
-$ cd ${HOME}/workspace/paasta/deployment/paasta-deployment/bosh
+$ cd ${HOME}/workspace/paasta-5.0/deployment/bosh-deployment
 $ bosh int {iaas}/creds.yml --path /jumpbox_ssh/private_key > jumpbox.key 
 $ chmod 600 jumpbox.key
 $ ssh jumpbox@{bosh_url} -i jumpbox.key
 ```
 
 ```
-ubuntu@inception:~/workspace/paasta/deployment/paasta-deployment/bosh$ ssh jumpbox@10.0.1.6 -i jumpbox.key
+ubuntu@inception:~/workspace/paasta-5.0/deployment/bosh-deployment$ ssh jumpbox@10.0.1.6 -i jumpbox.key
 Unauthorized use is strictly prohibited. All access and activity
 is subject to logging and monitoring.
 Welcome to Ubuntu 16.04.6 LTS (GNU/Linux 4.15.0-54-generic x86_64)

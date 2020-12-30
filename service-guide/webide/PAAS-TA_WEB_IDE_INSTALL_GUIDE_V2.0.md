@@ -35,14 +35,16 @@ PaaS-TA 3.5 버전부터는 Bosh2.0 기반으로 deploy를 진행하며 기존 B
 설치 범위는 WEB-IDE 사용을 검증하기 위한 기본 설치를 기준으로 작성하였다.
 
 ### <div id='1.3'/> 1.3. 시스템 구성도
-본 장에서는 WEB-IDE의 시스템 구성에 대해 기술하였다. Browser(PaaS-TA Portal), WEB IDE Server, Workspace, Desktop IDE로 최소사항을 구성하였다.
+본 장에서는 WEB-IDE의 시스템 구성에 대해 기술하였다. Browser(PaaS-TA Portal), WEB IDE Server, Workspace, Desktop IDE로 최소사항을 구성하였다.<br />
+WEB-IDE 는 0개 부터 N개 까지 VM INSTANCE 를 생성, 삭제 할 수 있다. <br />
+(설치시 확보된 PUBLIC IP 갯수 안에서 가능함)
 
-![](/service-guide/images/webide/web-ide-01.png)
+![](/service-guide/images/webide/web-ide-on-01.png)
 
 | 구분 | Resource Pool | 스펙 |
 |--------|-------|-------|
-| paasta-web-ide1 | resource\_pools | 1vCPU / 2GB RAM / 10GB Disk |
-| paasta-web-ide2 | resource\_pools | 1vCPU / 2GB RAM / 10GB Disk |
+| web-ide | resource\_pools | 1vCPU / 2GB RAM / 10GB Disk |
+
 
 
 ### <div id='1.4'/>1.4. 참고자료
@@ -81,7 +83,7 @@ Succeeded
 
 서비스 설치에 필요한 Deployment를 Git Repository에서 받아 서비스 설치 작업 경로로 위치시킨다.  
 
-- Service Deployment Git Repository URL : https://github.com/PaaS-TA/service-deployment/tree/v5.0.3
+- Service Deployment Git Repository URL : https://github.com/PaaS-TA/service-deployment/tree/v5.0.4
 
 ```
 # Deployment 다운로드 파일 위치 경로 생성 및 설치 경로 이동
@@ -89,7 +91,7 @@ $ mkdir -p ~/workspace/paasta-5.0/deployment
 $ cd ~/workspace/paasta-5.0/deployment
 
 # Deployment 파일 다운로드
-$ git clone https://github.com/PaaS-TA/service-deployment.git -b v5.0.3
+$ git clone https://github.com/PaaS-TA/service-deployment.git -b v5.0.4
 ```
 
 ### <div id="2.4"/> 2.4. Deployment 파일 수정
@@ -161,45 +163,64 @@ Succeeded
 
 - Deployment YAML에서 사용하는 변수 파일을 서버 환경에 맞게 수정한다.
 
-> $ vi ~/workspace/paasta-5.0/deployment/service-deployment/web-id/vars.yml
+> $ vi ~/workspace/paasta-5.0/deployment/service-deployment/web-ide/vars.yml
 
 ```
+deployment_name: "web-ide"                                                # 서비스 배포 명
+
 # STEMCELL
-stemcell_os: "ubuntu-xenial"                                         # stemcell os
-stemcell_version: "315.64"                                           # stemcell version
+stemcell_os: "ubuntu-xenial"                                              # stemcell os
+stemcell_version: "315.64"                                                # stemcell version
+stemcell_alias: "default"                                                 # stemcell alias
 
 # NETWORK
-private_networks_name: "default"                                     # private network name
-public_networks_name: "vip"                                          # public network name
+private_networks_name: "default"                                          # private network name
+public_networks_name: "vip"                                               # public network name
 
 # ECLIPSE-CHE
-eclipse_che_azs: [z7]                                                # eclipse-che : azs
-eclipse_che_instances: 1                                             # eclipse-che : instances (1)
-eclipse_che_vm_type: "large"                                         # eclipse-che : vm type
-eclipse_che_public_ips: "<ECLIPSE_CHE_PUBLIC_IPS>"                   # eclipse-che : public ips (e.g. ["00.00.00.00" , "11.11.11.11"])
+eclipse_che_azs: [z7]                                                     # eclipse-che : azs
+eclipse_che_instances: 0                                                  # eclipse-che : instances (1), ondemand service default 0
+eclipse_che_vm_type: "large"                                              # eclipse-che : vm type
+eclipse_che_public_ips: "<ECLIPSE_CHE_INIT_PUBLIC_IPS>"                   # eclipse-che : public ips (e.g. ["00.00.00.00" , "11.11.11.11"])
+eclipse_che_buffer_ips: "<ECLIPSE_CHE_BUFFER_PUBLIC_IPS>"                 # eclipse-che : OnDemand 에서 사용할 여분의 public ips
+eclipse_che_instance_name: "eclipse-che"                                  # eclipse-che : 작업 이름
 
 # MARIA_DB
-mariadb_azs: [z3]                                                    # mariadb : azs
-mariadb_instances: 1                                                 # mariadb : instances (1) 
-mariadb_vm_type: "small"                                             # mariadb : vm type
-mariadb_persistent_disk_type: "10GB"                                 # mariadb : persistent disk type
-mariadb_port: "<MARIADB_PORT>"                                       # mariadb : database port (e.g. 31306) -- Do Not Use "3306"
-mariadb_admin_password: "<MARIADB_ADMIN_PASSWORD>"                   # mariadb : database admin password (e.g. "Paasta@2018")
+mariadb_azs: [z4]                                                         # mariadb : azs
+mariadb_instances: 1                                                      # mariadb : instances (1) 
+mariadb_vm_type: "small"                                                  # mariadb : vm type
+mariadb_persistent_disk_type: "10GB"                                      # mariadb : persistent disk type
+mariadb_port: "<MARIADB_PORT>"                                            # mariadb : database port (e.g. 31306) -- Do Not Use "3306"
+mariadb_admin_password: "<MARIADB_ADMIN_PASSWORD>"                        # mariadb : database admin password (e.g. "Paasta@2018")
 
 # SERVICE-BROKER
-broker_azs: [z3]                                                     # service-broker : azs
-broker_instances: 1                                                  # service-broker : instances (1)
-broker_vm_type: "medium"                                             # service-broker : vm type
-broker_port: "<BROKER_PORT>"                                         # service-broker : broker port (e.g. "8080")
-broker_services_id: "<BROKER_SERVICES_ID>"                           # service-broker : service guid (e.g. "af86588c-6212-11e7-907b-b6006ad3webide0")
-broker_services_plans_id: "<BROKER_SERVICES_PLANS_ID>"               # service-broker : service plan id (e.g. "a5930564-6212-11e7-907b-b6006ad3webide1")
+broker_azs: [z4]                                                          # service-broker : azs
+broker_instances: 1                                                       # service-broker : instances (1)
+broker_vm_type: "medium"                                                  # service-broker : vm type
+broker_port: "<BROKER_PORT>"                                              # service-broker : broker port (e.g. "8080")
+serviceDefinition_id: "<SERVICE_GUID>"                                    # serviceDefinition_id : service guid (e.g. "af86588c-6212-11e7-907b-b6006ad3webide0")
+serviceDefinition_name: "WEB IDE"
+serviceDefinition_plan1_id: "<SERVICE_PLAN_ID>"                           # serviceDefinition_plan1_id : service plan id (e.g. "a5930564-6212-11e7-907b-b6006ad3webide1")
+serviceDefinition_plan1_name: "<SERVICE_PLAN_NAME>"                       # serviceDefinition_plan1_name : service plan name (e.g. "dedicated-vm")
+serviceDefinition_plan1_desc: "WEB IDE SERVICE"
+serviceDefinition_bullet_name: "Web IDE OnDemand Server Use"
+serviceDefinition_bullet_desc: "Web IDE Service Using a OnDemand Server"
+serviceDefinition_org_limitation: "-1"                                    # serviceDefinition_org_limitation : 조직별 서비스 제한
+serviceDefinition_space_limitation: "-1"                                  # serviceDefinition_space_limitation : 공간별 서비스 제한
+
+# RELEASE
+releases_name: "paas-ta-webide-release"                                   # 서비스 릴리즈 이름(필수) bosh releases로 확인 가능
+releases_url: "http://45.248.73.44/index.php/s/WTSjj7szKy38b6X/download"
+
+# CF
+cloudfoundry_sslSkipValidation: "true"
 ```
 
 ### <div id="2.5"/> 2.5. 서비스 설치
 
 - 서버 환경에 맞추어 Deploy 스크립트 파일의 VARIABLES 설정을 수정한다. 
 
-> $ vi ~/workspace/paasta-5.0/deployment/service-deployment/web-id/deploy.sh
+> $ vi ~/workspace/paasta-5.0/deployment/service-deployment/web-ide/deploy.sh
 
 ```
 #!/bin/bash
@@ -218,7 +239,7 @@ bosh -e ${BOSH_NAME} -n -d web-ide deploy --no-redact web-ide.yml \
 
 - 서비스를 설치한다.  
 ```
-$ cd ~/workspace/paasta-5.0/deployment/service-deployment/web-id
+$ cd ~/workspace/paasta-5.0/deployment/service-deployment/web-ide
 $ sh ./deploy.sh  
 ```  
 
@@ -226,7 +247,7 @@ $ sh ./deploy.sh
 
 - 서비스 설치에 필요한 릴리즈 파일을 다운로드 받아 Local machine의 서비스 설치 작업 경로로 위치시킨다.  
   
-  - 설치 릴리즈 파일 다운로드 : [paasta-webide-release-1.0.tgz](http://45.248.73.44/index.php/s/q7fBcXokm7FSNdW/download)
+  - 설치 릴리즈 파일 다운로드 : [paasta-webide-release-2.0.tgz](http://45.248.73.44/index.php/s/WTSjj7szKy38b6X/download)
 
 ```
 # 릴리즈 다운로드 파일 위치 경로 생성
@@ -234,14 +255,14 @@ $ mkdir -p ~/workspace/paasta-5.0/release/service
 
 # 릴리즈 파일 다운로드 및 파일 경로 확인
 $ ls ~/workspace/paasta-5.0/release/service
-paasta-webide-release-1.0.tgz
+paasta-webide-release-2.0.tgz
 ```
   
 - 서버 환경에 맞추어 Deploy 스크립트 파일의 VARIABLES 설정을 수정하고 Option file 및 변수를 추가한다.  
      (추가) -o operations/use-compiled-releases.yml  
      (추가) -v inception_os_user_name="<HOME_USER_NAME>"  
      
-> $ vi ~/workspace/paasta-5.0/deployment/service-deployment/web-id/deploy.sh
+> $ vi ~/workspace/paasta-5.0/deployment/service-deployment/web-ide/deploy.sh
 
 ```
 #!/bin/bash
@@ -262,7 +283,7 @@ bosh -e ${BOSH_NAME} -n -d web-ide deploy --no-redact web-ide.yml \
 
 - 서비스를 설치한다.  
 ```
-$ cd ~/workspace/paasta-5.0/deployment/service-deployment/web-id
+$ cd ~/workspace/paasta-5.0/deployment/service-deployment/web-ide
 $ sh ./deploy.sh  
 ```  
 
@@ -270,18 +291,16 @@ $ sh ./deploy.sh
 
 설치 완료된 서비스를 확인한다.  
 
-> $ bosh -e micro-bosh -d web-id vms
+> $ bosh -e micro-bosh -d web-ide vms
 
 ```
 Using environment '10.30.40.111' as user 'admin' (openid, bosh.admin)
 
 Task 7872. Done
 
-Deployment 'web-id'
+Deployment 'web-ide'
 
 Instance                                            Process State  AZ  IPs            VM CID                                   VM Type  Active
-eclipse-che/ed136540-c650-47a2-918b-bb7f6020469d    running        z7  10.30.56.54    vm-5a3a2b10-d0c9-47c8-97f0-6ea64c339df8  large    true
-							               115.68.46.178
 mariadb/ec34aa5b-c7cc-4297-9e2d-babf05d83832        running        z3  10.30.56.55    vm-9e1631af-b6c8-481e-aad3-3fd713f106a9  small    true
 webide-broker/a641df99-d36a-49ee-8329-018fe10fa23d  running        z3  10.30.56.56    vm-eb784964-48cd-4e4c-b080-53675d3738c2  medium   true
 
@@ -376,6 +395,29 @@ webide                   webide-shared                           A paasta web id
 $ cf create-service webide webide-shared paasta-webide-service
 Creating service instance paasta-webide-service in org system / space dev as admin...
 OK
+```
+<br>
+
+#### 생성된 WEB-IDE VM 인스턴스를 확인한다.
+
+>`bosh -e micro-bosh -d web-ide vms`
+```
+$ bosh -e micro-bosh -d web-ide vms
+Using environment '10.30.40.111' as user 'admin' (openid, bosh.admin)
+
+Task 7872. Done
+
+Deployment 'web-ide'
+
+Instance                                            Process State  AZ  IPs            VM CID                                   VM Type  Active
+eclipse-che/ed136540-c650-47a2-918b-bb7f6020469d    running        z7  10.30.56.54    vm-5a3a2b10-d0c9-47c8-97f0-6ea64c339df8  large    true
+							                                           115.68.46.178
+mariadb/ec34aa5b-c7cc-4297-9e2d-babf05d83832        running        z3  10.30.56.55    vm-9e1631af-b6c8-481e-aad3-3fd713f106a9  small    true
+webide-broker/a641df99-d36a-49ee-8329-018fe10fa23d  running        z3  10.30.56.56    vm-eb784964-48cd-4e4c-b080-53675d3738c2  medium   true
+
+3 vms
+
+Succeeded
 ```
 <br>
 
