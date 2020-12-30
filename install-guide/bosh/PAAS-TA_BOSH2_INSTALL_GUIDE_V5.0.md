@@ -513,6 +513,7 @@ $ chmod +x ${HOME}/workspace/paasta-5.0/deployment/bosh-deployment/*.sh
 
 ### <div id='1031'/>3.3.6. BOSH 설치 Option 파일 
 
+Bosh 설치 시 필요한 Option 파일을 추가해야 한다.
 
 #### <div id='1032'/>3.3.6.1. BOSH Optional 파일
 
