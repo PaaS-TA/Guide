@@ -183,7 +183,7 @@ $ bosh -version
 ```
 $ mkdir -p ${HOME}/workspace/paasta/deployment
 $ cd ${HOME}/workspace/paasta/deployment
-$ git clone https://github.com/PaaS-TA/paasta-deployment.git -b v5.1
+$ git clone https://github.com/PaaS-TA/paasta-deployment.git -b v5.1.0
 ```
 - PaaS-TA 사이트에서 [PaaS-TA Deployment] 파일을 다운로드해 ${HOME}/workspace/paasta-5.0/deployment 이하 디렉터리에 압축을 푼다.
 - PaaS-TA 사이트에서 [PaaS-TA Release] 파일을 다운로드해 ${HOME}/workspace/paasta-5.0/release 이하 디렉터리에 압축을 푼다.
