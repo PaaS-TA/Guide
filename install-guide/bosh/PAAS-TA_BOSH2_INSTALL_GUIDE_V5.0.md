@@ -588,7 +588,7 @@ Syslog Agent는 BOSH VM의 log 정보를 logsearch의 ls-router에 전송하는 
 BOSH 설치 전에 paasta-monitoring의 InfluxDB IP를 metric_url로 사용하기 위해 사전에 정의해야 한다.
 마찬가지로 logsearch의 ls-router IP도 syslog_address로 연동하기 위해 사전에 정의해야 한다.
 
-#### <div id='1026'/>3.3.4.3. BOSH 설치 Shell Script
+#### <div id='1026'/>3.3.6.3. BOSH 설치 Shell Script
 
 | 파일명 | 설명 | 요구사항 |
 |:---  |:---     |:---   |
@@ -613,6 +613,8 @@ bosh create-env bosh.yml \
 	-o uaa.yml \					# UAA 적용      
 	-o credhub.yml \				# CredHub 적용    
 	-o jumpbox-user.yml \				# Jumpbox 적용  
+	-o syslog.yml \					# [MONITORING] Monitoring Logging Agent 적용
+	-o paasta-addon/paasta-monitoring-agent.yml \	# [MONITORING] Monitoring Metric Agent 적용
  	-l aws-vars.yml					# AWS 환경에 BOSH 설치시 적용하는 변수 설정 파일
 ```
 
@@ -638,7 +640,7 @@ $ chmod +x ${HOME}/workspace/paasta/deployment/paasta-deployment/bosh/*.sh
 ```
 
 
-### <div id='1034'/>3.3.5. BOSH 설치
+### <div id='1034'/>3.3.7. BOSH 설치
 
 - 서버 환경에 맞추어 Deploy 스크립트 파일의 설정을 수정한다. 
 
@@ -651,6 +653,8 @@ bosh create-env bosh.yml \
 		-o uaa.yml \
 		-o credhub.yml \
 		-o jumpbox-user.yml \
+		-o syslog.yml \
+		-o paasta-addon/paasta-monitoring-agent.yml \
 		-l aws-vars.yml
 ```
 
@@ -671,7 +675,7 @@ bosh create-env bosh.yml \
 - BOSH 설치 Shell Script 파일 실행
 
 ```
-$ cd ${HOME}/workspace/paasta-5.0/deployment/bosh-deployment
+$ cd ${HOME}/workspace/paasta-5.1/deployment/bosh-deployment
 $ ./deploy-{iaas}.sh
 ```
 
@@ -722,13 +726,13 @@ $ bosh alias-env {director_name} -e {bosh_url} --ca-cert <(bosh int ./{iaas}/cre
 $ bosh –e {director_name} env
 ```
 
-### <div id='1037'/>3.3.7. CredHub
+### <div id='1037'/>3.3.9. CredHub
 CredHub은 인증정보 저장소이다.  
 BOSH 설치 시 Operation 파일로 credhub.yml을 추가하였다.  
 BOSH 설치 시 credhub.yml을 적용하면, PaaS-TA 설치 시 PaaS-TA에서 사용하는 인증정보(Certificate, Password)를 CredHub에 저장한다.  
 PaaS-TA 인증정보가 필요할 때 CredHub을 사용하며, CredHub CLI를 통해 CredHub에 로그인하여 인증정보 조회, 수정, 삭제를 할 수 있다.
 
-#### <div id='1038'/>3.3.7.1. CredHub CLI 설치
+#### <div id='1038'/>3.3.9.1. CredHub CLI 설치
 
 CredHub CLI는 BOSH를 설치한 Inception(설치환경)에 설치한다.
 
@@ -740,7 +744,7 @@ $ sudo mv credhub /usr/local/bin/credhub
 $ credhub –-version
 ```
 
-#### <div id='1039'/>3.3.7.2. CredHub 로그인
+#### <div id='1039'/>3.3.9.2. CredHub 로그인
 CredHub에 로그인하기 위해 BOSH를 설치한 bosh-deployment 디렉터리의 creds.yml을 활용하여 로그인한다.
 
 ```
@@ -761,7 +765,7 @@ PaaS-TA를 설치하면 인증 정보가 저장되어 조회할 수 있다.
 $ credhub get -n /{director}/{deployment}/uaa_ca
 ```
 
-### <div id='1040'/>3.3.8. Jumpbox
+### <div id='1040'/>3.3.10. Jumpbox
 BOSH 설치 시 Operation 파일로 jumpbox-user.yml을 추가하였다.  
 Jumpbox는 BOSH VM에 접근하기 위한 인증을 적용하게 된다.  
 인증키는 BOSH에서 자체적으로 생성하며, 인증키를 통해 BOSH VM에 접근할 수 있다.  
