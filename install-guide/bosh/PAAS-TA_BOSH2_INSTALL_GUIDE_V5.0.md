@@ -675,14 +675,14 @@ bosh create-env bosh.yml \
 - BOSH 설치 Shell Script 파일 실행
 
 ```
-$ cd ${HOME}/workspace/paasta-5.1/deployment/paasta-deployment
+$ cd ${HOME}/workspace/paasta-5.1/deployment/paasta-deployment/bosh/
 $ ./deploy-{iaas}.sh
 ```
 
 - BOSH 설치 중
 
 ```
-ubuntu@inception:~/workspace/paasta-5.1/deployment/paasta-deployment$ ./deploy-aws.sh
+ubuntu@inception:~/workspace/paasta-5.1/deployment/paasta-deployment/bosh$ ./deploy-aws.sh
 Deployment manifest: '/home/ubuntu/workspace/paasta-5.1/deployment/bosh-deployment/bosh.yml'
 Deployment state: 'aws/state.json'
 
@@ -718,7 +718,7 @@ creds.yml은 BOSH 인증정보를 가지고 있으며, creds.yml을 활용하여
 BOSH 로그인 후, BOSH CLI 명령어를 이용하여 PaaS-TA를 설치할 수 있다.
 
 ```
-$ cd ${HOME}/workspace/paasta-5.1/deployment/paasta-deployment
+$ cd ${HOME}/workspace/paasta-5.1/deployment/paasta-deployment/bosh/
 $ export BOSH_CA_CERT=$(bosh int ./{iaas}/creds.yml --path /director_ssl/ca)
 $ export BOSH_CLIENT=admin
 $ export BOSH_CLIENT_SECRET=$(bosh int ./{iaas}/creds.yml --path /admin_password)
@@ -748,7 +748,7 @@ $ credhub –-version
 CredHub에 로그인하기 위해 BOSH를 설치한 bosh-deployment 디렉터리의 creds.yml을 활용하여 로그인한다.
 
 ```
-$ cd ${HOME}/workspace/paasta-5.1/deployment/paasta-deployment
+$ cd ${HOME}/workspace/paasta-5.1/deployment/paasta-deployment/bosh/
 $ export CREDHUB_CLIENT=credhub-admin
 $ export CREDHUB_SECRET=$(bosh int --path /credhub_admin_client_secret {iaas}/creds.yml)
 $ export CREDHUB_CA_CERT=$(bosh int --path /credhub_tls/ca {iaas}/creds.yml)
@@ -772,7 +772,7 @@ Jumpbox는 BOSH VM에 접근하기 위한 인증을 적용하게 된다.
 BOSH VM에 이상이 있거나 상태를 체크할 때 Jumpbox를 활용하여 BOSH VM에 접근할 수 있다.
 
 ```
-$ cd ${HOME}/workspace/paasta-5.1/deployment/paasta-deployment
+$ cd ${HOME}/workspace/paasta-5.1/deployment/paasta-deployment/bosh/
 $ bosh int {iaas}/creds.yml --path /jumpbox_ssh/private_key > jumpbox.key 
 $ chmod 600 jumpbox.key
 $ ssh jumpbox@{bosh_url} -i jumpbox.key
