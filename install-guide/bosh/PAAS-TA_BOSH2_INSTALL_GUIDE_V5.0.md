@@ -185,9 +185,9 @@ $ mkdir -p ${HOME}/workspace/paasta/deployment
 $ cd ${HOME}/workspace/paasta/deployment
 $ git clone https://github.com/PaaS-TA/paasta-deployment.git -b v5.1
 ```
-- [PaaS-TA Deployment] 경우 위 예시와 같이 Github 에서 deployment 를 받아 파일을 ${HOME}/workspace/paasta-5.0/deployment 이하 디렉터리에 위치시킨다.
-- 위 링크되어 있는 PaaS-TA 사이트에서 [PaaS-TA Release] 파일을 다운로드해 ${HOME}/workspace/paasta-5.0/release 이하 디렉터리에 압축을 푼다.
-- 위 링크되어 있는 PaaS-TA 사이트에서 [PaaS-TA Stemcell] 파일을 다운로드해 ${HOME}/workspace/paasta-5.0/stemcell 이하 디렉터리에 압축을 푼다.
+- [PaaS-TA Deployment] 경우 위 예시와 같이 Github 에서 deployment 를 받아 파일을 ${HOME}/workspace/paasta-5.1/deployment 이하 디렉터리에 위치시킨다.
+- 위 링크되어 있는 PaaS-TA 사이트에서 [PaaS-TA Release] 파일을 다운로드해 ${HOME}/workspace/paasta-5.1/release 이하 디렉터리에 압축을 푼다.
+- 위 링크되어 있는 PaaS-TA 사이트에서 [PaaS-TA Stemcell] 파일을 다운로드해 ${HOME}/workspace/paasta-5.1/stemcell 이하 디렉터리에 압축을 푼다.
 
 ### <div id='1014'/>3.3.4.    BOSH 설치 파일
 
@@ -248,10 +248,10 @@ bosh-deployment  cloud-config  paasta-deployment  paasta-deployment-monitoring  
 </tr>
 </table>
 
-- paasta-5.0/release 이하 디렉터리
+- paasta-5.1/release 이하 디렉터리
 
 ```
-$ cd ${HOME}/workspace/paasta-5.0/release$ ls
+$ cd ${HOME}/workspace/paasta-5.1/release$ ls
 bosh paasta paasta-monitoring portal service
 ```
 
@@ -278,10 +278,10 @@ bosh paasta paasta-monitoring portal service
 </tr>
 </table>
 
-- paasta-5.0 이하 디렉터리
+- paasta-5.1 이하 디렉터리
 
 ```
-$ cd ${HOME}/workspace/paasta-5.0$ ls
+$ cd ${HOME}/workspace/paasta-5.1$ ls
 deployment release stemcell
 ```
 
@@ -636,7 +636,7 @@ bosh create-env bosh.yml \
 - Shell Script 파일에 실행 권한 부여
 
 ```
-$ chmod +x ${HOME}/workspace/paasta/deployment/paasta-deployment/bosh/*.sh  
+$ chmod +x ${HOME}/workspace/paasta-5.1/deployment/paasta-deployment/bosh/*.sh  
 ```
 
 
@@ -644,7 +644,7 @@ $ chmod +x ${HOME}/workspace/paasta/deployment/paasta-deployment/bosh/*.sh
 
 - 서버 환경에 맞추어 Deploy 스크립트 파일의 설정을 수정한다. 
 
-> $ vi ~/workspace/paasta/deployment/paasta-deployment/bosh/deploy-aws.sh
+> $ vi ~/workspace/paasta-5.1/deployment/paasta-deployment/bosh/deploy-aws.sh
 ```
 bosh create-env bosh.yml \                         
 		--state=aws/state.json \	
@@ -658,7 +658,7 @@ bosh create-env bosh.yml \
 		-l aws-vars.yml
 ```
 
-> $ vi ~/workspace/paasta/deployment/paasta-deployment/bosh/deploy-openstack-monitoring.sh
+> $ vi ~/workspace/paasta-5.1/deployment/paasta-deployment/bosh/deploy-openstack-monitoring.sh
 ```
 bosh create-env bosh.yml \                         
 		--state=aws/state.json \	
@@ -675,15 +675,15 @@ bosh create-env bosh.yml \
 - BOSH 설치 Shell Script 파일 실행
 
 ```
-$ cd ${HOME}/workspace/paasta-5.1/deployment/bosh-deployment
+$ cd ${HOME}/workspace/paasta-5.1/deployment/paasta-deployment
 $ ./deploy-{iaas}.sh
 ```
 
 - BOSH 설치 중
 
 ```
-ubuntu@inception:~/workspace/paasta-5.0/deployment/bosh-deployment$ ./deploy-aws.sh
-Deployment manifest: '/home/ubuntu/workspace/paasta-5.0/deployment/bosh-deployment/bosh.yml'
+ubuntu@inception:~/workspace/paasta-5.1/deployment/paasta-deployment$ ./deploy-aws.sh
+Deployment manifest: '/home/ubuntu/workspace/paasta-5.1/deployment/bosh-deployment/bosh.yml'
 Deployment state: 'aws/state.json'
 
 Started validating
@@ -718,7 +718,7 @@ creds.yml은 BOSH 인증정보를 가지고 있으며, creds.yml을 활용하여
 BOSH 로그인 후, BOSH CLI 명령어를 이용하여 PaaS-TA를 설치할 수 있다.
 
 ```
-$ cd ${HOME}/workspace/paasta-5.0/deployment/bosh-deployment
+$ cd ${HOME}/workspace/paasta-5.1/deployment/paasta-deployment
 $ export BOSH_CA_CERT=$(bosh int ./{iaas}/creds.yml --path /director_ssl/ca)
 $ export BOSH_CLIENT=admin
 $ export BOSH_CLIENT_SECRET=$(bosh int ./{iaas}/creds.yml --path /admin_password)
@@ -748,7 +748,7 @@ $ credhub –-version
 CredHub에 로그인하기 위해 BOSH를 설치한 bosh-deployment 디렉터리의 creds.yml을 활용하여 로그인한다.
 
 ```
-$ cd ${HOME}/workspace/paasta-5.0/deployment/bosh-deployment
+$ cd ${HOME}/workspace/paasta-5.1/deployment/paasta-deployment
 $ export CREDHUB_CLIENT=credhub-admin
 $ export CREDHUB_SECRET=$(bosh int --path /credhub_admin_client_secret {iaas}/creds.yml)
 $ export CREDHUB_CA_CERT=$(bosh int --path /credhub_tls/ca {iaas}/creds.yml)
@@ -772,14 +772,14 @@ Jumpbox는 BOSH VM에 접근하기 위한 인증을 적용하게 된다.
 BOSH VM에 이상이 있거나 상태를 체크할 때 Jumpbox를 활용하여 BOSH VM에 접근할 수 있다.
 
 ```
-$ cd ${HOME}/workspace/paasta-5.0/deployment/bosh-deployment
+$ cd ${HOME}/workspace/paasta-5.1/deployment/paasta-deployment
 $ bosh int {iaas}/creds.yml --path /jumpbox_ssh/private_key > jumpbox.key 
 $ chmod 600 jumpbox.key
 $ ssh jumpbox@{bosh_url} -i jumpbox.key
 ```
 
 ```
-ubuntu@inception:~/workspace/paasta-5.0/deployment/bosh-deployment$ ssh jumpbox@10.0.1.6 -i jumpbox.key
+ubuntu@inception:~/workspace/paasta-5.1/deployment/paasta-deployment$ ssh jumpbox@10.0.1.6 -i jumpbox.key
 Unauthorized use is strictly prohibited. All access and activity
 is subject to logging and monitoring.
 Welcome to Ubuntu 16.04.6 LTS (GNU/Linux 4.15.0-54-generic x86_64)
