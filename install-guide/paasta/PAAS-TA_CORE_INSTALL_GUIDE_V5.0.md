@@ -791,55 +791,57 @@ common_vars.yml파일과 {IaaS}-vars.yml을 수정하여 PaaS-TA 설치시 적�
 
 #### <div id='1019'/>● common_vars.yml
 common 폴더에 있는 common_vars.yml PaaS-TA 및 각종 Service 설치시 적용하는 공통 변수 설정 파일이 존재한다.  
-PaaS-TA를 설치할 때는 system_domain, paasta_admin_username, paasta_admin_password, uaa_client_admin_secret, uaa_client_portal_secret의 값을 변경 하여 설치 할 수 있다.
+PaaS-TA를 설치할 때는 system_domain, paasta_admin_username, paasta_admin_password, uaa_client_admin_secret, uaa_client_portal_secret,paasta_database_port의 값을 변경 하여 설치 할 수 있다.
 
 
 ```
 # BOSH INFO
-bosh_ip: "10.0.1.6"                        		# BOSH IP
-bosh_url: "http://10.0.1.6"				# BOSH URL (e.g. "https://00.000.0.0")
-bosh_client_admin_id: "admin"				# BOSH Client Admin ID
-bosh_client_admin_secret: "ert7na4jpewsczt"		# BOSH Client Admin Secret('echo $(bosh int ~/workspace/paasta/deployment/paasta-deployment/bosh/{iaas}/creds.yml —path /admin_password))' 명령어를 통해 확인 가능)
-bosh_director_port: 25555				# BOSH Director Port
-bosh_oauth_port: 8443					# BOSH OAuth Port
+bosh_ip: "10.0.1.6"				# BOSH IP
+bosh_url: "https://10.0.1.6"				# BOSH URL (e.g. "https://00.000.0.0")
+bosh_client_admin_id: "admin"			# BOSH Client Admin ID
+bosh_client_admin_secret: "ert7na4jpewscztsxz48"	# BOSH Client Admin Secret('echo $(bosh int ~/workspace/paasta-5.0/deployment/paasta-deployment/bosh/{iaas}/creds.yml --path /admin_password)' 명령어를 통해 확인 가능)
+bosh_director_port: 25555			# bosh director port
+bosh_oauth_port: 8443				# bosh oauth port
+
 
 # PAAS-TA INFO
-system_domain: "xx.xx.xxx.xxx.xip.io"			# Domain (xip.io를 사용하는 경우 HAProxy Public IP와 동일)
-paasta_admin_username: "admin"				# PaaS-TA Admin Username
-paasta_admin_password: "admin"				# PaaS-TA Admin Password
-paasta_nats_ip: "10.0.1.121"				# PaaS-TA Nats IP(e.g. "10.0.1.121")
-paasta_nats_port: 4222					# PaaS-TA Nats Port(e.g. "4222")
-paasta_nats_user: "nats"				# PaaS-TA Nats User(e.g. "nats")
-paasta_nats_password: "7EZB5ZkMLMqT73h2JtxPqO"		# PaaS-TA Nats Password (CredHub 로그인후 'credhub get -n /micro-bosh/paasta/nats_password' 명령어를 통해 확인 가능)
-paasta_nats_private_networks_name: "default"		# PaaS-TA Nats 의 Network 이름
-paasta_database_ips: "10.0.1.123"			# PaaS-TA Database IP(e.g. "10.0.1.123")
-paasta_database_port: 5524				# PaaS-TA Database Port(e.g. 5524)
-paasta_cc_db_id: "cloud_controller"			# CCDB ID(e.g. "cloud_controller")
-paasta_cc_db_password: "cc_admin"			# CCDB Password(e.g. "cc_admin")
-paasta_uaa_db_id: "uaa"					# UAADB ID(e.g. "uaa")
-paasta_uaa_db_password: "uaa_admin"			# UAADB Password(e.g. "uaa_admin")
+system_domain: "61.252.53.246.xip.io"		# Domain (xip.io를 사용하는 경우 HAProxy Public IP와 동일)
+paasta_admin_username: "admin"			# PaaS-TA Admin Username
+paasta_admin_password: "admin"			# PaaS-TA Admin Password
+paasta_nats_ip: "10.0.1.121"
+paasta_nats_port: 4222
+paasta_nats_user: "nats"
+paasta_nats_password: "7EZB5ZkMLMqT73h2JtxPv1fvh3UsqO"	# PaaS-TA Nats Password (CredHub 로그인후 'credhub get -n /micro-bosh/paasta/nats_password' 명령어를 통해 확인 가능)
+paasta_nats_private_networks_name: "default"	# PaaS-TA Nats 의 Network 이름
+paasta_database_ips: "10.0.1.123"		# PaaS-TA Database IP (e.g. "10.0.1.123")
+paasta_database_port: 5524			# PaaS-TA Database Port (e.g. 5524(postgresql)/13307(mysql)) -- Do Not Use "3306"&"13306" in mysql
+paasta_database_type: "postgresql"                      # PaaS-TA Database Type (e.g. "postgresql" or "mysql")
+paasta_database_driver_class: "org.postgresql.Driver"   # PaaS-TA Database driver-class (e.g. "org.postgresql.Driver" or "com.mysql.jdbc.Driver")
+paasta_cc_db_id: "cloud_controller"		# CCDB ID (e.g. "cloud_controller")
+paasta_cc_db_password: "cc_admin"		# CCDB Password (e.g. "cc_admin")
+paasta_uaa_db_id: "uaa"				# UAADB ID (e.g. "uaa")
+paasta_uaa_db_password: "uaa_admin"		# UAADB Password (e.g. "uaa_admin")
 paasta_api_version: "v3"
 
-
 # UAAC INFO
-uaa_client_admin_id: "admin"				# UAAC Admin Client Admin ID
-uaa_client_admin_secret: "admin-secret"			# UAAC Admin Client에 접근하기 위한 Secret 변수
-uaa_client_portal_secret: "clientsecret"		# UAAC Portal Client에 접근하기 위한 Secret 변수
+uaa_client_admin_id: "admin"			# UAAC Admin Client Admin ID
+uaa_client_admin_secret: "admin-secret"		# UAAC Admin Client에 접근하기 위한 Secret 변수
+uaa_client_portal_secret: "clientsecret"	# UAAC Portal Client에 접근하기 위한 Secret 변수
 
 # Monitoring INFO
-metric_url: "10.0.161.101"				# Monitoring InfluxDB IP
-syslog_address: "10.0.121.100"            		# Logsearch의 ls-router IP
-syslog_port: "2514"                          		# Logsearch의 ls-router Port
-syslog_transport: "relp"                        	# Logsearch Protocol
-saas_monitoring_url: "xx.xx.xxx.xxx"	   		# Pinpoint HAProxy WEBUI의 Public IP
-monitoring_api_url: "xx.xx.xxx.xxx"        		# Monitoring-WEB의 Public IP
+metric_url: "10.0.161.101"			# Monitoring InfluxDB IP
+syslog_address: "10.0.121.100"            	# Logsearch의 ls-router IP
+syslog_port: "2514"                          	# Logsearch의 ls-router Port
+syslog_transport: "relp"                        # Logsearch Protocol
+saas_monitoring_url: "61.252.53.248"	   	# Pinpoint HAProxy WEBUI의 Public IP
+monitoring_api_url: "61.252.53.241"        	# Monitoring-WEB의 Public IP
 
 ### Portal INFO
 portal_web_user_ip: "52.78.88.252"
-portal_web_user_url: "http://portal-web-user.xx.xx.xxx.xxx.xip.io" 
+portal_web_user_url: "http://portal-web-user.52.78.88.252.xip.io" 
 
 ### ETC INFO
-abacus_url: "http://abacus.xx.xx.xxx.xxx.xip.io"	# Abacus URL (e.g. "http://abacus.xxx.xxx.xxx.xxx.xip.io")
+abacus_url: "http://abacus.61.252.53.248.xip.io"	# abacus url (e.g. "http://abacus.xxx.xxx.xxx.xxx.xip.io")
 ```
 
 #### <div id='1020'/>● {IaaS}-vars.yml
