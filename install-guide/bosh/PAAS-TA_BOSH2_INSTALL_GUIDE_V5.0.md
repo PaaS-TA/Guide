@@ -178,16 +178,16 @@ $ bosh -version
 
 ### <div id='1013'/>3.3.3.    설치 파일 다운로드
 
-[설치 파일 다운로드](https://paas-ta.kr/download/package)
+[설치 파일 다운로드](http://45.248.73.44/index.php/s/PnxxbkmLiLpXdBD)
 - 디렉터리 생성 (내려받은 파일이 위치할 경로)
 ```
 $ mkdir -p ${HOME}/workspace/paasta/deployment
 $ cd ${HOME}/workspace/paasta/deployment
 $ git clone https://github.com/PaaS-TA/paasta-deployment.git -b v5.1
 ```
-- 위 예시와 같이 Github 에서 deployment 를 받아 [PaaS-TA Deployment] 파일을 ${HOME}/workspace/paasta-5.0/deployment 이하 디렉터리에 위치시킨다.
-- PaaS-TA 사이트에서 [PaaS-TA Release](http://45.248.73.44/index.php/s/ESccrNbq7PBEcTw) 파일을 다운로드해 ${HOME}/workspace/paasta-5.0/release 이하 디렉터리에 압축을 푼다.
-- PaaS-TA 사이트에서 [PaaS-TA Stemcell](http://45.248.73.44/index.php/s/5bPBCi9CMRydJ4C) 파일을 다운로드해 ${HOME}/workspace/paasta-5.0/stemcell 이하 디렉터리에 압축을 푼다.
+- [PaaS-TA Deployment] 경우 위 예시와 같이 Github 에서 deployment 를 받아 파일을 ${HOME}/workspace/paasta-5.0/deployment 이하 디렉터리에 위치시킨다.
+- 위 링크되어 있는 PaaS-TA 사이트에서 [PaaS-TA Release] 파일을 다운로드해 ${HOME}/workspace/paasta-5.0/release 이하 디렉터리에 압축을 푼다.
+- 위 링크되어 있는 PaaS-TA 사이트에서 [PaaS-TA Stemcell] 파일을 다운로드해 ${HOME}/workspace/paasta-5.0/stemcell 이하 디렉터리에 압축을 푼다.
 
 ### <div id='1014'/>3.3.4.    BOSH 설치 파일
 
