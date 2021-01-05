@@ -185,16 +185,18 @@ $ mkdir -p ${HOME}/workspace/paasta/deployment
 $ cd ${HOME}/workspace/paasta/deployment
 $ git clone https://github.com/PaaS-TA/paasta-deployment.git -b v5.1
 ```
-- [PaaS-TA Deployment] 경우 위 예시와 같이 Github 에서 deployment 를 받아 파일을 ${HOME}/workspace/paasta-5.1/deployment 이하 디렉터리에 위치시킨다.
-- 위 링크되어 있는 PaaS-TA 사이트에서 [PaaS-TA Release] 파일을 다운로드해 ${HOME}/workspace/paasta-5.1/release 이하 디렉터리에 압축을 푼다.
-- 위 링크되어 있는 PaaS-TA 사이트에서 [PaaS-TA Stemcell] 파일을 다운로드해 ${HOME}/workspace/paasta-5.1/stemcell 이하 디렉터리에 압축을 푼다.
+- [PaaS-TA Deployment] 는 위 예시와 같이 Github 에서 deployment 를 받아 파일을 ${HOME}/workspace/paasta-5.1/deployment/ 이하 디렉터리에 위치시킨다.
+- [PaaS-TA Release] 는 monitoring-deployment 기본 설정은 온라인 설치로 되어있다.  
+  오프라인 설치 시 위 링크되어 에 있는 PaaS-TA 사이트에서(설치 파일 다운로드) [PaaS-TA Release] 파일을 다운로드해 ${HOME}/workspace/paasta-5.1/release/ 이하 디렉터리에 압축을 푼다.
+- [PaaS-TA Stemcell] 은 monitoring-deployment 기본 설정은 온라인 설치로 되어있다.  
+  오프라인 설치 시 위 링크되어 에 있는 PaaS-TA 사이트에서(설치 파일 다운로드) [PaaS-TA Stemcell] 파일을 다운로드해 ${HOME}/workspace/paasta-5.1/stemcell/ 이하 디렉터리에 압축을 푼다.
 
 ### <div id='1014'/>3.3.4.    BOSH 설치 파일
 
-- paasta-5.0 이하 디렉터리
+- paasta-5.1 이하 디렉터리
 
 ```
-$ cd ${HOME}/workspace/paasta-5.0$ ls
+$ cd ${HOME}/workspace/paasta-5.1$ ls
 deployment release stemcell
 
 ```
@@ -214,10 +216,10 @@ deployment release stemcell
 </tr>
 </table>
 
-- paasta-5.0/deployment 이하 디렉터리
+- paasta-5.1/deployment 이하 디렉터리
 
 ```
-$ cd ${HOME}/workspace/paasta-5.0/deployment$ ls
+$ cd ${HOME}/workspace/paasta-5.1/deployment$ ls
 bosh-deployment  cloud-config  paasta-deployment  paasta-deployment-monitoring  portal-deployment  service-deployment
 ```
 
@@ -499,7 +501,7 @@ bosh create-env bosh.yml \
 - Shell Script 파일에 실행 권한 부여
 
 ```
-$ chmod +x ${HOME}/workspace/paasta-5.0/deployment/bosh-deployment/*.sh  
+$ chmod +x ${HOME}/workspace/paasta-5.1/deployment/bosh-deployment/*.sh  
 ```
 
 ##### <div id='1017'/>● openstack-vars.yml
