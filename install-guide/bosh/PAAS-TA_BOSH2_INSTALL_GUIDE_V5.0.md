@@ -183,10 +183,9 @@ $ bosh -version
 ```
 $ mkdir -p ${HOME}/workspace/paasta/deployment
 $ cd ${HOME}/workspace/paasta/deployment
-$ git clone https://github.com/PaaS-TA/paasta-deployment.git -b v5.1        # bosh 설치 시 구성하지 않은 경우 구성
-$ git clone https://github.com/PaaS-TA/monitoring-deployment.git -b v5.1.0  # v5.1.0 monitoring-deployment 구성
+$ git clone https://github.com/PaaS-TA/paasta-deployment.git -b v5.1  
 ```
-- [PaaS-TA Deployment] 인 paasta-deployment, monitoring-deployment 는 위 예시와 같이 Github 에서 deployment 를 받아 파일을 ${HOME}/workspace/paasta-5.1/deployment/ 이하 디렉터리에 위치시킨다.
+- [PaaS-TA Deployment] 는 위 예시와 같이 Github 에서 deployment 를 받아 파일을 ${HOME}/workspace/paasta-5.1/deployment/ 이하 디렉터리에 위치시킨다.
 - [PaaS-TA Release] 는 기본 설정은 온라인 설치로 되어있다.  
   오프라인 설치 시 위 링크되어 에 있는 PaaS-TA 사이트에서(설치 파일 다운로드) [PaaS-TA Release] 파일을 다운로드해 ${HOME}/workspace/paasta-5.1/release/ 이하 디렉터리에 압축을 푼다.
 - [PaaS-TA Stemcell] 은 기본 설정은 온라인 설치로 되어있다.  

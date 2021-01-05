@@ -82,9 +82,10 @@ PaaS-TA 3.1 버전까지는 PaaS-TA Container, Controller를 각각의 deploymen
 ```
 $ mkdir -p ${HOME}/workspace/paasta/deployment
 $ cd ${HOME}/workspace/paasta/deployment
-$ git clone https://github.com/PaaS-TA/common.git -b v5.1
+$ git clone https://github.com/PaaS-TA/common.git -b v5.0.1
 $ cd ${HOME}/workspace/paasta/deployment
-$ git clone https://github.com/PaaS-TA/paasta-deployment.git -b v5.1
+$ git clone https://github.com/PaaS-TA/paasta-deployment.git -b v5.1        # bosh 설치 시 누락 되었다면 구성
+$ git clone https://github.com/PaaS-TA/monitoring-deployment.git -b v5.1.0  # v5.1.0 monitoring-deployment 구성
 ```
 
 ## <div id='109'/>3.3. Stemcell 업로드
