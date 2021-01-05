@@ -22,7 +22,7 @@
 
 1. BOSH 설치가 되어있으며, BOSH Login이 되어 있어야 한다.
 2. cloud-config와 runtime-config가 업데이트 되어있는지 확인한다.
-3. Stemcell 목록을 확인하여 서비스 설치에 필요한 Stemcell(ubuntu xenial 315.36)이 업로드 되어 있는 것을 확인한다.
+3. Stemcell 목록을 확인하여 서비스 설치에 필요한 Stemcell(ubuntu xenial 621.78)이 업로드 되어 있는 것을 확인한다.
 
 
 > cloud-config 확인  
@@ -39,9 +39,9 @@
 
 - Logsearch를 설치하기 위한 deployment가 존재하지 않는다면 다운로드 받는다
 ```
-$ cd ${HOME}/workspace/paasta-5.0/deployment
+$ cd ${HOME}/workspace/paasta-5.1/deployment
 $ git clone https://github.com/paas-ta/common.git –b v5.0.1
-$ git clone https://github.com/paas-ta/monitoring-deployment.git –b v5.0.1
+$ git clone https://github.com/paas-ta/monitoring-deployment.git –b v5.1.0
 ```
 
 ### <div id='5'/>2.3. Logsearch 설치 환경설정
@@ -49,7 +49,7 @@ $ git clone https://github.com/paas-ta/monitoring-deployment.git –b v5.0.1
 PaaS-TA VM Log수집을 위해서는 Logsearch가 설치되어야 한다. 
 
 ```
-$ cd ${HOME}/workspace/paasta-5.0/deployment/monitoring-deployment/logsearch
+$ cd ${HOME}/workspace/paasta-5.1/deployment/monitoring-deployment/logsearch
 ```
 
 ### <div id='6'/>● common_vars.yml
@@ -61,7 +61,7 @@ syslog_address는 Monitoring 옵션을 포함한 BOSH와 PaaS-TA를 설치할 �
 # BOSH INFO
 bosh_url: "http://10.0.1.6"			# BOSH URL (e.g. "https://00.000.0.0")
 bosh_client_admin_id: "admin"			# BOSH Client Admin ID
-bosh_client_admin_secret: "ert7na4jpewscztsxz48"	# BOSH Client Admin Secret('echo $(bosh int ~/workspace/paasta-5.0/deployment/paasta-deployment/bosh/{iaas}/creds.yml --path /admin_password)' 명령어를 통해 확인 가능)
+bosh_client_admin_secret: "ert7na4jpewscztsxz48"	# BOSH Client Admin Secret('echo $(bosh int ~/workspace/paasta-5.1/deployment/paasta-deployment/bosh/{iaas}/creds.yml --path /admin_password)' 명령어를 통해 확인 가능)
 bosh_director_port: 25555			# BOSH Director Port
 bosh_oauth_port: 8443				# BOSH OAuth Port
 
@@ -114,7 +114,7 @@ inception_os_user_name: "ubuntu"		# Deployment Name
 
 # STEMCELL
 stemcell_os: "ubuntu-xenial"			# Stemcell OS
-stemcell_version: "315.36"			# Stemcell Version
+stemcell_version: "621.78"			# Stemcell Version
 
 # ELASTICSEARCH-MASTER
 elasticsearch_master_azs: ["z5"]		# Elasticsearch-Master 가용 존
@@ -174,11 +174,13 @@ bosh –e {director_name} -d logsearch deploy logsearch-deployment.yml \
 
 ### <div id='9'/>2.4. Logsearch 설치
 
-- 서버 환경에 맞추어 Deploy 스크립트 파일의 설정을 수정한다. 
+- 서버 환경에 맞추어 Deploy 스크립트 파일의 설정을 수정한다.  
+  기본적으로 온라인 설치로 되어 있음.
 
-> $ vi ${HOME}/workspace/paasta-5.0/deployment/monitoring-deployment/logsearch/deploy-logsearch.sh
+> $ vi ${HOME}/workspace/paasta-5.1/deployment/monitoring-deployment/logsearch/deploy-logsearch.sh
 
 ```
+# .yml 파일들 설정 변경 이슈 있는지 같이 확인한다.  
 bosh –e {director_name} -d logsearch deploy logsearch-deployment.yml \	
 	-l logsearch-vars.yml \
 	-l ../../common/common_vars.yml
@@ -187,7 +189,7 @@ bosh –e {director_name} -d logsearch deploy logsearch-deployment.yml \
 - Logsearch 설치 Shell Script 파일 실행 (BOSH 로그인 필요)
 
 ```
-$ cd ~/workspace/paasta-5.0/deployment/monitoring-deployment/logsearch
+$ cd ~/workspace/paasta-5.1/deployment/monitoring-deployment/logsearch
 $ sh deploy-logsearch.sh
 ```
 
@@ -195,14 +197,14 @@ $ sh deploy-logsearch.sh
 
 - 서비스 설치에 필요한 릴리즈 파일을 다운로드 받아 Local machine의 작업 경로로 위치시킨다.  
   
-  - 설치 파일 다운로드 위치 : https://paas-ta.kr/download/package    
+  - 설치 파일 다운로드 위치 : http://45.248.73.44/index.php/s/PnxxbkmLiLpXdBD  
 
 ```
 # 릴리즈 다운로드 파일 위치 경로 생성
-$ mkdir -p ~/workspace/paasta-5.0/release/paasta-monitoring
+$ mkdir -p ~/workspace/paasta-5.1/release/paasta-monitoring
 
 # 릴리즈 파일 다운로드 및 파일 경로 확인
-$ cd ${HOME}/workspace/paasta-5.0/release/paasta-monitoring
+$ cd ${HOME}/workspace/paasta-5.1/release/paasta-monitoring
 $ ls
 ..................
 logsearch-boshrelease-209.0.1.tgz						logsearch-for-cloudfoundry-207.0.1.tgz
@@ -212,9 +214,10 @@ logsearch-boshrelease-209.0.1.tgz						logsearch-for-cloudfoundry-207.0.1.tgz
 
 - 서버 환경에 맞추어 Deploy 스크립트 파일의 설정을 수정한다. 
 
-> $ vi ${HOME}/workspace/paasta-5.0/deployment/monitoring-deployment/logsearch/deploy-logsearch.sh
+> $ vi ${HOME}/workspace/paasta-5.1/deployment/monitoring-deployment/logsearch/deploy-logsearch.sh
 
 ```
+# .yml 파일들 설정 변경 이슈 있는지 같이 확인한다.  
 bosh –e {director_name} -d logsearch deploy logsearch-deployment.yml \				
 	-o use-compiled-releases-logsearch.yml \
 	-l logsearch-vars.yml \
@@ -224,7 +227,7 @@ bosh –e {director_name} -d logsearch deploy logsearch-deployment.yml \
 - Logsearch 설치 Shell Script 파일 실행 (BOSH 로그인 필요)
 
 ```
-$ cd ~/workspace/paasta-5.0/deployment/monitoring-deployment/logsearch
+$ cd ~/workspace/paasta-5.1/deployment/monitoring-deployment/logsearch
 $ sh deploy-logsearch.sh
 ```
 
