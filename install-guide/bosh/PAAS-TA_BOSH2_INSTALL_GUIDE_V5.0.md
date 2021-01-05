@@ -183,7 +183,7 @@ $ bosh -version
 ```
 $ mkdir -p ${HOME}/workspace/paasta/deployment
 $ cd ${HOME}/workspace/paasta/deployment
-$ git clone https://github.com/PaaS-TA/paasta-deployment.git -b v5.1  
+$ git clone https://github.com/PaaS-TA/paasta-deployment.git -b v5.1.0  
 ```
 - [PaaS-TA Deployment] 는 위 예시와 같이 Github 에서 deployment 를 받아 파일을 ${HOME}/workspace/paasta-5.1/deployment/ 이하 디렉터리에 위치시킨다.
 - [PaaS-TA Release] 는 기본 설정은 온라인 설치로 되어있다.  
