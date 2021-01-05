@@ -183,7 +183,7 @@ $ bosh -version
 ```
 $ mkdir -p ${HOME}/workspace/paasta/deployment
 $ cd ${HOME}/workspace/paasta/deployment
-$ git clone https://github.com/PaaS-TA/paasta-deployment.git -b v5.1  
+$ git clone https://github.com/PaaS-TA/paasta-deployment.git -b v5.1.0
 ```
 - [PaaS-TA Deployment] 는 위 예시와 같이 Github 에서 deployment 를 받아 파일을 ${HOME}/workspace/paasta-5.1/deployment/ 이하 디렉터리에 위치시킨다.
 - [PaaS-TA Release] 는 기본 설정은 온라인 설치로 되어있다.  
@@ -536,6 +536,7 @@ syslog_transport: "relp"				# Logsearch Protocol
 
 ### <div id='1031'/>3.3.6. BOSH 설치 Option 파일 
 
+Bosh 설치 시 필요한 Option 파일을 추가해야 한다.
 
 #### <div id='1032'/>3.3.6.1. BOSH Optional 파일
 
