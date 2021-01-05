@@ -41,7 +41,7 @@
 ```
 $ cd ${HOME}/workspace/paasta-5.1/deployment
 $ git clone https://github.com/paas-ta/common.git –b v5.0.1
-$ git clone https://github.com/paas-ta/monitoring-deployment.git –b v5.0.1
+$ git clone https://github.com/paas-ta/monitoring-deployment.git –b v5.1.0
 ```
 
 ### <div id='5'/>2.3. Logsearch 설치 환경설정
@@ -174,11 +174,13 @@ bosh –e {director_name} -d logsearch deploy logsearch-deployment.yml \
 
 ### <div id='9'/>2.4. Logsearch 설치
 
-- 서버 환경에 맞추어 Deploy 스크립트 파일의 설정을 수정한다. 
+- 서버 환경에 맞추어 Deploy 스크립트 파일의 설정을 수정한다.  
+  기본적으로 온라인 설치로 되어 있음.
 
 > $ vi ${HOME}/workspace/paasta-5.1/deployment/monitoring-deployment/logsearch/deploy-logsearch.sh
 
 ```
+# .yml 파일들 설정 변경 이슈 있는지 같이 확인한다.  
 bosh –e {director_name} -d logsearch deploy logsearch-deployment.yml \	
 	-l logsearch-vars.yml \
 	-l ../../common/common_vars.yml
@@ -195,7 +197,7 @@ $ sh deploy-logsearch.sh
 
 - 서비스 설치에 필요한 릴리즈 파일을 다운로드 받아 Local machine의 작업 경로로 위치시킨다.  
   
-  - 설치 파일 다운로드 위치 : https://paas-ta.kr/download/package    
+  - 설치 파일 다운로드 위치 : http://45.248.73.44/index.php/s/PnxxbkmLiLpXdBD  
 
 ```
 # 릴리즈 다운로드 파일 위치 경로 생성
@@ -215,6 +217,7 @@ logsearch-boshrelease-209.0.1.tgz						logsearch-for-cloudfoundry-207.0.1.tgz
 > $ vi ${HOME}/workspace/paasta-5.1/deployment/monitoring-deployment/logsearch/deploy-logsearch.sh
 
 ```
+# .yml 파일들 설정 변경 이슈 있는지 같이 확인한다.  
 bosh –e {director_name} -d logsearch deploy logsearch-deployment.yml \				
 	-o use-compiled-releases-logsearch.yml \
 	-l logsearch-vars.yml \
