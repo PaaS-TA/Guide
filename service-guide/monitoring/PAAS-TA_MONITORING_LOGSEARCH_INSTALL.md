@@ -207,7 +207,7 @@ $ mkdir -p ~/workspace/paasta-5.1/release/paasta-monitoring
 $ cd ${HOME}/workspace/paasta-5.1/release/paasta-monitoring
 $ ls
 ..................
-logsearch-boshrelease-209.0.1.tgz						logsearch-for-cloudfoundry-207.0.1.tgz
+logsearch-boshrelease-209.1.0.tgz						logsearch-for-cloudfoundry-207.0.3.tgz
 ..................
 ```
 
