@@ -732,8 +732,9 @@ Succeeded
 ### <div id='1035'/>3.3.7. BOSH 설치 - 다운로드 된 Release 파일 이용 방식
 
 - 서비스 설치에 필요한 릴리즈 파일을 다운로드 받아 Local machine의 작업 경로로 위치시킨다.  
+  v.5.0.1 에 설치 파일 버전을 v5.0.0 과 같은 파일을 사용한다.
   
-  - 설치 파일 다운로드 위치 : https://paas-ta.kr/download/package    
+  - 설치 파일 다운로드 위치 : http://45.248.73.44/index.php/s/mq8xXc4yTELqLz3  
 
 ```
 # 릴리즈 다운로드 파일 위치 경로 생성
