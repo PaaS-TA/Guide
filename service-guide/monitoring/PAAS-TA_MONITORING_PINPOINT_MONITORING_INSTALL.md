@@ -252,7 +252,7 @@ paasta-pinpoint-monitoring-release.tgz
 ```
 
 - 서버 환경에 맞추어 Deploy 스크립트 파일의 설정을 수정한다.  
-  오프라인 설치인 경우, paasta-pinpoint.yml 에서 설치 파일에 대한 hash 값 확인도 필요하다
+  오프라인 설치인 경우 설치 파일에 수정사항이 있다면 paasta-pinpoint.yml 에서 설치 파일에 대한 hash 값 확인도 필요하다
 
 > $ vi ${HOME}/workspace/paasta-5.1/deployment/monitoring-deployment/pinpoint-monitoring/deploy-pinpoint.sh
 
