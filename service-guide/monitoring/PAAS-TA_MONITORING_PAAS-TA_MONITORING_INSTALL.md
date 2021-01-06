@@ -47,7 +47,7 @@ $ git clone https://github.com/paas-ta/monitoring-deployment.git –b v5.0.1
 release, stemcell 설치 파일 다운로드는 아래 다운로드 에서 받고 설치한다.  
 v5.0.1 설치 파일은 v5.0.0 설치 파일과 같은 파일들을 사용한다.
 
-http://45.248.73.44/index.php/s/syrn36aa8x4FqYR  
+http://45.248.73.44/index.php/s/NYCmQPp4oxXHWqW  
 
 ![PaaSTa_release_dir_5.0]
 
@@ -201,7 +201,7 @@ $ sh deploy-paasta-monitoring.sh
 
 - 서비스 설치에 필요한 릴리즈 파일을 다운로드 받아 Local machine의 작업 경로로 위치시킨다.  
   
-  - 설치 파일 다운로드 위치 : https://paas-ta.kr/download/package    
+  - 설치 파일 다운로드 위치 : http://45.248.73.44/index.php/s/Ly4YZEKNb3mi9Bt  
 
 ```
 # 릴리즈 다운로드 파일 위치 경로 생성
