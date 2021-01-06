@@ -178,7 +178,7 @@ $ bosh -version
 
 ### <div id='1013'/>3.3.3.    설치 파일 다운로드
 
-[설치 파일 다운로드](https://paas-ta.kr/download/package)
+[설치 파일 다운로드](http://45.248.73.44/index.php/s/syrn36aa8x4FqYR)
 - 디렉터리 생성 (내려받은 파일이 위치할 경로)
 ```
 
