@@ -15,7 +15,7 @@
 
 ## <div id='1'/>1. 개요
 
-본 문서(PaaS-TA Monitoring 설치 가이드)는 전자정부프레임워크 기반의 PaaS-TA 5.0 환경 기준으로 BOSH 2.0을 이용하여 PaaS-TA Monitoring 설치를 위한 가이드를 제공한다.
+본 문서(PaaS-TA Monitoring 설치 가이드)는 전자정부프레임워크 기반의 PaaS-TA 5.1 환경 기준으로 BOSH 2.0을 이용하여 PaaS-TA Monitoring 설치를 위한 가이드를 제공한다.
 
 ## <div id='2'/>2. PaaS-TA Monitoring 설치
 ### <div id='3'/>2.1. Prerequisite
@@ -44,11 +44,11 @@ $ cd ${HOME}/workspace/paasta-5.1/deployment
 $ git clone https://github.com/paas-ta/common.git –b v5.0.1
 $ git clone https://github.com/paas-ta/monitoring-deployment.git –b v5.1.0
 ```
-release, stemcell 설치 파일 다운로드는 아래 다운로드 에서 받고 설치한다.
+기본적으로 온라인 설치로 설정되어 있으나 오프라인 설치 시 release, stemcell 설치 파일 다운로드는 아래 다운로드 에서 받고 설치한다.
 
-https://paas-ta.kr/download/package
+http://45.248.73.44/index.php/s/PnxxbkmLiLpXdBD  
 
-![PaaSTa_release_dir_5.0]
+![PaaSTa_release_dir_5.1]
 
 ### <div id='5'/>2.3. PaaS-TA Monitoring 설치 환경설정
 
@@ -200,7 +200,7 @@ $ sh deploy-paasta-monitoring.sh
 
 - 서비스 설치에 필요한 릴리즈 파일을 다운로드 받아 Local machine의 작업 경로로 위치시킨다.  
   
-  - 설치 파일 다운로드 위치 : https://paas-ta.kr/download/package    
+  - 설치 파일 다운로드 위치 : http://45.248.73.44/index.php/s/PnxxbkmLiLpXdBD  
 
 ```
 # 릴리즈 다운로드 파일 위치 경로 생성
