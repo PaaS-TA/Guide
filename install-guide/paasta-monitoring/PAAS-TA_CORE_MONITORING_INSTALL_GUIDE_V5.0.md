@@ -86,7 +86,7 @@ $ git clone https://github.com/paas-ta/monitoring-deployment.git –b v5.0.1
 
 ## <div id='109'/>3.3.  Stemcell 업로드
 VM을 배포할 때 사용되는 Stemcell을 BOSH에 업로드할 경우 로컬 파일과 URL을 직접 입력하여 업로드, 두가지 방법을 사용할 수 있다.  
-로컬 파일을 사용할 경우 PaaS-TA 사이트에서 [PaaS-TA Stemcell](https://paas-ta.kr/download/package) 파일을 내려받아 ${HOME}/workspace/paasta-5.0/stemcell 이하 디렉터리에 압축을 푼다.   
+로컬 파일을 사용할 경우 PaaS-TA 사이트에서 [PaaS-TA Stemcell](http://45.248.73.44/index.php/s/NYCmQPp4oxXHWqW) 파일을 내려받아 ${HOME}/workspace/paasta-5.0/stemcell 이하 디렉터리에 압축을 푼다.   
 압축을 풀면 아래와 같이 ${HOME}/workspace/paasta-5.0/stemcell/paasta-monitoring 디렉터리가 생성되며 릴리즈 파일(tgz)이 존재한다.
 
 ```
