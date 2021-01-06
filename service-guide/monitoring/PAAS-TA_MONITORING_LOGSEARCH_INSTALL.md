@@ -195,7 +195,8 @@ $ sh deploy-logsearch.sh
 
 ### <div id='10'/>2.5. Logsearch 설치 - 다운로드 된 Release 파일 이용 방식
 
-- 서비스 설치에 필요한 릴리즈 파일을 다운로드 받아 Local machine의 작업 경로로 위치시킨다.  
+- v5.1 경우 기본적으로 온라인 설치.  
+  오프라인 설치가 필요하다면, 서비스 설치에 필요한 릴리즈 파일을 다운로드 받아 Local machine의 작업 경로로 위치시킨다.  
   
   - 설치 파일 다운로드 위치 : http://45.248.73.44/index.php/s/PnxxbkmLiLpXdBD  
 
@@ -212,7 +213,8 @@ logsearch-boshrelease-209.1.0.tgz						logsearch-for-cloudfoundry-207.0.3.tgz
 ```
 
 
-- 서버 환경에 맞추어 Deploy 스크립트 파일의 설정을 수정한다. 
+- 서버 환경에 맞추어 Deploy 스크립트 파일의 설정을 수정한다.  
+  오프라인 설치 시 설치 파일에 수정사항이 있다면 logsearch-deployment.yml 에 설치 파일에 hash 정보를 확인할 필요가 있다.
 
 > $ vi ${HOME}/workspace/paasta-5.1/deployment/monitoring-deployment/logsearch/deploy-logsearch.sh
 
