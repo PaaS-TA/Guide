@@ -1,7 +1,7 @@
 # PaaS-TA 5.1 가이드 문서
 
 ## 플랫폼 설치 가이드
-- [설치 파일 다운로드 받기](http://45.248.73.44/index.php/s/PnxxbkmLiLpXdBD)
+- [설치 파일 다운로드 받기](https://paas-ta.kr/download/package)
 - 운영 환경 설치
   - PaaS-TA 플랫폼 자동화 설치
     - (Deprecated) ~~[플랫폼 설치 자동화  설치](./use-guide/platform/PAAS-TA_PLATFORM_INSTALL_AUTOMATION_INSTALL_GUIDE_v1.0.md)~~
@@ -57,7 +57,7 @@
 - [PaaS-TA 마켓플레이스](./service-guide/marketplace/PAAS-TA_MARKETPLACE_INSTALL_GUIDE_V1.0.md)
 
 ## 모니터링 설치 가이드
-- [PaaS-TA 모니터링](./service-guide/monitoring/PAAS-TA_MONITORING_INSTALL_GUIDE_V5.1.0.md)
+- [PaaS-TA 모니터링](./service-guide/monitoring/PAAS-TA_MONITORING_INSTALL_GUIDE_V5.0.md)
 
 ## 활용 가이드
 - [BOSH CLI V2(Command Line Interface) 사용](../../../Guide-4.0-ROTELLE/blob/master/Use-Guide/Bosh/PaaS-TA_BOSH_CLI_V2_사용자_가이드v1.0.md)
