@@ -234,7 +234,8 @@ $ sh deploy-pinpoint.sh
 
 ## <div id='25'/>2.5. Pinpoint Monitoring 설치 - 다운로드 된 Release 파일 이용 방식
 
-- 서비스 설치에 필요한 릴리즈 파일을 다운로드 받아 Local machine의 작업 경로로 위치시킨다.  
+- v5.1 경우 기본적으로 온라인 설치.  
+  필요에 의해 오프라인 설치를 한다면 서비스 설치에 필요한 릴리즈 파일을 다운로드 받아 Local machine의 작업 경로로 위치시킨다.  
   
   - 설치 파일 다운로드 위치 : http://45.248.73.44/index.php/s/PnxxbkmLiLpXdBD  
 
@@ -250,7 +251,8 @@ paasta-pinpoint-monitoring-release.tgz
 ..................
 ```
 
-- 서버 환경에 맞추어 Deploy 스크립트 파일의 설정을 수정한다. 
+- 서버 환경에 맞추어 Deploy 스크립트 파일의 설정을 수정한다.  
+  오프라인 설치인 경우 설치 파일에 수정사항이 있다면 paasta-pinpoint.yml 에서 설치 파일에 대한 hash 값 확인도 필요하다
 
 > $ vi ${HOME}/workspace/paasta-5.1/deployment/monitoring-deployment/pinpoint-monitoring/deploy-pinpoint.sh
 
