@@ -1,47 +1,54 @@
 ## Table of Contents
 
 1. [개요](#101)  
-　● [목적](#102)  
-　● [범위](#103)  
-　● [참고 자료](#104)  
-2. [PaaS-TA 5.0.2](#105)  
-3. [PaaS-TA 5.0.2 설치](#106)  
-　3.1. [Prerequisite](#107)  
-　3.2. [설치 파일 다운로드](#108)  
-　3.3. [Stemcell 업로드](#109)  
-　3.4. [Cloud Config 설정](#1010)  
-　　●  [AZs](#1011)  
-　　●  [VM types](#1012)  
-　　●  [Compilation](#1013)  
-　　●  [Disk Size](#1014)  
-　　●  [Networks](#1015)  
-　3.5. [Runtime Config 설정](#1016)  
-　3.6. [PaaS-TA 설치 파일](#1017)  
-　　3.6.1. [PaaS-TA 설치 Variable 파일](#1018)    
-　　　●  [common_vars.yml](#1019)  
-　　　●  [{IaaS}-vars.yml](#1020)  
-　　　●  [PaaS-TA 그외 Variable List](#1021)  
-　　3.6.2. [PaaS-TA Operation 파일](#1022)  
-　　3.6.3. [PaaS-TA 설치 Shell Scripts](#1023)  
-　　　●  [deploy-aws.sh](#1024)  
-　3.7. [PaaS-TA 설치](#1030)  
-　3.8. [PaaS-TA 로그인](#1032)  
+   ● [목적](#102)  
+   　● [범위](#103)  
+   　● [참고 자료](#104)  
+2. [PaaS-TA 5.1](#105)  
+3. [PaaS-TA 5.1 설치](#106)  
+   3.1. [Prerequisite](#107)  
+   　3.2. [설치 파일 다운로드](#108)  
+   　3.3. [Stemcell 업로드](#109)  
+   　3.4. [Cloud Config 설정](#1010)  
+   　　●  [AZs](#1011)  
+   　　●  [VM types](#1012)  
+   　　●  [Compilation](#1013)  
+   　　●  [Disk Size](#1014)  
+   　　●  [Networks](#1015)  
+   　3.5. [Runtime Config 설정](#1016)  
+   　3.6. [PaaS-TA 설치 파일](#1017)  
+   　　3.6.1. [PaaS-TA 설치 Variable 파일](#1018)    
+   　　　●  [common_vars.yml](#1019)  
+   　　　●  [{IaaS}-vars.yml](#1020)  
+   　　　●  [PaaS-TA 그외 Variable List](#1021)  
+   　　3.6.2. [PaaS-TA Operation 파일](#1022)  
+   　　3.6.3. [PaaS-TA 설치 Shell Scripts](#1023)  
+   　　　●  [deploy-aws.sh](#1024)  
+   　　　●  [deploy-openstack.sh](#1025)  
+   　3.7. [PaaS-TA 설치](#1030)  
+   　3.8. [PaaS-TA 로그인](#1032)   
 
 ## Executive Summary
 
-본 문서는 PaaS-TA 5.0.2(이하 PaaS-TA)을 수동으로 설치하기 위한 가이드를 제공하는 데 그 목적이 있다.
+본 문서는 PaaS-TA 5.1(이하 PaaS-TA)을 수동으로 설치하기 위한 가이드를 제공하는 데 그 목적이 있다.
 
 # <div id='101'/>1.  문서 개요 
 
 ## <div id='102'/>● 목적
-본 문서는 Inception 환경(설치환경)에서 BOSH2(이하 BOSH) 설치 후, BOSH를 기반으로 PaaS-TA를 설치하기 위한 가이드를 제공하는 데 그 목적이 있다.
+
+본 문서는 Inception 환경(설치환경)에서 BOSH2(이하 BOSH) 설치 후, BOSH를 기반으로 Monitoring을 적용하지 않은 PaaS-TA와 통합 Monitoring을 적용한 PaaS-TA를 설치하기 위한 가이드를 제공하는 데 그 목적이 있다.
+
 
 ## <div id='103'/>● 범위
-본 문서는 cf-deployment v9.5.0을 기준으로 작성되었다.  
+
+본 문서는 cf-deployment v13.12.0을 기준으로 작성되었다.  
 PaaS-TA은 bosh-deployment를 기반으로 한 BOSH 환경에서 설치한다.  
-PaaS-TA 설치 시 필요한 Stemcell은 기존 ubuntu-xenial-315.36에서 ubuntu-xenial-315.64로 변경되었다.  
+
+PaaS-TA 설치 시 필요한 Stemcell은 기존 ubuntu-xenial-315.64에서 ubuntu-xenial-621.78로 변경되었다.  
+
 PaaS-TA는 VMware vSphere, Google Cloud Platform, Amazon Web Services EC2, OpenStack, Microsoft Azure 등의 IaaS를 지원한다.  
-현재 PaaS-TA 5.0.2에서 검증한 IaaS 환경은 AWS 환경이다.
+
+현재 PaaS-TA 5.1에서 검증한 IaaS 환경은 AWS, OpenStack 환경이다.
 
 ## <div id='104'/>● 참고 자료
 
@@ -55,7 +62,7 @@ BOSH Deployment: [https://github.com/cloudfoundry/bosh-deployment](https://githu
 
 CF Deployment: [https://github.com/cloudfoundry/cf-deployment](https://github.com/cloudfoundry/cf-deployment)
 
-# <div id='105'/>2. PaaS-TA 5.0.2
+# <div id='105'/>2. PaaS-TA 5.1
 
 PaaS-TA는 BOSH를 기반으로 설치된다. BOSH CLI를 사용하여 BOSH를 생성한 후, paasta-deployment로 PaaS-TA를 배포한다. 
 
@@ -63,7 +70,7 @@ PaaS-TA 3.1 버전까지는 PaaS-TA Container, Controller를 각각의 deploymen
 
 ![PaaSTa_BOSH_Use_Guide_Image2]  
 
-# <div id='106'/>3. PaaS-TA 5.0.2 설치
+# <div id='106'/>3. PaaS-TA 5.1 설치
 
 ## <div id='107'/>3.1. Prerequisite
 
@@ -72,29 +79,20 @@ PaaS-TA 3.1 버전까지는 PaaS-TA Container, Controller를 각각의 deploymen
 
 
 ## <div id='108'/>3.2. 설치 파일 다운로드
+
 - PaaS-TA를 설치하기 위한 deployment가 존재하지 않는다면 다운로드 받는다
+
 ```
 $ mkdir -p ${HOME}/workspace/paasta/deployment
 $ cd ${HOME}/workspace/paasta/deployment
-$ git clone https://github.com/PaaS-TA/common.git -b v5.0.1
+$ git clone https://github.com/PaaS-TA/common.git
 $ cd ${HOME}/workspace/paasta/deployment
-$ git clone https://github.com/PaaS-TA/paasta-deployment.git -b v5.0.2
+$ git clone https://github.com/PaaS-TA/paasta-deployment.git -b v5.1.0
 ```
 
 ## <div id='109'/>3.3. Stemcell 업로드
-VM을 배포할 때 사용되는 Stemcell을 BOSH에 업로드할 경우 로컬 파일과 URL을 직접 입력하여 업로드, 두가지 방법을 사용할 수 있다.  
-로컬 파일을 사용할 경우 PaaS-TA 사이트에서 [PaaS-TA Stemcell](https://paas-ta.kr/download/package) 파일을 내려받아 ${HOME}/workspace/paasta/stemcell 이하 디렉터리에 압축을 푼다.  
-압축을 풀면 아래와 같이 ${HOME}/workspace/paasta/stemcell/paasta 디렉터리가 생성되며 릴리즈 파일(tgz)이 존재한다.
 
-```
-$ cd ${HOME}/workspace/paasta/stemcell/paasta
-$ ls
-bosh-stemcell-315.64-alicloud-kvm-ubuntu-xenial-go_agent.tgz  bosh-stemcell-315.64-google-kvm-ubuntu-xenial-go_agent.tgz     bosh-stemcell-315.64-vsphere-esxi-ubuntu-xenial-go_agent.tgz
-bosh-stemcell-315.64-aws-xen-hvm-ubuntu-xenial-go_agent.tgz   bosh-stemcell-315.64-openstack-kvm-ubuntu-xenial-go_agent.tgz  bosh-stemcell-315.64-warden-boshlite-ubuntu-xenial-go_agent.tgz
-bosh-stemcell-315.64-azure-hyperv-ubuntu-xenial-go_agent.tgz  bosh-stemcell-315.64-vcloud-esxi-ubuntu-xenial-go_agent.tgz
-```
-
-Stemcell은 배포 시 생성되는 PaaS-TA VM Base OS Image이며, PaaS-TA 5.0.2은 Ubuntu xenial stemcell 315.64를 기반으로 한다.  
+Stemcell은 배포 시 생성되는 PaaS-TA VM Base OS Image이며, PaaS-TA 5.1은 Ubuntu xenial stemcell 621.78를 기반으로 한다.  
 BOSH 로그인 후 다음 명령어를 수행하여 Stemcell을 올린다.  
 {director_name}은 BOSH 설치 시 사용한 Director 명이다.
 
@@ -102,11 +100,14 @@ BOSH 로그인 후 다음 명령어를 수행하여 Stemcell을 올린다.
 - AWS
 
 ```
-(로컬파일)
-$ bosh -e {director_name} upload-stemcell ${HOME}/workspace/paasta/stemcell/paasta/bosh-stemcell-315.64-aws-xen-hvm-ubuntu-xenial-go_agent.tgz
+$ bosh -e {director_name} upload-stemcell https://s3.amazonaws.com/bosh-core-stemcells/621.78/bosh-stemcell-621.78-aws-xen-hvm-ubuntu-xenial-go_agent.tgz
+```
 
-(URL)
-$ bosh -e {director_name} upload-stemcell https://s3.amazonaws.com/bosh-core-stemcells/315.64/bosh-stemcell-315.64-aws-xen-hvm-ubuntu-xenial-go_agent.tgz
+
+- OpenStack
+
+```
+$ bosh -e {director_name} upload-stemcell https://s3.amazonaws.com/bosh-core-stemcells/621.78/bosh-stemcell-621.78-openstack-kvm-ubuntu-xenial-go_agent.tgz
 ```
 
 ## <div id='1010'/>3.4. Cloud Config 설정
@@ -310,7 +311,12 @@ vm_extensions:
       size: 102400
       type: gp2
   name: 100GB_ephemeral_disk
-
+- name: ssh-proxy-and-router-lb
+  cloud_properties:
+    ports:
+    - host: 80
+    - host: 443
+    - host: 2222
 
 ## vm_type :: 가상머신 유형(VM Type)을 정의한다. (AWS 경우, Instance type 설정)
 vm_types:
@@ -424,6 +430,8 @@ vm_types:
   name: caas_small_highmem
 ```
 
+
+
 - Cloud Config 업데이트
 
 ```
@@ -446,19 +454,23 @@ PaaS-TA를 설치하는 환경에 따라 다르게 설정해도 된다.
 ### <div id='1012'/>● VM Types
 
 VM Type은 IaaS에서 정의된 VM Type이다.  
+
 ※ 다음은 AWS에서 정의한 Instance Type이다.
 ![PaaSTa_FLAVOR_Image]
 
 ### <div id='1013'/>● Compilation
+
 PaaS-TA 및 서비스 설치 시, PaaS-TA는 Compile VM을 생성하여 소스를 컴파일하고, PaaS-TA VM을 생성하여 컴파일된 파일을 대상 VM에 설치한다.  
 컴파일이 끝난 VM은 삭제된다.
 
 ※ Worker 수는 Compile VM의 수로, 많을수록 컴파일 속도가 빨라진다.
 
 ### <div id='1014'/>● Disk Size
+
 PaaS-TA 및 서비스가 설치되는 VM의 Persistent Disk Size이다.
 
 ### <div id='1015'/>● Networks
+
 Networks는 AZ 별 Subnet Network, DNS, Security Groups, Network ID를 정의한다.  
 보통 AZ 별로 256개의 IP를 정의할 수 있도록 Range Cider를 정의한다.
 
@@ -473,26 +485,29 @@ Networks는 AZ 별 Subnet Network, DNS, Security Groups, Network ID를 정의한
   ```  
   $ cd ${HOME}/workspace/paasta/deployment/paasta-deployment/bosh
   $ bosh -e {director_name} update-runtime-config -n runtime-configs/dns.yml
-  ```  
+  ```
 
   - Runtime Config 확인  
 
   ```
   $ bosh –e {director_name} runtime-config
-  ```  
+  ```
 
 - OS Configuration Runtime Config  
   BOSH Linux OS 구성 릴리스를 이용하여 sysctl을 구성한다.  
 
   - Runtime Config 업데이트  
+
   ```  
   $ cd ${HOME}/workspace/paasta/deployment/paasta-deployment/bosh
   $ bosh -e {director_name} update-runtime-config -n --name=os-conf runtime-configs/os-conf.yml
-  ```  
+  ```
+
   - Runtime Config 확인  
+
   ```  
   $ bosh –e {director_name} runtime-config --name=os-conf
-  ```  
+  ```
 
 ## <div id='1017'/>3.6.  PaaS-TA 설치 파일
 
@@ -508,8 +523,16 @@ common_vars.yml파일과 {IaaS}-vars.yml을 수정하여 PaaS-TA 설치시 적�
 <td>AWS 환경에 PaaS-TA 설치시 적용하는 변수 설정 파일</td>
 </tr>
 <tr>
+<td>openstack-vars.yml</td>
+<td>OpenStack 환경에 PaaS-TA 설치시 적용하는 변수 설정 파일</td>
+</tr>
+<tr>
 <td>deploy-aws.sh</td>
 <td>AWS 환경에 PaaS-TA 설치를 위한 Shell Script 파일</td>
+</tr>
+<tr>
+<td>deploy-openstack.sh</td>
+<td>OpenStack 환경에 적용된 PaaS-TA 설치를 위한 Shell Script 파일</td>
 </tr>
 <tr>
 <td>paasta-deployment.yml</td>
@@ -517,56 +540,60 @@ common_vars.yml파일과 {IaaS}-vars.yml을 수정하여 PaaS-TA 설치시 적�
 </tr>
 </table>
 
+
+
+
 ### <div id='1018'/>3.6.1. PaaS-TA 설치 Variable File
 
 
 #### <div id='1019'/>● common_vars.yml
+
 common 폴더에 있는 common_vars.yml PaaS-TA 및 각종 Service 설치시 적용하는 공통 변수 설정 파일이 존재한다.  
-PaaS-TA를 설치할 때는 system_domain, paasta_admin_username, paasta_admin_password, uaa_client_admin_secret, uaa_client_portal_secret의 값을 변경 하여 설치 할 수 있다.
+PaaS-TA를 설치할 때는 system_domain, paasta_admin_username, paasta_admin_password, uaa_client_admin_secret, uaa_client_portal_secret, paasta_database_port의 값을 변경 하여 설치 할 수 있다.
 
 
 ```
 # BOSH INFO
-bosh_ip: "10.0.1.6"				# BOSH IP
-bosh_url: "http://10.0.1.6"			# BOSH URL (e.g. "https://00.000.0.0")
-bosh_client_admin_id: "admin"			# BOSH Client Admin ID
-bosh_client_admin_secret: "ert7na4xz48"		# BOSH Client Admin Secret('echo $(bosh int ~/workspace/paasta/deployment/paasta-deployment/bosh/{iaas}/creds.yml —path /admin_password))' 명령어를 통해 확인 가능)
-bosh_director_port: 25555			# BOSH Director Port
-bosh_oauth_port: 8443				# BOSH OAuth Port
+bosh_ip: "10.0.1.6"                        		# BOSH IP
+bosh_url: "http://10.0.1.6"				# BOSH URL (e.g. "https://00.000.0.0")
+bosh_client_admin_id: "admin"				# BOSH Client Admin ID
+bosh_client_admin_secret: "ert7na4jpewsczt"		# BOSH Client Admin Secret('echo $(bosh int ~/workspace/paasta/deployment/paasta-deployment/bosh/{iaas}/creds.yml —path /admin_password))' 명령어를 통해 확인 가능)
+bosh_director_port: 25555				# BOSH Director Port
+bosh_oauth_port: 8443					# BOSH OAuth Port
 
 # PAAS-TA INFO
-system_domain: "xx.xx.xxx.xxx.xip.io"		# Domain (xip.io를 사용하는 경우 HAProxy Public IP와 동일)
-paasta_admin_username: "admin"			# PaaS-TA Admin Username
-paasta_admin_password: "admin"			# PaaS-TA Admin Password
-paasta_nats_ip: "xx.xx.xxx.xxx"			# PaaS-TA Nats IP(e.g. "10.0.1.123")
-paasta_nats_port: 4222				# PaaS-TA Nats Port(e.g. "4222")
-paasta_nats_user: "nats"			# PaaS-TA Nats User(e.g. "nats")
-paasta_nats_password: "7EZB5ZkMLMqT73h2J"	# PaaS-TA Nats Password (CredHub 로그인후 'credhub get -n /micro-bosh/paasta/nats_password' 명령어를 통해 확인 가능)
-paasta_nats_private_networks_name: "default"	# PaaS-TA Nats 의 Network 이름
-paasta_database_ips: "xx.xx.xxx.xxx"		# PaaS-TA Database IP(e.g. "10.0.1.123")
-paasta_database_port: 5524			# PaaS-TA Database Port(e.g. 5524)
-paasta_cc_db_id: "cloud_controller"		# CCDB ID(e.g. "cloud_controller")
-paasta_cc_db_password: "cc_admin"		# CCDB Password(e.g. "cc_admin")
-paasta_uaa_db_id: "uaa"				# UAADB ID(e.g. "uaa")
-paasta_uaa_db_password: "uaa_admin"		# UAADB Password(e.g. "uaa_admin")
+system_domain: "xx.xx.xxx.xxx.xip.io"			# Domain (xip.io를 사용하는 경우 HAProxy Public IP와 동일)
+paasta_admin_username: "admin"				# PaaS-TA Admin Username
+paasta_admin_password: "admin"				# PaaS-TA Admin Password
+paasta_nats_ip: "10.0.1.121"				# PaaS-TA Nats IP(e.g. "10.0.1.121")
+paasta_nats_port: 4222					# PaaS-TA Nats Port(e.g. "4222")
+paasta_nats_user: "nats"				# PaaS-TA Nats User(e.g. "nats")
+paasta_nats_password: "7EZB5ZkMLMqT73h2JtxPqO"		# PaaS-TA Nats Password (CredHub 로그인후 'credhub get -n /micro-bosh/paasta/nats_password' 명령어를 통해 확인 가능)
+paasta_nats_private_networks_name: "default"		# PaaS-TA Nats 의 Network 이름
+paasta_database_ips: "10.0.1.123"			# PaaS-TA Database IP(e.g. "10.0.1.123")
+paasta_database_port: 5524				# PaaS-TA Database Port (e.g. 5524(postgresql)/13307(mysql)) -- Do Not Use "3306"&"13306" in mysql
+paasta_cc_db_id: "cloud_controller"			# CCDB ID(e.g. "cloud_controller")
+paasta_cc_db_password: "cc_admin"			# CCDB Password(e.g. "cc_admin")
+paasta_uaa_db_id: "uaa"					# UAADB ID(e.g. "uaa")
+paasta_uaa_db_password: "uaa_admin"			# UAADB Password(e.g. "uaa_admin")
 paasta_api_version: "v3"
 
 
 # UAAC INFO
-uaa_client_admin_id: "admin"			# UAAC Admin Client Admin ID
-uaa_client_admin_secret: "admin-secret"		# UAAC Admin Client에 접근하기 위한 Secret 변수
-uaa_client_portal_secret: "clientsecret"	# UAAC Portal Client에 접근하기 위한 Secret 변수
+uaa_client_admin_id: "admin"				# UAAC Admin Client Admin ID
+uaa_client_admin_secret: "admin-secret"			# UAAC Admin Client에 접근하기 위한 Secret 변수
+uaa_client_portal_secret: "clientsecret"		# UAAC Portal Client에 접근하기 위한 Secret 변수
 
 # Monitoring INFO
-metric_url: "xx.xx.xxx.xxx"			# Monitoring InfluxDB IP
-syslog_address: "xx.xx.xxx.xxx"            	# Logsearch의 ls-router IP
-syslog_port: "2514"                          	# Logsearch의 ls-router Port
-syslog_transport: "relp"                        # Logsearch Protocol
-saas_monitoring_url: "xx.xx.xxx.xxx"	   	# Pinpoint HAProxy WEBUI의 Public IP
-monitoring_api_url: "xx.xx.xxx.xxx"        	# Monitoring-WEB의 Public IP
+metric_url: "10.0.161.101"				# Monitoring InfluxDB IP
+syslog_address: "10.0.121.100"            		# Logsearch의 ls-router IP
+syslog_port: "2514"                          		# Logsearch의 ls-router Port
+syslog_transport: "relp"                        	# Logsearch Protocol
+saas_monitoring_url: "xx.xx.xxx.xxx"	   		# Pinpoint HAProxy WEBUI의 Public IP
+monitoring_api_url: "xx.xx.xxx.xxx"        		# Monitoring-WEB의 Public IP
 
 ### Portal INFO
-portal_web_user_ip: "xx.xx.xxx.xxx"
+portal_web_user_ip: "52.78.88.252"
 portal_web_user_url: "http://portal-web-user.xx.xx.xxx.xxx.xip.io" 
 
 ### ETC INFO
@@ -583,7 +610,7 @@ deployment_name: paasta					# Deployment Name
 network_name: default					# Default Network Name
 inception_os_user_name: ubuntu				# Home User Name (Release File Path 설정 시 필요)
 network_name: default					# 지정하지 않은 Default 네트워크
-private_ip: "xx.xx.xxx.xxx"				# Proxy IP (BOSH-LITE 환경에서 설치 시 사용)
+private_ip: "10.244.0.34"				# Proxy IP (BOSH-LITE 환경에서 설치 시 사용)
 haproxy_public_ip: xx.xx.xxx.xxx			# HAProxy IP (Public IP)
 haproxy_public_network_name: vip			# PaaS-TA Public Network Name
 haproxy_private_network_name: "private"			# PaaS-TA Private Network name(vSphere 환경에서 설치 중 use-haproxy-public-network-vsphere.yml 옵션 사용시 적용)	
@@ -603,132 +630,128 @@ uaa_client_portal_redirect_uri: "http://portal-web-user.xx.xx.xxx.xxx.xip.io,htt
 
 
 # STEMCELL
-stemcell_os: "ubuntu-xenial"				# Stemcell OS
-stemcell_version: "315.64"				# Stemcell Version
+stemcell_os: "ubuntu-xenial"			# Stemcell OS
+stemcell_version: "621.78"			# Stemcell Version
 
 # SMOKE-TEST
-smoke_tests_azs: [z1]					# Smoke-Test 가용 존
-smoke_tests_instances: 1				# Smoke-Test 인스턴스 수
-smoke_tests_vm_type: minimal				# Smoke-Test VM 종류
-smoke_tests_network: default				# Smoke-Test 네트워크
+smoke_tests_azs: [z1]				# Smoke-Test 가용 존
+smoke_tests_instances: 1			# Smoke-Test 인스턴스 수
+smoke_tests_vm_type: minimal			# Smoke-Test VM 종류
+smoke_tests_network: default			# Smoke-Test 네트워크
 
 # NATS
-nats_azs: [z1, z2]					# NATS 가용 존
-nats_instances: 2					# NATS 인스턴스 수
-nats_vm_type: minimal					# NATS VM 종류
-nats_network: default					# NATS 네트워크
-
-# ADAPTER
-adapter_azs: [z1, z2]					# ADAPTER 가용 존
-adapter_instances: 2					# ADAPTER 인스턴스 수
-adapter_vm_type: minimal				# ADAPTER VM 종류
-adapter_network: default				# ADAPTER 네트워크
+nats_azs: [z1, z2]				# NATS 가용 존
+nats_instances: 2				# NATS 인스턴스 수
+nats_vm_type: minimal				# NATS VM 종류
+nats_network: default				# NATS 네트워크
 
 # DATABASE
-database_azs: [z1]					# DATABASE 가용 존
-database_instances: 1					# DATABASE 인스턴스 수
-database_vm_type: small					# DATABASE VM 종류
-database_network: default				# DATABASE 네트워크
-database_persistent_disk_type: 10GB			# DATABASE 영구 Disk 종류
+database_azs: [z1]				# DATABASE 가용 존
+database_instances: 1				# DATABASE 인스턴스 수
+database_vm_type: small				# DATABASE VM 종류
+database_network: default			# DATABASE 네트워크
+database_persistent_disk_type: 10GB		# DATABASE 영구 Disk 종류
 
 # DIEGO-API
-diego_api_azs: [z1, z2]					# DIEGO-API 가용 존
-diego_api_instances: 2					# DIEGO-API 인스턴스 수
-diego_api_vm_type: small				# DIEGO-API VM 종류
-diego_api_network: default				# DIEGO-API 네트워크
+diego_api_azs: [z1, z2]				# DIEGO-API 가용 존
+diego_api_instances: 2				# DIEGO-API 인스턴스 수
+diego_api_vm_type: small			# DIEGO-API VM 종류
+diego_api_network: default			# DIEGO-API 네트워크
 
 # UAA
-uaa_azs: [z1, z2]					# UAA 가용 존
-uaa_instances: 2					# UAA 인스턴스 수
-uaa_vm_type: minimal					# UAA VM 종류
-uaa_network: default					# UAA 네트워크
+uaa_azs: [z1, z2]				# UAA 가용 존
+uaa_instances: 2				# UAA 인스턴스 수
+uaa_vm_type: minimal				# UAA VM 종류
+uaa_network: default				# UAA 네트워크
 
 # SINGLETON-BLOBSTORE
-singleton_blobstore_azs: [z1]				# SINGLETON-BLOBSTORE 가용 존
-singleton_blobstore_instances: 1			# SINGLETON-BLOBSTORE 인스턴스 수
-singleton_blobstore_vm_type: small			# SINGLETON-BLOBSTORE VM 종류
-singleton_blobstore_network: default			# SINGLETON-BLOBSTORE 네트워크
-singleton_blobstore_persistent_disk_type: 100GB		# SINGLETON-BLOBSTORE 영구 Disk 종류
+singleton_blobstore_azs: [z1]			# SINGLETON-BLOBSTORE 가용 존
+singleton_blobstore_instances: 1		# SINGLETON-BLOBSTORE 인스턴스 수
+singleton_blobstore_vm_type: small		# SINGLETON-BLOBSTORE VM 종류
+singleton_blobstore_network: default		# SINGLETON-BLOBSTORE 네트워크
+singleton_blobstore_persistent_disk_type: 100GB	# SINGLETON-BLOBSTORE 영구 Disk 종류
 
 # API
-api_azs: [z1, z2]					# API 가용 존
-api_instances: 2					# API 인스턴스 수
-api_vm_type: small					# API VM 종류
-api_network: default					# API 네트워크
-api_vm_extensions: [50GB_ephemeral_disk]		# API 영구 Disk 종류
+api_azs: [z1, z2]				# API 가용 존
+api_instances: 2				# API 인스턴스 수
+api_vm_type: small				# API VM 종류
+api_network: default				# API 네트워크
+api_vm_extensions: [50GB_ephemeral_disk]	# API 영구 Disk 종류
 
 # CC-WORKER
-cc_worker_azs: [z1, z2]					# CC-WORKER 가용 존
-cc_worker_instances: 2					# CC-WORKER 인스턴스 수
-cc_worker_vm_type: minimal				# CC-WORKER VM 종류
-cc_worker_network: default				# CC-WORKER 네트워크
+cc_worker_azs: [z1, z2]				# CC-WORKER 가용 존
+cc_worker_instances: 2				# CC-WORKER 인스턴스 수
+cc_worker_vm_type: minimal			# CC-WORKER VM 종류
+cc_worker_network: default			# CC-WORKER 네트워크
 
 # SCHEDULER
-scheduler_azs: [z1, z2]					# SCHEDULER 가용 존
-scheduler_instances: 2					# SCHEDULER 인스턴스 수
-scheduler_vm_type: minimal				# SCHEDULER VM 종류
-scheduler_network: default				# SCHEDULER 네트워크
+scheduler_azs: [z1, z2]				# SCHEDULER 가용 존
+scheduler_instances: 2				# SCHEDULER 인스턴스 수
+scheduler_vm_type: minimal			# SCHEDULER VM 종류
+scheduler_network: default			# SCHEDULER 네트워크
 scheduler_vm_extensions: [diego-ssh-proxy-network-properties] # SCHEDULER 영구 Disk 종류
 
 # ROUTER
-router_azs: [z1, z2]					# ROUTER 가용 존
-router_instances: 2					# ROUTER 인스턴스 수
-router_vm_type: minimal					# ROUTER VM 종류
-router_network: default					# ROUTER 네트워크
+router_azs: [z1, z2]				# ROUTER 가용 존
+router_instances: 2				# ROUTER 인스턴스 수
+router_vm_type: minimal				# ROUTER VM 종류
+router_network: default				# ROUTER 네트워크
 router_vm_extensions: [cf-router-network-properties]	# ROUTER 영구 Disk 종류
 
 # TCP-ROUTER
-tcp_router_azs: [z1, z2]				# TCP-ROUTER 가용 존
-tcp_router_instances: 2					# TCP-ROUTER 인스턴스 수
-tcp_router_vm_type: minimal				# TCP-ROUTER VM 종류
-tcp_router_network: default				# TCP-ROUTER 네트워크
+tcp_router_azs: [z1, z2]			# TCP-ROUTER 가용 존
+tcp_router_instances: 2				# TCP-ROUTER 인스턴스 수
+tcp_router_vm_type: minimal			# TCP-ROUTER VM 종류
+tcp_router_network: default			# TCP-ROUTER 네트워크
 tcp_router_vm_extensions: [cf-tcp-router-network-properties]	# TCP-ROUTER 영구 Disk 종류
 
 # DOPPLER
-doppler_azs: [z1, z2]					# DOPPLER 가용 존
-doppler_instances: 4					# DOPPLER 인스턴스 수
-doppler_vm_type: minimal				# DOPPLER VM 종류
-doppler_network: default				# DOPPLER 네트워크
+doppler_azs: [z1, z2]				# DOPPLER 가용 존
+doppler_instances: 4				# DOPPLER 인스턴스 수
+doppler_vm_type: minimal			# DOPPLER VM 종류
+doppler_network: default			# DOPPLER 네트워크
 
 # DIEGO-CELL
-diego_cell_azs: [z1, z2]				# DIEGO-CELL 가용 존
-diego_cell_instances: 2					# DIEGO-CELL 인스턴스 수
-diego_cell_vm_type: small-highmem-16GB			# DIEGO-CELL VM 종류
-diego_cell_network: default				# DIEGO-CELL 네트워크
+diego_cell_azs: [z1, z2]			# DIEGO-CELL 가용 존
+diego_cell_instances: 3				# DIEGO-CELL 인스턴스 수
+diego_cell_vm_type: small-highmem-16GB		# DIEGO-CELL VM 종류
+diego_cell_network: default			# DIEGO-CELL 네트워크
 diego_cell_vm_extensions: [100GB_ephemeral_disk]	# DIEGO-CELL 영구 Disk 종류
 
 # LOG-API
-log_api_azs: [z1, z2]					# LOG-API 가용 존
-log_api_instances: 2					# LOG-API 인스턴스 수
-log_api_vm_type: minimal				# LOG-API VM 종류
-log_api_network: default				# LOG-API 네트워크
+log_api_azs: [z1, z2]				# LOG-API 가용 존
+log_api_instances: 2				# LOG-API 인스턴스 수
+log_api_vm_type: minimal			# LOG-API VM 종류
+log_api_network: default			# LOG-API 네트워크
 
 # CREDHUB
-credhub_azs: [z1, z2]					# CREDHUB 가용 존
-credhub_instances: 2					# CREDHUB 인스턴스 수
-credhub_vm_type: minimal				# CREDHUB VM 종류
-credhub_network: default				# CREDHUB 네트워크
+credhub_azs: [z1, z2]				# CREDHUB 가용 존
+credhub_instances: 2				# CREDHUB 인스턴스 수
+credhub_vm_type: minimal			# CREDHUB VM 종류
+credhub_network: default			# CREDHUB 네트워크
 
 # ROTATE-CC-DATABASE-KEY
-rotate_cc_database_key_azs: [z1]			# ROTATE-CC-DATABASE-KEY 가용 존
-rotate_cc_database_key_instances: 1			# ROTATE-CC-DATABASE-KEY 인스턴스 수
-rotate_cc_database_key_vm_type: minimal			# ROTATE-CC-DATABASE-KEY VM 종류
-rotate_cc_database_key_network: default			# ROTATE-CC-DATABASE-KEY 네트워크
+rotate_cc_database_key_azs: [z1]		# ROTATE-CC-DATABASE-KEY 가용 존
+rotate_cc_database_key_instances: 1		# ROTATE-CC-DATABASE-KEY 인스턴스 수
+rotate_cc_database_key_vm_type: minimal		# ROTATE-CC-DATABASE-KEY VM 종류
+rotate_cc_database_key_network: default		# ROTATE-CC-DATABASE-KEY 네트워크
 
 # HAPROXY
-haproxy_azs: [z7]					# HAPROXY 가용 존
-haproxy_instances: 1					# HAPROXY 인스턴스 수
-haproxy_vm_type: minimal				# HAPROXY VM 종류
-haproxy_network: default				# HAPROXY 네트워크
+haproxy_azs: [z7]				# HAPROXY 가용 존
+haproxy_instances: 1				# HAPROXY 인스턴스 수
+haproxy_vm_type: minimal			# HAPROXY VM 종류
+haproxy_network: default			# HAPROXY 네트워크
 ```
 
 
 #### <div id='1021'/>● PaaS-TA 그외 Variable List
 
 1. uaa_login_logout_redirect_parameter_whitelist : 포탈 페이지 이동을 위한 UAA Redirect Whitelist 등록 변수
+
 ```
 ex) uaa_login_logout_redirect_parameter_whitelist=["{PaaS-TA PORTAL URI}","{PaaS-TA PORTAL URI}/callback","{PaaS-TA PORTAL URI}/login"]
 ```
+
 > xip.io : 임시 도메인, 기본 DNS 서버가 8.8.8.8로 설정되어야 한다.  
 > xip.io를 사용하지 않고 DNS를 사용할 경우, Whitelist에 포탈 DNS, 포탈 DNS/callback, 포탈 DNS/login 세 개의 항목을 등록해야 한다.
 
@@ -745,46 +768,52 @@ ex) uaa_login_links_signup="{PaaS-TA PORTAL URI}/createuser"
 ```
 
 4. uaa_client_portal_redirect_uri : UAAC Portal Client의 Redirect URI 지정 변수, 포탈에서 로그인 버튼 클릭 후 UAA 페이지에서 로그인 성공 시 이동하는 URI
+
 ```
 ex) uaa_client_portal_redirect_uri="{PaaS-TA PORTAL URI}, {PaaS-TA PORTAL URI}/callback"
 ```
 
 5. uaa_client_portal_secret : UAAC Portal Client에 접근하기 위한 Secret 변수
+
 ```
 ex) uaa_client_portal_secret="portalclient"
 
   paasta-portal deploy 파일 안의 portal_client_secret의 값과 일치해야 한다.
 ```
+
 ![PaaSTa_VALUE_Image]
 
 6. uaa_client_admin_secret : UAAC Admin Client에 접근하기 위한 Secret 변수
+
 ```
 ex) uaa_client_admin_secret="admin-secret"
 ```
 
 - uaa_client_admin_secret 적용 확인 방법
-    
-    (1) PaaS-TA 설치 후 아래 명령어 실행한다.
-    ```
-    $ uaac target
-    $ uaac token client get
-    ```
 
-    (2) 설정한 secret 값으로 admin token을 얻을 경우 아래와 같은 결과가 출력된다.
-    ```
-    ubuntu@inception:~$ uaac target
-    
-    Target: https://uaa.54.180.53.80.xip.io
-    Context: admin, from client admin
-    
-    ubuntu@inception:~$ uaac token client get
-    Client ID:  admin
-    Client secret:  ************
-    
-    Successfully fetched token via client credentials grant.
-    Target: https://uaa.54.180.53.80.xip.io
-    Context: admin, from client admin
-    ```
+  (1) PaaS-TA 설치 후 아래 명령어 실행한다.
+
+  ```
+  $ uaac target
+  $ uaac token client get
+  ```
+
+  (2) 설정한 secret 값으로 admin token을 얻을 경우 아래와 같은 결과가 출력된다.
+
+  ```
+  ubuntu@inception:~$ uaac target
+  
+  Target: https://uaa.54.180.53.80.xip.io
+  Context: admin, from client admin
+  
+  ubuntu@inception:~$ uaac token client get
+  Client ID:  admin
+  Client secret:  ************
+  
+  Successfully fetched token via client credentials grant.
+  Target: https://uaa.54.180.53.80.xip.io
+  Context: admin, from client admin
+  ```
 
 
 
@@ -797,11 +826,21 @@ ex) uaa_client_admin_secret="admin-secret"
 <td>요구사항</td>
 </tr>
 <tr>
+<td>operations/use-compiled-releases-online.yml</td>
+<td>인터넷이 연결된 환경에서 컴파일 없이 빠른 설치가 가능하다.</td>
+<td></td>
+</tr>
+<tr>
 <td>operations/use-postgres.yml</td>
 <td>Database를 Postgres로 설치 <br> 
     - use-postgres.yml 미적용 시 MySQL 설치  <br>
     - 3.5 이전 버전에서 Migration 시 필수  
 </td>
+<td></td>
+</tr>
+<tr>
+<td>operations/use-compiled-releases-postgres-online.yml</td>
+<td>인터넷이 연결된 환경에서 컴파일 없이 Postgres의 빠른 설치가 가능하다.</td>
 <td></td>
 </tr>
 <tr>
@@ -836,10 +875,12 @@ ex) uaa_client_admin_secret="admin-secret"
     -v haproxy_private_network_name
 </td>
 </tr>
+<tr>
+<td>operations/use-compiled-releases-haproxy-online.yml</td>
+<td>인터넷이 연결된 환경에서 컴파일 없이 HAProxy의 빠른 설치가 가능하다.</td>
+<td></td>
+</tr>
 </table>
-
-
-
 
 ### <div id='1023'/>3.6.3.   PaaS-TA 설치 Shell Scripts
 
@@ -848,7 +889,7 @@ PaaS-TA VM 중 singleton-blobstore, database의 AZs(zone)을 변경하면 조직
 
 이미 설치된 PaaS-TA의 재배포 시, singleton-blobstore, database의 AZs(zone)을 변경하면 조직(ORG), 공간(SPACE), 앱(APP) 정보가 모두 삭제된다.
 
-<b>※ PaaS-TA 설치 시 명령어는 BOSH deploy를 사용한다. (IaaS 환경에 따라 Option이 다름)</b><br>
+**※ PaaS-TA 설치 시 명령어는 BOSH deploy를 사용한다. (IaaS 환경에 따라 Option이 다름)**
 
 PaaS-TA 배포 BOSH 명령어 예시
 
@@ -882,27 +923,49 @@ PaaS-TA 배포 시, 설치 Option을 추가해야 한다. 설치 Option에 대�
 </tr>
 </table>
 
+
+
+### 
+
 #### <div id='1024'/>● deploy-aws.sh
+
 ```
 bosh -e {director_name} -d paasta -n deploy paasta-deployment.yml \	# PaaS-TA Manifest File
 	-o operations/aws.yml \						# AWS 설정
+	-o operations/use-compiled-releases-online.yml \		# PaaS-TA 설치시 공통 컴파일 릴리즈 파일 정보
+	-o operations/use-haproxy.yml \					# HAProxy 적용
+	-o operations/use-haproxy-public-network.yml \			# HAProxy Public Network 적용
+	-o operations/use-compiled-releases-haproxy-online.yml \	# PaaS-TA 설치시 HAProxy 컴파일 릴리즈 파일 정보
+	-o operations/use-postgres.yml \				# Database Type 설정 (3.5버전 이하에서 Migration 시 필수)
+	-o operations/use-compiled-releases-postgres-online.yml \	# PaaS-TA 설치시 Postgres 컴파일 릴리즈 파일 정보
+	-o operations/rename-network-and-deployment.yml \		# Rename Network and Deployment
+	-l aws-vars.yml \						# AWS 환경에 PaaS-TA 설치시 적용하는 변수 설정 파일
+	-l ../../common/common_vars.yml					# PaaS-TA 및 각종 Service 설치시 적용하는 공통 변수 설정 파일
+```
+
+#### <div id='1025'/>● deploy-openstack.sh
+
+```
+bosh -e {director_name} -d paasta -n deploy paasta-deployment.yml \	# PaaS-TA Manifest File
+	-o operations/openstack.yml \					# OpenStack 설정
 	-o operations/use-haproxy.yml \					# HAProxy 적용
 	-o operations/use-haproxy-public-network.yml \			# HAProxy Public Network 적용
 	-o operations/use-postgres.yml \				# Database Type 설정 (3.5버전 이하에서 Migration 시 필수)
 	-o operations/rename-network-and-deployment.yml \		# Rename Network and Deployment
-	-l aws-vars.yml \						# AWS 환경에 PaaS-TA 설치시 적용하는 변수 설정 파일
+	-l openstack-vars.yml \						# OpenStack 환경에 PaaS-TA 설치시 적용하는 변수 설정 파일
 	-l ../../common/common_vars.yml					# PaaS-TA 및 각종 Service 설치시 적용하는 공통 변수 설정 파일
 ```
 
 - Shell script 파일에 실행 권한 부여
 
 ```
-$ chmod +x ${HOME}/workspace/paasta/deployment/paasta-deployment/paasta/*.sh
+$ chmod +x ${HOME}/workspace/paasta-5.5/deployment/paasta-deployment/paasta/*.sh
 ```
 
 
 
 ## <div id='1030'/>3.7.  PaaS-TA 설치
+
 - 서버 환경에 맞추어 Deploy 스크립트 파일의 설정을 수정한다. 
 
 > $ vi ${HOME}/workspace/paasta/deployment/paasta-deployment/paasta/deploy-aws.sh
@@ -910,14 +973,19 @@ $ chmod +x ${HOME}/workspace/paasta/deployment/paasta-deployment/paasta/*.sh
 ```
 bosh -e {director_name} -d paasta -n deploy paasta-deployment.yml \	# PaaS-TA Manifest File
 	-o operations/aws.yml \						# AWS 설정
+  	-o operations/use-compiled-releases-online.yml \		# PaaS-TA 설치시 공통 컴파일 릴리즈 파일 정보
 	-o operations/use-haproxy.yml \					# HAProxy 적용
 	-o operations/use-haproxy-public-network.yml \			# HAProxy Public Network 적용
+ 	 -o operations/use-compiled-releases-haproxy-online.yml \	# PaaS-TA 설치시 HAProxy 컴파일 릴리즈 파일 정보
 	-o operations/use-postgres.yml \				# Database Type 설정 (3.5버전 이하에서 Migration 시 필수)
+	-o operations/use-compiled-releases-postgres-online.yml \	# PaaS-TA 설치시 Postgres 컴파일 릴리즈 파일 정보
 	-o operations/rename-network-and-deployment.yml \		# Rename Network and Deployment
 	-l aws-vars.yml \						# AWS 환경에 PaaS-TA 설치시 적용하는 변수 설정 파일
 	-l ../../common/common_vars.yml					# PaaS-TA 및 각종 Service 설치시 적용하는 공통 변수 설정 파일
 ```
-- PaaS-TA 설치 Shell Script 파일 실행 (BOSH 로그인 필요)
+
+
+- PaaS-TA 설치 시 Shell Script 파일 실행 (BOSH 로그인 필요)
 
 ```
 $ cd ${HOME}/workspace/paasta/deployment/paasta-deployment/paasta
@@ -936,41 +1004,40 @@ Task 134. Done
 
 Deployment 'paasta'
 
-Instance                                                  Process State  AZ  IPs           VM CID               VM Type             Active
-adapter/58948983-7e9b-4761-89bf-6f88a6b9c7e2              running        z1  10.0.1.123    i-076d0dfa6ec1f7d98  small               true
-adapter/ffca4d6c-6ce4-4cf0-8084-39326e68c9eb              running        z2  10.0.41.122   i-0a61fc33453ec64d0  small               true
-api/4b7cff7b-1e44-44eb-840b-732c754b921c                  running        z1  10.0.1.128    i-05767b58d1d4b957c  medium              true
-api/da8ca5bd-e310-44b6-b54a-21865f7132bd                  running        z2  10.0.41.125   i-0ad626de643f5acb4  medium              true
-cc-worker/7babe563-bc7a-434d-85a2-4fd67081cfd7            running        z2  10.0.41.126   i-01b845e22ffc1eb48  medium              true
-cc-worker/a5475b17-af99-44dc-9241-1feb087010f3            running        z1  10.0.1.129    i-0c7e1f4e89871c8d7  medium              true
-credhub/27d026fe-a409-4f4e-8a22-61f121a2aba8              running        z2  10.0.41.134   i-0570c6ce731340f08  small               true
-credhub/c58fa66a-cff6-4532-9abd-d4ba3b31f60e              running        z1  10.0.1.137    i-048b62105a7373a3d  small               true
-database/d4449c40-25e4-4422-ac33-3584fe70f7c3             running        z1  10.0.1.124    i-0408dcd38fb9e7346  medium              true
-diego-api/3211715c-c2e3-4356-a9b0-30b5da9fb3b4            running        z2  10.0.41.123   i-09ab4c691aeb20d6a  small               true
-diego-api/77e870de-e4fb-4737-82c5-5504e63df0a4            running        z1  10.0.1.125    i-097475fa6e44911ab  small               true
-diego-cell/bd7cde8e-5424-4ded-8e6e-5f0513af7641           running        z2  10.0.41.132   i-0de8bdd034aaca50c  large-highmem-32GB  true
-diego-cell/c14318c5-cd0f-4c9f-acd4-8ab8908c169e           running        z1  10.0.1.135    i-00feefaa1eb37afb0  large-highmem-32GB  true
-doppler/10344617-d442-4e22-9af9-8cc35d8bf314              running        z2  10.0.41.130   i-0a831bffcf5d6c172  medium              true
-doppler/45bbbd94-3d5f-44df-9f01-11f8cdeb48ea              running        z1  10.0.1.133    i-07ad774745c4c6ab7  medium              true
-doppler/61fd7584-11be-442f-9c8a-2df1424121d8              running        z1  10.0.1.134    i-0ee286945a1939220  medium              true
-doppler/89adaeb7-16ac-431e-9ba3-754e74308af7              running        z2  10.0.41.131   i-0f47381253fddd716  medium              true
-haproxy/d645b06f-36eb-40d7-a828-8115794ca035              running        z7  10.0.0.121    i-0d3b17f8414573ebe  minimal             true
-                                                                             54.180.53.80
-log-api/c6d866b5-8350-427b-b873-cb7fbd5da943              running        z2  10.0.41.133   i-0c7de5da28f58f302  small               true
-log-api/d8376424-360a-4f1b-9488-503f49fd8550              running        z1  10.0.1.136    i-07d78c5dc6d854f8e  small               true
-nats/154e1623-9dfe-425f-8bea-90d9b444e1d7                 running        z1  10.0.1.122    i-0d2e6c416bd23047c  small               true
-nats/9d8f7df6-c22c-4f8e-ae28-83dbe9fa0de1                 running        z2  10.0.41.121   i-0c2169e16e77af947  small               true
-router/202e4d16-8044-4b47-8e7b-b6e827502b04               running        z1  10.0.1.131    i-0e08bd4fa4c54739c  small               true
-router/bd268bbd-1619-441c-a401-72d3cd9e18da               running        z2  10.0.41.128   i-0d6ca756c81fec386  small               true
-scheduler/33b5f3e2-83b4-4998-9e81-71cf60aaf82d            running        z1  10.0.1.130    i-0bbf05c84fc31e235  medium              true
-scheduler/a0dbe4d2-6f81-4df6-992b-111e10014609            running        z2  10.0.41.127   i-0a8b481db3cd80036  medium              true
-singleton-blobstore/d0aa4103-50f9-474d-b309-c0a0c402ad5c  running        z1  10.0.1.127    i-028ef29ff1c5c18ca  medium              true
-tcp-router/7998c2be-d535-49ca-bba6-5477c6018d78           running        z1  10.0.1.132    i-027e51e7407ada6cd  small               true
-tcp-router/e55653ea-cc33-4ead-b1d6-4b5f33fdb78b           running        z2  10.0.41.129   i-00fe2dda763b39cc9  small               true
-uaa/6ea05760-f851-413a-b03d-cfe83885d935                  running        z2  10.0.41.124   i-0577911096858aa61  medium              true
-uaa/d49ee04f-6f1f-4fbc-97ac-76419511b2e7                  running        z1  10.0.1.126    i-07938b838ca591170  medium              true
+Instance                                                  Process State  AZ  IPs           VM CID               VM Type             Active  Stemcell  
+api/918da8e3-36c9-4144-b457-f48792041ece                  running        z1  10.0.31.206   i-093920c2caf43fe63  small               true    bosh-aws-xen-hvm-ubuntu-xenial-go_agent/621.78  
+api/c01d1a66-56c0-4dfb-87cd-b4e7323012ec                  running        z2  10.0.32.204   i-0bd6841ee37df618b  small               true    bosh-aws-xen-hvm-ubuntu-xenial-go_agent/621.78  
+cc-worker/30aa88de-8b5c-4e3a-a0ae-b2933f3af492            running        z1  10.0.31.207   i-02a7032164038f09b  minimal             true    bosh-aws-xen-hvm-ubuntu-xenial-go_agent/621.78  
+cc-worker/31a465bd-64af-49c6-a867-3439d98b2014            running        z2  10.0.32.205   i-0d8345c5348a42fdd  minimal             true    bosh-aws-xen-hvm-ubuntu-xenial-go_agent/621.78  
+credhub/0d2da1ef-dbdc-47d8-9514-69c1e0e83f82              running        z2  10.0.32.213   i-0f21b57a610868775  minimal             true    bosh-aws-xen-hvm-ubuntu-xenial-go_agent/621.78  
+credhub/a43132d5-ab04-4fe3-8b75-b8194f28678b              running        z1  10.0.31.216   i-0ea2f77eb95a32f21  minimal             true    bosh-aws-xen-hvm-ubuntu-xenial-go_agent/621.78  
+database/07b7ba09-7ace-4428-b4d4-a80163aaf82c             running        z1  10.0.31.202   i-0c532e0a7a53015c2  small               true    bosh-aws-xen-hvm-ubuntu-xenial-go_agent/621.78  
+diego-api/a05bbf7b-f513-48f0-8444-c90cd4b63ae2            running        z2  10.0.32.202   i-0b982d70a8debde41  small               true    bosh-aws-xen-hvm-ubuntu-xenial-go_agent/621.78  
+diego-api/ba388ba5-e6df-4d5e-9c6e-3af6b1fdc319            running        z1  10.0.31.203   i-0a5dfee4dc8ba1b68  small               true    bosh-aws-xen-hvm-ubuntu-xenial-go_agent/621.78  
+diego-cell/15378660-b457-4b6e-a9cb-5729b091c675           running        z1  10.0.31.213   i-095a00b9cb171c444  small-highmem-16GB  true    bosh-aws-xen-hvm-ubuntu-xenial-go_agent/621.78  
+diego-cell/7d7ed58e-c82e-429e-a6ce-18e4d70cca29           running        z2  10.0.32.211   i-02d836e28133368a1  small-highmem-16GB  true    bosh-aws-xen-hvm-ubuntu-xenial-go_agent/621.78  
+diego-cell/eb3b22f3-2905-4ef5-81d0-1ba6974b7316           running        z1  10.0.31.214   i-0a26ae4105e8ef6f4  small-highmem-16GB  true    bosh-aws-xen-hvm-ubuntu-xenial-go_agent/621.78  
+doppler/75577265-7f33-45c0-b4de-b24a881462bf              running        z1  10.0.31.211   i-01b19951e2ed96a55  minimal             true    bosh-aws-xen-hvm-ubuntu-xenial-go_agent/621.78  
+doppler/82956ad8-d103-4223-b426-cebc793c45ee              running        z2  10.0.32.209   i-01e7d7cf7d117bf96  minimal             true    bosh-aws-xen-hvm-ubuntu-xenial-go_agent/621.78  
+doppler/8d1fa381-c9d4-4b51-b195-c25d5d7a1a55              running        z1  10.0.31.212   i-048de3c6ad38a0184  minimal             true    bosh-aws-xen-hvm-ubuntu-xenial-go_agent/621.78  
+doppler/ece4a895-03b9-47a1-9b48-9eaabaf258ef              running        z2  10.0.32.210   i-09a3cf0e5ac171012  minimal             true    bosh-aws-xen-hvm-ubuntu-xenial-go_agent/621.78  
+haproxy/abb270ef-01e8-4d4c-941c-2187ca2cc8ad              running        z7  10.0.30.201   i-08af20c6712d54dd6  minimal             true    bosh-aws-xen-hvm-ubuntu-xenial-go_agent/621.78  
+                                                                             54.180.53.80                                                    
+log-api/7b45f808-22c4-45ff-a81c-74a20bac852a              running        z1  10.0.31.215   i-0b11b17bdbc23553e  minimal             true    bosh-aws-xen-hvm-ubuntu-xenial-go_agent/621.78  
+log-api/dac3304c-f0a2-4c20-999d-db08ee39c7a7              running        z2  10.0.32.212   i-0b8426cba9bc7db7a  minimal             true    bosh-aws-xen-hvm-ubuntu-xenial-go_agent/621.78  
+nats/35b3ab92-453f-4e9f-adf8-04477f41ee80                 running        z2  10.0.32.201   i-05a787d09b5a2df0a  minimal             true    bosh-aws-xen-hvm-ubuntu-xenial-go_agent/621.78  
+nats/d08e1c80-bdf4-40c8-9134-16fb4a34ee11                 running        z1  10.0.31.201   i-04eddc4dfa9f9793e  minimal             true    bosh-aws-xen-hvm-ubuntu-xenial-go_agent/621.78  
+router/0c77c858-f0c7-400c-868d-e96cd2dff4a9               running        z1  10.0.31.209   i-075290e50e0ef541d  minimal             true    bosh-aws-xen-hvm-ubuntu-xenial-go_agent/621.78  
+router/5458b789-8ed0-4ba8-8093-6155ba1fa9b1               running        z2  10.0.32.207   i-02bc3f58d3c0306c9  minimal             true    bosh-aws-xen-hvm-ubuntu-xenial-go_agent/621.78  
+scheduler/348e2a4e-2da7-47a3-92f8-8bf3b00e9bf0            running        z1  10.0.31.208   i-0a0b2bd3e712f0b26  minimal             true    bosh-aws-xen-hvm-ubuntu-xenial-go_agent/621.78  
+scheduler/f56a196b-1f76-4ecc-b721-9b7fd04b8a94            running        z2  10.0.32.206   i-0c0917f591ce872f5  minimal             true    bosh-aws-xen-hvm-ubuntu-xenial-go_agent/621.78  
+singleton-blobstore/af6b0c3a-27d0-46ef-b432-0b5c8e81519d  running        z1  10.0.31.205   i-0c519ef6d50d74d1e  small               true    bosh-aws-xen-hvm-ubuntu-xenial-go_agent/621.78  
+tcp-router/891c0b3e-4de6-44a5-a98b-96dd0490cac3           running        z2  10.0.32.208   i-084e044926e602669  minimal             true    bosh-aws-xen-hvm-ubuntu-xenial-go_agent/621.78  
+tcp-router/ff3e0a98-092c-4e4c-a20c-0c0abf094a44           running        z1  10.0.31.210   i-076ef16b4d4114f83  minimal             true    bosh-aws-xen-hvm-ubuntu-xenial-go_agent/621.78  
+uaa/3e0f17c1-cd11-4ce6-b3b8-bf1b0f45aa9f                  running        z1  10.0.31.204   i-0454401aa5fcf61fb  minimal             true    bosh-aws-xen-hvm-ubuntu-xenial-go_agent/621.78  
+uaa/f8f6b0e8-2bbf-4be5-8f69-ac8dc7a3d943                  running        z2  10.0.32.203   i-0abd8df56336a799e  minimal             true    bosh-aws-xen-hvm-ubuntu-xenial-go_agent/621.78  
 
-31 vms
+30 vms
 
 Succeeded
 ```
@@ -978,19 +1045,29 @@ Succeeded
 
 
 
-
 ## <div id='1032'/>3.8.  PaaS-TA 로그인 
 
-CF CLI를 설치하고 PaaS-TA에 로그인한다.
+CF CLI를 설치하고 PaaS-TA에 로그인한다.  
+CF CLI는 v6과 v7중 선택해서 설치를 한다.  
 CF API는 PaaS-TA 배포 시 지정했던 System Domain 명을 사용한다.
 
-- CF CLI 설치
+- CF CLI v6 설치
 
 ```
 $ wget -q -O - https://packages.cloudfoundry.org/debian/cli.cloudfoundry.org.key | sudo apt-key add -
 $ echo "deb https://packages.cloudfoundry.org/debian stable main" | sudo tee /etc/apt/sources.list.d/cloudfoundry-cli.list
 $ sudo apt update
 $ sudo apt install cf-cli -y
+$ cf --version
+```
+
+- CF CLI v7 설치 (PaaS-TA 5.1 이상)
+
+```
+$ wget -q -O - https://packages.cloudfoundry.org/debian/cli.cloudfoundry.org.key | sudo apt-key add -
+$ echo "deb https://packages.cloudfoundry.org/debian stable main" | sudo tee /etc/apt/sources.list.d/cloudfoundry-cli.list
+$ sudo apt update
+$ sudo apt install cf7-cli -y
 $ cf --version
 ```
 
@@ -1004,7 +1081,7 @@ Setting api endpoint to api.54.180.53.80.xip.io...
 OK
 
 api endpoint:   https://api.54.180.53.80.xip.io
-api version:    2.138.0
+api version:    3.87.0
 ```
 
 - PaaS-TA 로그인
@@ -1024,9 +1101,10 @@ OK
 Select an org (or press enter to skip):
 ```
 
-[PaaSTa_BOSH_Use_Guide_Image1]:./images/bosh1.png
-[PaaSTa_BOSH_Use_Guide_Image2]:./images/bosh2.png
-[PaaSTa_FLAVOR_Image]:./images/aws-vmtype.PNG
-[PaaSTa_UAA_LOGIN_Image]:./images/uaa-login.png
-[PaaSTa_UAA_LOGIN_Image2]:./images/uaa-login-2.png
-[PaaSTa_VALUE_Image]:./images/paasta-value.png
+[PaaSTa_BOSH_Use_Guide_Image1]:https://github.com/PaaS-TA/Guide-5.0-Ravioli/blob/master/install-guide/paasta/images/bosh1.png?raw=true
+[PaaSTa_BOSH_Use_Guide_Image2]:./images/bosh2-1.png
+[PaaSTa_FLAVOR_Image]:https://github.com/PaaS-TA/Guide-5.0-Ravioli/blob/master/install-guide/paasta/images/aws-vmtype.PNG?raw=true
+[PaaSTa_FLAVOR_Image_2]:https://github.com/PaaS-TA/Guide/blob/monitoring-5.1/install-guide/paasta-monitoring/images/flavor_openstack.png?raw=true
+[PaaSTa_UAA_LOGIN_Image]:https://github.com/PaaS-TA/Guide-5.0-Ravioli/blob/master/install-guide/paasta/images/uaa-login.png?raw=true
+[PaaSTa_UAA_LOGIN_Image2]:https://raw.githubusercontent.com/PaaS-TA/Guide-5.0-Ravioli/master/install-guide/paasta/images/uaa-login-2.png
+[PaaSTa_VALUE_Image]:https://github.com/PaaS-TA/Guide-5.0-Ravioli/blob/master/install-guide/paasta/images/paasta-value.png?raw=true
