@@ -83,10 +83,10 @@ PaaS-TA 3.1 버전까지는 PaaS-TA Container, Controller를 각각의 deploymen
 - PaaS-TA를 설치하기 위한 deployment가 존재하지 않는다면 다운로드 받는다
 
 ```
-$ mkdir -p ${HOME}/workspace/paasta/deployment
-$ cd ${HOME}/workspace/paasta/deployment
+$ mkdir -p ${HOME}/workspace/paasta-5.1.0/deployment
+$ cd ${HOME}/workspace/paasta-5.1.0/deployment
 $ git clone https://github.com/PaaS-TA/common.git
-$ cd ${HOME}/workspace/paasta/deployment
+$ cd ${HOME}/workspace/paasta-5.1.0/deployment
 $ git clone https://github.com/PaaS-TA/paasta-deployment.git -b v5.1.0
 ```
 
@@ -113,7 +113,7 @@ $ bosh -e {director_name} upload-stemcell https://s3.amazonaws.com/bosh-core-ste
 ## <div id='1010'/>3.4. Cloud Config 설정
 
 PaaS-TA를 설치하기 위한 IaaS 관련 Network, Storage, VM 관련 설정을 Cloud Config로 정의한다.  
-PaaS-TA 설치 파일을 내려받으면 ${HOME}/workspace/paasta/deployment/paasta-deployment/cloud-config 디렉터리 이하에 IaaS별 Cloud Config 예제를 확인할 수 있으며, 예제를 참고하여 cloud-config.yml을 IaaS에 맞게 수정한다.  
+PaaS-TA 설치 파일을 내려받으면 ${HOME}/workspace/paasta-5.1.0/deployment/paasta-deployment/cloud-config 디렉터리 이하에 IaaS별 Cloud Config 예제를 확인할 수 있으며, 예제를 참고하여 cloud-config.yml을 IaaS에 맞게 수정한다.  
 PaaS-TA 배포 전에 Cloud Config를 BOSH에 적용해야 한다. 
 
 - AWS을 기준으로 한 cloud-config.yml 예제
@@ -435,7 +435,7 @@ vm_types:
 - Cloud Config 업데이트
 
 ```
-$ bosh –e {director_name} update-cloud-config ${HOME}/workspace/paasta/deployment/paasta-deployment/cloud-config/{iaas}-cloud-config.yml
+$ bosh –e {director_name} update-cloud-config ${HOME}/workspace/paasta-5.1.0/deployment/paasta-deployment/cloud-config/{iaas}-cloud-config.yml
 ```
 
 - Cloud Config 확인
@@ -483,7 +483,7 @@ Networks는 AZ 별 Subnet Network, DNS, Security Groups, Network ID를 정의한
   - Runtime Config 업데이트  
 
   ```  
-  $ cd ${HOME}/workspace/paasta/deployment/paasta-deployment/bosh
+  $ cd ${HOME}/workspace/paasta-5.1.0/deployment/paasta-deployment/bosh
   $ bosh -e {director_name} update-runtime-config -n runtime-configs/dns.yml
   ```
 
@@ -499,7 +499,7 @@ Networks는 AZ 별 Subnet Network, DNS, Security Groups, Network ID를 정의한
   - Runtime Config 업데이트  
 
   ```  
-  $ cd ${HOME}/workspace/paasta/deployment/paasta-deployment/bosh
+  $ cd ${HOME}/workspace/paasta-5.1.0/deployment/paasta-deployment/bosh
   $ bosh -e {director_name} update-runtime-config -n --name=os-conf runtime-configs/os-conf.yml
   ```
 
@@ -557,7 +557,7 @@ PaaS-TA를 설치할 때는 system_domain, paasta_admin_username, paasta_admin_p
 bosh_ip: "10.0.1.6"                        		# BOSH IP
 bosh_url: "http://10.0.1.6"				# BOSH URL (e.g. "https://00.000.0.0")
 bosh_client_admin_id: "admin"				# BOSH Client Admin ID
-bosh_client_admin_secret: "ert7na4jpewsczt"		# BOSH Client Admin Secret('echo $(bosh int ~/workspace/paasta/deployment/paasta-deployment/bosh/{iaas}/creds.yml —path /admin_password))' 명령어를 통해 확인 가능)
+bosh_client_admin_secret: "ert7na4jpewsczt"		# BOSH Client Admin Secret('echo $(bosh int ~/workspace/paasta-5.1.0/deployment/paasta-deployment/bosh/{iaas}/creds.yml —path /admin_password))' 명령어를 통해 확인 가능)
 bosh_director_port: 25555				# BOSH Director Port
 bosh_oauth_port: 8443					# BOSH OAuth Port
 
@@ -959,7 +959,7 @@ bosh -e {director_name} -d paasta -n deploy paasta-deployment.yml \	# PaaS-TA Ma
 - Shell script 파일에 실행 권한 부여
 
 ```
-$ chmod +x ${HOME}/workspace/paasta-5.5/deployment/paasta-deployment/paasta/*.sh
+$ chmod +x ${HOME}/workspace/paasta-5.1.0/deployment/paasta-deployment/paasta/*.sh
 ```
 
 
@@ -968,7 +968,7 @@ $ chmod +x ${HOME}/workspace/paasta-5.5/deployment/paasta-deployment/paasta/*.sh
 
 - 서버 환경에 맞추어 Deploy 스크립트 파일의 설정을 수정한다. 
 
-> $ vi ${HOME}/workspace/paasta/deployment/paasta-deployment/paasta/deploy-aws.sh
+> $ vi ${HOME}/workspace/paasta-5.1.0/deployment/paasta-deployment/paasta/deploy-aws.sh
 
 ```
 bosh -e {director_name} -d paasta -n deploy paasta-deployment.yml \	# PaaS-TA Manifest File
@@ -988,7 +988,7 @@ bosh -e {director_name} -d paasta -n deploy paasta-deployment.yml \	# PaaS-TA Ma
 - PaaS-TA 설치 시 Shell Script 파일 실행 (BOSH 로그인 필요)
 
 ```
-$ cd ${HOME}/workspace/paasta/deployment/paasta-deployment/paasta
+$ cd ${HOME}/workspace/paasta-5.1.0/deployment/paasta-deployment/paasta
 $ ./deploy-{IaaS}.sh
 ```
 
