@@ -36,7 +36,7 @@
 
 ## <div id='102'/>● 목적
 
-본 문서는 Inception 환경(설치환경)에서 BOSH2(이하 BOSH) 설치 후, BOSH를 기반으로 Monitoring을 적용하지 않은 PaaS-TA와 통합 Monitoring을 적용한 PaaS-TA를 설치하기 위한 가이드를 제공하는 데 그 목적이 있다.
+본 문서는 Inception 환경(설치환경)에서 BOSH2(이하 BOSH) 설치 후, PaaS-TA를 설치하기 위한 가이드를 제공하는 데 그 목적이 있다.
 
 
 ## <div id='103'/>● 범위
