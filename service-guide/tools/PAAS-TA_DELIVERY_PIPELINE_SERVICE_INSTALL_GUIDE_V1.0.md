@@ -497,7 +497,7 @@ bosh -e ${BOSH_ENVIRONMENT} -n -d pipeline-service deploy --no-redact pipeline-s
     -o operations/${CURRENT_IAAS}-network.yml \
     -l ${COMMON_VARS_PATH} \
     -l vars.yml \
-    -v release_dir="/home/ubuntu/workspace/paasta-5.5/release"  
+    -v release_dir="/home/ubuntu/workspace/paasta-5.5.0/release"  
 ```  
 
 - 서비스를 설치한다.  
