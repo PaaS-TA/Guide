@@ -200,8 +200,9 @@ cubrid_ssh_user: "vcap"                  # cubrid가 설치된 서버 SSH 접속
 
 ### <div id="2.5"/> 2.5. 서비스 설치
 
-- 서버 환경에 맞추어 Deploy 스크립트 파일의 VARIABLES 설정을 수정하고 Option file 및 변수를 추가한다.  
+- 서버 환경에 맞추어 Deploy 스크립트 파일의 VARIABLES 설정을 수정하고, Option file을 추가할지 선택한다.  
      (선택) -o operations/use-compiled-releases.yml (ubuntu-xenial/621.94로 컴파일 된 릴리즈 사용)  
+
 
 > $ vi ~/workspace/paasta-5.5.0/deployment/service-deployment/cubrid/deploy.sh
 
