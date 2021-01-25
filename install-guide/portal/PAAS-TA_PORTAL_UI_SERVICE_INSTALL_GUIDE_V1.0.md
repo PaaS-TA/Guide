@@ -225,18 +225,21 @@ portal_default_api_desc: "PaaS-TA 5.0 install infra"                     # ETC :
 
 ### <div id="2.5"/> 2.5. 서비스 설치
 
-- 서버 환경에 맞추어 Deploy 스크립트 파일의 VARIABLES 설정을 수정한다. 
+- 서버 환경에 맞추어 Deploy 스크립트 파일의 VARIABLES 설정을 수정하고, Option file을 추가할지 선택한다.  
+     (선택) -o operations/use-compiled-releases.yml (ubuntu-xenial/621.94로 컴파일 된 릴리즈 사용) 
 
 > $ vi ~/workspace/paasta-5.5.0/deployment/portal-deployment/portal-ui/deploy.sh
 ```
 #!/bin/bash
 
 # VARIABLES
-COMMON_VARS_PATH="<COMMON_VARS_FILE_PATH>"    # common_vars.yml File Path (e.g. ../../common/common_vars.yml)
+BOSH_NAME="<BOSH_NAME>"                                         # bosh name (e.g. micro-bosh)
+IAAS="<IAAS_NAME>"                                              # IaaS (e.g. aws/azure/gcp/openstack/vsphere)
+COMMON_VARS_PATH="<COMMON_VARS_FILE_PATH>"                      # common_vars.yml File Path (e.g. /home/ubuntu/workspace/paasta-5.0/common/common_vars.yml)
 
 # DEPLOY
-bosh -e ${BOSH_ENVIRONMENT} -n -d portal-ui deploy portal-ui.yml \
-    -o operations/${CURRENT_IAAS}-network.yml \
+bosh -e ${BOSH_NAME} -n -d portal-ui deploy portal-ui.yml \
+    -o operations/${IAAS}-network.yml \
     -l ${COMMON_VARS_PATH} \
     -l vars.yml
 
@@ -264,8 +267,8 @@ paasta-portal-ui-release-2.4.0.tgz
 ```
   
 - 서버 환경에 맞추어 Deploy 스크립트 파일의 VARIABLES 설정을 수정하고 Option file 및 변수를 추가한다.  
-     (추가) -o operations/use-offline-releases.yml  
-     (추가) -v release_dir="<RELEASE_DIRECTORY>"
+     (추가) -o operations/use-offline-releases.yml (미리 다운받은 offline 릴리즈 사용)  
+     (추가) -v release_dir="<RELEASE_DIRECTORY>"  
      
 > $ vi ~/workspace/paasta-5.5.0/deployment/portal-deployment/portal-ui/deploy.sh
   
@@ -273,15 +276,16 @@ paasta-portal-ui-release-2.4.0.tgz
 #!/bin/bash
 
 # VARIABLES
-COMMON_VARS_PATH="<COMMON_VARS_FILE_PATH>"    # common_vars.yml File Path (e.g. ../../common/common_vars.yml)
+BOSH_NAME="<BOSH_NAME>"                                         # bosh name (e.g. micro-bosh)
+IAAS="<IAAS_NAME>"                                              # IaaS (e.g. aws/azure/gcp/openstack/vsphere)
+COMMON_VARS_PATH="<COMMON_VARS_FILE_PATH>"                      # common_vars.yml File Path (e.g. /home/ubuntu/workspace/paasta-5.0/common/common_vars.yml)
 
 # DEPLOY
-bosh -e ${BOSH_ENVIRONMENT} -n -d portal-ui deploy portal-ui.yml \
-    -o operations/${CURRENT_IAAS}-network.yml \
-    -o operations/use-offline-releases.yml \
+bosh -e ${BOSH_NAME} -n -d portal-ui deploy portal-ui.yml \
+    -o operations/${IAAS}-network.yml \
     -l ${COMMON_VARS_PATH} \
     -l vars.yml \
-    -v release_dir="/home/ubuntu/workspace/paasta-5.5.0/release/"
+    -v release_dir="/home/ubuntu/workspace/paasta-5.5.0/release"  
 
 ```  
 
