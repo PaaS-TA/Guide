@@ -344,7 +344,7 @@ bosh -e ${BOSH_ENVIRONMENT} -n -d pinpoint deploy --no-redact pinpoint.yml \
     -l ${COMMON_VARS_PATH} \
     -l vars.yml \
     -l operations/pem.yml \ 
-    -v release_dir="/home/ubuntu/workspace/paasta-5.5/release"  
+    -v release_dir="/home/ubuntu/workspace/paasta-5.5.0/release"  
 ```
 
 - 서비스를 설치한다.  
