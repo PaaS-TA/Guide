@@ -331,7 +331,7 @@ BOSH_ENVIRONMENT= "${BOSH_ENVIRONMENT}"		# bosh director alias name (PaaS-TA에�
 bosh -e ${BOSH_ENVIRONMENT} -n -d redis deploy --no-redact redis.yml \
     -l ${COMMON_VARS_PATH} \
     -l vars.yml \
-    -v release_dir="/home/ubuntu/workspace/paasta-5.5/release"  
+    -v release_dir="/home/ubuntu/workspace/paasta-5.5.0/release"  
 ```  
 
 - 서비스를 설치한다.  
