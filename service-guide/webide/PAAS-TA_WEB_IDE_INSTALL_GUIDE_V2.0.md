@@ -22,6 +22,11 @@
   4.2. [WEB-IDE Workspace 화면](#4.2)  
   4.3. [WEB-IDE Teminal에서의 CF CLI 실행](#4.3)  
 
+5. [WEB IDE IP 증설](#5)  
+  5.1. [서비스 확인](#5.1)   
+  5.2. [Deployment 파일 수정](#5.2)   
+  5.3. [서비스 재 설치](#5.3)    
+  5.4. [서비스 설치 확인](#5.4)    
 
 
 ## <div id="1"/> 1. 문서 개요
@@ -58,11 +63,11 @@ WEB-IDE 는 0개 부터 N개 까지 VM INSTANCE 를 생성, 삭제 할 수 있�
 
 ### <div id="2.1"/> 2.1. Prerequisite 
 
-본 설치 가이드는 Linux 환경에서 설치하는 것을 기준으로 하였다. 서비스 설치를 위해서는 BOSH 2.0과 PaaS-TA 5.0, PaaS-TA 포털이 설치되어 있어야 한다.
+본 설치 가이드는 Linux 환경에서 설치하는 것을 기준으로 하였다. 서비스 설치를 위해서는 BOSH 2.0과 PaaS-TA 5.0 이상이 설치되있어야 한다.
 
 ### <div id="2.2"/> 2.2. Stemcell 확인  
 
-Stemcell 목록을 확인하여 서비스 설치에 필요한 Stemcell이 업로드 되어 있는 것을 확인한다.  (PaaS-TA 5.0 과 동일 stemcell 사용)
+Stemcell 목록을 확인하여 서비스 설치에 필요한 Stemcell이 업로드 되어 있는 것을 확인한다.  (PaaS-TA 5.5 과 동일 stemcell 사용)
 
 > $ bosh -e micro-bosh stemcells  
 
@@ -70,7 +75,7 @@ Stemcell 목록을 확인하여 서비스 설치에 필요한 Stemcell이 업로
 Using environment '10.0.1.6' as client 'admin'
 
 Name                                     Version  OS             CPI  CID  
-bosh-aws-xen-hvm-ubuntu-xenial-go_agent  315.64*  ubuntu-xenial  -    ami-0297ff649e8eea21b  
+bosh-aws-xen-hvm-ubuntu-xenial-go_agent  621.94*  ubuntu-xenial  -    ami-0297ff649e8eea21b  
 
 (*) Currently deployed
 
@@ -83,15 +88,15 @@ Succeeded
 
 서비스 설치에 필요한 Deployment를 Git Repository에서 받아 서비스 설치 작업 경로로 위치시킨다.  
 
-- Service Deployment Git Repository URL : https://github.com/PaaS-TA/service-deployment/tree/v5.0.4
+- Service Deployment Git Repository URL : https://github.com/PaaS-TA/service-deployment/tree/v#.#.#
 
 ```
 # Deployment 다운로드 파일 위치 경로 생성 및 설치 경로 이동
-$ mkdir -p ~/workspace/paasta-5.0/deployment
-$ cd ~/workspace/paasta-5.0/deployment
+$ mkdir -p ~/workspace/paasta-5.5/deployment
+$ cd ~/workspace/paasta-5.5/deployment
 
 # Deployment 파일 다운로드
-$ git clone https://github.com/PaaS-TA/service-deployment.git -b v5.0.4
+$ git clone https://github.com/PaaS-TA/service-deployment.git -b v#.#.#
 ```
 
 ### <div id="2.4"/> 2.4. Deployment 파일 수정
@@ -163,14 +168,14 @@ Succeeded
 
 - Deployment YAML에서 사용하는 변수 파일을 서버 환경에 맞게 수정한다.
 
-> $ vi ~/workspace/paasta-5.0/deployment/service-deployment/web-ide/vars.yml
+> $ vi ~/workspace/paasta-5.5/deployment/service-deployment/web-ide/vars.yml
 
 ```
 deployment_name: "web-ide"                                                # 서비스 배포 명
 
 # STEMCELL
 stemcell_os: "ubuntu-xenial"                                              # stemcell os
-stemcell_version: "315.64"                                                # stemcell version
+stemcell_version: "621.94"                                                # stemcell version
 stemcell_alias: "default"                                                 # stemcell alias
 
 # NETWORK
@@ -208,10 +213,6 @@ serviceDefinition_bullet_desc: "Web IDE Service Using a OnDemand Server"
 serviceDefinition_org_limitation: "-1"                                    # serviceDefinition_org_limitation : 조직별 서비스 제한
 serviceDefinition_space_limitation: "-1"                                  # serviceDefinition_space_limitation : 공간별 서비스 제한
 
-# RELEASE
-releases_name: "paas-ta-webide-release"                                   # 서비스 릴리즈 이름(필수) bosh releases로 확인 가능
-releases_url: "http://45.248.73.44/index.php/s/WTSjj7szKy38b6X/download"
-
 # CF
 cloudfoundry_sslSkipValidation: "true"
 ```
@@ -220,7 +221,7 @@ cloudfoundry_sslSkipValidation: "true"
 
 - 서버 환경에 맞추어 Deploy 스크립트 파일의 VARIABLES 설정을 수정한다. 
 
-> $ vi ~/workspace/paasta-5.0/deployment/service-deployment/web-ide/deploy.sh
+> $ vi ~/workspace/paasta-5.5/deployment/service-deployment/web-ide/deploy.sh
 
 ```
 #!/bin/bash
@@ -228,7 +229,7 @@ cloudfoundry_sslSkipValidation: "true"
 # VARIABLES
 BOSH_NAME="micro-bosh"                           # bosh name (e.g. micro-bosh)
 IAAS="openstack"                                 # IaaS (e.g. aws/azure/gcp/openstack/vsphere)
-COMMON_VARS_PATH="<COMMON_VARS_FILE_PATH>"       # common_vars.yml File Path (e.g. /home/ubuntu/paasta-5.0/common/common_vars.yml)
+COMMON_VARS_PATH="<COMMON_VARS_FILE_PATH>"       # common_vars.yml File Path (e.g. /home/ubuntu/paasta-5.5/common/common_vars.yml)
 
 # DEPLOY
 bosh -e ${BOSH_NAME} -n -d web-ide deploy --no-redact web-ide.yml \
@@ -239,7 +240,7 @@ bosh -e ${BOSH_NAME} -n -d web-ide deploy --no-redact web-ide.yml \
 
 - 서비스를 설치한다.  
 ```
-$ cd ~/workspace/paasta-5.0/deployment/service-deployment/web-ide
+$ cd ~/workspace/paasta-5.5/deployment/service-deployment/web-ide
 $ sh ./deploy.sh  
 ```  
 
@@ -247,14 +248,14 @@ $ sh ./deploy.sh
 
 - 서비스 설치에 필요한 릴리즈 파일을 다운로드 받아 Local machine의 서비스 설치 작업 경로로 위치시킨다.  
   
-  - 설치 릴리즈 파일 다운로드 : [paasta-webide-release-2.0.tgz](http://45.248.73.44/index.php/s/WTSjj7szKy38b6X/download)
+  - 설치 릴리즈 파일 다운로드 : [paasta-webide-release-2.0.tgz](http://45.248.73.44/index.php/s/NCCxrnHDcYqP776/download)
 
 ```
 # 릴리즈 다운로드 파일 위치 경로 생성
-$ mkdir -p ~/workspace/paasta-5.0/release/service
+$ mkdir -p ~/workspace/paasta-5.5/release/service
 
 # 릴리즈 파일 다운로드 및 파일 경로 확인
-$ ls ~/workspace/paasta-5.0/release/service
+$ ls ~/workspace/paasta-5.5/release/service
 paasta-webide-release-2.0.tgz
 ```
   
@@ -262,7 +263,7 @@ paasta-webide-release-2.0.tgz
      (추가) -o operations/use-compiled-releases.yml  
      (추가) -v inception_os_user_name="<HOME_USER_NAME>"  
      
-> $ vi ~/workspace/paasta-5.0/deployment/service-deployment/web-ide/deploy.sh
+> $ vi ~/workspace/paasta-5.5/deployment/service-deployment/web-ide/deploy.sh
 
 ```
 #!/bin/bash
@@ -270,7 +271,7 @@ paasta-webide-release-2.0.tgz
 # VARIABLES
 BOSH_NAME="micro-bosh"                           # bosh name (e.g. micro-bosh)
 IAAS="openstack"                                 # IaaS (e.g. aws/azure/gcp/openstack/vsphere)
-COMMON_VARS_PATH="<COMMON_VARS_FILE_PATH>"       # common_vars.yml File Path (e.g. /home/ubuntu/paasta-5.0/common/common_vars.yml)
+COMMON_VARS_PATH="<COMMON_VARS_FILE_PATH>"       # common_vars.yml File Path (e.g. /home/ubuntu/paasta-5.5/common/common_vars.yml)
 
 # DEPLOY
 bosh -e ${BOSH_NAME} -n -d web-ide deploy --no-redact web-ide.yml \
@@ -283,7 +284,7 @@ bosh -e ${BOSH_NAME} -n -d web-ide deploy --no-redact web-ide.yml \
 
 - 서비스를 설치한다.  
 ```
-$ cd ~/workspace/paasta-5.0/deployment/service-deployment/web-ide
+$ cd ~/workspace/paasta-5.5/deployment/service-deployment/web-ide
 $ sh ./deploy.sh  
 ```  
 
@@ -308,6 +309,8 @@ webide-broker/a641df99-d36a-49ee-8329-018fe10fa23d  running        z3  10.30.56.
 
 Succeeded
 ```
+
+
 
 ## <div id='3'/> 3. WEB-IDE의 PaaS-TA 포털사이트 연동
 
@@ -344,8 +347,8 @@ webide-service-broker         http://10.30.56.56:8080
 $ cf service-access
 Getting service access as admin...
 broker: webide-service-broker
-   service   plan            access   orgs
-   webide    webide-shared   none
+   offering   plan           access   orgs
+   webide     dedicated-vm   none      
 ```
 <br>
 
@@ -364,8 +367,8 @@ $ cf service-access
 Getting service access as admin...
 
 broker: webide-service-broker
-   service   plan            access   orgs
-   webide    webide-shared   all
+   offering   plan           access   orgs
+   webide     dedicated-vm   all      
 ```
 <br>
 
@@ -377,8 +380,8 @@ $ cf marketplace
 Getting services from marketplace in org system / space dev as admin...
 OK
 
-service                  plans                                   description                                                                                                                              broker
-webide                   webide-shared                           A paasta web ide service for application development.provision parameters                                                                webide-service-broker
+offering   plans          description                                                                 broker
+webide     dedicated-vm   A paasta web ide service for application development.provision parameters   webide-service-broker
 ```
 <br>
 
@@ -390,11 +393,13 @@ webide                   webide-shared                           A paasta web id
 - **내 서비스명** : 내 서비스에서 보여지는 명칭이다. 이 명칭을 기준으로 환경 설정 정보를 가져온다.
 
 
->`$ cf create-service webide webide-shared webide-service`
+>`$ cf create-service webide dedicated-vm webide-service`
 ```
-$ cf create-service webide webide-shared paasta-webide-service
+$ cf create-service webide dedicated-vm paasta-webide-service
 Creating service instance paasta-webide-service in org system / space dev as admin...
 OK
+
+Create in progress. Use 'cf services' or 'cf service webide' to check operation status.
 ```
 <br>
 
@@ -411,7 +416,7 @@ Deployment 'web-ide'
 
 Instance                                            Process State  AZ  IPs            VM CID                                   VM Type  Active
 eclipse-che/ed136540-c650-47a2-918b-bb7f6020469d    running        z7  10.30.56.54    vm-5a3a2b10-d0c9-47c8-97f0-6ea64c339df8  large    true
-							                                           115.68.46.178
+							               115.68.46.178
 mariadb/ec34aa5b-c7cc-4297-9e2d-babf05d83832        running        z3  10.30.56.55    vm-9e1631af-b6c8-481e-aad3-3fd713f106a9  small    true
 webide-broker/a641df99-d36a-49ee-8329-018fe10fa23d  running        z3  10.30.56.56    vm-eb784964-48cd-4e4c-b080-53675d3738c2  medium   true
 
@@ -428,8 +433,8 @@ Succeeded
 $ cf services
 Getting services in org system / space dev as admin...
 
-name                    service      plan            bound apps   last operation     broker                    upgrade available
-paasta-webide-service   webide       webide-shared                create succeeded   webide-service-broker
+name     service   plan           bound apps   last operation     broker                  upgrade available
+webide   webide    dedicated-vm                create succeeded   webide-service-broker   
 ```
 <br>
 
@@ -475,3 +480,168 @@ paasta-webide-service   webide       webide-shared                create succeed
 ##### cf push 를 이용해 cf에 앱을 업로드한다.
 
 > ![](/service-guide/images/webide/web-ide-14.png)
+
+
+
+
+## <div id='5'/> 2. WEB IDE IP 증설
+### <div id="5.1"/> 5.1. 서비스 확인
+
+현재 생성된 WEB-IDE VM 인스턴스를 확인한다.
+
+>`bosh -e micro-bosh -d web-ide vms`
+```
+$ bosh -e micro-bosh -d web-ide vms
+Using environment '10.30.40.111' as user 'admin' (openid, bosh.admin)
+
+Task 7872. Done
+
+Deployment 'web-ide'
+
+Instance                                            Process State  AZ  IPs            VM CID                                   VM Type  Active
+eclipse-che/ed136540-c650-47a2-918b-bb7f6020469d    running        z7  10.30.56.54    vm-5a3a2b10-d0c9-47c8-97f0-6ea64c339df8  large    true
+							               115.68.46.178
+mariadb/ec34aa5b-c7cc-4297-9e2d-babf05d83832        running        z3  10.30.56.55    vm-9e1631af-b6c8-481e-aad3-3fd713f106a9  small    true
+webide-broker/a641df99-d36a-49ee-8329-018fe10fa23d  running        z3  10.30.56.56    vm-eb784964-48cd-4e4c-b080-53675d3738c2  medium   true
+
+3 vms
+
+Succeeded
+```
+<br>
+
+
+
+### <div id="5.2"/> 5.2. Deployment 파일 수정
+
+기존 설치할때 사용했던 Deployment YAML에서 eclipse_che_instances의 값을 배포된 eclipse-che의 수만큼 변경을 해주고 eclipse_che_public_ips에 설치된 public ip를 입력한다.  
+그리고 WEB-IDE에 추가시킬 IP를 eclipse_che_buffer_ips에 추가한다.
+
+> $ vi ~/workspace/paasta-5.5/deployment/service-deployment/web-ide/vars.yml
+
+```
+.....
+
+# ECLIPSE-CHE
+eclipse_che_azs: [z7]                                                   # eclipse-che : azs
+eclipse_che_instances: 1                                                # eclipse-che : instances (1), ondemand service default 0
+eclipse_che_vm_type: "large"                                            # eclipse-che : vm type
+eclipse_che_public_ips: ["115.68.46.178"]                               # eclipse-che : public ips (e.g. ["00.00.00.00" , "11.11.11.11"])
+eclipse_che_buffer_ips: ["115.68.46.178", "52.153.36.143"]              # eclipse-che : OnDemand 에서 사용할 여분의 public ips
+eclipse_che_instance_name: "eclipse-che"                                # eclipse-che : 작업 이름
+
+........
+
+```
+
+이후 web-ide.yml에 있는 eclipse_che_public_ips를 사용할 수 있게 주석을 해제한다.
+
+> $ vi ~/workspace/paasta-5.5/deployment/service-deployment/web-ide/web-ide.yml
+
+```
+수정 전
+
+.....
+
+instance_groups:
+- name: eclipse-che                                           # 작업 이름(필수)
+  azs: ((eclipse_che_azs))
+  instances: ((eclipse_che_instances))
+  vm_type: ((eclipse_che_vm_type))
+  stemcell: "((stemcell_alias))"
+  networks:
+  - name: ((private_networks_name))
+#  - name: ((public_networks_name))                           
+#    static_ips: ((eclipse_che_public_ips))                   # 배포시 사용할 public ips, OnDemand instance를 초기에 0 으로 셋
+팅해서 주석처리.
+  jobs:
+  - name: "((eclipse_che_instance_name))"
+    release: "((releases_name))"
+
+.....
+
+---------------------------------------------------
+수정 후
+
+.....
+
+instance_groups:
+- name: eclipse-che                                           # 작업 이름(필수)
+  azs: ((eclipse_che_azs))
+  instances: ((eclipse_che_instances))
+  vm_type: ((eclipse_che_vm_type))
+  stemcell: "((stemcell_alias))"
+  networks:
+  - name: ((private_networks_name))
+  - name: ((public_networks_name))                           
+    static_ips: ((eclipse_che_public_ips))                   # 배포시 사용할 public ips, OnDemand instance를 초기에 0 으로 셋
+팅해서 주석처리.
+  jobs:
+  - name: "((eclipse_che_instance_name))"
+    release: "((releases_name))"
+
+.....
+
+```
+
+
+
+
+
+### <div id="5.3"/> 5.3. 서비스 재 설치
+
+- 서비스를 재 설치한다.  
+```
+$ cd ~/workspace/paasta-5.5/deployment/service-deployment/web-ide
+$ sh ./deploy.sh  
+
+Using environment '10.0.1.6' as client 'admin'
+
+Using deployment 'web-ide'
+
+Release 'paas-ta-webide-release/2.0' already exists.
+
+  instance_groups:
+  - name: webide-broker
+    properties:
+      network:
+        static_ips:
++       - 52.153.36.143
+Task 581
+
+Task 581 | 02:20:43 | Preparing deployment: Preparing deployment (00:00:02)
+Task 581 | 02:20:45 | Preparing deployment: Rendering templates (00:00:01)
+Task 581 | 02:20:46 | Preparing package compilation: Finding packages to compile (00:00:00)
+Task 581 | 02:20:46 | Updating instance webide-broker: webide-broker/f47c5c19-92d3-4b84-86da-89e8e53090fc (0) (canary) (00:00:13)
+
+Task 581 Started  Mon Jan 11 02:20:43 UTC 2021
+Task 581 Finished Mon Jan 11 02:20:59 UTC 2021
+Task 581 Duration 00:00:16
+Task 581 done
+
+```  
+
+
+### <div id="5.4"/> 5.4. 서비스 설치 확인
+
+설치 완료된 서비스를 확인한다.  
+
+> $ bosh -e micro-bosh -d web-ide vms
+
+```
+Using environment '10.30.40.111' as user 'admin' (openid, bosh.admin)
+
+Task 7872. Done
+
+Deployment 'web-ide'
+
+Instance                                            Process State  AZ  IPs            VM CID                                   VM Type  Active
+eclipse-che/ed136540-c650-47a2-918b-bb7f6020469d    running        z7  10.30.56.54    vm-5a3a2b10-d0c9-47c8-97f0-6ea64c339df8  large    true
+							               115.68.46.178
+mariadb/ec34aa5b-c7cc-4297-9e2d-babf05d83832        running        z3  10.30.56.55    vm-9e1631af-b6c8-481e-aad3-3fd713f106a9  small    true
+webide-broker/a641df99-d36a-49ee-8329-018fe10fa23d  running        z3  10.30.56.56    vm-eb784964-48cd-4e4c-b080-53675d3738c2  medium   true
+
+3 vms
+
+Succeeded
+```

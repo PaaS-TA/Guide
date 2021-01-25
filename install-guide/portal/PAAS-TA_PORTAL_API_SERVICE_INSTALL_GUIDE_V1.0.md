@@ -76,50 +76,10 @@ BOSH CLI v2 가 설치 되어 있지 않을 경우 먼저 BOSH2.0 설치 가이�
   - [BOSH2 사용자 가이드](../../install-guide/bosh/PAAS-TA_BOSH2_INSTALL_GUIDE_V5.0.md)<br>
   - [BOSH CLI V2 사용자 가이드](https://github.com/PaaS-TA/Guide-4.0-ROTELLE/blob/master/Use-Guide/Bosh/PaaS-TA_BOSH_CLI_V2_사용자_가이드v1.0.md)
 
-- bosh runtime-config를 확인하여 bosh-dns include deployments 에 paasta가 있는지 확인한다.<br>
- ※ bosh-dns include deployments에 paasta가 없다면 ~/workspace/paasta-5.0/deployment/bosh-deployment/runtime-configs 의 dns.yml 을 열어서 paasta를 추가하고, bosh runtime-config를 업데이트 해준다.    
-
-> $ bosh -e micro-bosh runtime-config
-```
-Using environment '10.0.1.6' as client 'admin'
-
----
-addons:
-- include:
-    deployments:
-    - paasta
-    - pinpoint
-    - paasta-pinpoint-monitoring
-    stemcell:
-    - os: ubuntu-trusty
-    - os: ubuntu-xenial
-  jobs:
-  - name: bosh-dns
-    properties:
-      api:
-        client:
-          tls: "((/dns_api_client_tls))"
-        server:
-          tls: "((/dns_api_server_tls))"
-      cache:
-        enabled: true
-      health:
-        client:
-          tls: "((/dns_healthcheck_client_tls))"
-        enabled: true
-        server:
-          tls: "((/dns_healthcheck_server_tls))"
-    release: bosh-dns
-  name: bosh-dns
-...(생략)...
-
-Succeeded
-
-```
 
 ### <div id="2.2"/> 2.2. Stemcell 확인
 
-Stemcell 목록을 확인하여 서비스 설치에 필요한 Stemcell이 업로드 되어 있는 것을 확인한다.  (PaaS-TA 5.0 과 동일 stemcell 사용)
+Stemcell 목록을 확인하여 서비스 설치에 필요한 Stemcell이 업로드 되어 있는 것을 확인한다.  (PaaS-TA 5.5.0 과 동일 stemcell 사용)
 
 > $ bosh -e micro-bosh stemcells
 
@@ -127,7 +87,7 @@ Stemcell 목록을 확인하여 서비스 설치에 필요한 Stemcell이 업로
 Using environment '10.0.1.6' as client 'admin'
 
 Name                                     Version  OS             CPI  CID  
-bosh-aws-xen-hvm-ubuntu-xenial-go_agent  315.64*  ubuntu-xenial  -    ami-0297ff649e8eea21b  
+bosh-aws-xen-hvm-ubuntu-xenial-go_agent  621.94*  ubuntu-xenial  -    ami-0297ff649e8eea21b  
 
 (*) Currently deployed
 
@@ -140,15 +100,15 @@ Succeeded
 
 서비스 설치에 필요한 Deployment를 Git Repository에서 받아 서비스 설치 작업 경로로 위치시킨다.  
 
-- Portal Deployment Git Repository URL : https://github.com/PaaS-TA/portal-deployment/tree/v5.0.5
+- Portal Deployment Git Repository URL : https://github.com/PaaS-TA/portal-deployment/tree/v5.1.0
 
 ```
 # Deployment 다운로드 파일 위치 경로 생성 및 설치 경로 이동
-$ mkdir -p ~/workspace/paasta-5.0/deployment
-$ cd ~/workspace/paasta-5.0/deployment
+$ mkdir -p ~/workspace/paasta-5.5.0/deployment
+$ cd ~/workspace/paasta-5.5.0/deployment
 
 # Deployment 파일 다운로드
-$ git clone https://github.com/PaaS-TA/portal-deployment.git -b v5.0.5
+$ git clone https://github.com/PaaS-TA/portal-deployment.git -b v5.1.0
 ```
 
 ### <div id="2.4"/> 2.4. Deployment 파일 수정
@@ -220,12 +180,12 @@ Succeeded
 
 - Deployment YAML에서 사용하는 변수 파일을 서버 환경에 맞게 수정한다.
 
-> $ vi ~/workspace/paasta-5.0/deployment/portal-deployment/portal-api/vars.yml
+> $ vi ~/workspace/paasta-5.5.0/deployment/portal-deployment/portal-api/vars.yml
 
 ```
 # STEMCELL INFO
 stemcell_os: "ubuntu-xenial"                                    # stemcell os
-stemcell_version: "315.64"                                      # stemcell version
+stemcell_version: "621.94"                                      # stemcell version
 
 # NETWORKS INFO
 private_networks_name: "default"                                # private network name
@@ -308,14 +268,14 @@ mail_smtp_properties_subject: "<MAIL_SMTP_PROPERTIES_SUBJECT>"  # mail-smtp : pr
 
 - 서버 환경에 맞추어 Deploy 스크립트 파일의 VARIABLES 설정을 수정한다. 
 
-> $ vi ~/workspace/paasta-5.0/deployment/portal-deployment/portal-api/deploy.sh
+> $ vi ~/workspace/paasta-5.5.0/deployment/portal-deployment/portal-api/deploy.sh
 ```
 #!/bin/bash
   
 # VARIABLES
 BOSH_NAME="<BOSH_NAME>"                                # bosh name (e.g. micro-bosh)
 IAAS="<IAAS_NAME>"                                     # IaaS (e.g. aws/azure/gcp/openstack/vsphere)
-COMMON_VARS_PATH="<COMMON_VARS_FILE_PATH>"             # common_vars.yml File Path (e.g. /home/ubuntu/paasta-5.0/common/common_vars.yml)
+COMMON_VARS_PATH="<COMMON_VARS_FILE_PATH>"             # common_vars.yml File Path (e.g. /home/ubuntu/paasta-5.5.0/common/common_vars.yml)
 
 # DEPLOY
 bosh -e ${BOSH_NAME} -n -d portal-api deploy --no-redact portal-api.yml \
@@ -326,7 +286,7 @@ bosh -e ${BOSH_NAME} -n -d portal-api deploy --no-redact portal-api.yml \
 
 - 서비스를 설치한다.  
 ```
-$ cd ~/workspace/paasta-5.0/deployment/portal-deployment/portal-api   
+$ cd ~/workspace/paasta-5.5.0/deployment/portal-deployment/portal-api   
 $ sh ./deploy.sh  
 ```  
 
@@ -334,22 +294,22 @@ $ sh ./deploy.sh
 
 - 서비스 설치에 필요한 릴리즈 파일을 다운로드 받아 Local machine의 서비스 설치 작업 경로로 위치시킨다.  
   
-  - 설치 릴리즈 파일 다운로드 : [paasta-portal-api-release-2.3.0.tgz](http://45.248.73.44/index.php/s/B24Mtmbn9bFLmCd/download)
+  - 설치 릴리즈 파일 다운로드 : [paasta-portal-api-release-2.4.0.tgz](http://45.248.73.44/index.php/s/im9LWHZGs9aaP2d/download)
 
 ```
 # 릴리즈 다운로드 파일 위치 경로 생성
-$ mkdir -p ~/workspace/paasta-5.0/release/portal
+$ mkdir -p ~/workspace/paasta-5.5.0/release/portal
 
 # 릴리즈 파일 다운로드 및 파일 경로 확인
-$ ls ~/workspace/paasta-5.0/release/portal
-paasta-portal-api-release-2.3.0.tgz
+$ ls ~/workspace/paasta-5.5.0/release/portal
+paasta-portal-api-release-2.4.0.tgz
 ```
   
 - 서버 환경에 맞추어 Deploy 스크립트 파일의 VARIABLES 설정을 수정하고 Option file 및 변수를 추가한다.  
      (추가) -o operations/use-compiled-releases.yml  
      (추가) -v inception_os_user_name="<HOME_USER_NAME>"  
      
-> $ vi ~/workspace/paasta-5.0/deployment/portal-deployment/portal-api/deploy.sh
+> $ vi ~/workspace/paasta-5.5.0/deployment/portal-deployment/portal-api/deploy.sh
   
 ```
 #!/bin/bash
@@ -357,7 +317,7 @@ paasta-portal-api-release-2.3.0.tgz
 # VARIABLES
 BOSH_NAME="<BOSH_NAME>"                                # bosh name (e.g. micro-bosh)
 IAAS="<IAAS_NAME>"                                     # IaaS (e.g. aws/azure/gcp/openstack/vsphere)
-COMMON_VARS_PATH="<COMMON_VARS_FILE_PATH>"             # common_vars.yml File Path (e.g. /home/ubuntu/paasta-5.0/common/common_vars.yml)
+COMMON_VARS_PATH="<COMMON_VARS_FILE_PATH>"             # common_vars.yml File Path (e.g. /home/ubuntu/paasta-5.5.0/common/common_vars.yml)
 
 # DEPLOY
 bosh -e ${BOSH_NAME} -n -d portal-api deploy --no-redact portal-api.yml \
@@ -370,7 +330,7 @@ bosh -e ${BOSH_NAME} -n -d portal-api deploy --no-redact portal-api.yml \
 
 - 서비스를 설치한다.  
 ```
-$ cd ~/workspace/paasta-5.0/deployment/portal-deployment/portal-api  
+$ cd ~/workspace/paasta-5.5.0/deployment/portal-deployment/portal-api  
 $ sh ./deploy.sh  
 ```  
 

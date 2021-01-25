@@ -17,6 +17,10 @@
   -  [2.3. 마켓플레이스 UAA Client Id 등록](#23)
   -  [2.4. 마켓플레이스 서비스 관리](#24)
 
+# Deprecated
+
+<b>※ 본 문서는 PaaS-TA 5.1 이하의 버전까지 지원한다.</b>
+
 # <div id='1'/> 1. 문서 개요
 
 ### <div id='11'/> 1.1. 목적
@@ -39,7 +43,7 @@
 
 ### <div id='21'/> 2.1. 설치 전 준비사항
 본 설치 가이드는 Linux 환경에서 설치하는 것을 기준으로 하였다.
-마켓플레이스를 설치하기 위해서는 BOSH 2.0과 PaaS-TA 5.0, PaaS-TA 포털이 설치되어 있어야 한다.
+마켓플레이스를 설치하기 위해서는 BOSH 2.0과 PaaS-TA 5.0 이상, PaaS-TA 포털이 설치되어 있어야 한다.
 
 ##### 마켓플레이스 설치에 필요한 Object Storage(Swift) 및 DB 정보를 설정하기 위해서는 paasta-marketplace-env-release가 필수적으로 설치되어 있어야 한다.
 
@@ -53,7 +57,7 @@
 - 설치 작업 경로 및 디렉토리 (파일) 구성  
 ```  
 ### 설치 작업 경로  
-$ {HOME}/workspace/paasta-5.0/release/service/marketplace  
+$ {HOME}/workspace/paasta-5.5/release/service/marketplace  
 
 ### marketplace 설치 디렉토리 (파일)를 다운로드한다
 $ wget --content-disposition http://45.248.73.44/index.php/s/wCtqT3RL5N5pqSm/download
@@ -150,7 +154,7 @@ marketplace
   1) marketplace-api 의 manifest 파일을 환경에 맞게 수정한다.
     
   ```
-  $ cd ${HOME}/workspace/paasta-5.0/release/service/marketplace/marketplace-api
+  $ cd ${HOME}/workspace/paasta-5.5/release/service/marketplace/marketplace-api
   $ vi manifest.yml
   
   ---
@@ -244,7 +248,7 @@ marketplace
   2) marketplace-webadmin 의 manifest 파일을 환경에 맞게 수정한다.  
     
   ```
-  $ cd ${HOME}/workspace/paasta-5.0/release/service/marketplace/marketplace-webadmin
+  $ cd ${HOME}/workspace/paasta-5.5/release/service/marketplace/marketplace-webadmin
   $ vi manifest.yml
   
   ---
@@ -288,7 +292,7 @@ marketplace
   3) marketplace-webseller 의 manifest 파일을 환경에 맞게 수정한다.  
     
   ```
-  $ cd ${HOME}/workspace/paasta-5.0/release/service/marketplace/marketplace-webseller
+  $ cd ${HOME}/workspace/paasta-5.5/release/service/marketplace/marketplace-webseller
   $ vi manifest.yml
   
   ---
@@ -340,7 +344,7 @@ marketplace
   4) marketplace-webuser 의 manifest 파일을 환경에 맞게 수정한다.  
     
   ```
-  $ cd ${HOME}/workspace/paasta-5.0/release/service/marketplace/marketplace-webuser
+  $ cd ${HOME}/workspace/paasta-5.5/release/service/marketplace/marketplace-webuser
   $ vi manifest.yml
   
   ---
@@ -391,15 +395,15 @@ marketplace
    > 마켓플레이스 API는 공통적으로 사용되는 App으로 가장 먼저 배포한다.  
    
   ```
-  $ cd ${HOME}/workspace/paasta-5.0/release/service/marketplace/marketplace-api
+  $ cd ${HOME}/workspace/paasta-5.5/release/service/marketplace/marketplace-api
   $ cf push marketplace-api -f manifest.yml
 
   Pushing from manifest to org marketplace / space system as admin...
-  Using manifest file /home/ubuntu/workspacepaasta-5.0/release/service/marketplace/marketplace-api/manifest.yml
+  Using manifest file /home/ubuntu/workspace/paasta-5.5/release/service/marketplace/marketplace-api/manifest.yml
   Getting app info...
   Creating app with these attributes...
   + name:         marketplace-api
-    path:         /home/ubuntu/workspacepaasta-5.0/release/service/marketplace/marketplace-api/marketplace-api.jar
+    path:         /home/ubuntu/workspace/paasta-5.5/release/service/marketplace/marketplace-api/marketplace-api.jar
     buildpacks:
   +   java_buildpack
   + disk quota:   2G
@@ -463,7 +467,7 @@ marketplace
   - 마켓플레이스 Web Admin (marketplace-webadmin) 배포
   
   ```
-  $ cd ${HOME}/workspace/paasta-5.0/release/service/marketplace/marketplace-webadmin
+  $ cd ${HOME}/workspace/paasta-5.5/release/service/marketplace/marketplace-webadmin
   $ cf push marketplace-webadmin -f manifest.yml
 
   Pushing from manifest to org marketplace / space system as admin...
@@ -530,15 +534,15 @@ marketplace
 
   - 마켓플레이스 Web Seller (marketplace-webseller) 배포
   ```
-  $ cd ${HOME}/workspace/paasta-5.0/release/service/marketplace/marketplace-webseller
+  $ cd ${HOME}/workspace/paasta-5.5/release/service/marketplace/marketplace-webseller
   $ cf push marketplace-webseller -f manifest.yml
   
   Pushing from manifest to org marketplace / space system as admin...
-  Using manifest file /home/ubuntu/workspace/paasta-5.0/release/service/marketplace/marketplace-webseller/manifest.yml
+  Using manifest file /home/ubuntu/workspace/paasta-5.5/release/service/marketplace/marketplace-webseller/manifest.yml
   Getting app info...
   Creating app with these attributes...
   + name:         marketplace-webseller
-    path:         /home/ubuntu/workspace/paasta-5.0/release/service/marketplace/marketplace-webseller/marketplace-web-seller.war
+    path:         /home/ubuntu/workspace/paasta-5.5/release/service/marketplace/marketplace-webseller/marketplace-web-seller.war
     buildpacks:
   +   java_buildpack
   + instances:    1
@@ -595,15 +599,15 @@ marketplace
   
   - 마켓플레이스 Web User (marketplace-webuser) 배포
   ```
-  $ cd ${HOME}/workspace/paasta-5.0/release/service/marketplace/marketplace-webuser
+  $ cd ${HOME}/workspace/paasta-5.5/release/service/marketplace/marketplace-webuser
   $ cf push marketplace-webuser -f manifest.yml
   
   Pushing from manifest to org marketplace / space system as admin...
-  Using manifest file /home/ubuntu/workspace/paasta-5.0/release/service/marketplace/marketplace-webuser/manifest.yml
+  Using manifest file /home/ubuntu/workspace/paasta-5.5/release/service/marketplace/marketplace-webuser/manifest.yml
   Getting app info...
   Creating app with these attributes...
   + name:         marketplace-webuser
-    path:         /home/ubuntu/workspace/paasta-5.0/release/service/marketplace/marketplace-webuser/marketplace-web-user.war
+    path:         /home/ubuntu/workspace/paasta-5.5/release/service/marketplace/marketplace-webuser/marketplace-web-user.war
     buildpacks:
   +   java_buildpack
   + instances:    1

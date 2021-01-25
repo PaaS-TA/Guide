@@ -82,10 +82,10 @@ PaaS-TA 3.5 버전부터는 Bosh2.0 기반으로 deploy를 진행하며 기존 B
 
 ### <div id="2.1"/> 2.1. Prerequisite  
 
-본 설치 가이드는 Linux 환경에서 설치하는 것을 기준으로 하였다. 서비스 설치를 위해서는 BOSH 2.0과 PaaS-TA 5.0, PaaS-TA 포털이 설치되어 있어야 한다. 
+본 설치 가이드는 Linux 환경에서 설치하는 것을 기준으로 하였다. 서비스 설치를 위해서는 BOSH 2.0과 PaaS-TA 5.0 이상, PaaS-TA 포털이 설치되어 있어야 한다. 
 
 - bosh runtime-config를 확인하여 bosh-dns include deployments 에 pinpoint가 있는지 확인한다.  
- ※ bosh-dns include deployments에 pinpoint가 없다면 ~/workspace/paasta-5.0/deployment/bosh-deployment/runtime-configs 의 dns.yml 을 열어서 pinpoint를 추가하고, bosh runtime-config를 업데이트 해준다.    
+ ※ bosh-dns include deployments에 pinpoint가 없다면 ~/workspace/paasta-5.5.0/deployment/paasta-deployment/bosh/runtime-configs 의 dns.yml 을 열어서 pinpoint를 추가하고, bosh runtime-config를 업데이트 해준다.    
 
 > $ bosh -e micro-bosh runtime-config
 ```
@@ -126,7 +126,7 @@ Succeeded
 
 ### <div id="2.2"/> 2.2. Stemcell 확인
 
-Stemcell 목록을 확인하여 서비스 설치에 필요한 Stemcell이 업로드 되어 있는 것을 확인한다.  (PaaS-TA 5.0 과 동일 stemcell 사용)
+Stemcell 목록을 확인하여 서비스 설치에 필요한 Stemcell이 업로드 되어 있는 것을 확인한다.  (PaaS-TA 5.5.0 과 동일 stemcell 사용)
 
 > $ bosh -e micro-bosh stemcells
 
@@ -134,7 +134,7 @@ Stemcell 목록을 확인하여 서비스 설치에 필요한 Stemcell이 업로
 Using environment '10.0.1.6' as client 'admin'
 
 Name                                     Version  OS             CPI  CID  
-bosh-aws-xen-hvm-ubuntu-xenial-go_agent  315.64*  ubuntu-xenial  -    ami-0297ff649e8eea21b  
+bosh-aws-xen-hvm-ubuntu-xenial-go_agent  621.94*  ubuntu-xenial  -    ami-0297ff649e8eea21b  
 
 (*) Currently deployed
 
@@ -147,15 +147,15 @@ Succeeded
 
 서비스 설치에 필요한 Deployment를 Git Repository에서 받아 서비스 설치 작업 경로로 위치시킨다.  
 
-- Service Deployment Git Repository URL : https://github.com/PaaS-TA/service-deployment/tree/v5.0.3
+- Service Deployment Git Repository URL : https://github.com/PaaS-TA/service-deployment/tree/v5.0.5
 
 ```
 # Deployment 다운로드 파일 위치 경로 생성 및 설치 경로 이동
-$ mkdir -p ~/workspace/paasta-5.0/deployment
-$ cd ~/workspace/paasta-5.0/deployment
+$ mkdir -p ~/workspace/paasta-5.5.0/deployment
+$ cd ~/workspace/paasta-5.5.0/deployment
 
 # Deployment 파일 다운로드
-$ git clone https://github.com/PaaS-TA/service-deployment.git -b v5.0.3
+$ git clone https://github.com/PaaS-TA/service-deployment.git -b v5.0.5
 ```
 
 ### <div id="2.4"/> 2.4. Deployment 파일 수정
@@ -227,11 +227,11 @@ Succeeded
 
 - Deployment YAML에서 사용하는 변수 파일을 서버 환경에 맞게 수정한다.
 
-> $ vi ~/workspace/paasta-5.0/deployment/service-deployment/pinpoint/vars.yml
+> $ vi ~/workspace/paasta-5.5.0/deployment/service-deployment/pinpoint/vars.yml
 ```
 # STEMCELL
 stemcell_os: "ubuntu-xenial"                                     # stemcell os
-stemcell_version: "latest"                                       # stemcell version
+stemcell_version: "621.94"                                       # stemcell version
 
 # NETWORK
 private_networks_name: "default"                                 # private network name
@@ -285,7 +285,7 @@ resourcemanager_port: 8040                                       # resourcemanag
 
 - 서버 환경에 맞추어 Deploy 스크립트 파일의 VARIABLES 설정을 수정한다. 
 
-> $ vi ~/workspace/paasta-5.0/deployment/service-deployment/pinpoint/deploy.sh
+> $ vi ~/workspace/paasta-5.5.0/deployment/service-deployment/pinpoint/deploy.sh
 
 ```
 #!/bin/bash
@@ -293,7 +293,7 @@ resourcemanager_port: 8040                                       # resourcemanag
 # VARIABLES
 BOSH_NAME="<BOSH_NAME>"                            # bosh name (e.g. micro-bosh)
 IAAS="<IAAS_NAME>"                                 # IaaS (e.g. aws/azure/gcp/openstack/vsphere)
-COMMON_VARS_PATH="<COMMON_VARS_FILE_PATH>"         # common_vars.yml File Path (e.g. /home/ubuntu/paasta-5.0/common/common_vars.yml)
+COMMON_VARS_PATH="<COMMON_VARS_FILE_PATH>"         # common_vars.yml File Path (e.g. /home/ubuntu/paasta-5.5.0/common/common_vars.yml)
 
 # DEPLOY
 bosh -e ${BOSH_NAME} -n -d pinpoint deploy --no-redact pinpoint.yml \
@@ -306,7 +306,7 @@ bosh -e ${BOSH_NAME} -n -d pinpoint deploy --no-redact pinpoint.yml \
 
 - 서비스를 설치한다.  
 ```
-$ cd ~/workspace/paasta-5.0/deployment/service-deployment/pinpoint  
+$ cd ~/workspace/paasta-5.5.0/deployment/service-deployment/pinpoint  
 $ sh ./deploy.sh  
 ```  
 
@@ -318,10 +318,10 @@ $ sh ./deploy.sh
 
 ```
 # 릴리즈 다운로드 파일 위치 경로 생성
-$ mkdir -p ~/workspace/paasta-5.0/release/service
+$ mkdir -p ~/workspace/paasta-5.5.0/release/service
 
 # 릴리즈 파일 다운로드 및 파일 경로 확인
-$ ls ~/workspace/paasta-5.0/release/service
+$ ls ~/workspace/paasta-5.5.0/release/service
 paasta-pinpoint-release.tgz
 ```
 
@@ -329,14 +329,14 @@ paasta-pinpoint-release.tgz
      (추가) -o operations/use-compiled-releases.yml  
      (추가) -v inception_os_user_name="<HOME_USER_NAME>"  
      
-> $ vi ~/workspace/paasta-5.0/deployment/service-deployment/pinpoint/deploy.sh
+> $ vi ~/workspace/paasta-5.5.0/deployment/service-deployment/pinpoint/deploy.sh
 ```
 #!/bin/bash
   
 # VARIABLES
 BOSH_NAME="<BOSH_NAME>"                            # bosh name (e.g. micro-bosh)
 IAAS="<IAAS_NAME>"                                 # IaaS (e.g. aws/azure/gcp/openstack/vsphere)
-COMMON_VARS_PATH="<COMMON_VARS_FILE_PATH>"         # common_vars.yml File Path (e.g. /home/ubuntu/paasta-5.0/common/common_vars.yml)
+COMMON_VARS_PATH="<COMMON_VARS_FILE_PATH>"         # common_vars.yml File Path (e.g. /home/ubuntu/paasta-5.5.0/common/common_vars.yml)
 
 # DEPLOY
 bosh -e ${BOSH_NAME} -n -d pinpoint deploy --no-redact pinpoint.yml \
@@ -350,7 +350,7 @@ bosh -e ${BOSH_NAME} -n -d pinpoint deploy --no-redact pinpoint.yml \
 
 - 서비스를 설치한다.  
 ```
-$ cd ~/workspace/paasta-5.0/deployment/service-deployment/pinpoint  
+$ cd ~/workspace/paasta-5.5.0/deployment/service-deployment/pinpoint  
 $ sh ./deploy.sh  
 ```  
 

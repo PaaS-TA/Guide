@@ -18,10 +18,12 @@
 3. [PaaS-TA Portal 설치](#3)  
   3.1. [Prerequisite](#3.1)  
     3.1.1. [App 파일 및 Manifest 파일 다운로드](#3.1.1)  
-    3.1.2. [Portal 설치용 조직 및 공간 설정](#3.1.2)  
-  3.2. [Portal App Manifest 및 설정 파일 수정](#3.2)  
-  3.3. [Portal App 배포](#3.3)  
-
+    3.1.2. [Portal App Manifest 변경 Script 변수 설정](#3.1.2)  
+    3.1.3. [Portal App Manifest 변경 Script 실행](#3.1.3)  
+    3.1.4. [Portal App 배포 Script 변수 설정](#3.1.4)  
+    3.1.5. [Portal App 배포 Script 실행](#3.1.5)  
+    3.1.6. [Portal SSH 설치](#3.1.6)  
+    
 4. [PaaS-TA Portal 운영](#4)  
   4.1. [사용자의 조직 생성 Flag 활성화](#4.1)  
   4.2. [사용자포탈 UAA 페이지 오류](#4.2)  
@@ -66,10 +68,10 @@
 ## <div id="2"/> 2. PaaS-TA Portal infra 설치  
 
 ### <div id="2.1"/> 2.1. Prerequisite 
-본 설치 가이드는 Linux 환경에서 설치하는 것을 기준으로 하였다. 서비스 설치를 위해서는 BOSH 2.0과 PaaS-TA 5.0이 설치 되어 있어야 한다.
+본 설치 가이드는 Linux 환경에서 설치하는 것을 기준으로 하였다. 서비스 설치를 위해서는 BOSH 2.0과 5.0 이상의 PaaS-TA가 설치 되어 있어야 한다.
 
 ### <div id="2.2"/> 2.2. Stemcell 확인
-Stemcell 목록을 확인하여 서비스 설치에 필요한 Stemcell이 업로드 되어 있는 것을 확인한다.  (PaaS-TA 5.0 과 동일 stemcell 사용)  
+Stemcell 목록을 확인하여 서비스 설치에 필요한 Stemcell이 업로드 되어 있는 것을 확인한다.  (PaaS-TA 5.5.0 과 동일 stemcell 사용)  
 
 > $ bosh -e micro-bosh stemcells
 
@@ -77,7 +79,7 @@ Stemcell 목록을 확인하여 서비스 설치에 필요한 Stemcell이 업로
 Using environment '10.0.1.6' as client 'admin'
 
 Name                                     Version  OS             CPI  CID  
-bosh-aws-xen-hvm-ubuntu-xenial-go_agent  315.64*  ubuntu-xenial  -    ami-0297ff649e8eea21b  
+bosh-aws-xen-hvm-ubuntu-xenial-go_agent  621.94*  ubuntu-xenial  -    ami-0297ff649e8eea21b  
 
 (*) Currently deployed
 
@@ -90,15 +92,15 @@ Succeeded
 
 서비스 설치에 필요한 Deployment를 Git Repository에서 받아 서비스 설치 작업 경로로 위치시킨다.  
 
-- Portal Deployment Git Repository URL : https://github.com/PaaS-TA/portal-deployment/tree/v5.0.5
+- Portal Deployment Git Repository URL : https://github.com/PaaS-TA/portal-deployment/tree/v5.1.0
 
 ```
 # Deployment 다운로드 파일 위치 경로 생성 및 설치 경로 이동
-$ mkdir -p ~/workspace/paasta-5.0/deployment
-$ cd ~/workspace/paasta-5.0/deployment
+$ mkdir -p ~/workspace/paasta-5.5.0/deployment
+$ cd ~/workspace/paasta-5.5.0/deployment
 
 # Deployment 파일 다운로드
-$ git clone https://github.com/PaaS-TA/portal-deployment.git -b v5.0.5
+$ git clone https://github.com/PaaS-TA/portal-deployment.git -b v5.1.0
 ```
 
 ### <div id="2.4"/> 2.4. Deployment 파일 수정  
@@ -166,14 +168,14 @@ vm_types:
 Succeeded
 ```
 
-- Deployment YAML에서 사용하는 변수 파일을 서버 환경에 맞게 수정한다. <div id="1.3.vars"/>
+- Deployment YAML에서 사용하는 변수 파일을 서버 환경에 맞게 수정한다.
 
-> $ vi ~/workspace/paasta-5.0/deployment/portal-deployment/portal-container-infra/vars.yml
+> $ vi ~/workspace/paasta-5.5.0/deployment/portal-deployment/portal-container-infra/vars.yml
 
 ```
 # STEMCELL INFO
 stemcell_os: "ubuntu-xenial"                                    # stemcell os
-stemcell_version: "315.64"                                      # stemcell version
+stemcell_version: "621.94"                                      # stemcell version
 
 # NETWORKS INFO
 private_networks_name: "default"                                # private network name
@@ -206,14 +208,14 @@ binary_storage_email: "<BINARY_STORAGE_EMAIL>"                  # binary storage
 
 - 서버 환경에 맞추어 Deploy 스크립트 파일의 VARIABLES 설정을 수정한다. 
 
-> $ vi ~/workspace/paasta-5.0/deployment/portal-deployment/portal-container-infra/deploy.sh
+> $ vi ~/workspace/paasta-5.5.0/deployment/portal-deployment/portal-container-infra/deploy.sh
 ```
 #!/bin/bash
 
 # VARIABLES
 BOSH_NAME="<BOSH_NAME>"                                # bosh name (e.g. micro-bosh)
 IAAS="<IAAS_NAME>"                                     # IaaS (e.g. aws/azure/gcp/openstack/vsphere)
-COMMON_VARS_PATH="<COMMON_VARS_FILE_PATH>"             # common_vars.yml File Path (e.g. /home/ubuntu/paasta-5.0/common/common_vars.yml)
+COMMON_VARS_PATH="<COMMON_VARS_FILE_PATH>"             # common_vars.yml File Path (e.g. /home/ubuntu/paasta-5.5.0/common/common_vars.yml)
 
 # DEPLOY
 bosh -e ${BOSH_NAME} -n -d portal-container-infra deploy --no-redact portal-container-infra.yml \
@@ -223,7 +225,7 @@ bosh -e ${BOSH_NAME} -n -d portal-container-infra deploy --no-redact portal-cont
 
 - 서비스를 설치한다.  
 ```
-$ cd ~/workspace/paasta-5.0/deployment/portal-deployment/portal-container-infra    
+$ cd ~/workspace/paasta-5.5.0/deployment/portal-deployment/portal-container-infra    
 $ sh ./deploy.sh  
 ```  
 
@@ -235,10 +237,10 @@ $ sh ./deploy.sh
 
 ```
 # 릴리즈 다운로드 파일 위치 경로 생성
-$ mkdir -p ~/workspace/paasta-5.0/release/portal
+$ mkdir -p ~/workspace/paasta-5.5.0/release/portal
 
 # 릴리즈 파일 다운로드 및 파일 경로 확인
-$ ls ~/workspace/paasta-5.0/release/portal
+$ ls ~/workspace/paasta-5.5.0/release/portal
 paasta-portal-api-release-2.3.0-ctn.tgz
 ```
   
@@ -246,7 +248,7 @@ paasta-portal-api-release-2.3.0-ctn.tgz
      (추가) -o operations/use-compiled-releases.yml  
      (추가) -v inception_os_user_name="<HOME_USER_NAME>"  
      
-> $ vi ~/workspace/paasta-5.0/deployment/portal-deployment/portal-container-infra/deploy.sh
+> $ vi ~/workspace/paasta-5.5.0/deployment/portal-deployment/portal-container-infra/deploy.sh
   
 ```
 #!/bin/bash
@@ -254,7 +256,7 @@ paasta-portal-api-release-2.3.0-ctn.tgz
 # VARIABLES
 BOSH_NAME="<BOSH_NAME>"                                # bosh name (e.g. micro-bosh)
 IAAS="<IAAS_NAME>"                                     # IaaS (e.g. aws/azure/gcp/openstack/vsphere)
-COMMON_VARS_PATH="<COMMON_VARS_FILE_PATH>"             # common_vars.yml File Path (e.g. /home/ubuntu/paasta-5.0/common/common_vars.yml)
+COMMON_VARS_PATH="<COMMON_VARS_FILE_PATH>"             # common_vars.yml File Path (e.g. /home/ubuntu/paasta-5.5.0/common/common_vars.yml)
 
 # DEPLOY
 bosh -e ${BOSH_NAME} -n -d portal-container-infra deploy --no-redact portal-container-infra.yml \
@@ -266,7 +268,7 @@ bosh -e ${BOSH_NAME} -n -d portal-container-infra deploy --no-redact portal-cont
 
 - 서비스를 설치한다.  
 ```
-$ cd ~/workspace/paasta-5.0/deployment/portal-deployment/portal-container-infra   
+$ cd ~/workspace/paasta-5.5.0/deployment/portal-deployment/portal-container-infra   
 $ sh ./deploy.sh  
 ```  
 
@@ -298,15 +300,15 @@ Portal 설치에 필요한 App 파일 및 Manifest 파일을 다운로드 받아
 
 ```
 ### 설치 작업 경로  
-$ cd ~/workspace/paasta-5.0/release/portal
+$ cd ~/workspace/paasta-5.5.0/release/portal
 
 ### portal app 파일을 다운로드한다
-$ wget --content-disposition http://45.248.73.44/index.php/s/6LqkkyTBqtWoDme/download
+$ wget --content-disposition http://45.248.73.44/index.php/s/jcDJmxrnsnc772E/download
 $ unzip portal-app.zip 
 
 ### 설치 디렉토리 (파일) 구성  
 portal-app
-├── portal-api-2.2.0
+├── portal-api-2.3.0
 │   ├── manifest.yml
 │   └── paas-ta-portal-api.jar
 ├── portal-common-api-2.1.0
@@ -327,68 +329,125 @@ portal-app
 ├── portal-web-admin-2.2.0
 │   ├── manifest.yml
 │   └── paas-ta-portal-webadmin.war
-└── portal-web-user-2.2.0
-    ├── config
-    ├── manifest.yml
-    └── paas-ta-portal-webuser
+└── portal-web-user-2.3.0
+│   ├── config
+│   ├── manifest.yml
+│   └── paas-ta-portal-webuser
+├── 1.applyChangeVariable.sh
+├── 2.portalContainerPush.sh
+└── portal-rule.json
  ```
  
-### <div id="3.1.2"/> 3.1.2. Portal 설치용 조직 및 공간 설정
-Portal을 PaaS-TA에 App으로 배포하기 위해, Portal 서비스 배포를 위한 조직과 공간을 사전에 생성하고 설정한다. 이를 위해 조직과 공간을 생성하고 설정할 수 있는 권한을 가진 관리자 계정으로 로그인 되어 있어야 한다.
-
-- Portal 배포를 위한 조직 및 공간 생성
-```
-### Portal 배포를 위한 조직 및 공간 생성 및 설정 
-$ cf create-quota portal_quota -m 20G -i -1 -s -1 -r -1 --reserved-route-ports -1 --allow-paid-service-plans
-$ cf create-org portal -q portal_quota
-$ cf create-space system -o portal  
-```
-
-### <div id="3.2"/> 3.2. Portal App Manifest 및 설정 파일 수정
-
+### <div id="3.1.2"/> 3.1.2. Portal App Manifest 변경 Script 변수 설정
 manifest는 Components 요소 및 배포의 속성을 정의한 YAML 파일이다. manifest 파일에는 어떤 name, memory, instance, host, path, buildpack, env 등을 사용 할 것인지 정의가 되어 있다.
-Portal 설치에 필요한 PaaS-TA 및 infra 정보를 확인하여 각 App 의 manifest 파일을 환경에 맞게 수정한다.
 
 - infra 정보 : [2.4. Deployment 파일 수정 - vars.yml](#1.3.vars) 및 [2.7. 서비스 설치 확인](#2.7) 참조  
 - PaaS-TA 정보 : PaaS-TA 설치 시 사용한 common_vars.yml 파일을 참고한다.  
+
 ```
 ### e.g.) common_vars.yml의 PaaS-TA 정보
 # PAAS-TA INFO
-system_domain: "61.252.53.246.xip.io"		                # Domain (xip.io를 사용하는 경우 HAProxy Public IP와 동일)
-paasta_admin_username: "admin"		                    	# PaaS-TA Admin Username
-paasta_admin_password: "admin"		                    	# PaaS-TA Admin Password
+system_domain: "61.252.53.246.xip.io"                   # Domain (xip.io를 사용하는 경우 HAProxy Public IP와 동일)
+paasta_admin_username: "admin"                          # PaaS-TA Admin Username
+paasta_admin_password: "admin"                          # PaaS-TA Admin Password
 paasta_nats_ip: "10.0.1.121"
 paasta_nats_port: 4222
 paasta_nats_user: "nats"
-paasta_nats_password: "7EZB5ZkMLMqT73h2JtxPv1fvh3UsqO"	# PaaS-TA Nats Password (CredHub 로그인후 'credhub get -n /micro-bosh/paasta/nats_password' 명령어를 통해 확인 가능)
-paasta_nats_private_networks_name: "default"	          # PaaS-TA Nats 의 Network 이름
-paasta_database_ips: "10.0.1.123"		                    # PaaS-TA Database IP (e.g. "10.0.1.123")
-paasta_database_port: 5524			                        # PaaS-TA Database Port (e.g. 5524)
+paasta_nats_password: "7EZB5ZkMLMqT73h2JtxPv1fvh3UsqO"  # PaaS-TA Nats Password (CredHub 로그인후 'credhub get -n /micro-bosh/paasta/nats_password' 명령어를 통해 확인 가능)
+paasta_nats_private_networks_name: "default"            # PaaS-TA Nats 의 Network 이름
+paasta_database_ips: "10.0.1.123"                       # PaaS-TA Database IP (e.g. "10.0.1.123")
+paasta_database_port: 5524                              # PaaS-TA Database Port (e.g. 5524)
 paasta_database_type: "postgresql"                      # PaaS-TA Database Type (e.g. "postgresql" or "mysql")
 paasta_database_driver_class: "org.postgresql.Driver"   # PaaS-TA Database driver-class (e.g. "org.postgresql.Driver" or "com.mysql.jdbc.Driver")
-paasta_cc_db_id: "cloud_controller"		                  # CCDB ID (e.g. "cloud_controller")
-paasta_cc_db_password: "cc_admin"		                    # CCDB Password (e.g. "cc_admin")
-paasta_uaa_db_id: "uaa"				                          # UAADB ID (e.g. "uaa")
-paasta_uaa_db_password: "uaa_admin"		                  # UAADB Password (e.g. "uaa_admin")
+paasta_cc_db_id: "cloud_controller"                     # CCDB ID (e.g. "cloud_controller")
+paasta_cc_db_password: "cc_admin"                       # CCDB Password (e.g. "cc_admin")
+paasta_uaa_db_id: "uaa"                                 # UAADB ID (e.g. "uaa")
+paasta_uaa_db_password: "uaa_admin"                     # UAADB Password (e.g. "uaa_admin")
 paasta_api_version: "v3"
 
 # UAAC INFO
-uaa_client_admin_id: "admin"			                      # UAAC Admin Client Admin ID
-uaa_client_admin_secret: "admin-secret"		              # UAAC Admin Client에 접근하기 위한 Secret 변수
-uaa_client_portal_secret: "clientsecret"	              # UAAC Portal Client에 접근하기 위한 Secret 변수
+uaa_client_admin_id: "admin"                            # UAAC Admin Client Admin ID
+uaa_client_admin_secret: "admin-secret"                 # UAAC Admin Client에 접근하기 위한 Secret 변수
+uaa_client_portal_secret: "clientsecret"                # UAAC Portal Client에 접근하기 위한 Secret 변수
 
 # Monitoring INFO
-monitoring_api_url: "61.252.53.241"                   	# Monitoring-WEB의 Public IP
+monitoring_api_url: "61.252.53.241"                     # Monitoring-WEB의 Public IP
 
 ### ETC INFO
-abacus_url: "http://abacus.61.252.53.248.xip.io"	      # abacus url (e.g. "http://abacus.xxx.xxx.xxx.xxx.xip.io")
+abacus_url: "http://abacus.61.252.53.248.xip.io"        # abacus url (e.g. "http://abacus.xxx.xxx.xxx.xxx.xip.io")
 ```
 
-- Portal App manifest 파일 수정  
-  : portal-registration, portal-gateway, portal-api, portal-common-api, portal-storage-api, portal-log-api, portal-web-admin
+Portal을 PaaS-TA에 App으로 배포하기 전에 Portal App의 Manifest의 변수를 일괄 변경해주는 Script 동작을 위해 Portal 설치에 필요한 PaaS-TA 및 infra 정보를 확인하여 Script의 변수를 설정한다.
+
+> $ vi ~/workspace/paasta-5.5.0/release/portal/portal-app/1.applyChangeVariable.sh
 ```
+#!/bin/bash
+
+# COMMON VARIABLE
+DOMAIN="xx.xxx.xx.xxx.xip.io"           # PaaS-TA System Domain
+CF_USER_ADMIN_USERNAME="admin"          # PaaS-TA Admin Username
+CF_USER_ADMIN_PASSWORD="admin"          # PaaS-TA Admin Password
+UAA_CLIENT_ID="admin"                   # UAA Client ID
+UAA_CLIENT_SECRET="admin-secret"        # UAA Cliant Secret
+UAA_ADMIN_CLIENT_ID="admin"             # UAA Admin Client ID
+UAA_ADMIN_CLIENT_SECRET="admin-secret"  # UAA Admin Client Secret
+UAA_LOGIN_CLIENT_ID="admin"             # UAA Login Client ID
+UAA_LOGIN_CLIENT_SECRET="admin-secret"  # UAA Login Client Secret
+PORTAL_DB_IP="10.0.41.101"              # portal-container-infra IP
+PORTAL_DB_PORT="13306"                  # portal-container-infra Port
+PORTAL_DB_USER_PASSWORD="Paasta@2019"   # portal-container-infra DB Password
+
+# PORTAL-API
+ABACUS_URL=""                           # Abacus URL(Not required)
+MONITORING_API_URL=""	                  # Monitoring API URL(Not required)
+
+# PORTAL-COMMON-API
+PAASTA_DB_DRIVER="org.postgresql.Driver"  # PaaS-TA DB Driver (e.g. org.postgresql.Driver OR com.mysql.jdbc.Driver)
+PAASTA_DATABASE="postgresql"              # PaaS-TA DB (e.g. postgresql OR mysql)
+PAASTA_DB_IP="10.0.1.123"`                # PaaS-TA DB IP
+PAASTA_DB_PORT="5524"                     # PaaS-TA DB Port (e.g. 5524(postgres) OR 13307(mysql))
+CC_DB_NAME="cloud_controller"             # PaaS-TA CCDB Name
+CC_DB_USER_NAME="cloud_controller"        # PaaS-TA CCDB ID
+CC_DB_USER_PASSWORD="cc_admin"            # PaaS-TA CCDB Password
+UAA_DB_NAME="uaa"                         # PaaS-TA UAA Name
+UAA_DB_USER_NAME="uaa"                    # PaaS-TA UAA ID
+UAA_DB_USER_PASSWORD="uaa_admin"          # PaaS-TA UAA Password
+MAIL_SMTP_HOST="smtp.gmail.com"           # Mail-SMTP Host
+MAIL_SMTP_PORT="465"                      # Mail-SMTP Port
+MAIL_SMTP_USERNAME="paasta"               # Mail-SMTP User Name
+MAIL_SMTP_PASSWORD="paasta"               # Mail-SMTP Password
+MAIL_SMTP_USEREMAIL="paas-ta@gmail.com"   # Mail-SMTP User Email
+MAIL_SMTP_PROPERTIES_AUTHURL="portal-web-user.<DOMAIN>"   # Mail-SMTP Properties Auth URL
+
+# PORTAL-STORAGE-API
+OBJECTSTORAGE_TENANTNAME="paasta-portal"  # portal-container-infra Binary Storage Tenant Name
+OBJECTSTORAGE_USERNAME="paasta-portal"    # portal-container-infra Binary Storage User Name
+OBJECTSTORAGE_PASSWORD="paasta"           # portal-container-infra Binary Storage Password
+OBJECTSTORAGE_IP="10.0.41.101"            # portal-container-infra IP
+OBJECTSTORAGE_PORT="15001"                # portal-container-infra Binary Storage Port
+
+# PORTAL-WEBUSER
+UAAC_PORTAL_CLIENT_ID="portalclient"      # UAAC Portal Client ID
+UAAC_PORTAL_CLIENT_SECRET="clientsecret"  # UAAC Poral Client Secret
+USER_APP_SIZE_MB=0                        # USER My App size(MB), if value==0 -> unlimited
+
+......
+
+```
+
+
+### <div id="3.1.3"/> 3.1.3. Portal App Manifest 변경 Script 실행
+Portal을 PaaS-TA에 App으로 배포하기 전에 Portal App의 Manifest의 변수를 일괄 변경해주는 Script를 실행한다.
+
+```
+$ cd ~/workspace/paasta-5.5.0/release/portal/portal-app
+$ source 1.applyChangeVariable.sh
+
+
+### 이후 각 Manifest.yml 파일을 확인하여 값이 정상적으로 바뀌었는지 확인한다.
+
 e.g.) portal-registration
-$ vi ~/workspace/paasta-5.0/release/portal/portal-app/portal-registration-2.1.0/manifest.yml
+$ vi ~/workspace/paasta-5.5.0/release/portal/portal-app/portal-registration-2.1.0/manifest.yml
 
 applications:
   - name: portal-registration
@@ -397,7 +456,7 @@ applications:
     buildpacks:
     - java_buildpack
     routes:
-    - route: portal-registration.<DOMAIN>
+    - route: portal-registration.xx.xxx.xxx.xxx.xip.io
     path: paas-ta-portal-registration.jar
     env:
       server_port: 80
@@ -412,379 +471,70 @@ applications:
       eureka_server_maxThreadsForPeerReplication: 0
       eureka_client_server_waitTimeInMsWhenSyncEmpty: 0
       eureka_client_serviceUrl_defaultZone: http://${vcap.application.uris[0]}/eureka/
-```
 
-- Portal App 설정 파일 수정 및 적용  
-  : portal-web-user   
-```
-### 설정 파일을 환경에 맞게 수정한다.
-$ cd ~/workspace/paasta-5.0/release/portal/portal-app/portal-web-user-2.2.0/config
-$ vi config.json
 
-{
-  "clientId": "<UAAC_PORTAL_CLIENT_ID>",
-  "clientSecret": "<UAAC_PORTAL_CLIENT_SECRET>",
-  "redirectUri": "/callback",
-  "logoutredirectUri": "/login",
-  "scope": "openid cloud_controller_service_permissions.read cloud_controller.read cloud_controller.write",
-  "authUrl": "/oauth/authorize",
-  "checkUrl": "/check_token",
-  "accessUrl": "/oauth/token",
-  "infoUrl": "/userinfo",
-  "logoutUrl": "/logout.do",
-  "userinfoUrl": "/commonapi/v2/user",
-  "code": "code",
-  "sessionTimeout": "10",
-  "monitoring": false,
-  "quantity": false,
-  "automaticApproval": true,
-  "apiversion": "v3",
-  "webadminUri": "http://portal-web-admin.<DOMAIN>"
-}
-
-### applyChangeConfig.sh 를 실행하여 설정 정보를 적용한다. 
-$ cd ~/workspace/paasta-5.0/release/portal/portal-app/portal-web-user-2.2.0/config
-$ sh applyChangeConfig.sh
 
 ```
-### <div id="3.3"/> 3.3. Portal App 배포  
 
-- Portal 배포용 조직 및 공간으로 target을 설정하고, security-group을 설정한다.
+
+
+### <div id="3.1.4"/> 3.1.4. Portal App 배포 Script 변수 설정
+Portal을 PaaS-TA에 App으로 배포해주는 Script 동작을 위해 Script의 접속정보 변수를 설정한다.
+
+> $ vi ~/workspace/paasta-5.5.0/release/portal/portal-app/2.portalContainerPush.sh
 ```
-# Portal 배포용 조직 및 공간 target 설정
-$ cf target -o portal -s system
+#!/bin/bash
 
-# portal infra 및 PaaS-TA 접속을 위해 security-group을 생성하고 설정한다. 
-$ vi portal-rule.json
+#VARIABLE
+DOMAIN="xx.xxx.xx.xxx.xip.io"				    # PaaS-TA System Domain
+PAASTA_USER_ADMIN_USERNAME="admin"			# PaaS-TA Admin Username
+PAASTA_USER_ADMIN_PASSWORD="admin"			# PaaS-TA Admin Password
+PORTAL_QUOTA_NAME="portal_quota"			  # PaaS-TA Portal Quota Name
+PORTAL_ORG_NAME="portal"					      # PaaS-TA Portal Org Name
+PORTAL_SPACE_NAME="system"					    # PaaS-TA Portal Space Name
+PORTAL_SECURITY_GROUP_NAME="portal"			# PaaS-TA Portal Space Name
 
-[
-    {
-        "destination": "<PaaS-TA 설치 IP영역 (e.g. 10.0.1.0/24)>",
-        "protocol": "all"
-    },
-    {
-        "destination": "<Portal infra 설치 IP (e.g. 10.0.81.121)>",
-        "protocol": "all"
-    }
-]
+......
 
-$ cf create-security-group portal portal-rule.json
-$ cf bind-running-security-group portal
-$ cf bind-staging-security-group portal
 ```
 
-  1. portal-registration 배포 
+### <div id="3.1.5"/> 3.1.5. Portal App 배포 Script 실행
+Portal을 PaaS-TA에 App으로 배포해주는 Script를 실행한다.
+
 ```
-$ cd ~/workspace/paasta-5.0/release/portal/portal-app/portal-registration-2.1.0
+$ cd ~/workspace/paasta-5.5.0/release/portal/portal-app
+$ source 2.applyChangeVariable.sh
+
+.....
+
+name                  requested state   processes           routes
+portal-api            started           web:1/1, task:0/0   portal-api.61.252.53.246.xip.io
+portal-common-api     started           web:1/1, task:0/0   portal-common-api.61.252.53.246.xip.io
+portal-gateway        started           web:1/1, task:0/0   portal-gateway.61.252.53.246.xip.io
+portal-log-api        started           web:1/1, task:0/0   portal-log-api.61.252.53.246.xip.io
+portal-registration   started           web:1/1, task:0/0   portal-registration.61.252.53.246.xip.io
+portal-storage-api    started           web:1/1, task:0/0   portal-storage-api.61.252.53.246.xip.io
+portal-web-admin      started           web:1/1, task:0/0   portal-web-admin.61.252.53.246.xip.io
+portal-web-user       started           web:1/1             portal-web-user.61.252.53.246.xip.io
+
+```
+
+### <div id="3.1.6"/> 3.1.6. Portal SSH 설치
+
+Portal 5.1.0 버전 이상부터는 배포된 어플리케이션의 SSH 접속이 가능하다.
+
+이를 위해 Portal SSH App을 먼저 배포해야 한다.
+
+
+- Portal SSH 다운로드 및 배포
+```
+$ wget --content-disposition http://45.248.73.44/index.php/s/awPjYDYCMiHY7yF/download
+$ unzip portal-ssh.zip
+$ cd portal-ssh
 $ cf push
-
-Getting app info...
-Creating app with these attributes...
-+ name:         portal-registration
-  path:         /home/ubuntu/workspace/paasta-5.0/release/portal/portal-app/portal-registration-2.1.0/paas-ta-portal-registration.jar
-  buildpacks:
-+   java_buildpack
-+ instances:    1
-+ memory:       1G
-  env:
-+   eureka_client_fetchRegistry
-+   eureka_client_registerWithEureka
-
-... ((생략)) ...
-
-name:              portal-registration
-requested state:   started
-routes:            portal-registration.52.78.102.150.nip.io
-last uploaded:     Thu 26 Nov 15:14:41 KST 2020
-stack:             cflinuxfs3
-buildpacks:        java_buildpack
-
-type:            web
-instances:       1/1
-memory usage:    1024M
-start command:   JAVA_OPTS="-agentpath:$PWD/.java-buildpack/open_jdk_jre/bin/jvmkill-1.16.0_RELEASE=printHeapHistogram=1
-                 -Djava.io.tmpdir=$TMPDIR -XX:ActiveProcessorCount=$(nproc)
-                 -Djava.ext.dirs=$PWD/.java-buildpack/container_security_provider:$PWD/.java-buildpack/open_jdk_jre/lib/ext
-                 -Djava.security.properties=$PWD/.java-buildpack/java_security/java.security $JAVA_OPTS" &&
-                 CALCULATED_MEMORY=$($PWD/.java-buildpack/open_jdk_jre/bin/java-buildpack-memory-calculator-3.13.0_RELEASE
-                 -totMemory=$MEMORY_LIMIT -loadedClasses=20046 -poolType=metaspace -stackThreads=250 -vmOptions="$JAVA_OPTS") && echo JVM
-                 Memory Configuration: $CALCULATED_MEMORY && JAVA_OPTS="$JAVA_OPTS $CALCULATED_MEMORY" && MALLOC_ARENA_MAX=2
-                 SERVER_PORT=$PORT eval exec $PWD/.java-buildpack/open_jdk_jre/bin/java $JAVA_OPTS -cp $PWD/.
-                 org.springframework.boot.loader.JarLauncher
-     state     since                  cpu      memory         disk           details
-#0   running   2020-11-26T06:15:01Z   209.7%   249.3M of 1G   154.3M of 1G   
-
 ```
-  2. portal-gateway 배포 
-```
-$ cd ~/workspace/paasta-5.0/release/portal/portal-app/portal-gateway-2.1.0
-$ cf push
 
-Getting app info...
-Creating app with these attributes...
-+ name:         portal-gateway
-  path:         /home/ubuntu/workspace/paasta-5.0/release/portal/portal-app/portal-gateway-2.1.0/paas-ta-portal-gateway.jar
-  buildpacks:
-+   java_buildpack
-+ instances:    1
-+ memory:       1G
-  env:
-+   eureka_client_serviceUrl_defaultZone
-+   eureka_instance_hostname
 
-... ((생략)) ...
-
-name:              portal-gateway
-requested state:   started
-routes:            portal-gateway.52.78.102.150.nip.io
-last uploaded:     Thu 26 Nov 15:19:30 KST 2020
-stack:             cflinuxfs3
-buildpacks:        java_buildpack
-
-type:            web
-instances:       1/1
-memory usage:    1024M
-start command:   JAVA_OPTS="-agentpath:$PWD/.java-buildpack/open_jdk_jre/bin/jvmkill-1.16.0_RELEASE=printHeapHistogram=1
-                 -Djava.io.tmpdir=$TMPDIR -XX:ActiveProcessorCount=$(nproc)
-                 -Djava.ext.dirs=$PWD/.java-buildpack/container_security_provider:$PWD/.java-buildpack/open_jdk_jre/lib/ext
-                 -Djava.security.properties=$PWD/.java-buildpack/java_security/java.security $JAVA_OPTS" &&
-                 CALCULATED_MEMORY=$($PWD/.java-buildpack/open_jdk_jre/bin/java-buildpack-memory-calculator-3.13.0_RELEASE
-                 -totMemory=$MEMORY_LIMIT -loadedClasses=20024 -poolType=metaspace -stackThreads=250 -vmOptions="$JAVA_OPTS") && echo JVM
-                 Memory Configuration: $CALCULATED_MEMORY && JAVA_OPTS="$JAVA_OPTS $CALCULATED_MEMORY" && MALLOC_ARENA_MAX=2
-                 SERVER_PORT=$PORT eval exec $PWD/.java-buildpack/open_jdk_jre/bin/java $JAVA_OPTS -cp $PWD/.
-                 org.springframework.boot.loader.JarLauncher
-     state     since                  cpu    memory         disk           details
-#0   running   2020-11-26T06:19:50Z   0.0%   240.4M of 1G   154.6M of 1G   
-
-```
-  3. portal-api 배포 
-```
-$ cd ~/workspace/paasta-5.0/release/portal/portal-app/portal-api-2.2.0
-$ cf push
-
-Getting app info...
-Creating app with these attributes...
-+ name:         portal-api
-  path:         /home/ubuntu/workspace/paasta-5.0/release/portal/portal-app/portal-api-2.2.0/paas-ta-portal-api.jar
-  buildpacks:
-+   java_buildpack
-+ instances:    1
-+ memory:       2G
-  env:
-+   JBP_CONFIG_CONTAINER_SECURITY_PROVIDER
-+   abacus_url
-+   cloudfoundry_authorization
-
-... ((생략)) ...
-
-name:              portal-api
-requested state:   started
-routes:            portal-api.52.78.102.150.nip.io
-last uploaded:     Thu 26 Nov 15:22:27 KST 2020
-stack:             cflinuxfs3
-buildpacks:        java_buildpack
-
-type:            web
-instances:       1/1
-memory usage:    2048M
-start command:   JAVA_OPTS="-agentpath:$PWD/.java-buildpack/open_jdk_jre/bin/jvmkill-1.16.0_RELEASE=printHeapHistogram=1
-                 -Djava.io.tmpdir=$TMPDIR -XX:ActiveProcessorCount=$(nproc) -Dorg.cloudfoundry.security.keymanager.enabled=false
-                 -Dorg.cloudfoundry.security.trustmanager.enabled=false
-                 -Djava.ext.dirs=$PWD/.java-buildpack/container_security_provider:$PWD/.java-buildpack/open_jdk_jre/lib/ext
-                 -Djava.security.properties=$PWD/.java-buildpack/java_security/java.security $JAVA_OPTS" &&
-                 CALCULATED_MEMORY=$($PWD/.java-buildpack/open_jdk_jre/bin/java-buildpack-memory-calculator-3.13.0_RELEASE
-                 -totMemory=$MEMORY_LIMIT -loadedClasses=27365 -poolType=metaspace -stackThreads=250 -vmOptions="$JAVA_OPTS") && echo JVM
-                 Memory Configuration: $CALCULATED_MEMORY && JAVA_OPTS="$JAVA_OPTS $CALCULATED_MEMORY" && MALLOC_ARENA_MAX=2
-                 SERVER_PORT=$PORT eval exec $PWD/.java-buildpack/open_jdk_jre/bin/java $JAVA_OPTS -cp $PWD/.
-                 org.springframework.boot.loader.JarLauncher
-     state     since                  cpu    memory         disk           details
-#0   running   2020-11-26T06:22:52Z   0.0%   611.2M of 2G   185.8M of 1G   
-
-```
-  4. portal-common-api 배포 
-```
-$ cd ~/workspace/paasta-5.0/release/portal/portal-app/portal-common-api-2.1.0
-$ cf push
-
-Getting app info...
-Creating app with these attributes...
-+ name:         portal-common-api
-  path:         /home/ubuntu/workspace/paasta-5.0/release/portal/portal-app/portal-common-api-2.1.0/paas-ta-portal-common-api.jar
-  buildpacks:
-+   java_buildpack
-+ instances:    1
-+ memory:       1G
-  env:
-+   datasource_cc_driver-class-name
-+   datasource_cc_password
-+   datasource_cc_url
-
-... ((생략)) ...
-
-name:              portal-common-api
-requested state:   started
-routes:            portal-common-api.52.78.102.150.nip.io
-last uploaded:     Thu 26 Nov 16:11:16 KST 2020
-stack:             cflinuxfs3
-buildpacks:        java_buildpack
-
-type:            web
-instances:       1/1
-memory usage:    1024M
-start command:   JAVA_OPTS="-agentpath:$PWD/.java-buildpack/open_jdk_jre/bin/jvmkill-1.16.0_RELEASE=printHeapHistogram=1
-                 -Djava.io.tmpdir=$TMPDIR -XX:ActiveProcessorCount=$(nproc)
-                 -Djava.ext.dirs=$PWD/.java-buildpack/container_security_provider:$PWD/.java-buildpack/open_jdk_jre/lib/ext
-                 -Djava.security.properties=$PWD/.java-buildpack/java_security/java.security $JAVA_OPTS" &&
-                 CALCULATED_MEMORY=$($PWD/.java-buildpack/open_jdk_jre/bin/java-buildpack-memory-calculator-3.13.0_RELEASE
-                 -totMemory=$MEMORY_LIMIT -loadedClasses=21771 -poolType=metaspace -stackThreads=250
-                 -vmOptions="$JAVA_OPTS") && echo JVM Memory Configuration: $CALCULATED_MEMORY && JAVA_OPTS="$JAVA_OPTS
-                 $CALCULATED_MEMORY" && MALLOC_ARENA_MAX=2 SERVER_PORT=$PORT eval exec
-                 $PWD/.java-buildpack/open_jdk_jre/bin/java $JAVA_OPTS -cp $PWD/.
-                 org.springframework.boot.loader.JarLauncher
-     state     since                  cpu    memory         disk           details
-#0   running   2020-11-26T07:11:42Z   0.0%   185.4M of 1G   163.8M of 1G   
-
-```
-  5. portal-storage-api 배포 
-```
-$ cd ~/workspace/paasta-5.0/release/portal/portal-app/portal-storage-api-2.1.0
-$ cf push
-
-Getting app info...
-Creating app with these attributes...
-+ name:         portal-storage-api
-  path:         /home/ubuntu/workspace/paasta-5.0/release/portal/portal-app/portal-storage-api-2.1.0/paas-ta-portal-storage-api.jar
-  buildpacks:
-+   java_buildpack
-+ instances:    1
-+ memory:       1G
-  env:
-+   eureka_client_serviceUrl_defaultZone
-+   eureka_instance_hostname
-
-... ((생략)) ...
-
-name:              portal-storage-api
-requested state:   started
-routes:            portal-storage-api.52.78.102.150.nip.io
-last uploaded:     Thu 26 Nov 16:13:22 KST 2020
-stack:             cflinuxfs3
-buildpacks:        java_buildpack
-
-type:            web
-instances:       1/1
-memory usage:    1024M
-start command:   JAVA_OPTS="-agentpath:$PWD/.java-buildpack/open_jdk_jre/bin/jvmkill-1.16.0_RELEASE=printHeapHistogram=1 -Djava.io.tmpdir=$TMPDIR -XX:ActiveProcessorCount=$(nproc)
-                 -Djava.ext.dirs=$PWD/.java-buildpack/container_security_provider:$PWD/.java-buildpack/open_jdk_jre/lib/ext -Djava.security.properties=$PWD/.java-buildpack/java_security/java.security $JAVA_OPTS" &&
-                 CALCULATED_MEMORY=$($PWD/.java-buildpack/open_jdk_jre/bin/java-buildpack-memory-calculator-3.13.0_RELEASE -totMemory=$MEMORY_LIMIT -loadedClasses=18539 -poolType=metaspace -stackThreads=250 -vmOptions="$JAVA_OPTS") && echo JVM Memory
-                 Configuration: $CALCULATED_MEMORY && JAVA_OPTS="$JAVA_OPTS $CALCULATED_MEMORY" && MALLOC_ARENA_MAX=2 SERVER_PORT=$PORT eval exec $PWD/.java-buildpack/open_jdk_jre/bin/java $JAVA_OPTS -cp $PWD/. org.springframework.boot.loader.JarLauncher
-     state     since                  cpu    memory         disk           details
-#0   running   2020-11-26T07:13:40Z   0.0%   121.4M of 1G   147.7M of 1G   
-
-```
-  6. portal-log-api 배포 
-```
-$ cd ~/workspace/paasta-5.0/release/portal/portal-app/portal-log-api-2.1.0
-$ cf push
-
-Getting app info...
-Creating app with these attributes...
-+ name:         portal-log-api
-  path:         /home/ubuntu/workspace/paasta-5.0/release/portal/portal-app/portal-log-api-2.1.0/paas-ta-portal-log-api.jar
-  buildpacks:
-+   java_buildpack
-+ instances:    1
-+ memory:       1G
-  env:
-+   cloudfoundry_authorization
-+   cloudfoundry_cc_api_sslSkipValidation
-
-... ((생략)) ...
-
-name:              portal-log-api
-requested state:   started
-routes:            portal-log-api.52.78.102.150.nip.io
-last uploaded:     Thu 26 Nov 16:15:11 KST 2020
-stack:             cflinuxfs3
-buildpacks:        java_buildpack
-
-type:            web
-instances:       1/1
-memory usage:    1024M
-start command:   JAVA_OPTS="-agentpath:$PWD/.java-buildpack/open_jdk_jre/bin/jvmkill-1.16.0_RELEASE=printHeapHistogram=1 -Djava.io.tmpdir=$TMPDIR -XX:ActiveProcessorCount=$(nproc)
-                 -Djava.ext.dirs=$PWD/.java-buildpack/container_security_provider:$PWD/.java-buildpack/open_jdk_jre/lib/ext -Djava.security.properties=$PWD/.java-buildpack/java_security/java.security $JAVA_OPTS" &&
-                 CALCULATED_MEMORY=$($PWD/.java-buildpack/open_jdk_jre/bin/java-buildpack-memory-calculator-3.13.0_RELEASE -totMemory=$MEMORY_LIMIT -loadedClasses=16845 -poolType=metaspace -stackThreads=250 -vmOptions="$JAVA_OPTS") && echo JVM Memory
-                 Configuration: $CALCULATED_MEMORY && JAVA_OPTS="$JAVA_OPTS $CALCULATED_MEMORY" && MALLOC_ARENA_MAX=2 SERVER_PORT=$PORT eval exec $PWD/.java-buildpack/open_jdk_jre/bin/java $JAVA_OPTS -cp $PWD/. org.springframework.boot.loader.JarLauncher
-     state     since                  cpu    memory      disk       details
-#0   running   2020-11-26T07:15:26Z   0.0%   40K of 1G   8K of 1G   
-```
-  7. portal-web-admin 배포 
-```
-$ cd ~/workspace/paasta-5.0/release/portal/portal-app/portal-web-admin-2.2.0
-$ cf push
-
-Getting app info...
-Creating app with these attributes...
-+ name:         portal-web-admin
-  path:         /home/ubuntu/workspace/paasta-5.0/release/portal/portal-app/portal-web-admin-2.2.0/paas-ta-portal-webadmin.war
-  buildpacks:
-+   java_buildpack
-+ instances:    1
-+ memory:       1G
-  env:
-+   datasource_cfg_ddl-auto
-+   datasource_cfg_naming_strategy
-
-... ((생략)) ...
-
-name:              portal-web-admin
-requested state:   started
-routes:            portal-web-admin.52.78.102.150.nip.io
-last uploaded:     Thu 26 Nov 16:17:43 KST 2020
-stack:             cflinuxfs3
-buildpacks:        java_buildpack
-
-type:            web
-instances:       1/1
-memory usage:    1024M
-start command:   JAVA_OPTS="-agentpath:$PWD/.java-buildpack/open_jdk_jre/bin/jvmkill-1.16.0_RELEASE=printHeapHistogram=1 -Djava.io.tmpdir=$TMPDIR -XX:ActiveProcessorCount=$(nproc)
-                 -Djava.ext.dirs=$PWD/.java-buildpack/container_security_provider:$PWD/.java-buildpack/open_jdk_jre/lib/ext -Djava.security.properties=$PWD/.java-buildpack/java_security/java.security $JAVA_OPTS" &&
-                 CALCULATED_MEMORY=$($PWD/.java-buildpack/open_jdk_jre/bin/java-buildpack-memory-calculator-3.13.0_RELEASE -totMemory=$MEMORY_LIMIT -loadedClasses=17876 -poolType=metaspace -stackThreads=250 -vmOptions="$JAVA_OPTS") && echo JVM Memory
-                 Configuration: $CALCULATED_MEMORY && JAVA_OPTS="$JAVA_OPTS $CALCULATED_MEMORY" && MALLOC_ARENA_MAX=2 SERVER_PORT=$PORT eval exec $PWD/.java-buildpack/open_jdk_jre/bin/java $JAVA_OPTS -cp $PWD/. org.springframework.boot.loader.WarLauncher
-     state     since                  cpu      memory         disk           details
-#0   running   2020-11-26T07:18:05Z   187.5%   237.5M of 1G   232.5M of 1G   
-```
-  8. portal-web-user 배포 
-```
-$ cd ~/workspace/paasta-5.0/release/portal/portal-app/portal-web-user-2.2.0
-$ cf push
-
-Getting app info...
-Creating app with these attributes...
-+ name:         portal-web-user
-  path:         /home/ubuntu/workspace/paasta-5.0/release/portal/portal-app/portal-web-user-2.2.0/paas-ta-portal-webuser
-  buildpacks:
-+   staticfile_buildpack
-+ instances:    1
-+ memory:       1G
-
-... ((생략)) ...
-
-name:              portal-web-user
-requested state:   started
-routes:            portal-web-user.52.78.102.150.nip.io
-last uploaded:     Thu 26 Nov 16:19:20 KST 2020
-stack:             cflinuxfs3
-buildpacks:        staticfile
-
-type:            web
-instances:       1/1
-memory usage:    1024M
-start command:   $HOME/boot.sh
-     state     since                  cpu    memory       disk           details
-#0   running   2020-11-26T07:19:33Z   0.0%   2.5M of 1G   163.2M of 1G   
-
-```
 
 ## <div id="4"/>4. PaaS-TA Portal 운영
 
