@@ -341,21 +341,22 @@ laas_logo: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAABGCAYAAABll74gAA
 
 ### <div id="2.5"/> 2.5. 서비스 설치
 
-- 서버 환경에 맞추어 Deploy 스크립트 파일의 VARIABLES 설정을 수정한다. 
+- 서버 환경에 맞추어 Deploy 스크립트 파일의 VARIABLES 설정을 수정하고, Option file을 추가할지 선택한다.  
+     (선택) -o operations/use-compiled-releases.yml (ubuntu-xenial/621.94로 컴파일 된 릴리즈 사용)  
 
 > $ vi ~/workspace/paasta-5.5.0/deployment/service-deployment/logging-service/deploy.sh
 
 ```
 #!/bin/bash
-  
+
 # VARIABLES
-BOSH_NAME="micro-bosh"                           # bosh name (e.g. micro-bosh)
-IAAS="openstack"                                 # IaaS (e.g. aws/azure/gcp/openstack/vsphere)
-COMMON_VARS_PATH="<COMMON_VARS_FILE_PATH>"       # common_vars.yml File Path (e.g. /home/ubuntu/paasta-5.5.0/common/common_vars.yml)
+COMMON_VARS_PATH="<COMMON_VARS_FILE_PATH>"		# common_vars.yml File Path (e.g. ../../common/common_vars.yml)
+CURRENT_IAAS="${CURRENT_IAAS}"								# IaaS Information (PaaS-TA에서 제공되는 create-bosh-login.sh 미 사용시 aws/azure/gcp/openstack/vsphere 입력)
+BOSH_ENVIRONMENT= "${BOSH_ENVIRONMENT}"				# bosh director alias name (PaaS-TA에서 제공되는 create-bosh-login.sh 미 사용시 bosh envs에서 이름을 확인하여 입력)
 
 # DEPLOY
-bosh -e ${BOSH_NAME} -n -d logging-service deploy --no-redact logging-service.yml \
-    -o operations/${IAAS}-network.yml \
+bosh -e ${BOSH_ENVIRONMENT} -n -d logging-service deploy --no-redact logging-service.yml \
+    -o operations/${CURRENT_IAAS}-network.yml \
     -l ${COMMON_VARS_PATH} \
     -l vars.yml
 ```
@@ -382,26 +383,26 @@ paasta-logging-service-release.tgz
 ```
   
 - 서버 환경에 맞추어 Deploy 스크립트 파일의 VARIABLES 설정을 수정하고 Option file 및 변수를 추가한다.  
-     (추가) -o operations/use-compiled-releases.yml  
-     (추가) -v inception_os_user_name="<HOME_USER_NAME>"  
+     (추가) -o operations/use-offline-releases.yml (미리 다운받은 offline 릴리즈 사용)  
+     (추가) -v release_dir="<Release Directory>"  
      
 > $ vi ~/workspace/paasta-5.5.0/deployment/service-deployment/logging-service/deploy.sh
 
 ```
 #!/bin/bash
-  
+
 # VARIABLES
-BOSH_NAME="micro-bosh"                           # bosh name (e.g. micro-bosh)
-IAAS="openstack"                                 # IaaS (e.g. aws/azure/gcp/openstack/vsphere)
-COMMON_VARS_PATH="<COMMON_VARS_FILE_PATH>"       # common_vars.yml File Path (e.g. /home/ubuntu/paasta-5.5.0/common/common_vars.yml)
+COMMON_VARS_PATH="<COMMON_VARS_FILE_PATH>"		# common_vars.yml File Path (e.g. ../../common/common_vars.yml)
+CURRENT_IAAS="${CURRENT_IAAS}"								# IaaS Information (PaaS-TA에서 제공되는 create-bosh-login.sh 미 사용시 aws/azure/gcp/openstack/vsphere 입력)
+BOSH_ENVIRONMENT= "${BOSH_ENVIRONMENT}"				# bosh director alias name (PaaS-TA에서 제공되는 create-bosh-login.sh 미 사용시 bosh envs에서 이름을 확인하여 입력)
 
 # DEPLOY
-bosh -e ${BOSH_NAME} -n -d logging-service deploy --no-redact logging-service.yml \
-    -o operations/${IAAS}-network.yml \
-    -o operations/use-compiled-releases.yml \
+bosh -e ${BOSH_ENVIRONMENT} -n -d logging-service deploy --no-redact logging-service.yml \
+    -o operations/${CURRENT_IAAS}-network.yml \
     -l ${COMMON_VARS_PATH} \
     -l vars.yml \
-    -v inception_os_user_name="ubuntu"
+    -v release_dir="/home/ubuntu/workspace/paasta-5.5/release"  
+
 ```  
 
 - 서비스를 설치한다.  
