@@ -23,8 +23,8 @@
    　　　●  [PaaS-TA 그외 Variable List](#1021)  
    　　3.6.2. [PaaS-TA Operation 파일](#1022)  
    　　3.6.3. [PaaS-TA 설치 Shell Scripts](#1023)  
-   　　　●  [deploy-aws.sh](#1024)  
-   　　　●  [deploy-openstack.sh](#1025)  
+   　　　●  [deploy-aws-monitoring.sh](#1024)  
+   　　　●  [deploy-openstack-monitoring.sh](#1025)  
    　3.7. [PaaS-TA 설치](#1030)  
    　3.8. [PaaS-TA 로그인](#1032)   
 
@@ -976,7 +976,7 @@ bosh -e {director_name} -d paasta -n deploy paasta-deployment.yml \	# PaaS-TA Ma
 	-o operations/use-postgres.yml \				# Database Type 설정 (3.5버전 이하에서 Migration 시 필수)
 	-o operations/use-compiled-releases-postgres-online.yml \	# PaaS-TA 설치시 Postgres 컴파일 릴리즈 파일 정보
 	-o operations/rename-network-and-deployment.yml \		# Rename Network and Deployment
-  -o paasta-addon/paasta-monitoring.yml \				# [MONITORING] monitoring metric agent 적용 
+    -o paasta-addon/paasta-monitoring.yml \				# [MONITORING] monitoring metric agent 적용
 	-o operations/addons/enable-component-syslog.yml \		# [MONITORING] monitoring log agent 적용
 	-l aws-vars.yml \						# AWS 환경에 PaaS-TA 설치시 적용하는 변수 설정 파일
 	-l ../../common/common_vars.yml					# PaaS-TA 및 각종 Service 설치시 적용하는 공통 변수 설정 파일
@@ -987,14 +987,14 @@ bosh -e {director_name} -d paasta -n deploy paasta-deployment.yml \	# PaaS-TA Ma
 ```
 bosh -e {director_name} -d paasta -n deploy paasta-deployment.yml \	# PaaS-TA Manifest File
 	-o operations/openstack.yml \					# OpenStack 설정
-  -o operations/use-compiled-releases-online.yml \		# PaaS-TA 설치시 공통 컴파일 릴리즈 파일 정보
+    -o operations/use-compiled-releases-online.yml \		# PaaS-TA 설치시 공통 컴파일 릴리즈 파일 정보
 	-o operations/use-haproxy.yml \					# HAProxy 적용
 	-o operations/use-haproxy-public-network.yml \			# HAProxy Public Network 적용
-  -o operations/use-compiled-releases-haproxy-online.yml \	# PaaS-TA 설치시 HAProxy 컴파일 릴리즈 파일 정보
+    -o operations/use-compiled-releases-haproxy-online.yml \	# PaaS-TA 설치시 HAProxy 컴파일 릴리즈 파일 정보
 	-o operations/use-postgres.yml \				# Database Type 설정 (3.5버전 이하에서 Migration 시 필수)
-  -o operations/use-compiled-releases-postgres-online.yml \	# PaaS-TA 설치시 Postgres 컴파일 릴리즈 파일 정보
+    -o operations/use-compiled-releases-postgres-online.yml \	# PaaS-TA 설치시 Postgres 컴파일 릴리즈 파일 정보
 	-o operations/rename-network-and-deployment.yml \		# Rename Network and Deployment
-  -o paasta-addon/paasta-monitoring.yml \				# [MONITORING] monitoring metric agent 적용 
+    -o paasta-addon/paasta-monitoring.yml \				# [MONITORING] monitoring metric agent 적용
 	-o operations/addons/enable-component-syslog.yml \		# [MONITORING] monitoring log agent 적용
 	-l openstack-vars.yml \						# OpenStack 환경에 PaaS-TA 설치시 적용하는 변수 설정 파일
 	-l ../../common/common_vars.yml					# PaaS-TA 및 각종 Service 설치시 적용하는 공통 변수 설정 파일
@@ -1016,14 +1016,14 @@ $ chmod +x ${HOME}/workspace/paasta-5.1.0/deployment/paasta-deployment/paasta/*.
 ```
 bosh -e {director_name} -d paasta -n deploy paasta-deployment.yml \	# PaaS-TA Manifest File
 	-o operations/aws.yml \						# AWS 설정
-  	-o operations/use-compiled-releases-online.yml \		# PaaS-TA 설치시 공통 컴파일 릴리즈 파일 정보
+  -o operations/use-compiled-releases-online.yml \		# PaaS-TA 설치시 공통 컴파일 릴리즈 파일 정보
 	-o operations/use-haproxy.yml \					# HAProxy 적용
 	-o operations/use-haproxy-public-network.yml \			# HAProxy Public Network 적용
- 	 -o operations/use-compiled-releases-haproxy-online.yml \	# PaaS-TA 설치시 HAProxy 컴파일 릴리즈 파일 정보
+ 	-o operations/use-compiled-releases-haproxy-online.yml \	# PaaS-TA 설치시 HAProxy 컴파일 릴리즈 파일 정보
 	-o operations/use-postgres.yml \				# Database Type 설정 (3.5버전 이하에서 Migration 시 필수)
 	-o operations/use-compiled-releases-postgres-online.yml \	# PaaS-TA 설치시 Postgres 컴파일 릴리즈 파일 정보
 	-o operations/rename-network-and-deployment.yml \		# Rename Network and Deployment
-  -o paasta-addon/paasta-monitoring.yml \				# [MONITORING] monitoring metric agent 적용 
+    -o paasta-addon/paasta-monitoring.yml \				# [MONITORING] monitoring metric agent 적용
 	-o operations/addons/enable-component-syslog.yml \		# [MONITORING] monitoring log agent 적용
 	-l aws-vars.yml \						# AWS 환경에 PaaS-TA 설치시 적용하는 변수 설정 파일
 	-l ../../common/common_vars.yml					# PaaS-TA 및 각종 Service 설치시 적용하는 공통 변수 설정 파일
@@ -1041,7 +1041,7 @@ bosh -e {director_name} -d paasta -n deploy paasta-deployment.yml \	# PaaS-TA Ma
 	-o operations/use-postgres.yml \				# Database Type 설정 (3.5버전 이하에서 Migration 시 필수)
 	-o operations/use-compiled-releases-postgres-online.yml \	# PaaS-TA 설치시 Postgres 컴파일 릴리즈 파일 정보
 	-o operations/rename-network-and-deployment.yml \		# Rename Network and Deployment
-	-o paasta-addon/paasta-monitoring.yml \				# [MONITORING] monitoring metric agent 적용 
+	-o paasta-addon/paasta-monitoring.yml \				# [MONITORING] monitoring metric agent 적용
 	-o operations/addons/enable-component-syslog.yml \		# [MONITORING] monitoring log agent 적용
 	-l openstack-vars.yml \						# OpenStack 환경에 PaaS-TA 설치시 적용하는 변수 설정 파일
 	-l ../../common/common_vars.yml					# PaaS-TA 및 각종 Service 설치시 적용하는 공통 변수 설정 파일
