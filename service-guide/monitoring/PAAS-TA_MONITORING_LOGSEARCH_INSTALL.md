@@ -131,7 +131,7 @@ cluster_monitor_network: "default"		# Cluster-Monitor 네트워크
 cluster_monitor_persistent_disk_type: "10GB"	# Cluster-Monitor 영구 Disk 종류
 
 # MAINTENANCE
-maintenance_azs: ["z5", "z6"]			# Maintenance 가용 존
+maintenance_azs: ["z5"]				# Maintenance 가용 존
 maintenance_instances: 1			# Maintenance 인스턴스 수
 maintenance_vm_type: "medium"			# Maintenance VM 종류
 maintenance_network: "default"			# Maintenance 네트워크
