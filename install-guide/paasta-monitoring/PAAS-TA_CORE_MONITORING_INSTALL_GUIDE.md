@@ -1016,7 +1016,7 @@ $ chmod +x ${HOME}/workspace/paasta-5.1.0/deployment/paasta-deployment/paasta/*.
 ```
 bosh -e {director_name} -d paasta -n deploy paasta-deployment.yml \	# PaaS-TA Manifest File
 	-o operations/aws.yml \						# AWS 설정
-  -o operations/use-compiled-releases-online.yml \		# PaaS-TA 설치시 공통 컴파일 릴리즈 파일 정보
+    -o operations/use-compiled-releases-online.yml \		# PaaS-TA 설치시 공통 컴파일 릴리즈 파일 정보
 	-o operations/use-haproxy.yml \					# HAProxy 적용
 	-o operations/use-haproxy-public-network.yml \			# HAProxy Public Network 적용
  	-o operations/use-compiled-releases-haproxy-online.yml \	# PaaS-TA 설치시 HAProxy 컴파일 릴리즈 파일 정보
