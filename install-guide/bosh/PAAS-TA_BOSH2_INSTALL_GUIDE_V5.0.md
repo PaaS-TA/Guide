@@ -1,45 +1,47 @@
 ## Table of Contents
 
-1. [개요](#101)  
-　● [목적](#102)  
-　● [범위](#103)  
-　● [참고 자료](#104)  
-2. [BOSH](#105)  
-　● [BOSH 컴포넌트 구성](#106)  
-3. [BOSH 설치 환경 구성 및 설치](#107)  
-　3.1. [BOSH 설치 절차](#108)  
-　3.2. [Inception 서버 구성](#109)  
-　3.3. [BOSH 설치](#1010)  
-　　3.3.1. [Prerequisite](#1011)  
-　　3.3.2. [BOSH CLI 및 Dependency 설치](#1012)  
-　　3.3.3. [설치 파일 다운로드](#1013)  
-　　3.3.4. [BOSH 설치 ](#1015)  
-　　　3.3.4.1. [BOSH 설치 Variable 파일](#1016)  
-　　　　● [aws-vars.yml](#1017)  
-　　　3.3.4.2. [BOSH 설치 Option 파일](#1023)  
-　　　　● [BOSH Optional 파일](#1024)  
-　　　3.3.4.3. [BOSH 설치 Shell Script](#1026)  
-　　　　● [deploy-aws.sh](#1027)  
-　　3.3.5. [BOSH 설치](#1034)  
-　　3.3.6. [BOSH 로그인](#1036)  
-　　3.3.7. [CredHub](#1037)  
-　　　3.3.7.1. [CredHub CLI 설치](#1038)  
-　　　3.3.7.2. [CredHub 로그인](#1039)  
-　　3.3.8. [Jumpbox](#1040)  
+1. [개요](#1)  
+　● [목적](#1.1)  
+　● [범위](#1.2)  
+　● [참고 자료](#1.3)  
+2. [BOSH](#2)  
+　● [BOSH 컴포넌트 구성](#2.1)  
+3. [BOSH 설치 환경 구성 및 설치](#3)  
+　3.1. [BOSH 설치 절차](#3.1)  
+　3.2. [Inception 서버 구성](#3.2)  
+　3.3. [BOSH 설치](#3.3)  
+　　3.3.1. [Prerequisite](#3.3.1)  
+　　3.3.2. [BOSH CLI 및 Dependency 설치](#3.3.2)  
+　　3.3.3. [설치 파일 다운로드](#3.3.3)  
+　　3.3.4. [BOSH 설치](#3.3.4)  
+　　　3.3.4.1. [BOSH 설치 Variable 파일](#3.3.4.1)  
+　　　　● [aws-vars.yml](#3.3.4.1.1)  
+　　　　● [openstack-vars.yml](#3.3.4.1.2)  
+　　　3.3.4.2. [BOSH 설치 Option 파일](#3.3.4.2)  
+　　　　● [BOSH Optional 파일](#3.3.4.2.1)  
+　　　3.3.4.3. [BOSH 설치 Shell Script](#3.3.4.3)  
+　　　　● [deploy-aws.sh](#3.3.4.3.1)  
+　　　　● [deploy-openstack.sh](#3.3.4.3.2)  
+　　3.3.5. [BOSH 설치](#3.3.5)  
+　　3.3.6. [BOSH 로그인](#3.3.6)  
+　　3.3.7. [CredHub](#3.3.7)  
+　　　3.3.7.1. [CredHub CLI 설치](#3.3.7.1)  
+　　　3.3.7.2. [CredHub 로그인](#3.3.7.2)  
+　　3.3.8. [Jumpbox](#3.3.8)  
 
 ## Executive Summary
 
 본 문서는 BOSH2(이하 BOSH)의 설명 및 설치 가이드 문서로, BOSH를 실행할 수 있는 환경을 구성하고 사용하는 방법에 관해서 설명하였다.
 
-# <div id='101'/>1. 문서 개요 
+# <div id='1'/>1. 문서 개요 
 
-## <div id='102'/>● 목적
+## <div id='1.1'/>● 목적
 클라우드 환경에 서비스 시스템을 배포할 수 있는 BOSH는 릴리즈 엔지니어링, 개발, 소프트웨어 라이프사이클 관리를 통합한 오픈소스 프로젝트로 본 문서에서는 Inception 환경(설치환경)에서 BOSH를 설치하는 데 그 목적이 있다. 
 
-## <div id='103'/>● 범위
+## <div id='1.2'/>● 범위
 본 문서는 Linux 환경(Ubuntu 18.04)을 기준으로 BOSH 설치를 위한 패키지와 라이브러리를 설치 및 구성하고, 이를 이용하여 BOSH를 설치하는 것을 기준으로 작성하였다.
 
-## <div id='104'/>● 참고 자료
+## <div id='1.3'/>● 참고 자료
 
 본 문서는 Cloud Foundry의 BOSH Document와 Cloud Foundry Document를 참고로 작성하였다.
 
@@ -49,15 +51,15 @@ BOSH Deployment: [https://github.com/cloudfoundry/bosh-deployment](https://githu
 
 Cloud Foundry Document: [https://docs.cloudfoundry.org](https://docs.cloudfoundry.org)
 
-# <div id='105'/>2. BOSH
+# <div id='2'/>2. BOSH
 BOSH는 초기에 Cloud Foundry PaaS를 위해 개발되었지만, 현재는 Jenkins, Hadoop 등 Yaml 파일 형식으로 소프트웨어를 쉽게 배포할 수 있으며, 수백 가지의 VM을 설치할 수 있고, 각각의 VM에 대해 모니터링, 장애 복구 등 라이프 사이클을 관리할 수 있는 통합 프로젝트이다.
 
 BOSH가 지원하는 IaaS는 VMware vSphere, Google Cloud Platform, Amazon Web Services EC2, Microsoft Azure, OpenStack, Alibaba Cloud가 있다.  
 PaaS-TA는 VMware vSphere, Google Cloud Platform, Amazon Web Services EC2, OpenStack, Microsoft Azure 등의 IaaS를 지원한다.  
-현재 PaaS-TA 5.0.2에서 검증한 IaaS 환경은 AWS 환경이다.
+현재 PaaS-TA 5.1.0에서 검증한 IaaS 환경은 AWS, OpenStack 환경이다.
 
 PaaS-TA 3.1 버전까지는 Cloud Foundry BOSH1을 기준으로 설치했지만, PaaS-TA 3.5 버전부터 BOSH2를 기준으로 설치하였다.  
-PaaS-TA 5.0.2는 Cloud Foundry에서 제공하는 bosh-deployment를 활용하여 BOSH를 설치한다.
+PaaS-TA 5.1.0는 Cloud Foundry에서 제공하는 bosh-deployment를 활용하여 BOSH를 설치한다.
 
 BOSH2는 BOSH2 CLI를 통하여 BOSH와 PaaS-TA를 모두 생성한다.  
 bosh-deployment를 이용하여 BOSH를 생성한 후, paasta-deployment로 PaaS-TA를 설치한다.  
@@ -65,7 +67,7 @@ PaaS-TA 3.1 버전까지는 PaaS-TA Container, Controller를 별도의 deploymen
 
 ![PaaSTa_BOSH_Use_Guide_Image2](https://github.com/PaaS-TA/Guide-5.0-Ravioli/blob/master/install-guide/bosh/images/bosh2.png)
 
-## <div id='106'/>● BOSH 컴포넌트 구성
+## <div id='2.1'/>● BOSH 컴포넌트 구성
 
 BOSH의 컴포넌트 구성은 다음과 같다.
 
@@ -81,15 +83,15 @@ BOSH의 컴포넌트 구성은 다음과 같다.
 - Message Bus(Nats): Message Bus는 Director와 Agent 간 통신을 위한 Publish-Subscribe 방식의 Message System으로, VM 모니터링과 특정 명령을 수행하기 위해 사용된다.
 - Agent: Agent는 클라우드에 배포되는 모든 VM에 설치되고, Director로부터 특정 명령을 받고 수행하는 역할을 한다. Agent는 Director로부터 수신받은 Job Specification(설치할 패키지 및 구성 방법) 정보로 해당 VM에 Director의 지시대로 지정된 패키지를 설치하고, 필요한 구성 정보를 설정한다.
 
-# <div id='107'/>3. BOSH 설치 환경 구성 및 설치
+# <div id='3'/>3. BOSH 설치 환경 구성 및 설치
 
-## <div id='108'/>3.1. BOSH 설치 절차
+## <div id='3.1'/>3.1. BOSH 설치 절차
 Inception(PaaS-TA 설치 환경)은 BOSH 및 PaaS-TA를 설치하기 위한 설치 환경으로, VM 또는 서버 장비이다.  
 OS Version은 Ubuntu 18.04를 기준으로 한다. IaaS에서 수동으로 Inception VM을 생성해야 한다.
 
 Inception VM은 Ubuntu 18.04, vCPU 2 Core, Memory 4G, Disk 100G 이상을 권고한다.
 
-## <div id='109'/>3.2.  Inception 서버 구성
+## <div id='3.2'/>3.2.  Inception 서버 구성
 
 Inception 서버는 BOSH 및 PaaS-TA를 설치하기 위해 필요한 패키지 및 라이브러리, Manifest 파일 등의 환경을 가지고 있는 배포 작업 실행 서버이다.  
 Inception 서버는 외부 통신이 가능해야 한다.
@@ -99,11 +101,11 @@ BOSH 및 PaaS-TA 설치를 위해 Inception 서버에 구성해야 할 컴포넌
 - BOSH CLI 6.1.x 이상 
 - BOSH Dependency : ruby, ruby-dev, openssl 등
 - BOSH Deployment: BOSH 설치를 위한 manifest deployment  
-- PaaS-TA Deployment : PaaS-TA 설치를 위한 manifest deployment (cf-deployment v9.5.0 기준)
+- PaaS-TA Deployment : PaaS-TA 설치를 위한 manifest deployment (cf-deployment v13.12.0 기준)
 
-## <div id='1010'/>3.3.  BOSH 설치
+## <div id='3.3'/>3.3.  BOSH 설치
 
-### <div id='1011'/>3.3.1.    Prerequisite
+### <div id='3.3.1'/>3.3.1.    Prerequisite
 
 - 본 설치 가이드는 Ubuntu 18.04 버전을 기준으로 한다.  
 
@@ -113,7 +115,7 @@ BOSH 및 PaaS-TA 설치를 위해 Inception 서버에 구성해야 할 컴포넌
   ![Security_Group_ICMP_Image1](./images/security-group-icmp-01.png)  
 
 
-### <div id='1012'/>3.3.2.    BOSH CLI 및 Dependency 설치
+### <div id='3.3.2'/>3.3.2.    BOSH CLI 및 Dependency 설치
 
 - BOSH Dependency 설치 (Ubuntu 18.04)
 
@@ -172,19 +174,19 @@ $ sudo cp ./bosh /usr/local/bin/bosh
 $ bosh -version
 ```
 
-### <div id='1013'/>3.3.3.    설치 파일 다운로드
+### <div id='3.3.3'/>3.3.3.    설치 파일 다운로드
 
 - BOSH를 설치하기 위한 deployment가 존재하지 않는다면 다운로드 받는다
 ```
-$ mkdir -p ${HOME}/workspace/paasta/deployment
-$ cd ${HOME}/workspace/paasta/deployment
-$ git clone https://github.com/PaaS-TA/paasta-deployment.git -b v5.0.2
+$ mkdir -p ${HOME}/workspace/paasta-5.1.0/deployment
+$ cd ${HOME}/workspace/paasta-5.1.0/deployment
+$ git clone https://github.com/PaaS-TA/paasta-deployment.git -b v5.1.0
 ```
 
 - paasta/deployment/paasta-deployment 이하 디렉터리
 
 ```
-$ cd ${HOME}/workspace/paasta/deployment/paasta-deployment
+$ cd ${HOME}/workspace/paasta-5.1.0/deployment/paasta-deployment
 $ ls
 bosh  cloud-config  paasta
 ```
@@ -205,9 +207,9 @@ bosh  cloud-config  paasta
 </table>
 
 
-### <div id='1015'/>3.3.4.    BOSH 설치 파일
+### <div id='3.3.4'/>3.3.4.    BOSH 설치 파일
 
-${HOME}/workspace/paasta/deployment/paasta-deployment/bosh 이하 디렉터리에는 BOSH 설치를 위한 IaaS별 Shell Script 파일이 존재한다.  
+${HOME}/workspace/paasta-5.1.0/deployment/paasta-deployment/bosh 이하 디렉터리에는 BOSH 설치를 위한 IaaS별 Shell Script 파일이 존재한다.  
 Shell Script 파일을 이용하여 BOSH를 설치한다.
 파일명은 deploy-{IaaS}.sh 로 만들어졌다.  
 또한 {IaaS}-vars.yml을 수정하여 BOSH 설치시 적용하는 변수을 설정할 수 있다.
@@ -218,9 +220,16 @@ Shell Script 파일을 이용하여 BOSH를 설치한다.
 <td>AWS 환경에 BOSH 설치시 적용하는 변수 설정 파일</td>
 </tr>
 <tr>
+<td>openstack-vars.yml</td>
+<td>OpenStack 환경에 BOSH 설치시 적용하는 변수 설정 파일</td>
+</tr>
 <tr>
 <td>deploy-aws.sh</td>
 <td>AWS 환경에 BOSH 설치를 위한 Shell Script 파일</td>
+</tr>
+<tr>
+<td>deploy-openstack.sh</td>
+<td>OpenStack 환경에 BOSH 설치를 위한 Shell Script 파일</td>
 </tr>
 <tr>
 <td>bosh.yml</td>
@@ -231,9 +240,9 @@ Shell Script 파일을 이용하여 BOSH를 설치한다.
 
 
 
-#### <div id='1016'/>3.3.4.1. BOSH 설치 Variable File
+#### <div id='3.3.4.1'/>3.3.4.1. BOSH 설치 Variable File
 
-##### <div id='1017'/>● aws-vars.yml
+##### <div id='3.3.4.1.1'/>● aws-vars.yml
 
 ```
 # BOSH VARIABLE
@@ -259,10 +268,40 @@ syslog_port: "2514"					# Logsearch의 ls-router Port
 syslog_transport: "relp"				# Logsearch Protocol
 ```
 
+##### <div id='3.3.4.1.2'/>● openstack-vars.yml
 
-#### <div id='1023'/>3.3.4.2. BOSH 설치 Option 파일
+```
+# BOSH VARIABLE
+bosh_client_admin_id: "admin"				# Bosh Client Admin ID
+inception_os_user_name: "ubuntu"			# Home User Name
+director_name: "micro-bosh"				# BOSH Director Name
+private_cidr: "10.0.1.0/24"				# Private IP Range
+private_gw: "10.0.1.1"					# Private IP Gateway
+bosh_url: "10.0.1.6"					# Private IP 
+auth_url: "http://XX.XXX.XX.XX:XXXX/v3/"		# Openstack Keystone URL
+az: "nova"						# Openstack AZ Zone
+default_key_name: "paasta"				# Openstack Key Name
+default_security_groups: ["paasta"]			# Openstack Security Group
+net_id: "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX"		# Openstack Network ID
+openstack_password: "XXXXXX"				# Openstack User Password
+openstack_username: "XXXXXX"				# Openstack User Name
+openstack_domain: "XXXXXXX"				# Openstack Domain Name
+openstack_project: "PaaSTA"				# Openstack Project
+private_key: "~/.ssh/id_rsa.pem"			# Openstack Region
+region: "RegionOne"					# SSH Private Key Path
 
-##### <div id='1024'/>● BOSH Optional 파일
+# MONITORING VARIABLE(PaaS-TA Monitoring을 설치할 경우 향후 설치할 VM의 값으로 미리 수정)
+metric_url: "10.0.161.101"				# PaaS-TA Monitoring InfluxDB IP
+syslog_address: "10.0.121.100"				# Logsearch의 ls-router IP
+syslog_port: "2514"					# Logsearch의 ls-router Port
+syslog_transport: "relp"				# Logsearch Protocol
+```
+
+
+
+#### <div id='3.3.4.2'/>3.3.4.2. BOSH 설치 Option 파일
+
+##### <div id='3.3.4.2.1'/>● BOSH Optional 파일
 
 <table>
 <tr>
@@ -285,7 +324,7 @@ syslog_transport: "relp"				# Logsearch Protocol
 
 
 
-#### <div id='1026'/>3.3.4.3. BOSH 설치 Shell Script
+#### <div id='3.3.4.3'/>3.3.4.3. BOSH 설치 Shell Script
 
 BOSH 설치 명령어는 create-env로 시작한다.  
 Shell이 아닌 BOSH Command로 실행 가능하며, 설치하는 IaaS 환경에 따라 Option이 달라진다.  
@@ -316,7 +355,7 @@ BOSH 설치 Option은 아래와 같다.
 </tr>
 </table>
 
-##### <div id='1027'/>● deploy-aws.sh
+##### <div id='3.3.4.3.1'/>● deploy-aws.sh
 
 ```
 bosh create-env bosh.yml \                         
@@ -329,19 +368,33 @@ bosh create-env bosh.yml \
  	-l aws-vars.yml					# AWS 환경에 BOSH 설치시 적용하는 변수 설정 파일
 ```
 
+##### <div id='3.3.4.3.2'/>● deploy-openstack.sh
+
+```
+bosh create-env bosh.yml \                       
+	--state=openstack/state.json \			# BOSH Latest Running State, 설치 시 생성, Backup 필요
+	--vars-store=openstack/creds.yml \		# BOSH Credentials and Certs, 설치 시 생성, Backup 필요
+	-o openstack/cpi.yml \				# Openstack CPI 적용
+	-o uaa.yml \					# UAA 적용
+	-o credhub.yml \				# CredHub 적용
+	-o jumpbox-user.yml \				# Jumpbox 적용
+	-o openstack/disable-readable-vm-names.yml \	# VM 명을 UUIDs로 적용
+	-l openstack-vars.yml				# OpenStack 환경에 BOSH 설치시 적용하는 변수 설정 파일
+```
+
 
 - Shell Script 파일에 실행 권한 부여
 
 ```
-$ chmod +x ${HOME}/workspace/paasta/deployment/paasta-deployment/bosh/*.sh  
+$ chmod +x ${HOME}/workspace/paasta-5.1.0/deployment/paasta-deployment/bosh/*.sh  
 ```
 
 
-### <div id='1034'/>3.3.5. BOSH 설치
+### <div id='3.3.5'/>3.3.5. BOSH 설치
 
 - 서버 환경에 맞추어 Deploy 스크립트 파일의 설정을 수정한다. 
 
-> $ vi ~/workspace/paasta/deployment/paasta-deployment/bosh/deploy-aws.sh
+> $ vi ~/workspace/paasta-5.1.0/deployment/paasta-deployment/bosh/deploy-aws.sh
 ```                     
 bosh create-env bosh.yml \                         
 	--state=aws/state.json \	
@@ -356,15 +409,15 @@ bosh create-env bosh.yml \
 - BOSH 설치 Shell Script 파일 실행
 
 ```
-$ cd ${HOME}/workspace/paasta/deployment/paasta-deployment/bosh
+$ cd ${HOME}/workspace/paasta-5.1.0/deployment/paasta-deployment/bosh
 $ ./deploy-{iaas}.sh
 ```
 
 - BOSH 설치 중
 
 ```
-ubuntu@inception:~/workspace/paasta/deployment/paasta-deployment/bosh$ ./deploy-aws.sh
-Deployment manifest: '/home/ubuntu/workspace/paasta/deployment/paasta-deployment/bosh/bosh.yml'
+ubuntu@inception:~/workspace/paasta-5.1.0/deployment/paasta-deployment/bosh$ ./deploy-aws.sh
+Deployment manifest: '/home/ubuntu/workspace/paasta-5.1.0/deployment/paasta-deployment/bosh/bosh.yml'
 Deployment state: 'aws/state.json'
 
 Started validating
@@ -392,27 +445,27 @@ Succeeded
 ```
 
 
-### <div id='1036'/>3.3.6. BOSH 로그인
+### <div id='3.3.6'/>3.3.6. BOSH 로그인
 BOSH가 설치되면, BOSH 설치 디렉터리 이하 {iaas}/creds.yml 파일이 생성된다.  
 creds.yml은 BOSH 인증정보를 가지고 있으며, creds.yml을 활용하여 BOSH에 로그인한다.  
 BOSH 로그인 후, BOSH CLI 명령어를 이용하여 PaaS-TA를 설치할 수 있다.
 
 ```
-$ cd ${HOME}/workspace/paasta/deployment/paasta-deployment/bosh
+$ cd ${HOME}/workspace/paasta-5.1.0/deployment/paasta-deployment/bosh
 $ export BOSH_CA_CERT=$(bosh int ./{iaas}/creds.yml --path /director_ssl/ca)
 $ export BOSH_CLIENT=admin
 $ export BOSH_CLIENT_SECRET=$(bosh int ./{iaas}/creds.yml --path /admin_password)
 $ bosh alias-env {director_name} -e {bosh_url} --ca-cert <(bosh int ./{iaas}/creds.yml --path /director_ssl/ca)
-$ bosh –e {director_name} env
+$ bosh -e {director_name} env
 ```
 
-### <div id='1037'/>3.3.7. CredHub
+### <div id='3.3.7'/>3.3.7. CredHub
 CredHub은 인증정보 저장소이다.  
 BOSH 설치 시 Operation 파일로 credhub.yml을 추가하였다.  
 BOSH 설치 시 credhub.yml을 적용하면, PaaS-TA 설치 시 PaaS-TA에서 사용하는 인증정보(Certificate, Password)를 CredHub에 저장한다.  
 PaaS-TA 인증정보가 필요할 때 CredHub을 사용하며, CredHub CLI를 통해 CredHub에 로그인하여 인증정보 조회, 수정, 삭제를 할 수 있다.
 
-#### <div id='1038'/>3.3.7.1. CredHub CLI 설치
+#### <div id='3.3.7.1'/>3.3.7.1. CredHub CLI 설치
 
 CredHub CLI는 BOSH를 설치한 Inception(설치환경)에 설치한다.
 
@@ -421,14 +474,14 @@ $ wget https://github.com/cloudfoundry-incubator/credhub-cli/releases/download/2
 $ tar -xvf credhub-linux-2.5.3.tgz 
 $ chmod +x credhub
 $ sudo mv credhub /usr/local/bin/credhub 
-$ credhub –-version
+$ credhub --version
 ```
 
-#### <div id='1039'/>3.3.7.2. CredHub 로그인
+#### <div id='3.3.7.2'/>3.3.7.2. CredHub 로그인
 CredHub에 로그인하기 위해 BOSH를 설치한 bosh-deployment 디렉터리의 creds.yml을 활용하여 로그인한다.
 
 ```
-$ cd ${HOME}/workspace/paasta/deployment/paasta-deployment/bosh
+$ cd ${HOME}/workspace/paasta-5.1.0/deployment/paasta-deployment/bosh
 $ export CREDHUB_CLIENT=credhub-admin
 $ export CREDHUB_SECRET=$(bosh int --path /credhub_admin_client_secret {iaas}/creds.yml)
 $ export CREDHUB_CA_CERT=$(bosh int --path /credhub_tls/ca {iaas}/creds.yml)
@@ -445,21 +498,21 @@ PaaS-TA를 설치하면 인증 정보가 저장되어 조회할 수 있다.
 $ credhub get -n /{director}/{deployment}/uaa_ca
 ```
 
-### <div id='1040'/>3.3.8. Jumpbox
+### <div id='3.3.8'/>3.3.8. Jumpbox
 BOSH 설치 시 Operation 파일로 jumpbox-user.yml을 추가하였다.  
 Jumpbox는 BOSH VM에 접근하기 위한 인증을 적용하게 된다.  
 인증키는 BOSH에서 자체적으로 생성하며, 인증키를 통해 BOSH VM에 접근할 수 있다.  
 BOSH VM에 이상이 있거나 상태를 체크할 때 Jumpbox를 활용하여 BOSH VM에 접근할 수 있다.
 
 ```
-$ cd ${HOME}/workspace/paasta/deployment/paasta-deployment/bosh
+$ cd ${HOME}/workspace/paasta-5.1.0/deployment/paasta-deployment/bosh
 $ bosh int {iaas}/creds.yml --path /jumpbox_ssh/private_key > jumpbox.key 
 $ chmod 600 jumpbox.key
 $ ssh jumpbox@{bosh_url} -i jumpbox.key
 ```
 
 ```
-ubuntu@inception:~/workspace/paasta/deployment/paasta-deployment/bosh$ ssh jumpbox@10.0.1.6 -i jumpbox.key
+ubuntu@inception:~/workspace/paasta-5.1.0/deployment/paasta-deployment/bosh$ ssh jumpbox@10.0.1.6 -i jumpbox.key
 Unauthorized use is strictly prohibited. All access and activity
 is subject to logging and monitoring.
 Welcome to Ubuntu 16.04.6 LTS (GNU/Linux 4.15.0-54-generic x86_64)

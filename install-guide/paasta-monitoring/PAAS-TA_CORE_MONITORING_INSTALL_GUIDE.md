@@ -1,43 +1,46 @@
 ## Table of Contents
 
 1. [개요](#101)  
-　● [목적](#102)  
-　● [범위](#103)  
-　● [참고 자료](#104)  
-2. [PaaS-TA 5.1](#105)  
-3. [PaaS-TA 5.1 설치](#106)  
-　3.1. [Prerequisite](#107)  
-　3.2. [설치 파일 다운로드](#108)  
-　3.3. [Stemcell 업로드](#109)  
-　3.4. [Cloud Config 설정](#1010)  
-　　●  [AZs](#1011)  
-　　●  [VM types](#1012)  
-　　●  [Compilation](#1013)  
-　　●  [Disk Size](#1014)  
-　　●  [Networks](#1015)  
-　3.5. [Runtime Config 설정](#1016)  
-　3.6. [PaaS-TA 설치 파일](#1017)  
-　　3.6.1. [PaaS-TA 설치 Variable 파일](#1018)    
-　　　●  [common_vars.yml](#1019)  
-　　　●  [{IaaS}-vars.yml](#1020)  
-　　　●  [PaaS-TA 그외 Variable List](#1021)  
-　　3.6.2. [PaaS-TA Operation 파일](#1022)  
-　　3.6.3. [PaaS-TA 설치 Shell Scripts](#1023)  
-　　　●  [deploy-aws.sh](#1024)  
-　3.7. [PaaS-TA 설치](#1030)  
-　3.8. [PaaS-TA 로그인](#1032)   
+   ● [목적](#102)  
+   　● [범위](#103)  
+   　● [참고 자료](#104)  
+2. [PaaS-TA 5.1.0](#105)  
+3. [PaaS-TA 5.1.0 설치](#106)  
+   3.1. [Prerequisite](#107)  
+   　3.2. [설치 파일 다운로드](#108)  
+   　3.3. [Stemcell 업로드](#109)  
+   　3.4. [Cloud Config 설정](#1010)  
+   　　●  [AZs](#1011)  
+   　　●  [VM types](#1012)  
+   　　●  [Compilation](#1013)  
+   　　●  [Disk Size](#1014)  
+   　　●  [Networks](#1015)  
+   　3.5. [Runtime Config 설정](#1016)  
+   　3.6. [PaaS-TA 설치 파일](#1017)  
+   　　3.6.1. [PaaS-TA 설치 Variable 파일](#1018)    
+   　　　●  [common_vars.yml](#1019)  
+   　　　●  [{IaaS}-vars.yml](#1020)  
+   　　　●  [PaaS-TA 그외 Variable List](#1021)  
+   　　3.6.2. [PaaS-TA Operation 파일](#1022)  
+   　　3.6.3. [PaaS-TA 설치 Shell Scripts](#1023)  
+   　　　●  [deploy-aws.sh](#1024)  
+   　　　●  [deploy-openstack.sh](#1025)  
+   　3.7. [PaaS-TA 설치](#1030)  
+   　3.8. [PaaS-TA 로그인](#1032)   
 
 ## Executive Summary
 
-본 문서는 PaaS-TA 5.1(이하 PaaS-TA)을 수동으로 설치하기 위한 가이드를 제공하는 데 그 목적이 있다.
+본 문서는 PaaS-TA 5.1.0(이하 PaaS-TA)을 수동으로 설치하기 위한 가이드를 제공하는 데 그 목적이 있다.
 
 # <div id='101'/>1.  문서 개요 
 
 ## <div id='102'/>● 목적
-본 문서는 Inception 환경(설치환경)에서 BOSH2(이하 BOSH) 설치 후, BOSH를 기반으로 Monitoring을 적용하지 않은 PaaS-TA와 통합 Monitoring을 적용한 PaaS-TA를 설치하기 위한 가이드를 제공하는 데 그 목적이 있다.
+
+본 문서는 Inception 환경(설치환경)에서 BOSH2(이하 BOSH) 설치 후,  Monitoring을 적용한 PaaS-TA를 설치하기 위한 가이드를 제공하는 데 그 목적이 있다.
 
 
 ## <div id='103'/>● 범위
+
 본 문서는 cf-deployment v13.12.0을 기준으로 작성되었다.  
 PaaS-TA은 bosh-deployment를 기반으로 한 BOSH 환경에서 설치한다.  
 
@@ -45,9 +48,7 @@ PaaS-TA 설치 시 필요한 Stemcell은 기존 ubuntu-xenial-315.64에서 ubunt
 
 PaaS-TA는 VMware vSphere, Google Cloud Platform, Amazon Web Services EC2, OpenStack, Microsoft Azure 등의 IaaS를 지원한다.  
 
-현재 PaaS-TA 5.1에서 검증한 IaaS 환경은 AWS, OpenStack 환경이다.
-
-OpenStack 환경에서 Monitoring을 적용하여 PaaS-TA 설치 가능하다. 
+현재 PaaS-TA 5.1.0에서 검증한 IaaS 환경은 AWS, OpenStack 환경이다.
 
 ## <div id='104'/>● 참고 자료
 
@@ -61,7 +62,7 @@ BOSH Deployment: [https://github.com/cloudfoundry/bosh-deployment](https://githu
 
 CF Deployment: [https://github.com/cloudfoundry/cf-deployment](https://github.com/cloudfoundry/cf-deployment)
 
-# <div id='105'/>2. PaaS-TA 5.1
+# <div id='105'/>2. PaaS-TA 5.1.0
 
 PaaS-TA는 BOSH를 기반으로 설치된다. BOSH CLI를 사용하여 BOSH를 생성한 후, paasta-deployment로 PaaS-TA를 배포한다. 
 
@@ -69,7 +70,7 @@ PaaS-TA 3.1 버전까지는 PaaS-TA Container, Controller를 각각의 deploymen
 
 ![PaaSTa_BOSH_Use_Guide_Image2]  
 
-# <div id='106'/>3. PaaS-TA 5.1 설치
+# <div id='106'/>3. PaaS-TA 5.1.0 설치
 
 ## <div id='107'/>3.1. Prerequisite
 
@@ -78,18 +79,21 @@ PaaS-TA 3.1 버전까지는 PaaS-TA Container, Controller를 각각의 deploymen
 
 
 ## <div id='108'/>3.2. 설치 파일 다운로드
+
 - PaaS-TA를 설치하기 위한 deployment가 존재하지 않는다면 다운로드 받는다
+
 ```
-$ mkdir -p ${HOME}/workspace/paasta/deployment
-$ cd ${HOME}/workspace/paasta/deployment
-$ git clone https://github.com/PaaS-TA/common.git -b v5.0.1
-$ cd ${HOME}/workspace/paasta/deployment
-$ git clone https://github.com/PaaS-TA/paasta-deployment.git -b v5.1.0      # bosh 설치 시 누락 되었다면 구성
+$ mkdir -p ${HOME}/workspace/paasta-5.1.0/deployment
+$ cd ${HOME}/workspace/paasta-5.1.0/deployment
+$ git clone https://github.com/PaaS-TA/common.git
+$ cd ${HOME}/workspace/paasta-5.1.0/deployment
+$ git clone https://github.com/PaaS-TA/paasta-deployment.git -b v5.1.0
 $ git clone https://github.com/PaaS-TA/monitoring-deployment.git -b v5.1.0  # v5.1.0 monitoring-deployment 구성
 ```
 
 ## <div id='109'/>3.3. Stemcell 업로드
-Stemcell은 배포 시 생성되는 PaaS-TA VM Base OS Image이며, PaaS-TA 5.1은 Ubuntu xenial stemcell 621.78를 기반으로 한다.  
+
+Stemcell은 배포 시 생성되는 PaaS-TA VM Base OS Image이며, PaaS-TA 5.1.0은 Ubuntu xenial stemcell 621.78를 기반으로 한다.  
 BOSH 로그인 후 다음 명령어를 수행하여 Stemcell을 올린다.  
 {director_name}은 BOSH 설치 시 사용한 Director 명이다.
 
@@ -110,7 +114,7 @@ $ bosh -e {director_name} upload-stemcell https://s3.amazonaws.com/bosh-core-ste
 ## <div id='1010'/>3.4. Cloud Config 설정
 
 PaaS-TA를 설치하기 위한 IaaS 관련 Network, Storage, VM 관련 설정을 Cloud Config로 정의한다.  
-PaaS-TA 설치 파일을 내려받으면 ${HOME}/workspace/paasta/deployment/paasta-deployment/cloud-config 디렉터리 이하에 IaaS별 Cloud Config 예제를 확인할 수 있으며, 예제를 참고하여 cloud-config.yml을 IaaS에 맞게 수정한다.  
+PaaS-TA 설치 파일을 내려받으면 ${HOME}/workspace/paasta-5.1.0/deployment/paasta-deployment/cloud-config 디렉터리 이하에 IaaS별 Cloud Config 예제를 확인할 수 있으며, 예제를 참고하여 cloud-config.yml을 IaaS에 맞게 수정한다.  
 PaaS-TA 배포 전에 Cloud Config를 BOSH에 적용해야 한다. 
 
 - AWS을 기준으로 한 cloud-config.yml 예제
@@ -429,261 +433,10 @@ vm_types:
 
 
 
-- OpenStack을 기준으로 한 cloud-config.yml 예제
-
-```
-## azs :: 가용 영역(Availability Zone)을 정의한다.
-azs:
-- name: z1
-  cloud_properties:
-    availability_zone: zone1
-- name: z2
-  cloud_properties:
-    availability_zone: zone2
-- name: z3
-  cloud_properties:
-    availability_zone: zone3
-- name: z4
-  cloud_properties:
-    availability_zone: zone1
-- name: z5
-  cloud_properties:
-    availability_zone: zone2
-- name: z6
-  cloud_properties:
-    availability_zone: zone3
-
-## vm type :: 가상머신 유형(VM Type)을 정의한다. (OpenStack의 경우, Flavor 설정)
-vm_types:
-- name: minimal
-  cloud_properties:
-    instance_type: m1.small
-- name: default 
-  cloud_properties:
-    instance_type: m1.monitoring
-- name: small
-  cloud_properties:
-    instance_type: m1.monitoring
-- name: medium
-  cloud_properties:
-    instance_type: m1.medium
-- name: medium-memory-8GB
-  cloud_properties:
-    instance_type: m1.medium-memory 
-- name: large
-  cloud_properties:
-    instance_type: m1.large
-- name: xlarge
-  cloud_properties:
-    instance_type: m1.xlarge
-- name: small-50GB
-  cloud_properties:
-    instance_type: m1.medium
-- name: small-50GB-ephemeral-disk 
-  cloud_properties:
-    instance_type: m1.medium
-- name: small-100GB-ephemeral-disk
-  cloud_properties:
-    instance_type: m1.large
-- name: small-highmem-100GB-ephemeral-disk 
-  cloud_properties:
-    instance_type: m1.large
-- name: small-highmem-16GB
-  cloud_properties:
-    instance_type: m1.large-memory
-- name: service_medium
-  cloud_properties:
-    instance_type: m1.medium
-- name: service_medium_2G
-  cloud_properties:
-    instance_type: m1.medium
-- name: portal_small
-  cloud_properties:
-    instance_type: m1.tiny
-- name: portal_medium
-  cloud_properties:
-    instance_type: m1.small_1GM
-- name: portal_large
-  cloud_properties:
-    instance_type: m1.small
-
-## compilation :: 컴파일 가상머신이 생성될 가용 영역 및 가상머신 유형 등을 정의한다.
-compilation:
-  az: z3
-  network: default
-  reuse_compilation_vms: true
-  vm_type: large
-  workers: 5
-
-## disk type :: 디스크 유형(Disk type, Persistent Disk)을 정의한다.
-disk_types:
-- disk_size: 1024
-  name: default
-- disk_size: 1024
-  name: 1GB
-- disk_size: 2048
-  name: 2GB
-- disk_size: 4096
-  name: 4GB
-- disk_size: 5120
-  name: 5GB
-- disk_size: 8192
-  name: 8GB
-- disk_size: 10240
-  name: 10GB
-- disk_size: 20480
-  name: 20GB
-- disk_size: 30720
-  name: 30GB
-- disk_size: 51200
-  name: 50GB
-- disk_size: 102400
-  name: 100GB
-- disk_size: 1048576
-  name: 1TB
-
-- cloud_properties:
-    type: SSD1 
-  disk_size: 2000
-  name: 2GB_GP2
-- cloud_properties:
-    type: SSD1 
-  disk_size: 5000
-  name: 5GB_GP2
-- cloud_properties:
-    type: SSD1 
-  disk_size: 10000
-  name: 10GB_GP2
-- cloud_properties:
-    type: SSD1 
-  disk_size: 50000
-  name: 50GB_GP2
-
-## network :: 네트워크(Network)를 정의한다. (OpenStack의 경우, Subnet 및 Security Group, DNS, Gateway 설정)
-networks:
-- name: default
-  subnets:
-  - az: z1
-    cloud_properties:
-      name: random
-      net_id: 51b96a68-aded-4e73-aa44-f44a812b9b30
-      security_groups:
-      - openpaas
-    dns:
-    - 8.8.8.8
-    gateway: 10.20.10.1
-    range: 10.20.10.0/24
-    reserved:
-    - 10.20.10.2 - 10.20.10.10
-    static:
-    - 10.20.10.11 - 10.20.10.30
-  - az: z2
-    cloud_properties:
-      name: random
-      net_id: 51b96a68-aded-4e73-aa44-f44a812b9b30
-      security_groups:
-      - openpaas
-    dns:
-    - 8.8.8.8
-    gateway: 10.20.20.1
-    range: 10.20.20.0/24
-    reserved:
-    - 10.20.20.2 - 10.20.20.10
-    static:
-    - 10.20.20.11 - 10.20.20.30
-  - az: z3
-    cloud_properties:
-      name: random
-      net_id: 51b96a68-aded-4e73-aa44-f44a812b9b30
-      security_groups:
-      - openpaas
-    dns:
-    - 8.8.8.8
-    gateway: 10.20.30.1
-    range: 10.20.30.0/24
-    reserved:
-    - 10.20.30.2 - 10.20.30.10
-    static:
-    - 10.20.30.11 - 10.20.30.30
-  - az: z4
-    cloud_properties:
-      name: random
-      net_id: 51b96a68-aded-4e73-aa44-f44a812b9b30
-      security_groups:
-      - openpaas
-    dns:
-    - 8.8.8.8
-    gateway: 10.20.40.1
-    range: 10.20.40.0/24
-    reserved:
-    - 10.20.40.2 - 10.20.40.10
-    static:
-    - 10.20.40.11 - 10.20.40.30
-  
-- name: vip 
-  type: vip
-
-- name: service_private
-  subnets:
-  - az: z5
-    cloud_properties:
-      name: random
-      net_id: 51b96a68-aded-4e73-aa44-f44a812b9b30
-      security_groups:
-      - openpaas
-    dns:
-    - 8.8.8.8
-    gateway: 10.20.50.1
-    range: 10.20.50.0/24
-    reserved:
-    - 10.20.50.2 - 10.20.50.10
-    static:
-    - 10.20.50.11 - 10.20.50.30
-  - az: z6
-    cloud_properties:
-      name: random
-      net_id: 51b96a68-aded-4e73-aa44-f44a812b9b30
-      security_groups:
-      - openpaas
-    dns:
-    - 8.8.8.8
-    gateway: 10.20.60.1
-    range: 10.20.60.0/24
-    reserved:
-    - 10.20.60.2 - 10.20.60.10
-    static:
-    - 10.20.60.11 - 10.20.60.30
-
-- name: service_public
-  type: vip
-
-## vm extentions :: 임의의 특정 IaaS 구성을 지정하는 가상머신 구성을 정의한다. (Security Groups 및 Load Balancers 등)
-vm_extensions:
-- cloud_properties:
-    ports:
-    - host: 3306
-  name: mysql-proxy-lb
-- name: cf-router-network-properties
-- name: cf-tcp-router-network-properties
-- name: diego-ssh-proxy-network-properties
-- name: cf-haproxy-network-properties 
-- cloud_properties:
-    ephemeral_disk:
-      size: 51200
-      type: gp2
-  name: small-50GB 
-- cloud_properties:
-    ephemeral_disk:
-      size: 102400
-      type: gp2
-  name: small-highmem-100GB 
-
-```
-
 - Cloud Config 업데이트
 
 ```
-$ bosh –e {director_name} update-cloud-config ${HOME}/workspace/paasta/deployment/paasta-deployment/cloud-config/{iaas}-cloud-config.yml
+$ bosh –e {director_name} update-cloud-config ${HOME}/workspace/paasta-5.1.0/deployment/paasta-deployment/cloud-config/{iaas}-cloud-config.yml
 ```
 
 - Cloud Config 확인
@@ -706,19 +459,19 @@ VM Type은 IaaS에서 정의된 VM Type이다.
 ※ 다음은 AWS에서 정의한 Instance Type이다.
 ![PaaSTa_FLAVOR_Image]
 
-※ 다음은 OpenStack에서 정의한 Instance Type이다.
-![PaaSTa_FLAVOR_Image_2]
-
 ### <div id='1013'/>● Compilation
+
 PaaS-TA 및 서비스 설치 시, PaaS-TA는 Compile VM을 생성하여 소스를 컴파일하고, PaaS-TA VM을 생성하여 컴파일된 파일을 대상 VM에 설치한다.  
 컴파일이 끝난 VM은 삭제된다.
 
 ※ Worker 수는 Compile VM의 수로, 많을수록 컴파일 속도가 빨라진다.
 
 ### <div id='1014'/>● Disk Size
+
 PaaS-TA 및 서비스가 설치되는 VM의 Persistent Disk Size이다.
 
 ### <div id='1015'/>● Networks
+
 Networks는 AZ 별 Subnet Network, DNS, Security Groups, Network ID를 정의한다.  
 보통 AZ 별로 256개의 IP를 정의할 수 있도록 Range Cider를 정의한다.
 
@@ -731,7 +484,7 @@ Networks는 AZ 별 Subnet Network, DNS, Security Groups, Network ID를 정의한
   - Runtime Config 업데이트  
 
   ```  
-  $ cd ${HOME}/workspace/paasta/deployment/paasta-deployment/bosh
+  $ cd ${HOME}/workspace/paasta-5.1.0/deployment/paasta-deployment/bosh
   $ bosh -e {director_name} update-runtime-config -n runtime-configs/dns.yml
   ```
 
@@ -745,18 +498,21 @@ Networks는 AZ 별 Subnet Network, DNS, Security Groups, Network ID를 정의한
   BOSH Linux OS 구성 릴리스를 이용하여 sysctl을 구성한다.  
 
   - Runtime Config 업데이트  
+
   ```  
-  $ cd ${HOME}/workspace/paasta/deployment/paasta-deployment/bosh
+  $ cd ${HOME}/workspace/paasta-5.1.0/deployment/paasta-deployment/bosh
   $ bosh -e {director_name} update-runtime-config -n --name=os-conf runtime-configs/os-conf.yml
   ```
+
   - Runtime Config 확인  
+
   ```  
   $ bosh –e {director_name} runtime-config --name=os-conf
   ```
 
 ## <div id='1017'/>3.6.  PaaS-TA 설치 파일
 
-common_vars.yml파일과 {IaaS}-vars.yml을 수정하여 PaaS-TA 설치시 적용하는 변수를 설정할 수 있다. Monitoring 옵션이 적용된 파일은 deploy-{IaaS}-monitoring.sh이다.
+common_vars.yml파일과 {IaaS}-vars.yml을 수정하여 PaaS-TA 설치시 적용하는 변수를 설정할 수 있다.
 
 <table>
 <tr>
@@ -787,12 +543,14 @@ common_vars.yml파일과 {IaaS}-vars.yml을 수정하여 PaaS-TA 설치시 적�
 
 
 
+
 ### <div id='1018'/>3.6.1. PaaS-TA 설치 Variable File
 
 
 #### <div id='1019'/>● common_vars.yml
+
 common 폴더에 있는 common_vars.yml PaaS-TA 및 각종 Service 설치시 적용하는 공통 변수 설정 파일이 존재한다.  
-PaaS-TA를 설치할 때는 system_domain, paasta_admin_username, paasta_admin_password, uaa_client_admin_secret, uaa_client_portal_secret의 값을 변경 하여 설치 할 수 있다.
+PaaS-TA를 설치할 때는 system_domain, paasta_admin_username, paasta_admin_password, uaa_client_admin_secret, uaa_client_portal_secret, paasta_database_port의 값을 변경 하여 설치 할 수 있다.
 
 
 ```
@@ -800,7 +558,7 @@ PaaS-TA를 설치할 때는 system_domain, paasta_admin_username, paasta_admin_p
 bosh_ip: "10.0.1.6"                        		# BOSH IP
 bosh_url: "http://10.0.1.6"				# BOSH URL (e.g. "https://00.000.0.0")
 bosh_client_admin_id: "admin"				# BOSH Client Admin ID
-bosh_client_admin_secret: "ert7na4jpewsczt"		# BOSH Client Admin Secret('echo $(bosh int ~/workspace/paasta/deployment/paasta-deployment/bosh/{iaas}/creds.yml —path /admin_password))' 명령어를 통해 확인 가능)
+bosh_client_admin_secret: "ert7na4jpewsczt"		# BOSH Client Admin Secret('echo $(bosh int ~/workspace/paasta-5.1.0/deployment/paasta-deployment/bosh/{iaas}/creds.yml —path /admin_password))' 명령어를 통해 확인 가능)
 bosh_director_port: 25555				# BOSH Director Port
 bosh_oauth_port: 8443					# BOSH OAuth Port
 
@@ -814,7 +572,7 @@ paasta_nats_user: "nats"				# PaaS-TA Nats User(e.g. "nats")
 paasta_nats_password: "7EZB5ZkMLMqT73h2JtxPqO"		# PaaS-TA Nats Password (CredHub 로그인후 'credhub get -n /micro-bosh/paasta/nats_password' 명령어를 통해 확인 가능)
 paasta_nats_private_networks_name: "default"		# PaaS-TA Nats 의 Network 이름
 paasta_database_ips: "10.0.1.123"			# PaaS-TA Database IP(e.g. "10.0.1.123")
-paasta_database_port: 5524				# PaaS-TA Database Port(e.g. 5524)
+paasta_database_port: 5524				# PaaS-TA Database Port (e.g. 5524(postgresql)/13307(mysql)) -- Do Not Use "3306"&"13306" in mysql
 paasta_cc_db_id: "cloud_controller"			# CCDB ID(e.g. "cloud_controller")
 paasta_cc_db_password: "cc_admin"			# CCDB Password(e.g. "cc_admin")
 paasta_uaa_db_id: "uaa"					# UAADB ID(e.g. "uaa")
@@ -873,7 +631,6 @@ uaa_client_portal_redirect_uri: "http://portal-web-user.xx.xx.xxx.xxx.xip.io,htt
 
 syslog_custom_rule: 'if ($msg contains "DEBUG") then stop'	# [MONITORING] PaaS-TA Logging Agent에서 전송할 Custom Rule
 syslog_fallback_servers: []		# [MONITORING] PaaS-TA Syslog Fallback Servers
-
 
 # STEMCELL
 stemcell_os: "ubuntu-xenial"			# Stemcell OS
@@ -993,9 +750,11 @@ haproxy_network: default			# HAPROXY 네트워크
 #### <div id='1021'/>● PaaS-TA 그외 Variable List
 
 1. uaa_login_logout_redirect_parameter_whitelist : 포탈 페이지 이동을 위한 UAA Redirect Whitelist 등록 변수
+
 ```
 ex) uaa_login_logout_redirect_parameter_whitelist=["{PaaS-TA PORTAL URI}","{PaaS-TA PORTAL URI}/callback","{PaaS-TA PORTAL URI}/login"]
 ```
+
 > xip.io : 임시 도메인, 기본 DNS 서버가 8.8.8.8로 설정되어야 한다.  
 > xip.io를 사용하지 않고 DNS를 사용할 경우, Whitelist에 포탈 DNS, 포탈 DNS/callback, 포탈 DNS/login 세 개의 항목을 등록해야 한다.
 
@@ -1012,46 +771,52 @@ ex) uaa_login_links_signup="{PaaS-TA PORTAL URI}/createuser"
 ```
 
 4. uaa_client_portal_redirect_uri : UAAC Portal Client의 Redirect URI 지정 변수, 포탈에서 로그인 버튼 클릭 후 UAA 페이지에서 로그인 성공 시 이동하는 URI
+
 ```
 ex) uaa_client_portal_redirect_uri="{PaaS-TA PORTAL URI}, {PaaS-TA PORTAL URI}/callback"
 ```
 
 5. uaa_client_portal_secret : UAAC Portal Client에 접근하기 위한 Secret 변수
+
 ```
 ex) uaa_client_portal_secret="portalclient"
 
   paasta-portal deploy 파일 안의 portal_client_secret의 값과 일치해야 한다.
 ```
+
 ![PaaSTa_VALUE_Image]
 
 6. uaa_client_admin_secret : UAAC Admin Client에 접근하기 위한 Secret 변수
+
 ```
 ex) uaa_client_admin_secret="admin-secret"
 ```
 
 - uaa_client_admin_secret 적용 확인 방법
-  
-    (1) PaaS-TA 설치 후 아래 명령어 실행한다.
-    ```
-    $ uaac target
-    $ uaac token client get
-    ```
 
-    (2) 설정한 secret 값으로 admin token을 얻을 경우 아래와 같은 결과가 출력된다.
-    ```
-    ubuntu@inception:~$ uaac target
-    
-    Target: https://uaa.54.180.53.80.xip.io
-    Context: admin, from client admin
-    
-    ubuntu@inception:~$ uaac token client get
-    Client ID:  admin
-    Client secret:  ************
-    
-    Successfully fetched token via client credentials grant.
-    Target: https://uaa.54.180.53.80.xip.io
-    Context: admin, from client admin
-    ```
+  (1) PaaS-TA 설치 후 아래 명령어 실행한다.
+
+  ```
+  $ uaac target
+  $ uaac token client get
+  ```
+
+  (2) 설정한 secret 값으로 admin token을 얻을 경우 아래와 같은 결과가 출력된다.
+
+  ```
+  ubuntu@inception:~$ uaac target
+  
+  Target: https://uaa.54.180.53.80.xip.io
+  Context: admin, from client admin
+  
+  ubuntu@inception:~$ uaac token client get
+  Client ID:  admin
+  Client secret:  ************
+  
+  Successfully fetched token via client credentials grant.
+  Target: https://uaa.54.180.53.80.xip.io
+  Context: admin, from client admin
+  ```
 
 
 
@@ -1147,14 +912,13 @@ ex) uaa_client_admin_secret="admin-secret"
 <td>PaaS-TA release에서 제공하는 파일로 다운로드 및 컴파일 없이 Syslog의 빠른 설치가 가능하다.</td>
 <td></td>
 </tr>
-
 </table>
 
+</br>
 Monitoring Agent는 BOSH VM의 상태 정보(Metric data)를 paasta-monitoring의 InfluxDB에 전송한다.
 Syslog Agent는 BOSH VM의 log 정보를 logsearch의 ls-router에 전송하는 역할을 한다.
 BOSH 설치 전에 paasta-monitoring의 InfluxDB IP를 metric_url로 사용하기 위해 사전에 정의해야 한다.
 마찬가지로 logsearch의 ls-router IP도 syslog_address로 연동하기 위해 사전에 정의해야 한다.
-
 ### <div id='1023'/>3.6.3.   PaaS-TA 설치 Shell Scripts
 
 paasta-deployment.yml 파일은 PaaS-TA를 배포하는 Manifest 파일이며, PaaS-TA VM에 대한 설치 정의를 하게 된다.  
@@ -1197,9 +961,11 @@ PaaS-TA 배포 시, 설치 Option을 추가해야 한다. 설치 Option에 대�
 </table>
 
 
+
 ### 
 
 #### <div id='1024'/>● deploy-aws-monitoring.sh
+
 ```
 bosh -e {director_name} -d paasta -n deploy paasta-deployment.yml \	# PaaS-TA Manifest File
 	-o operations/aws.yml \						# AWS 설정
@@ -1216,35 +982,37 @@ bosh -e {director_name} -d paasta -n deploy paasta-deployment.yml \	# PaaS-TA Ma
 	-l ../../common/common_vars.yml					# PaaS-TA 및 각종 Service 설치시 적용하는 공통 변수 설정 파일
 ```
 
-#### <div id='1024'/>● deploy-openstack-monitoring.sh
+#### <div id='1025'/>● deploy-openstack-monitoring.sh
+
 ```
 bosh -e {director_name} -d paasta -n deploy paasta-deployment.yml \	# PaaS-TA Manifest File
 	-o operations/openstack.yml \					# OpenStack 설정
-	-o operations/use-compiled-releases-online.yml \		# PaaS-TA 설치시 공통 컴파일 릴리즈 파일 정보
+  -o operations/use-compiled-releases-online.yml \		# PaaS-TA 설치시 공통 컴파일 릴리즈 파일 정보
 	-o operations/use-haproxy.yml \					# HAProxy 적용
 	-o operations/use-haproxy-public-network.yml \			# HAProxy Public Network 적용
-	-o operations/use-compiled-releases-haproxy-online.yml \	# PaaS-TA 설치시 HAProxy 컴파일 릴리즈 파일 정보
+  -o operations/use-compiled-releases-haproxy-online.yml \	# PaaS-TA 설치시 HAProxy 컴파일 릴리즈 파일 정보
 	-o operations/use-postgres.yml \				# Database Type 설정 (3.5버전 이하에서 Migration 시 필수)
-	-o operations/use-compiled-releases-postgres-online.yml \	# PaaS-TA 설치시 Postgres 컴파일 릴리즈 파일 정보
+  -o operations/use-compiled-releases-postgres-online.yml \	# PaaS-TA 설치시 Postgres 컴파일 릴리즈 파일 정보
 	-o operations/rename-network-and-deployment.yml \		# Rename Network and Deployment
-	-o paasta-addon/paasta-monitoring.yml \				# [MONITORING] monitoring metric agent 적용 
+  -o paasta-addon/paasta-monitoring.yml \				# [MONITORING] monitoring metric agent 적용 
 	-o operations/addons/enable-component-syslog.yml \		# [MONITORING] monitoring log agent 적용
 	-l openstack-vars.yml \						# OpenStack 환경에 PaaS-TA 설치시 적용하는 변수 설정 파일
 	-l ../../common/common_vars.yml					# PaaS-TA 및 각종 Service 설치시 적용하는 공통 변수 설정 파일
 ```
+
 - Shell script 파일에 실행 권한 부여
 
 ```
-$ chmod +x ${HOME}/workspace/paasta/deployment/paasta-deployment/paasta/*.sh
+$ chmod +x ${HOME}/workspace/paasta-5.1.0/deployment/paasta-deployment/paasta/*.sh
 ```
 
 
 
 ## <div id='1030'/>3.7.  PaaS-TA 설치
+
 - 서버 환경에 맞추어 Deploy 스크립트 파일의 설정을 수정한다. 
 
-> $ vi ${HOME}/workspace/paasta/deployment/paasta-deployment/paasta/deploy-aws-monitoring.sh
-
+> $ vi ${HOME}/workspace/paasta-5.1.0/deployment/paasta-deployment/paasta/deploy-aws-monitoring.sh
 ```
 bosh -e {director_name} -d paasta -n deploy paasta-deployment.yml \	# PaaS-TA Manifest File
 	-o operations/aws.yml \						# AWS 설정
@@ -1261,10 +1029,8 @@ bosh -e {director_name} -d paasta -n deploy paasta-deployment.yml \	# PaaS-TA Ma
 	-l ../../common/common_vars.yml					# PaaS-TA 및 각종 Service 설치시 적용하는 공통 변수 설정 파일
 ```
 
-- Monitoring 옵션을 추가한 PaaS-TA 설치 시 Deploy 스크립트 파일의 설정을 수정한다.
-
+- Openstack 환경에서 Monitoring 옵션을 추가한 PaaS-TA 설치.
 > $ vi ${HOME}/workspace/paasta/deployment/paasta-deployment/paasta/deploy-openstack-monitoring.sh
-
 ```
 bosh -e {director_name} -d paasta -n deploy paasta-deployment.yml \	# PaaS-TA Manifest File
 	-o operations/openstack.yml \					# OpenStack 설정
@@ -1281,17 +1047,9 @@ bosh -e {director_name} -d paasta -n deploy paasta-deployment.yml \	# PaaS-TA Ma
 	-l ../../common/common_vars.yml					# PaaS-TA 및 각종 Service 설치시 적용하는 공통 변수 설정 파일
 ```
 
-- Monitoring 옵션이 적용되지 않은 PaaS-TA 설치 시 Shell Script 파일 실행 (BOSH 로그인 필요)
-
+- PaaS-TA 설치 시 Shell Script 파일 실행 (BOSH 로그인 필요)
 ```
-$ cd ${HOME}/workspace/paasta/deployment/paasta-deployment/paasta
-$ ./deploy-{IaaS}.sh
-```
-
-- Monitoring 옵션이 적용된 PaaS-TA 설치 시 Shell Script 파일-실행 (BOSH 로그인 필요)
-
-```
-$ cd ${HOME}/workspace/paasta/deployment/paasta-deployment/paasta
+$ cd ${HOME}/workspace/paasta-5.1.0/deployment/paasta-deployment/paasta
 $ ./deploy-{IaaS}-monitoring.sh
 ```
 
@@ -1364,7 +1122,7 @@ $ sudo apt install cf-cli -y
 $ cf --version
 ```
 
-- CF CLI v7 설치 (PaaS-TA 5.1 이상)
+- CF CLI v7 설치 (PaaS-TA 5.1.0 이상)
 
 ```
 $ wget -q -O - https://packages.cloudfoundry.org/debian/cli.cloudfoundry.org.key | sudo apt-key add -
