@@ -390,31 +390,31 @@ BOSH 설치 전에 paasta-monitoring의 InfluxDB IP를 metric_url로 사용하�
 ##### <div id='3.3.4.3.1'/>● deploy-aws-monitoring.sh
 ```
 bosh create-env bosh.yml \                         
-	--state=aws/state.json \			# BOSH Latest Running State, 설치 시 생성, Backup 필요
-	--vars-store=aws/creds.yml \			# BOSH Credentials and Certs, 설치 시 생성, Backup 필요 
-	-o aws/cpi.yml \				# AWS CPI 적용
-	-o uaa.yml \					# UAA 적용      
-	-o credhub.yml \				# CredHub 적용    
+	--state=aws/state.json \			# BOSH Latest Running State, 설치 시 생성, Backup 필요  
+	--vars-store=aws/creds.yml \			# BOSH Credentials and Certs, 설치 시 생성, Backup 필요   
+	-o aws/cpi.yml \				# AWS CPI 적용  
+	-o uaa.yml \					# UAA 적용  
+	-o credhub.yml \				# CredHub 적용  
 	-o jumpbox-user.yml \				# Jumpbox 적용  
-	-o syslog.yml \					# [MONITORING] Monitoring Logging Agent 적용
-	-o paasta-addon/paasta-monitoring-agent.yml \	# [MONITORING] Monitoring Metric Agent 적용
- 	-l aws-vars.yml					# AWS 환경에 BOSH 설치시 적용하는 변수 설정 파일
+	-o syslog.yml \					# [MONITORING] Monitoring Logging Agent 적용  
+	-o paasta-addon/paasta-monitoring-agent.yml \	# [MONITORING] Monitoring Metric Agent 적용  
+ 	-l aws-vars.yml					# AWS 환경에 BOSH 설치시 적용하는 변수 설정 파일  
 ```
 
 ##### <div id='3.3.4.3.2'/>● deploy-openstack-monitoring.sh
 
 ```
 bosh create-env bosh.yml \                       
-	--state=openstack/state.json \			# BOSH Latest Running State, 설치 시 생성, Backup 필요
-	--vars-store=openstack/creds.yml \		# BOSH Credentials and Certs, 설치 시 생성, Backup 필요
-	-o openstack/cpi.yml \				# Openstack CPI 적용
-	-o uaa.yml \					# UAA 적용
-	-o credhub.yml \				# CredHub 적용
-	-o jumpbox-user.yml \				# Jumpbox 적용
-	-o openstack/disable-readable-vm-names.yml \	# VM 명을 UUIDs로 적용
-	-o syslog.yml \					# [MONITORING] Monitoring Logging Agent 적용
-	-o paasta-addon/paasta-monitoring-agent.yml \	# [MONITORING] Monitoring Metric Agent 적용
-	-l openstack-vars.yml				# OpenStack 환경에 BOSH 설치시 적용하는 변수 설정 파일
+	--state=openstack/state.json \			# BOSH Latest Running State, 설치 시 생성, Backup 필요  
+	--vars-store=openstack/creds.yml \		# BOSH Credentials and Certs, 설치 시 생성, Backup 필요  
+	-o openstack/cpi.yml \				# Openstack CPI 적용  
+	-o uaa.yml \					# UAA 적용  
+	-o credhub.yml \				# CredHub 적용  
+	-o jumpbox-user.yml \				# Jumpbox 적용  
+	-o openstack/disable-readable-vm-names.yml \	# VM 명을 UUIDs로 적용  
+	-o syslog.yml \				# [MONITORING] Monitoring Logging Agent 적용  
+	-o paasta-addon/paasta-monitoring-agent.yml \	# [MONITORING] Monitoring Metric Agent 적용  
+	-l openstack-vars.yml				# OpenStack 환경에 BOSH 설치시 적용하는 변수 설정 파일  
 ```
 
 
@@ -431,16 +431,16 @@ $ chmod +x ${HOME}/workspace/paasta-5.1.0/deployment/paasta-deployment/bosh/*.sh
 
 > $ vi ~/workspace/paasta-5.1.0/deployment/paasta-deployment/bosh/deploy-aws.sh
 ```                     
-bosh create-env bosh.yml \                         
-	--state=aws/state.json \	
-	--vars-store=aws/creds.yml \ 
-	-o aws/cpi.yml \
-	-o uaa.yml \
-	-o credhub.yml \
-	-o jumpbox-user.yml \
-	-o syslog.yml \
-	-o paasta-addon/paasta-monitoring-agent.yml \
- 	-l aws-vars.yml
+bosh create-env bosh.yml \  
+	--state=aws/state.json \  
+	--vars-store=aws/creds.yml \  
+	-o aws/cpi.yml \  
+	-o uaa.yml \  
+	-o credhub.yml \  
+	-o jumpbox-user.yml \  
+	-o syslog.yml \  
+	-o paasta-addon/paasta-monitoring-agent.yml \  
+ 	-l aws-vars.yml  
 ```
 
 - BOSH 설치 Shell Script 파일 실행
