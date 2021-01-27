@@ -13,10 +13,9 @@
 　　● [deploy-pinpoint.sh](#233)  
 　　● [deploy-pinpoint-vsphere.sh](#234)  
 　2.4. [Pinpoint Monitoring 설치](#24)  
-　2.5. [Pinpoint Monitoring 설치 - 다운로드 된 Release 파일 이용 방식](#25)  
-　2.6. [서비스 설치 확인](#26)  
-　2.7. [Security-Group 등록](#27)  
-　2.8. [Pinpoint User-Provided Service 등록](#28)  
+　2.5. [서비스 설치 확인](#25)  
+　2.6. [Security-Group 등록](#26)  
+　2.7. [Pinpoint User-Provided Service 등록](#27)  
 3\. [Sample Web App 연동 Pinpoint 연동](#3)  
 　● [Sample Web App 구조](#31)  
 　● [Sample Web App에 서비스 바인드 신청 및 App 확인](#32)  
@@ -84,16 +83,16 @@ Pinpoint Server, HBase의 HBase Master, Collector , WebUI2로 최소사항을 �
 
 - PaaS-TA를 설치하기 위한 deployment가 존재하지 않는다면 다운로드 받는다
 ```
-$ cd ${HOME}/workspace/paasta-5.0/deployment
+$ cd ${HOME}/workspace/paasta-5.5.x/deployment
 $ git clone https://github.com/paas-ta/common.git –b v5.0.1
-$ git clone https://github.com/paas-ta/monitoring-deployment.git –b v5.0.1
+$ git clone https://github.com/paas-ta/monitoring-deployment.git –b v5.5.x
 ```
 
 
 
 ## <div id='23'> 2.3. Pinpoint Monitoring 설치 환경설정
 
-${HOME}/workspace/paasta-5.0/deployment/monitoring-deployment/pinpoint-monitoring 이하 디렉터리에는 Pinpoint Monitoring 설치를 위한 Shell Script 파일이 존재한다.
+${HOME}/workspace/paasta-5.5.x/deployment/monitoring-deployment/pinpoint-monitoring 이하 디렉터리에는 Pinpoint Monitoring 설치를 위한 Shell Script 파일이 존재한다.
 	
 ### <div id='231'/>● common_vars.yml
 common 폴더에 있는 common_vars.yml PaaS-TA 및 각종 Service 설치시 적용하는 공통 변수 설정 파일이 존재한다.  
@@ -103,7 +102,7 @@ Pinpoint-Monitoring을 설치할 때는 saas_monitoring_url 값을 변경 하여
 # BOSH INFO
 bosh_url: "http://10.0.1.6"			# BOSH URL (e.g. "https://00.000.0.0")
 bosh_client_admin_id: "admin"			# BOSH Client Admin ID
-bosh_client_admin_secret: "ert7na4jpewscztsxz48"	# BOSH Client Admin Secret('echo $(bosh int ~/workspace/paasta-5.0/deployment/paasta-deployment/bosh/{iaas}/creds.yml --path /admin_password)' 명령어를 통해 확인 가능)
+bosh_client_admin_secret: "ert7na4jpewscztsxz48"	# BOSH Client Admin Secret('echo $(bosh int ~/workspace/paasta-5.5.x/deployment/paasta-deployment/bosh/{iaas}/creds.yml --path /admin_password)' 명령어를 통해 확인 가능)
 bosh_director_port: 25555			# BOSH Director Port
 bosh_oauth_port: 8443				# BOSH OAuth Port
 
@@ -215,7 +214,7 @@ echo 'y' | bosh -e micro-bosh -d pinpoint-monitoring deploy paasta-pinpoint.yml 
 	
 - 서버 환경에 맞추어 Deploy 스크립트 파일의 설정을 수정한다. 
 
-> $ vi ${HOME}/workspace/paasta-5.0/deployment/monitoring-deployment/pinpoint-monitoring/deploy-pinpoint.sh
+> $ vi ${HOME}/workspace/paasta-5.5.x/deployment/monitoring-deployment/pinpoint-monitoring/deploy-pinpoint.sh
 
 ```
 echo 'y' | bosh -e {director_name} -d pinpoint-monitoring deploy paasta-pinpoint.yml \
@@ -228,49 +227,11 @@ echo 'y' | bosh -e {director_name} -d pinpoint-monitoring deploy paasta-pinpoint
 - Pinpoint Monitoring 설치 Shell Script 파일 실행 (BOSH 로그인 필요)
 
 ```
-$ cd ~/workspace/paasta-5.0/deployment/monitoring-deployment/paasta-monitoring
+$ cd ~/workspace/paasta-5.5.x/deployment/monitoring-deployment/paasta-monitoring
 $ sh deploy-pinpoint.sh
 ```
 
-## <div id='25'/>2.5. Pinpoint Monitoring 설치 - 다운로드 된 Release 파일 이용 방식
-
-- 서비스 설치에 필요한 릴리즈 파일을 다운로드 받아 Local machine의 작업 경로로 위치시킨다.  
-  
-  - 설치 파일 다운로드 위치 : https://paas-ta.kr/download/package    
-
-```
-# 릴리즈 다운로드 파일 위치 경로 생성
-$ mkdir -p ~/workspace/paasta-5.0/release/paasta-monitoring
-
-# 릴리즈 파일 다운로드 및 파일 경로 확인
-$ cd ${HOME}/workspace/paasta-5.0/release/paasta-monitoring
-$ ls
-..................
-paasta-pinpoint-monitoring-release.tgz
-..................
-```
-
-- 서버 환경에 맞추어 Deploy 스크립트 파일의 설정을 수정한다. 
-
-> $ vi ${HOME}/workspace/paasta-5.0/deployment/monitoring-deployment/pinpoint-monitoring/deploy-pinpoint.sh
-
-```
-echo 'y' | bosh -e {director_name} -d pinpoint-monitoring deploy paasta-pinpoint.yml \
-	-o use-compiled-releases-logsearch.yml \
-	-o use-public-network.yml \
-	-l pinpoint-vars.yml \
-	-l ../../common/common_vars.yml \
-	-l pem.yml
-```
-
-- Pinpoint Monitoring 설치 Shell Script 파일 실행 (BOSH 로그인 필요)
-
-```
-$ cd ~/workspace/paasta-5.0/deployment/monitoring-deployment/paasta-monitoring
-$ sh deploy-pinpoint.sh
-```
-
-## <div id='26'/>2.6. 서비스 설치 확인
+## <div id='25'/>2.5. 서비스 설치 확인
 Pinpoint Monitoring이 설치 완료 되었음을 확인한다.
 ```
 $ bosh –e {director_name} vms
@@ -287,7 +248,7 @@ haproxy_webui/b30b856c-ad74-4ff5-a9ee-32e2ef641ffa  running        z7  10.0.0.12
 pinpoint_web/c23b79cf-ef55-42f5-9c2a-b8102b6e5ca8   running        z3  10.0.81.123   i-02a82ab6f02784317  caas_small_highmem  true 
 ```
 
-## <div id='27'> 2.7. security-group 등록
+## <div id='26'> 2.6. security-group 등록
 Pinpoint collector와 배포 app간 통신을 위한  처리.
 
 ```
@@ -315,7 +276,7 @@ $ cf bind-staging-security-group pinpoint
 $ cf bind-running-security-group pinpoint
 ```
 
-## <div id='28'> 2.8. Pinpoint User-Provided service 등록
+## <div id='27'> 2.7. Pinpoint User-Provided service 등록
 
 Pinpoint 서비스팩 배포가 완료 되었으면 Application에서 서비스 팩을 사용하기 위해서 먼저 Pinpoint User-Provided service를 등록해 주어야 한다.
 
