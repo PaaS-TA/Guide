@@ -152,8 +152,8 @@ BOSH2 CLI 6.0 이하 버전 사용 시, 인증서 기간을 늘리고 싶다면 
 - 소스 build 전제 조건 :: Ubuntu, go 1.9.2 버전 이상
 
 ```
-$ mkdir -p ${HOME}/workspace/bosh-cli/src/
-$ cd ${HOME}/workspace/bosh-cli
+$ mkdir -p ~/workspace/bosh-cli/src/
+$ cd ~/workspace/bosh-cli
 
 $ export GOPATH=$PWD
 $ export PATH=$GOPATH/bin:$PATH
@@ -178,15 +178,15 @@ $ bosh -version
 
 - BOSH를 설치하기 위한 deployment가 존재하지 않는다면 다운로드 받는다
 ```
-$ mkdir -p ${HOME}/workspace/paasta-5.5.0/deployment
-$ cd ${HOME}/workspace/paasta-5.5.0/deployment
+$ mkdir -p ~/workspace/paasta-5.5.0/deployment
+$ cd ~/workspace/paasta-5.5.0/deployment
 $ git clone https://github.com/PaaS-TA/paasta-deployment.git -b v5.5.0
 ```
 
 - paasta/deployment/paasta-deployment 이하 디렉터리
 
 ```
-$ cd ${HOME}/workspace/paasta-5.5.0/deployment/paasta-deployment
+$ cd ~/workspace/paasta-5.5.0/deployment/paasta-deployment
 $ ls
 bosh  cloud-config  paasta
 ```
@@ -209,7 +209,7 @@ bosh  cloud-config  paasta
 
 ### <div id='3.3.4'/>3.3.4.    BOSH 설치 파일
 
-${HOME}/workspace/paasta-5.5.0/deployment/paasta-deployment/bosh 이하 디렉터리에는 BOSH 설치를 위한 IaaS별 Shell Script 파일이 존재한다.  
+~/workspace/paasta-5.5.0/deployment/paasta-deployment/bosh 이하 디렉터리에는 BOSH 설치를 위한 IaaS별 Shell Script 파일이 존재한다.  
 Shell Script 파일을 이용하여 BOSH를 설치한다.
 파일명은 deploy-{IaaS}.sh 로 만들어졌다.  
 또한 {IaaS}-vars.yml을 수정하여 BOSH 설치시 적용하는 변수을 설정할 수 있다.
@@ -250,7 +250,7 @@ bosh_client_admin_id: "admin"				# Bosh Client Admin ID
 private_cidr: "10.0.1.0/24"				# Private IP Range
 private_gw: "10.0.1.1"					# Private IP Gateway
 bosh_url: "10.0.1.6"					# Private IP 
-inception_os_user_name: "ubuntu"			# Home User Name
+releases_dir: "/home/ubuntu/workspace/paasta-5.5/release"	# Release Directory (offline으로 릴리즈 다운받아 사용시 설정)
 director_name: "micro-bosh"				# BOSH Director Name
 access_key_id: "XXXXXXXXXXXXXXX"			# AWS Access Key
 secret_access_key: "XXXXXXXXXXXXX"			# AWS Secret Key
@@ -273,7 +273,7 @@ syslog_transport: "relp"				# Logsearch Protocol
 ```
 # BOSH VARIABLE
 bosh_client_admin_id: "admin"				# Bosh Client Admin ID
-inception_os_user_name: "ubuntu"			# Home User Name
+releases_dir: "/home/ubuntu/workspace/paasta-5.5/release"	# Release Directory (offline으로 릴리즈 다운받아 사용시 설정)
 director_name: "micro-bosh"				# BOSH Director Name
 private_cidr: "10.0.1.0/24"				# Private IP Range
 private_gw: "10.0.1.1"					# Private IP Gateway
@@ -320,6 +320,30 @@ syslog_transport: "relp"				# Logsearch Protocol
 <td>jumpbox.yml</td>
 <td>Jumpbox 적용</td>
 </tr>
+<tr>
+<td>cce.yml</td>
+<td>CCE 조치 적용</td>
+</tr>
+<tr>
+<td>use-offline-release.yml</td>
+<td>bosh.yml 에서 사용되는 릴리즈를 오프라인에 저장된 릴리즈로 사용</td>
+</tr>
+<tr>
+<td>use-offline-release-{IaaS}.yml</td>
+<td>{IaaS}/cpi.yml에서 사용되는 릴리즈를 오프라인에 저장된 릴리즈로 사용</td>
+</tr>
+<tr>
+<td>use-offline-release-cce.yml</td>
+<td>cce.yml에서 사용되는 릴리즈를 오프라인에 저장된 릴리즈로 사용</td>
+</tr>
+<tr>
+<td>use-offline-release-jumpbox.yml</td>
+<td>jumpbox.yml에서 사용되는 릴리즈를 오프라인에 저장된 릴리즈로 사용</td>
+</tr>
+<tr>
+<td>use-offline-release-uaa.yml</td>
+<td>uaa.yml에서 사용되는 릴리즈를 오프라인에 저장된 릴리즈로 사용</td>
+</tr>
 </table>
 
 
@@ -363,6 +387,7 @@ bosh create-env bosh.yml \
 	--vars-store=aws/creds.yml \			# BOSH Credentials and Certs, 설치 시 생성, Backup 필요 
 	-o aws/cpi.yml \				# AWS CPI 적용
 	-o uaa.yml \					# UAA 적용      
+	-o cce.yml \					# CCE 조치 적용
 	-o credhub.yml \				# CredHub 적용    
 	-o jumpbox-user.yml \				# Jumpbox 적용  
  	-l aws-vars.yml					# AWS 환경에 BOSH 설치시 적용하는 변수 설정 파일
@@ -386,7 +411,7 @@ bosh create-env bosh.yml \
 - Shell Script 파일에 실행 권한 부여
 
 ```
-$ chmod +x ${HOME}/workspace/paasta-5.5.0/deployment/paasta-deployment/bosh/*.sh  
+$ chmod +x ~/workspace/paasta-5.5.0/deployment/paasta-deployment/bosh/*.sh  
 ```
 
 
@@ -401,6 +426,7 @@ bosh create-env bosh.yml \
 	--vars-store=aws/creds.yml \ 
 	-o aws/cpi.yml \
 	-o uaa.yml \
+	-o cce.yml \
 	-o credhub.yml \
 	-o jumpbox-user.yml \
  	-l aws-vars.yml
@@ -409,7 +435,7 @@ bosh create-env bosh.yml \
 - BOSH 설치 Shell Script 파일 실행
 
 ```
-$ cd ${HOME}/workspace/paasta-5.5.0/deployment/paasta-deployment/bosh
+$ cd ~/workspace/paasta-5.5.0/deployment/paasta-deployment/bosh
 $ ./deploy-{iaas}.sh
 ```
 
@@ -448,16 +474,67 @@ Succeeded
 ### <div id='3.3.6'/>3.3.6. BOSH 로그인
 BOSH가 설치되면, BOSH 설치 디렉터리 이하 {iaas}/creds.yml 파일이 생성된다.  
 creds.yml은 BOSH 인증정보를 가지고 있으며, creds.yml을 활용하여 BOSH에 로그인한다.  
-BOSH 로그인 후, BOSH CLI 명령어를 이용하여 PaaS-TA를 설치할 수 있다.
+BOSH 로그인 후, BOSH CLI 명령어를 이용하여 PaaS-TA를 설치할 수 있다.  
+BOSH를 이용하여 VM를 배포하려면 BOSH에 로그인을 해야한다.  
+BOSH 로그인 명령어는 다음과 같다.  
 
 ```
-$ cd ${HOME}/workspace/paasta-5.5.0/deployment/paasta-deployment/bosh
+$ cd ~/workspace/paasta-5.5.0/deployment/paasta-deployment/bosh
 $ export BOSH_CA_CERT=$(bosh int ./{iaas}/creds.yml --path /director_ssl/ca)
 $ export BOSH_CLIENT=admin
 $ export BOSH_CLIENT_SECRET=$(bosh int ./{iaas}/creds.yml --path /admin_password)
 $ bosh alias-env {director_name} -e {bosh_url} --ca-cert <(bosh int ./{iaas}/creds.yml --path /director_ssl/ca)
 $ bosh -e {director_name} env
 ```
+
+또한 PaaS-TA 5.5부터 BOSH 로그인을 하는 스크립트의 생성을 지원한다.
+해당 스크립트의 BOSH_DEPLOYMENT_PATH, CURRENT_IAAS, BOSH_IP, BOSH_CLIENT_ADMIN_ID, BOSH_ENVIRONMENT, BOSH_LOGIN_FILE_PATH, BOSH_LOGIN_FILE_NAME를 BOSH 환경과 스크립트를 저장하고 싶은 위치로 변경 후 실행한다.
+
+- BOSH Login 생성 Script의 설정 수정
+
+> vi ~/workspace/paasta-5.5.0/deployment/paasta-deployment/bosh/create-bosh-login.sh
+
+```
+#!/bin/bash
+
+BOSH_DEPLOYMENT_PATH="~/workspace/paasta-5.5/deployment/paasta-deployment/bosh" # (e.g. ~/workspace/paasta-5.5/deployment/paasta-deployment/bosh)
+CURRENT_IAAS="aws"				# (e.g. aws/azure/gcp/openstack/vsphere/bosh-lite)
+BOSH_IP="10.0.1.6"				# (e.g. 10.0.1.6)
+BOSH_CLIENT_ADMIN_ID="admin"			# (e.g. admin)
+BOSH_ENVIRONMENT="micro-bosh"			# (e.g. micro-bosh)
+BOSH_LOGIN_FILE_PATH="/home/ubuntu/.env"	# (e.g. /home/ubuntu/.env)
+BOSH_LOGIN_FILE_NAME="micro-bosh-login-env"	# (e.g. micro-bosh-login-env)
+
+echo 'export CRED_PATH='${BOSH_DEPLOYMENT_PATH}'
+export CURRENT_IAAS='${CURRENT_IAAS}'
+export BOSH_CA_CERT=$(bosh int $CRED_PATH/$CURRENT_IAAS/creds.yml --path /director_ssl/ca)
+export BOSH_CLIENT='${BOSH_CLIENT_ADMIN_ID}'
+export BOSH_CLIENT_SECRET=$(bosh int $CRED_PATH/$CURRENT_IAAS/creds.yml --path /admin_password)
+export BOSH_ENVIRONMENT='${BOSH_ENVIRONMENT}'
+bosh alias-env $BOSH_ENVIRONMENT -e '${BOSH_IP}' --ca-cert <(bosh int $CRED_PATH/$CURRENT_IAAS/creds.yml --path /director_ssl/ca)
+export CREDHUB_CLIENT=credhub-admin
+export CREDHUB_SECRET=$(bosh int --path /credhub_admin_client_secret $CRED_PATH/$CURRENT_IAAS/creds.yml)
+export CREDHUB_CA_CERT=$(bosh int --path /credhub_tls/ca $CRED_PATH/$CURRENT_IAAS/creds.yml)
+credhub login -s https://'${BOSH_IP}':8844 --skip-tls-validation
+' > ${BOSH_LOGIN_FILE_PATH}/${BOSH_LOGIN_FILE_NAME}
+
+```
+
+- BOSH Login 생성 Script 실행
+
+```
+$ cd ~/workspace/paasta-5.5.0/deployment/paasta-deployment/bosh
+$ source create-bosh-login.sh
+```
+
+
+- 생성된 Script로 BOSH Login 실행
+
+```
+$ source ${BOSH_LOGIN_FILE_PATH}/${BOSH_LOGIN_FILE_NAME}
+```
+
+
 
 ### <div id='3.3.7'/>3.3.7. CredHub
 CredHub은 인증정보 저장소이다.  
@@ -481,7 +558,7 @@ $ credhub --version
 CredHub에 로그인하기 위해 BOSH를 설치한 bosh-deployment 디렉터리의 creds.yml을 활용하여 로그인한다.
 
 ```
-$ cd ${HOME}/workspace/paasta-5.5.0/deployment/paasta-deployment/bosh
+$ cd ~/workspace/paasta-5.5.0/deployment/paasta-deployment/bosh
 $ export CREDHUB_CLIENT=credhub-admin
 $ export CREDHUB_SECRET=$(bosh int --path /credhub_admin_client_secret {iaas}/creds.yml)
 $ export CREDHUB_CA_CERT=$(bosh int --path /credhub_tls/ca {iaas}/creds.yml)
@@ -505,7 +582,7 @@ Jumpbox는 BOSH VM에 접근하기 위한 인증을 적용하게 된다.
 BOSH VM에 이상이 있거나 상태를 체크할 때 Jumpbox를 활용하여 BOSH VM에 접근할 수 있다.
 
 ```
-$ cd ${HOME}/workspace/paasta-5.5/deployment/paasta-deployment/bosh
+$ cd ~/workspace/paasta-5.5/deployment/paasta-deployment/bosh
 $ bosh int {iaas}/creds.yml --path /jumpbox_ssh/private_key > jumpbox.key 
 $ chmod 600 jumpbox.key
 $ ssh jumpbox@{bosh_url} -i jumpbox.key
