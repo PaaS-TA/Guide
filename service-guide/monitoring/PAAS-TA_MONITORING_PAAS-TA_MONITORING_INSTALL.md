@@ -41,7 +41,7 @@
 ```
 $ cd ${HOME}/workspace/paasta-5.0/deployment
 $ git clone https://github.com/paas-ta/common.git –b v5.0.1
-$ git clone https://github.com/paas-ta/monitoring-deployment.git –b v5.0.1
+$ git clone https://github.com/paas-ta/monitoring-deployment.git –b dev-v5.5.0
 ```
 release, stemcell 설치 파일 다운로드는 아래 다운로드 에서 받고 설치한다.
 
