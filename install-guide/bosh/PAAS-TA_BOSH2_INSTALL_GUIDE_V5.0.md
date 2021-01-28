@@ -531,7 +531,7 @@ $ source create-bosh-login.sh
 - 생성된 Script로 BOSH Login 실행
 
 ```
-$ source ${BOSH_LOGIN_FILE_PATH}/${BOSH_LOGIN_FILE_NAME}
+$ source {BOSH_LOGIN_FILE_PATH}/{BOSH_LOGIN_FILE_NAME}
 ```
 
 
