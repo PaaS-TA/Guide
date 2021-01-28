@@ -302,7 +302,7 @@ paasta-app-lifecycle-service-release.tgz
   
 - 서버 환경에 맞추어 Deploy 스크립트 파일의 VARIABLES 설정을 수정하고 Option file 및 변수를 추가한다.  
      (추가) -o operations/use-offline-releases.yml (미리 다운받은 offline 릴리즈 사용)  
-     (추가) -v release_dir="<RELEASE_DIRECTORY>"  
+     (추가) -v releases_dir="<RELEASE_DIRECTORY>"  
      
 > $ vi ~/workspace/paasta-5.5.0/deployment/service-deployment/lifecycle-service/deploy.sh
 
@@ -319,7 +319,7 @@ bosh -e ${BOSH_ENVIRONMENT} -n -d lifecycle-service deploy --no-redact lifecycle
     -o operations/${CURRENT_IAAS}-network.yml \
     -l ${COMMON_VARS_PATH} \
     -l vars.yml \
-    -v release_dir="/home/ubuntu/workspace/paasta-5.5.0/release"  
+    -v releases_dir="/home/ubuntu/workspace/paasta-5.5.0/release"  
 ```  
 
 - 서비스를 설치한다.  

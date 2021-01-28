@@ -47,7 +47,7 @@ release, stemcell 설치 파일 다운로드는 아래 다운로드 에서 받�
 
 https://paas-ta.kr/download/package
 
-![PaaSTa_release_dir_5.0]
+![PaaSTa_releases_dir_5.0]
 
 ### <div id='5'/>2.3. PaaS-TA Monitoring 설치 환경설정
 
@@ -223,7 +223,7 @@ PaaS-TA Monitoring Main Dashboard 화면
  ![PaaSTa_monitoring_main_dashboard_5.0]
 
 
-[PaaSTa_release_dir_5.0]:./images/paasta-release_5.0.png
+[PaaSTa_releases_dir_5.0]:./images/paasta-release_5.0.png
 [PaaSTa_logsearch_vms_5.0]:./images/logsearch_5.0.png
 [PaaSTa_monitoring_vms_5.0]:./images/paasta-monitoring_5.0.png
 
