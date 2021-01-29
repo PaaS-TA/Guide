@@ -23,11 +23,12 @@
 　　　　● [deploy-aws.sh](#3.3.4.3.1)  
 　　　　● [deploy-openstack.sh](#3.3.4.3.2)  
 　　3.3.5. [BOSH 설치](#3.3.5)  
-　　3.3.6. [BOSH 로그인](#3.3.6)  
-　　3.3.7. [CredHub](#3.3.7)  
-　　　3.3.7.1. [CredHub CLI 설치](#3.3.7.1)  
-　　　3.3.7.2. [CredHub 로그인](#3.3.7.2)  
-　　3.3.8. [Jumpbox](#3.3.8)  
+　　3.3.6. [BOSH 설치 - 다운로드 된 Release 파일 이용 방식](#3.3.6)  
+　　3.3.7. [BOSH 로그인](#3.3.7)  
+　　3.3.8. [CredHub](#3.3.8)  
+　　　3.3.8.1. [CredHub CLI 설치](#3.3.8.1)  
+　　　3.3.8.2. [CredHub 로그인](#3.3.8.2)  
+　　3.3.9. [Jumpbox](#3.3.9)  
 
 ## Executive Summary
 
@@ -471,7 +472,103 @@ Succeeded
 ```
 
 
-### <div id='3.3.6'/>3.3.6. BOSH 로그인
+### <div id='3.3.6'/>3.3.6. BOSH 설치 - 다운로드 된 Release 파일 이용 방식
+
+- 서비스 설치에 필요한 릴리즈 파일을 다운로드 받아 Local machine의 작업 경로로 위치시킨다.  
+  
+  - 설치 파일 통합 다운로드 위치 : https://paas-ta.kr/download/package    
+  - PaaS-TA 5.5.0 BOSH 설치 릴리즈 파일 다운로드 : [bosh.zip](http://45.248.73.44/index.php/s/fy83bkQQCcek2yk/download)
+
+```
+# 릴리즈 다운로드 파일 위치 경로 생성
+$ mkdir -p ~/workspace/paasta-5.5.0/release
+
+# 릴리즈 파일 다운로드 및 파일 경로 확인
+$ cd ~/workspace/paasta-5.5.0/release
+$ wget http://45.248.73.44/index.php/s/fy83bkQQCcek2yk/download --content-disposition
+$ unzip bosh.zip
+$ cd ~/workspace/paasta-5.5.0/release/bosh
+$ ls
+bosh-271.2.0-PaaS-TA.tgz                                                        bosh-vsphere-cpi-release-54.1.1.tgz
+bosh-271.2.0-ubuntu-xenial-621.93-20201130-224348-505837986-20201130224349.tgz  bosh-warden-cpi-41-ubuntu-xenial-621.93-20201130-224003-395585274-20201130224004.tgz
+bosh-aws-cpi-release-83.tgz                                                     bpm-1.1.9-ubuntu-xenial-621.93-20201130-224507-912672592-20201130224509.tgz
+bosh-azure-cpi-release-37.3.0.tgz                                               credhub-2.9.0-ubuntu-xenial-621.93-20201130-223813-836755462-20201130223815.tgz
+bosh-dns-release-1.27.0.tgz                                                     garden-runc-1.19.17-ubuntu-xenial-621.93-20201202-140222-317108723-20201202140224.tgz
+bosh-google-cpi-release-40.0.3.tgz                                              light-bosh-stemcell-621.93-aws-xen-hvm-ubuntu-xenial-go_agent.tgz
+bosh-openstack-cpi-release-44.tgz                                               light-bosh-stemcell-621.93-google-kvm-ubuntu-xenial-go_agent.tgz
+bosh-stemcell-621.93-azure-hyperv-ubuntu-xenial-go_agent.tgz                    os-conf-release-18.tgz
+bosh-stemcell-621.93-openstack-kvm-ubuntu-xenial-go_agent.tgz                   os-conf-release-22.1.0.tgz
+bosh-stemcell-621.93-vsphere-esxi-ubuntu-xenial-go_agent.tgz                    uaa-74.29.0-ubuntu-xenial-621.93-20201130-224014-789299918-20201130224017.tgz
+bosh-virtualbox-cpi-release-0.2.0.tgz
+
+```
+
+
+
+- 서버 환경에 맞추어 Deploy 스크립트 파일의 설정을 수정한다. 
+
+> $ vi ~/workspace/paasta-5.5.0/deployment/paasta-deployment/bosh/deploy-aws.sh
+
+
+```                     
+bosh create-env bosh.yml \                         
+	--state=aws/state.json \	
+	--vars-store=aws/creds.yml \ 
+	-o aws/cpi.yml \
+	-o uaa.yml \
+	-o cce.yml \
+	-o credhub.yml \
+	-o jumpbox-user.yml \
+	-o use-offline-releases-aws.yml \
+	-o use-offline-releases-uaa.yml \
+	-o use-offline-releases-cce.yml \
+	-o use-offline-releases-credhub.yml \
+	-o use-offline-releases-jumpbox.yml \
+ 	-l aws-vars.yml
+```
+
+- BOSH 설치 Shell Script 파일 실행
+
+```
+$ cd ~/workspace/paasta-5.5.0/deployment/paasta-deployment/bosh
+$ ./deploy-{iaas}.sh
+```
+
+- BOSH 설치 중
+
+```
+ubuntu@inception:~/workspace/paasta-5.5.0/deployment/paasta-deployment/bosh$ ./deploy-aws.sh
+Deployment manifest: '/home/ubuntu/workspace/paasta-5.5.0/deployment/paasta-deployment/bosh/bosh.yml'
+Deployment state: 'aws/state.json'
+
+Started validating
+  Validating release 'bosh'... Finished (00:00:01)
+  Validating release 'bpm'... Finished (00:00:01)
+  Validating release 'bosh-aws-cpi'... Finished (00:00:00)
+  Validating release 'uaa'... Finished (00:00:03)
+  Validating release 'credhub'...
+```
+
+- BOSH 설치 완료
+
+```
+  Compiling package 'uaa_utils/90097ea98715a560867052a2ff0916ec3460aabb'... Skipped [Package already compiled] (00:00:00)
+  Compiling package 'davcli/f8a86e0b88dd22cb03dec04e42bdca86b07f79c3'... Skipped [Package already compiled] (00:00:00)
+  Updating instance 'bosh/0'... Finished (00:01:44)
+  Waiting for instance 'bosh/0' to be running... Finished (00:02:16)
+  Running the post-start scripts 'bosh/0'... Finished (00:00:13)
+Finished deploying (00:11:54)
+
+Stopping registry... Finished (00:00:00)
+Cleaning up rendered CPI jobs... Finished (00:00:00)
+
+Succeeded
+```
+
+
+
+
+### <div id='3.3.7'/>3.3.7. BOSH 로그인
 BOSH가 설치되면, BOSH 설치 디렉터리 이하 {iaas}/creds.yml 파일이 생성된다.  
 creds.yml은 BOSH 인증정보를 가지고 있으며, creds.yml을 활용하여 BOSH에 로그인한다.  
 BOSH 로그인 후, BOSH CLI 명령어를 이용하여 PaaS-TA를 설치할 수 있다.  
@@ -536,13 +633,13 @@ $ source {BOSH_LOGIN_FILE_PATH}/{BOSH_LOGIN_FILE_NAME}
 
 
 
-### <div id='3.3.7'/>3.3.7. CredHub
+### <div id='3.3.8'/>3.3.8. CredHub
 CredHub은 인증정보 저장소이다.  
 BOSH 설치 시 Operation 파일로 credhub.yml을 추가하였다.  
 BOSH 설치 시 credhub.yml을 적용하면, PaaS-TA 설치 시 PaaS-TA에서 사용하는 인증정보(Certificate, Password)를 CredHub에 저장한다.  
 PaaS-TA 인증정보가 필요할 때 CredHub을 사용하며, CredHub CLI를 통해 CredHub에 로그인하여 인증정보 조회, 수정, 삭제를 할 수 있다.
 
-#### <div id='3.3.7.1'/>3.3.7.1. CredHub CLI 설치
+#### <div id='3.3.8.1'/>3.3.8.1. CredHub CLI 설치
 
 CredHub CLI는 BOSH를 설치한 Inception(설치환경)에 설치한다.
 
@@ -554,7 +651,7 @@ $ sudo mv credhub /usr/local/bin/credhub
 $ credhub --version
 ```
 
-#### <div id='3.3.7.2'/>3.3.7.2. CredHub 로그인
+#### <div id='3.3.8.2'/>3.3.8.2. CredHub 로그인
 CredHub에 로그인하기 위해 BOSH를 설치한 bosh-deployment 디렉터리의 creds.yml을 활용하여 로그인한다.
 
 ```
@@ -575,7 +672,7 @@ PaaS-TA를 설치하면 인증 정보가 저장되어 조회할 수 있다.
 $ credhub get -n /{director}/{deployment}/uaa_ca
 ```
 
-### <div id='3.3.8'/>3.3.8. Jumpbox
+### <div id='3.3.9'/>3.3.9. Jumpbox
 BOSH 설치 시 Operation 파일로 jumpbox-user.yml을 추가하였다.  
 Jumpbox는 BOSH VM에 접근하기 위한 인증을 적용하게 된다.  
 인증키는 BOSH에서 자체적으로 생성하며, 인증키를 통해 BOSH VM에 접근할 수 있다.  
