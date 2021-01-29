@@ -181,6 +181,10 @@ $ bosh -version
 $ mkdir -p ${HOME}/workspace/paasta-5.5/deployment
 $ cd ${HOME}/workspace/paasta-5.5/deployment
 $ git clone https://github.com/PaaS-TA/paasta-deployment.git -b working-5.5
+
+# bosh, paasta 모두 common/common_vars.yml 을 사용한다. 다운로드 받는다.
+# cd ${HOME}/workspace/paasta-5.5/deployment 
+$ git clone -b {TagVersion} https://github.com/PaaS-TA/common.git
 ```
 
 - paasta/deployment/paasta-deployment 이하 디렉터리
@@ -364,6 +368,12 @@ BOSH 설치 Option은 아래와 같다.
 <td>Requries value: -v metric_url</td>
 </tr>
 <tr>
+<td>paasta-addon/use-compiled-releases-monitoring-agent.yml</td>
+<td>컴파일 된 파일을 미리 다운로드 후 오프라인 방식으로 PaaS-TA Monitoring Agent의 설치.
+deploey-{IaaS}-monitoring.yml 파일과 use-compiled-releases-monitoring-agent.yml 내용 수정 필요 </td>
+<td>Requries value: -v metric_url</td>
+</tr>
+<tr>
 <td>syslog.yml</td>
 <td>Syslog 구성 적용</td>
 <td>Requries value: -v syslog_address -v syslog_port -v syslog_transport</td>
@@ -375,17 +385,6 @@ Syslog Agent는 BOSH VM의 log 정보를 logsearch의 ls-router에 전송하는 
 BOSH 설치 전에 paasta-monitoring의 InfluxDB IP를 metric_url로 사용하기 위해 사전에 정의해야 한다.
 마찬가지로 logsearch의 ls-router IP도 syslog_address로 연동하기 위해 사전에 정의해야 한다.
 
-| 파일명 | 설명 | 요구사항 |
-|:---  |:---     |:---   |
-|paasta-addon/paasta-monitoring-agent.yml | PaaS-TA Monitoring Agent 적용 | Requries value:   -v metric_url  |
-|paasta-addon/use-compiled-releases-monitoring-agent.yml | 다운로드 및 컴파일 없이 PaaS-TA Monitoring Agent의 빠른 설치가 가능하다.	 | |
-|syslog.yml | Syslog 구성 적용 | Requries value: -v syslog_address   -v syslog_port -v syslog_transport |
-|use-compiled-releases-syslog.yml | 다운로드 및 컴파일 없이 Syslog의 빠른 설치가 가능하다.	 |  |
-
-PaaS-TA Monitoring Agent는 BOSH VM의 상태 정보(Metric data)를 paasta-monitoring의 InfluxDB에 전송한다.  
-Syslog Agent는 BOSH VM의 log 정보를 logsearch의 ls-router에 전송하는 역할을 한다.  
-BOSH 설치 전에 paasta-monitoring의 InfluxDB IP를 metric_url로 사용하기 위해 사전에 정의해야 한다.  
-마찬가지로 logsearch의 ls-router IP도 syslog_address로 연동하기 위해 사전에 정의해야 한다.
 
 ##### <div id='3.3.4.3.1'/>● deploy-aws-monitoring.sh
 ```
