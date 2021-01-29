@@ -1054,7 +1054,7 @@ uaa/f8f6b0e8-2bbf-4be5-8f69-ac8dc7a3d943                  running        z2  10.
 Succeeded
 ```
 
-## <div id='3.8.1'/>3.8.1.  PaaS-TA 설치 - 다운로드 된 Release 파일 이용 방식
+## <div id='3.8'/>3.8.  PaaS-TA 설치 - 다운로드 된 Release 파일 이용 방식
 
 
 - 서비스 설치에 필요한 릴리즈 파일을 다운로드 받아 Local machine의 작업 경로로 위치시킨다.  
