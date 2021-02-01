@@ -78,7 +78,7 @@ BOSH CLI v2 가 설치 되어 있지 않을 경우 먼저 BOSH2.0 설치 가이�
 
 Stemcell 목록을 확인하여 서비스 설치에 필요한 Stemcell이 업로드 되어 있는 것을 확인한다.  (PaaS-TA 5.5.0 과 동일 stemcell 사용)
 
-> $ bosh -e micro-bosh stemcells
+> $ bosh -e ${BOSH_ENVIRONMENT} stemcells
 
 ```
 Using environment '10.0.1.6' as client 'admin'
@@ -115,7 +115,7 @@ Deployment 파일에서 사용하는 network, vm_type, disk_type 등은 Cloud co
 
 - Cloud config 설정 내용을 확인한다.   
 
-> $ bosh -e micro-bosh cloud-config   
+> $ bosh -e ${BOSH_ENVIRONMENT} cloud-config   
 
 ```
 Using environment '10.0.1.6' as client 'admin'
@@ -298,7 +298,7 @@ $ sh ./deploy.sh
 
 설치 완료된 서비스를 확인한다.  
 
-> $ bosh -e micro-bosh -d portal-ui vms  
+> $ bosh -e ${BOSH_ENVIRONMENT} -d portal-ui vms  
 
 ```
 Using environment '10.0.1.6' as client 'admin'
