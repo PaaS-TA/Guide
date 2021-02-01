@@ -75,7 +75,7 @@ PaaS-TA 3.1 버전까지는 PaaS-TA Container, Controller를 각각의 deploymen
 
 - BOSH2 기반의 BOSH를 설치한다.
 - PaaS-TA 설치는 BOSH를 설치한 Inception(설치 환경)에서 작업한다.
-
+- PaaS-TA 설치를 위해 BOSH LOGIN을 진행한다. ([BOSH 로그인](https://github.com/PaaS-TA/Guide/blob/v5.5.0/install-guide/bosh/PAAS-TA_BOSH2_INSTALL_GUIDE_V5.0.md#3.3.7))
 
 ## <div id='3.2'/>3.2. 설치 파일 다운로드
 - PaaS-TA를 설치하기 위한 deployment가 존재하지 않는다면 다운로드 받는다
@@ -1060,7 +1060,7 @@ Succeeded
 - 서비스 설치에 필요한 릴리즈 파일을 다운로드 받아 Local machine의 작업 경로로 위치시킨다.  
   
   - 설치 파일 통합 다운로드 위치 : https://paas-ta.kr/download/package    
-  - PaaS-TA 5.5.0 설치 릴리즈 파일 다운로드 : [paasta.zip](https://45.248.73.44/index.php/s/TS6M2MTBkYsX8Lq/download)
+  - PaaS-TA 5.5.0 설치 릴리즈 파일 다운로드 : [paasta.zip](http://45.248.73.44/index.php/s/TS6M2MTBkYsX8Lq/download)
 
 ```
 # 릴리즈 다운로드 파일 위치 경로 생성
