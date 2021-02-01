@@ -73,7 +73,7 @@
 ### <div id="2.2"/> 2.2. Stemcell 확인
 Stemcell 목록을 확인하여 서비스 설치에 필요한 Stemcell이 업로드 되어 있는 것을 확인한다.  (PaaS-TA 5.5.0 과 동일 stemcell 사용)  
 
-> $ bosh -e micro-bosh stemcells
+> $ bosh -e ${BOSH_ENVIRONMENT} stemcells
 
 ```
 Using environment '10.0.1.6' as client 'admin'
@@ -108,7 +108,7 @@ BOSH Deployment manifest는 Components 요소 및 배포의 속성을 정의한 
 
 - Cloud config 설정 내용을 확인한다.   
 
-> $ bosh -e micro-bosh cloud-config   
+> $ bosh -e ${BOSH_ENVIRONMENT} cloud-config   
 
 ```
 Using environment '10.0.1.6' as client 'admin'
@@ -273,7 +273,7 @@ $ sh ./deploy.sh
 ### <div id="2.7"/> 2.7. 서비스 설치 확인
 설치 완료된 서비스를 확인한다.  
 
-> $ bosh -e micro-bosh -d portal-container-infra vms  
+> $ bosh -e ${BOSH_ENVIRONMENT} -d portal-container-infra vms  
 
 ```
 Using environment '10.0.1.6' as client 'admin'
