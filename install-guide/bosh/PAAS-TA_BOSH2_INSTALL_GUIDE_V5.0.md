@@ -195,7 +195,7 @@ $ git clone https://github.com/PaaS-TA/paasta-deployment.git -b v5.5.0
 ```
 $ cd ~/workspace/paasta-5.5.0/deployment/paasta-deployment
 $ ls
-bosh  cloud-config  paasta
+README.md  bosh  cloud-config  paasta
 ```
 
 <table>
