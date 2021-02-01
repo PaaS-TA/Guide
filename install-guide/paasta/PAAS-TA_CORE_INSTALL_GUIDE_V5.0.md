@@ -124,7 +124,72 @@ $ cd ~/workspace/paasta-5.5.0/deployment/paasta-deployment/bosh
 $ source upload-stemcell.sh
 ```
 
-- 오프라인 환경에 저장한 스템셀을 사용 시 offline-upload-stemcell.sh을 사용하고 STEMCELL_DIR의 설정을 오프라인 환경에 저장된 스템셀의 위치로 저장 후 실행한다 (e.g. STEMCELL_DIR="/home/ubuntu/workspace/paasta-5.5.0/stemcell/paasta")
+- 만약 오프라인 환경에 저장한 스템셀을 사용 시 Stemcell을 저장 한 뒤 경로를 설정 후 Stemcell 업로드 Script를 실행한다. 
+- [PaaS-TA 5.5.0 스템셀 통합 다운로드](http://45.248.73.44/index.php/s/RLgPANn7LNmGrqP/download)
+- 개별 Stemcell 다운로드 
+
+```  
+폴더 생성 및 이동
+$ mkdir -p ~/workspace/paasta-5.5.0/stemcell/paasta
+$ cd ~/workspace/paasta-5.5.0/stemcell/paasta/
+
+AWS의 경우
+$ wget https://s3.amazonaws.com/bosh-core-stemcells/621.94/bosh-stemcell-621.94-aws-xen-hvm-ubuntu-xenial-go_agent.tgz
+
+AZURE의 경우
+$ wget https://s3.amazonaws.com/bosh-core-stemcells/621.94/bosh-stemcell-621.94-aws-xen-hvm-ubuntu-xenial-go_agent.tgz
+
+GCP의 경우
+$wget https://s3.amazonaws.com/bosh-core-stemcells/621.94/bosh-stemcell-621.94-aws-xen-hvm-ubuntu-xenial-go_agent.tgz
+
+OPENSTACK의 경우
+$ wget https://s3.amazonaws.com/bosh-core-stemcells/621.94/bosh-stemcell-621.94-aws-xen-hvm-ubuntu-xenial-go_agent.tgz
+
+VSHPERE의 경우
+$ wget https://s3.amazonaws.com/bosh-core-stemcells/621.94/bosh-stemcell-621.94-aws-xen-hvm-ubuntu-xenial-go_agent.tgz
+
+BOSH-LITE의 경우
+$ wget https://s3.amazonaws.com/bosh-core-stemcells/621.94/bosh-stemcell-621.94-aws-xen-hvm-ubuntu-xenial-go_agent.tgz
+
+통합 다운로드의 경우
+$ cd ~/workspace/paasta-5.5.0
+$ wget http://45.248.73.44/index.php/s/RLgPANn7LNmGrqP/download  --content-disposition
+$ unzip stemcell.zip
+
+```
+
+- 오프라인 Stemcell 업로드 Script의 설정 수정(STEMCELL_DIR 수정)
+
+> $ vi ~/workspace/paasta-5.5.0/deployment/paasta-deployment/bosh/offline-upload-stemcell.sh
+```                     
+#!/bin/bash
+STEMCELL_VERSION=621.94
+STEMCELL_DIR="/home/ubuntu/workspace/paasta-5.5.0/stemcell/paasta"
+CURRENT_IAAS="${CURRENT_IAAS}"					 # IaaS Information (PaaS-TA에서 제공되는 create-bosh-login.sh 미 사용시 aws/azure/gcp/openstack/vsphere 입력, 미 입력시 bosh-lite)
+BOSH_ENVIRONMENT="${BOSH_ENVIRONMENT}"			 # bosh director alias name (PaaS-TA에서 제공되는 create-bosh-login.sh 미 사용시 bosh envs에서 이름을 확인하여 입력)
+
+if [[ ${CURRENT_IAAS} = "aws" ]]; then
+        bosh -e ${BOSH_ENVIRONMENT} upload-stemcell ${STEMCELL_DIR}/bosh-stemcell-${STEMCELL_VERSION}-aws-xen-hvm-ubuntu-xenial-go_agent.tgz -n
+elif [[ ${CURRENT_IAAS} = "azure" ]]; then
+        bosh -e ${BOSH_ENVIRONMENT} upload-stemcell ${STEMCELL_DIR}/bosh-stemcell-${STEMCELL_VERSION}-azure-hyperv-ubuntu-xenial-go_agent.tgz -n
+elif [[ ${CURRENT_IAAS} = "gcp" ]]; then
+        bosh -e ${BOSH_ENVIRONMENT} upload-stemcell ${STEMCELL_DIR}/bosh-stemcell-${STEMCELL_VERSION}-google-kvm-ubuntu-xenial-go_agent.tgz -n
+elif [[ ${CURRENT_IAAS} = "openstack" ]]; then
+        bosh -e ${BOSH_ENVIRONMENT} upload-stemcell ${STEMCELL_DIR}/bosh-stemcell-${STEMCELL_VERSION}-openstack-kvm-ubuntu-xenial-go_agent.tgz -n
+elif [[ ${CURRENT_IAAS} = "vsphere" ]]; then
+        bosh -e ${BOSH_ENVIRONMENT} upload-stemcell ${STEMCELL_DIR}/bosh-stemcell-${STEMCELL_VERSION}-vsphere-esxi-ubuntu-xenial-go_agent.tgz -n
+else
+        bosh -e ${BOSH_ENVIRONMENT} upload-stemcell ${STEMCELL_DIR}/bosh-stemcell-${STEMCELL_VERSION}-warden-boshlite-ubuntu-xenial-go_agent.tgz -n
+fi
+```
+
+- 오프라인 Stemcell 업로드 Script 실행
+
+```
+$ cd ~/workspace/paasta-5.5.0/deployment/paasta-deployment/bosh
+$ source offline-upload-stemcell.sh
+```
+
 
 
 ## <div id='3.4'/>3.4. Runtime Config 설정  
@@ -159,8 +224,50 @@ $ source update-runtime-config.sh
   $ bosh -e ${BOSH_ENVIRONMENT} runtime-config --name=os-conf
   ```
 
-- 오프라인 환경에 저장한 릴리즈를 사용 시 offline-update-runtime-config.sh
-을 사용하고 RELEASE_DIR 설정을 오프라인 환경에 저장된 릴리즈의 위치로 저장 후 실행한다 (e.g. RELEASE_DIR="/home/ubuntu/workspace/paasta-5.5.0/release")
+- 만약 오프라인 환경에 저장한 릴리즈를 사용 시 Release를 저장 한 뒤 경로를 설정 후 update-runtime-config Script를 실행한다.
+
+
+
+- 만약 오프라인 환경에 저장한 릴리즈를 사용 시 릴리즈를 저장 한 뒤 경로를 설정 후 update-runtime-config 업로드 Script를 실행한다. 
+- [bosh-dns-release-1.27.0 다운로드](http://45.248.73.44/index.php/s/8wf2Fjn2ytxsnR7/download)
+- [os-conf-release-22.1.0 다운로드](http://45.248.73.44/index.php/s/G7ossXeZZHeMPTQ/download)
+
+```  
+폴더 생성 및 이동
+$ mkdir -p ~/workspace/paasta-5.5.0/release/bosh
+$ cd ~/workspace/paasta-5.5.0/release/bosh
+
+bosh-dns-release 1.27.0 다운로드 
+$ wget http://45.248.73.44/index.php/s/8wf2Fjn2ytxsnR7/download --content-disposition
+
+os-conf 22.1.0 다운로드 
+$ wget http://45.248.73.44/index.php/s/G7ossXeZZHeMPTQ/download --content-disposition
+
+```
+
+- 오프라인 Runtime Config 업데이트 Script 수정 (RELEASE_DIR 수정)
+
+> $ vi ~/workspace/paasta-5.5.0/deployment/paasta-deployment/bosh/offline-update-runtime-config.sh
+```                     
+#!/bin/bash
+  
+BOSH_ENVIRONMENT="${BOSH_ENVIRONMENT}"                   # bosh director alias name (PaaS-TA에서 제공되는 create-bosh-login.sh 미 사용시 bosh envs에서 이름을 확인하여 입력)
+RELEASE_DIR="/home/ubuntu/workspace/paasta-5.5.0/release" # Release Directory (offline으로 릴리즈 다운받아 사용시 설정)
+
+bosh -e ${BOSH_ENVIRONMENT} update-runtime-config -n runtime-configs/dns-offline.yml \
+                -v releases_dir=${RELEASE_DIR}
+bosh -e ${BOSH_ENVIRONMENT} update-runtime-config -n --name=os-conf runtime-configs/os-conf-offline.yml \
+                -v releases_dir=${RELEASE_DIR}
+```
+
+- 오프라인 Runtime Config 업데이트 Script 실행
+
+```
+$ cd ~/workspace/paasta-5.5.0/deployment/paasta-deployment/bosh
+$ source offline-update-runtime-config.sh
+```
+
+
 
 
 ## <div id='3.5'/>3.5. Cloud Config 설정
@@ -556,9 +663,10 @@ common_vars.yml파일과 vars.yml을 수정하여 PaaS-TA 설치시 적용하는
 
 
 #### <div id='3.6.1.1'/>● common_vars.yml
-common 폴더에 있는 common_vars.yml PaaS-TA 및 각종 Service 설치시 적용하는 공통 변수 설정 파일이 존재한다.  
-PaaS-TA를 설치할 때는 system_domain, paasta_admin_username, paasta_admin_password, uaa_client_admin_secret, uaa_client_portal_secret, paasta_database_port의 값을 변경 하여 설치 할 수 있다.
+~/workspace/paasta-5.5.0/deployment/common 폴더에 있는 common_vars.yml PaaS-TA 및 각종 Service 설치시 적용하는 공통 변수 설정 파일이 존재한다.  
+PaaS-TA 5.5.0을 설치할 때는 system_domain, paasta_admin_username, paasta_admin_password, uaa_client_admin_secret, uaa_client_portal_secret, paasta_database_port의 값을 변경 하여 설치 할 수 있다.
 
+> $ vi ~/workspace/paasta-5.5.0/deployment/common/common_vars.yml
 
 ```
 # BOSH INFO
@@ -613,6 +721,7 @@ abacus_url: "http://abacus.xx.xx.xxx.xxx.xip.io"	# Abacus URL (e.g. "http://abac
 
 PaaS-TA를 설치 할 때 적용되는 각종 변수값이나 배포 될 VM의 설정을 변경할 수 있다.
 
+> $ vi ~/workspace/paasta-5.5.0/deployment/paasta-deployment/paasta/vars.yml
 ```
 # SERVICE VARIABLE
 deployment_name: "paasta"			# Deployment Name
@@ -979,7 +1088,7 @@ $ chmod +x ~/workspace/paasta-5.5.0/deployment/paasta-deployment/paasta/*.sh
 
 
 ## <div id='3.7'/>3.7.  PaaS-TA 설치
-- 서버 환경에 맞추어 Deploy 스크립트 파일의 설정을 수정한다. 
+- 서버 환경에 맞추어 common_vars.yml과 vars.yml을 수정 한 뒤, Deploy 스크립트 파일의 설정을 수정한다. 
 
 > $ vi ~/workspace/paasta-5.5.0/deployment/paasta-deployment/paasta/deploy-aws.sh
 
@@ -1088,7 +1197,7 @@ diego-release-2.48.0.tgz                  php-buildpack-release-4.4.20.tgz
 dotnet-core-buildpack-release-2.3.14.tgz  postgres-release-43.tgz
 ```
 
-- 서버 환경에 맞추어 Deploy 스크립트 파일의 설정을 수정한다. 
+- 서버 환경에 맞추어 common_vars.yml과 vars.yml을 수정 한 뒤, Deploy 스크립트 파일의 설정을 수정한다. 
 
 > $ vi ~/workspace/paasta-5.5.0/deployment/paasta-deployment/paasta/deploy-aws.sh
 
