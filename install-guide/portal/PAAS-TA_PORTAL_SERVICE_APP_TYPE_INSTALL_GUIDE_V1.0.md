@@ -501,7 +501,7 @@ Portal을 PaaS-TA에 App으로 배포해주는 Script를 실행한다.
 
 ```
 $ cd ~/workspace/paasta-5.5.0/release/portal/portal-app
-$ source 2.applyChangeVariable.sh
+$ source 2.portalContainerPush.sh
 
 .....
 
