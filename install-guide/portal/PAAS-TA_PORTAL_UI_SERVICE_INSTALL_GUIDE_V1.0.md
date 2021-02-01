@@ -281,10 +281,11 @@ BOSH_ENVIRONMENT="${BOSH_ENVIRONMENT}"		# bosh director alias name (PaaS-TAÏóêÏÑ
 
 # DEPLOY
 bosh -e ${BOSH_ENVIRONMENT} -n -d portal-ui deploy portal-ui.yml \
+    -o operations/use-offline-releases.yml \
     -o operations/${CURRENT_IAAS}-network.yml \
     -l ${COMMON_VARS_PATH} \
     -l vars.yml \
-   -v releases_dir="/home/ubuntu/workspace/paasta-5.5.0/release"  
+    -v releases_dir="/home/ubuntu/workspace/paasta-5.5.0/release"  
 
 ```  
 
