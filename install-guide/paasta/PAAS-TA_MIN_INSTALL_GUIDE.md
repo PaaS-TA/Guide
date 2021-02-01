@@ -139,19 +139,19 @@ AWS의 경우
 $ wget https://s3.amazonaws.com/bosh-core-stemcells/621.94/bosh-stemcell-621.94-aws-xen-hvm-ubuntu-xenial-go_agent.tgz
 
 AZURE의 경우
-$ wget https://s3.amazonaws.com/bosh-core-stemcells/621.94/bosh-stemcell-621.94-aws-xen-hvm-ubuntu-xenial-go_agent.tgz
+$ wget https://bosh-core-stemcells.s3-accelerate.amazonaws.com/621.94/bosh-stemcell-621.94-azure-hyperv-ubuntu-xenial-go_agent.tgz
 
 GCP의 경우
-$wget https://s3.amazonaws.com/bosh-core-stemcells/621.94/bosh-stemcell-621.94-aws-xen-hvm-ubuntu-xenial-go_agent.tgz
+$wget https://bosh-core-stemcells.s3-accelerate.amazonaws.com/621.94/bosh-stemcell-621.94-google-kvm-ubuntu-xenial-go_agent.tgz
 
 OPENSTACK의 경우
-$ wget https://s3.amazonaws.com/bosh-core-stemcells/621.94/bosh-stemcell-621.94-aws-xen-hvm-ubuntu-xenial-go_agent.tgz
+$ wget https://s3.amazonaws.com/bosh-core-stemcells/621.94/bosh-stemcell-621.94-openstack-kvm-ubuntu-xenial-go_agent.tgz
 
 VSHPERE의 경우
-$ wget https://s3.amazonaws.com/bosh-core-stemcells/621.94/bosh-stemcell-621.94-aws-xen-hvm-ubuntu-xenial-go_agent.tgz
+$ wget https://s3.amazonaws.com/bosh-core-stemcells/621.94/bosh-stemcell-621.94-vsphere-esxi-ubuntu-xenial-go_agent.tgz
 
 BOSH-LITE의 경우
-$ wget https://s3.amazonaws.com/bosh-core-stemcells/621.94/bosh-stemcell-621.94-aws-xen-hvm-ubuntu-xenial-go_agent.tgz
+$ wget https://s3.amazonaws.com/bosh-core-stemcells/621.94/bosh-stemcell-621.94-warden-boshlite-ubuntu-xenial-go_agent.tgz
 
 통합 다운로드의 경우
 $ cd ~/workspace/paasta-5.5.0
