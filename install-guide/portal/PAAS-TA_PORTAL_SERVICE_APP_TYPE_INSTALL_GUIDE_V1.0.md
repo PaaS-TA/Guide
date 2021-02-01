@@ -484,12 +484,12 @@ Portal을 PaaS-TA에 App으로 배포해주는 Script 동작을 위해 Script의
 #!/bin/bash
 
 #VARIABLE
-DOMAIN="xx.xxx.xx.xxx.xip.io"				    # PaaS-TA System Domain
+DOMAIN="xx.xxx.xx.xxx.xip.io"						# PaaS-TA System Domain
 PAASTA_USER_ADMIN_USERNAME="admin"			# PaaS-TA Admin Username
 PAASTA_USER_ADMIN_PASSWORD="admin"			# PaaS-TA Admin Password
-PORTAL_QUOTA_NAME="portal_quota"			  # PaaS-TA Portal Quota Name
-PORTAL_ORG_NAME="portal"					      # PaaS-TA Portal Org Name
-PORTAL_SPACE_NAME="system"					    # PaaS-TA Portal Space Name
+PORTAL_QUOTA_NAME="portal_quota"				# PaaS-TA Portal Quota Name
+PORTAL_ORG_NAME="portal"								# PaaS-TA Portal Org Name
+PORTAL_SPACE_NAME="system"							# PaaS-TA Portal Space Name
 PORTAL_SECURITY_GROUP_NAME="portal"			# PaaS-TA Portal Space Name
 
 ......
