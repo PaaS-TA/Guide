@@ -214,8 +214,8 @@ binary_storage_email: "<BINARY_STORAGE_EMAIL>"                  # binary storage
 #!/bin/bash
 
 # VARIABLES
-COMMON_VARS_PATH="<COMMON_VARS_FILE_PATH>"	# common_vars.yml File Path (e.g. ../../common/common_vars.yml)
-BOSH_ENVIRONMENT="${BOSH_ENVIRONMENT}"			# bosh director alias name (PaaS-TA에서 제공되는 create-bosh-login.sh 미 사용시 bosh envs에서 이름을 확인하여 입력)
+COMMON_VARS_PATH="<COMMON_VARS_FILE_PATH>"  # common_vars.yml File Path (e.g. ../../common/common_vars.yml)
+BOSH_ENVIRONMENT="${BOSH_ENVIRONMENT}"      # bosh director alias name (PaaS-TA에서 제공되는 create-bosh-login.sh 미 사용시 bosh envs에서 이름을 확인하여 입력)
 
 # DEPLOY
 bosh -e ${BOSH_ENVIRONMENT} -n -d portal-container-infra deploy --no-redact portal-container-infra.yml \
@@ -254,8 +254,8 @@ paasta-portal-api-release-2.3.0-ctn.tgz
 #!/bin/bash
 
 # VARIABLES
-COMMON_VARS_PATH="<COMMON_VARS_FILE_PATH>"	# common_vars.yml File Path (e.g. ../../common/common_vars.yml)
-BOSH_ENVIRONMENT="${BOSH_ENVIRONMENT}"			# bosh director alias name (PaaS-TA에서 제공되는 create-bosh-login.sh 미 사용시 bosh envs에서 이름을 확인하여 입력)
+COMMON_VARS_PATH="<COMMON_VARS_FILE_PATH>"  # common_vars.yml File Path (e.g. ../../common/common_vars.yml)
+BOSH_ENVIRONMENT="${BOSH_ENVIRONMENT}"      # bosh director alias name (PaaS-TA에서 제공되는 create-bosh-login.sh 미 사용시 bosh envs에서 이름을 확인하여 입력)
 
 # DEPLOY
 bosh -e ${BOSH_ENVIRONMENT} -n -d portal-container-infra deploy --no-redact portal-container-infra.yml \
@@ -397,7 +397,7 @@ PORTAL_DB_USER_PASSWORD="Paasta@2019"   # portal-container-infra DB Password
 
 # PORTAL-API
 ABACUS_URL=""                           # Abacus URL(Not required)
-MONITORING_API_URL=""	                  # Monitoring API URL(Not required)
+MONITORING_API_URL=""                   # Monitoring API URL(Not required)
 
 # PORTAL-COMMON-API
 PAASTA_DB_DRIVER="org.postgresql.Driver"  # PaaS-TA DB Driver (e.g. org.postgresql.Driver OR com.mysql.jdbc.Driver)
@@ -484,13 +484,13 @@ Portal을 PaaS-TA에 App으로 배포해주는 Script 동작을 위해 Script의
 #!/bin/bash
 
 #VARIABLE
-DOMAIN="xx.xxx.xx.xxx.xip.io"						# PaaS-TA System Domain
-PAASTA_USER_ADMIN_USERNAME="admin"			# PaaS-TA Admin Username
-PAASTA_USER_ADMIN_PASSWORD="admin"			# PaaS-TA Admin Password
-PORTAL_QUOTA_NAME="portal_quota"				# PaaS-TA Portal Quota Name
-PORTAL_ORG_NAME="portal"								# PaaS-TA Portal Org Name
-PORTAL_SPACE_NAME="system"							# PaaS-TA Portal Space Name
-PORTAL_SECURITY_GROUP_NAME="portal"			# PaaS-TA Portal Space Name
+DOMAIN="xx.xxx.xx.xxx.xip.io"           # PaaS-TA System Domain
+PAASTA_USER_ADMIN_USERNAME="admin"      # PaaS-TA Admin Username
+PAASTA_USER_ADMIN_PASSWORD="admin"      # PaaS-TA Admin Password
+PORTAL_QUOTA_NAME="portal_quota"        # PaaS-TA Portal Quota Name
+PORTAL_ORG_NAME="portal"                # PaaS-TA Portal Org Name
+PORTAL_SPACE_NAME="system"              # PaaS-TA Portal Space Name
+PORTAL_SECURITY_GROUP_NAME="portal"     # PaaS-TA Portal Space Name
 
 ......
 
