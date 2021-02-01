@@ -224,9 +224,6 @@ $ source update-runtime-config.sh
   $ bosh -e ${BOSH_ENVIRONMENT} runtime-config --name=os-conf
   ```
 
-- 만약 오프라인 환경에 저장한 릴리즈를 사용 시 Release를 저장 한 뒤 경로를 설정 후 update-runtime-config Script를 실행한다.
-
-
 
 - 만약 오프라인 환경에 저장한 릴리즈를 사용 시 릴리즈를 저장 한 뒤 경로를 설정 후 update-runtime-config 업로드 Script를 실행한다. 
 - [bosh-dns-release-1.27.0 다운로드](http://45.248.73.44/index.php/s/8wf2Fjn2ytxsnR7/download)
