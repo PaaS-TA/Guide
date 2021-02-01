@@ -124,11 +124,13 @@ $ cd ~/workspace/paasta-5.5.0/deployment/paasta-deployment/bosh
 $ source upload-stemcell.sh
 ```
 
-- 만약 오프라인 환경에 저장한 스템셀을 사용 시 Stemcell을 저장 한 뒤 경로를 설정 후 Stemcell 업로드 Script를 실행한다. 
+
 - [PaaS-TA 5.5.0 스템셀 통합 다운로드](http://45.248.73.44/index.php/s/RLgPANn7LNmGrqP/download)
-- 개별 Stemcell 다운로드 
+- 만약 오프라인 환경에 저장한 스템셀을 사용 시 Stemcell을 저장 한 뒤 경로를 설정 후 Stemcell 업로드 Script를 실행한다. 
 
 ```  
+개별 Stemcell 다운로드 
+
 폴더 생성 및 이동
 $ mkdir -p ~/workspace/paasta-5.5.0/stemcell/paasta
 $ cd ~/workspace/paasta-5.5.0/stemcell/paasta/
