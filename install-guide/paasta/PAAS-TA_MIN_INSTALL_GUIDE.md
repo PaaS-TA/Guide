@@ -129,12 +129,11 @@ $ source upload-stemcell.sh
 - 만약 오프라인 환경에 저장한 스템셀을 사용 하고 싶다면, Stemcell을 저장 한 뒤 경로를 설정 후 Stemcell 업로드 Script를 실행한다. 
 
 ```  
-개별 Stemcell 다운로드 
-
 폴더 생성 및 이동
 $ mkdir -p ~/workspace/paasta-5.5.0/stemcell/paasta
 $ cd ~/workspace/paasta-5.5.0/stemcell/paasta/
 
+개별 Stemcell 다운로드 
 AWS의 경우
 $ wget https://s3.amazonaws.com/bosh-core-stemcells/621.94/bosh-stemcell-621.94-aws-xen-hvm-ubuntu-xenial-go_agent.tgz
 
