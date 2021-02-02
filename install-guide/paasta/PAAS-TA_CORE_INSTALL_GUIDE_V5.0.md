@@ -125,7 +125,7 @@ $ source upload-stemcell.sh
 ```
 
 - [PaaS-TA 5.5.0 스템셀 통합 다운로드](http://45.248.73.44/index.php/s/RLgPANn7LNmGrqP/download)  
-- 만약 오프라인 환경에 저장한 스템셀을 사용 시 Stemcell을 저장 한 뒤 경로를 설정 후 Stemcell 업로드 Script를 실행한다. 
+- 만약 오프라인 환경에 저장한 스템셀을 사용 하고 싶다면, Stemcell을 저장 한 뒤 경로를 설정 후 Stemcell 업로드 Script를 실행한다. 
 
 ```  
 개별 Stemcell 다운로드 
@@ -226,7 +226,7 @@ $ source update-runtime-config.sh
   ```
 
 
-- 만약 오프라인 환경에 저장한 릴리즈를 사용 시 릴리즈를 저장 한 뒤 경로를 설정 후 update-runtime-config 업로드 Script를 실행한다. 
+- 만약 오프라인 환경에 저장한 릴리즈를 사용 하고 싶다면, 릴리즈를 저장 한 뒤 경로를 설정 후 update-runtime-config 업로드 Script를 실행한다. 
 - [bosh-dns-release-1.27.0 다운로드](http://45.248.73.44/index.php/s/8wf2Fjn2ytxsnR7/download)
 - [os-conf-release-22.1.0 다운로드](http://45.248.73.44/index.php/s/G7ossXeZZHeMPTQ/download)
 
