@@ -90,7 +90,8 @@ $ git clone https://github.com/PaaS-TA/paasta-deployment.git -b v5.5.0-min
 ## <div id='3.3'/>3.3. Stemcell 업로드
 Stemcell은 배포 시 생성되는 PaaS-TA VM Base OS Image이며, PaaS-TA 5.5.0은 Ubuntu xenial stemcell 621.94를 기반으로 한다.  
 BOSH 로그인 후 다음 명령어를 수행하여 Stemcell을 올린다.  
-BOSH_ENVIRONMENT는 BOSH 설치 시 사용한 Director 명이고, CURRENT_IAAS는 배포된 환경 IaaS(aws, azure, gcp, openstack, vsphere, 그외 입력시 bosh-lite)에 맞게 입력을 한다. (PaaS-TA에서 제공되는 create-bosh-login.sh을 이용하여 BOSH LOGIN시 자동입력된다.)
+BOSH_ENVIRONMENT는 BOSH 설치 시 사용한 Director 명이고, CURRENT_IAAS는 배포된 환경 IaaS(aws, azure, gcp, openstack, vsphere, 그외 입력시 bosh-lite)에 맞게 입력을 한다. 
+<br>(PaaS-TA에서 제공되는 create-bosh-login.sh을 이용하여 BOSH LOGIN시 BOSH_ENVIRONMENT와 CURRENT_IAAS는 자동입력된다.)
 
 - Stemcell 업로드 Script의 설정 수정
 
