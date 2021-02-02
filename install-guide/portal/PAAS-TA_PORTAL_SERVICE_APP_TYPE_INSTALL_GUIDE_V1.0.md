@@ -340,7 +340,7 @@ portal-app
 ### <div id="3.1.2"/> 3.1.2. Portal App Manifest 변경 Script 변수 설정
 manifest는 Components 요소 및 배포의 속성을 정의한 YAML 파일이다. manifest 파일에는 어떤 name, memory, instance, host, path, buildpack, env 등을 사용 할 것인지 정의가 되어 있다.
 
-- infra 정보 : [2.4. Deployment 파일 수정 - vars.yml](#1.3.vars) 및 [2.7. 서비스 설치 확인](#2.7) 참조  
+- infra 정보 : [2.4. Deployment 파일 수정 - vars.yml](#2.4) 및 [2.7. 서비스 설치 확인](#2.7) 참조  
 - PaaS-TA 정보 : PaaS-TA 설치 시 사용한 common_vars.yml 파일을 참고한다.  
 
 ```
