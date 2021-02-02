@@ -274,10 +274,10 @@ webuser_automaticapproval: false                                         # webus
 user_app_size: 0                                                         # webuser : 사용자 myApp 배포시 용량제한 여부 (값이 0일경우 무제한)
 
 # ETC INFO
-portal_default_api_name: "PaaS-TA 5.0"                                   # ETC : default api name
+portal_default_api_name: "PaaS-TA 5.5.0"                                   # ETC : default api name
 portal_default_api_url: "http://<PORTAL-API-HAPROXY-PUBLIC-IP>:2225"     # ETC : default api url
 portal_default_header_auth: "Basic YWRtaW46b3BlbnBhYXN0YQ=="             # ETC : default header auth
-portal_default_api_desc: "PaaS-TA 5.0 install infra"                     # ETC : default api description
+portal_default_api_desc: "PaaS-TA 5.5.0 install infra"                     # ETC : default api description
 ```
 
 ### <div id="2.5"/> 2.5. 서비스 설치
