@@ -896,13 +896,13 @@ ex) uaa_client_admin_secret="admin-secret"
 </tr>
 <tr>
 <td>operations/use-offline-releases.yml</td>
-<td>paasta-deployment.yml에서 사용되는 릴리즈를 오프라인에 저장된 릴리즈로 설치가 가능하다.</td>
+<td>min-paasta-deployment.yml에서 사용되는 릴리즈를 오프라인에 저장된 릴리즈로 설치가 가능하다.</td>
 <td>Requires value :  -v releases_dir</td>
 </tr>
 <tr>
-<td>operations/use-postgres.yml</td>
+<td>operations/min-use-postgres.yml</td>
 <td>Database를 Postgres로 설치 <br> 
-    - use-postgres.yml 미적용 시 MySQL 설치  <br>
+    - min-use-postgres.yml 미적용 시 MySQL 설치  <br>
     - 3.5 이전 버전에서 Migration 시 필수  
 </td>
 <td></td>
@@ -914,12 +914,12 @@ ex) uaa_client_admin_secret="admin-secret"
 </tr>
 <tr>
 <td>operations/use-offline-releases-postgres.yml</td>
-<td>use-postgres.yml에서 사용되는 릴리즈를 오프라인에 저장된 릴리즈로 설치가 가능하다.</td>
-<td>Requires: use-postgres.yml<br>
+<td>min-use-postgres.yml에서 사용되는 릴리즈를 오프라인에 저장된 릴리즈로 설치가 가능하다.</td>
+<td>Requires: min-use-postgres.yml<br>
     Requires value :  -v releases_dir</td>
 </tr>
 <tr>
-<td>operations/use-haproxy.yml</td>
+<td>operations/min-use-haproxy.yml</td>
 <td>HAProxy 적용 <br>
     - IaaS에서 제공하는 LB를 사용하여 PaaS-TA 설치 시, Operation 파일을 제거하고 설치한다.
 </td>
@@ -932,34 +932,39 @@ ex) uaa_client_admin_secret="admin-secret"
 <td>HAProxy Public Network 설정 <br>
     - IaaS에서 제공하는 LB를 사용하여 PaaS-TA 설치 시, Operation 파일을 제거하고 설치한다.
 </td>
-<td>Requires: use-haproxy.yml <br>
+<td>Requires: min-use-haproxy.yml <br>
     Requires Value :  <br>
     -v haproxy_public_ip <br>
     -v haproxy_public_network_name
 </td>
 </tr>
 <tr>
-<td>operations/use-haproxy-public-network-vsphere.yml</td>
-<td>HAProxy Public Network 설정 <br>
-    - vsphere에서 사용하며, IaaS에서 제공하는 LB를 사용하여 PaaS-TA 설치 시, Operation 파일을 제거하고 설치한다.
-</td>
-<td>Requires: use-haproxy.yml <br>
-    Requires Value :  <br>
-    -v haproxy_public_ip <br>
-    -v haproxy_public_network_name <br>
-    -v haproxy_private_network_name
-</td>
-</tr>
-<tr>
 <td>operations/use-compiled-releases-haproxy.yml</td>
 <td>인터넷이 연결된 환경에서 컴파일 없이 HAProxy의 빠른 설치가 가능하다.</td>
-<td>Requires: use-haproxy.yml</td>
+<td>Requires: min-use-haproxy.yml</td>
 </tr>
 <tr>
 <td>operations/use-offline-releases-haproxy.yml</td>
-<td>use-haproxy.yml에서 사용되는 릴리즈를 오프라인에 저장된 릴리즈로 설치가 가능하다.</td>
-<td>Requires: use-haproxy.yml<br>
+<td>min-use-haproxy.yml에서 사용되는 릴리즈를 오프라인에 저장된 릴리즈로 설치가 가능하다.</td>
+<td>Requires: min-use-haproxy.yml<br>
     Requires value :  -v releases_dir</td>
+</tr>
+<tr>
+<td>operations/min-use-router-public-network.yml</td>
+<td>router를 외부 접근을 가능하게 수정한다.</td>
+<td>4VMs 배포시 사용</td>
+</tr>
+<tr>
+<td>operations/min-create-vm-singleton-blobstore.yml</td>
+<td>4VMs에서 사용되는 database의<br>singleton-blobstore를 단일 VM으로 배포한다.</td>
+<td>Requires: min-use-haproxy.yml <br>
+    7VMs 배포시 사용<br>
+    Requires operation file: min-option-network-and-deployment.yml</td>
+</tr>
+<tr>
+<td>operations/min-create-vm-tcp-router.yml</td>
+<td>4VMs에서 사용되는 router의 tcp-router를<br>단일 VM으로 배포한다.</td>
+<td>7VMs 배포시 사용</td>
 </tr>
 </table>
 
@@ -1023,7 +1028,7 @@ bosh -e ${BOSH_ENVIRONMENT} -d paasta -n deploy min-paasta-deployment.yml \	# Pa
 
 #### <div id='3.6.3.2'/>● deploy-aws-7vms.sh
 ```
-BOSH_ENVIRONMENT="${BOSH_ENVIRONMENT}"                   # bosh director alias name (PaaS-TA에서 제공되는 create-bosh-login.sh 미 사용시 bosh envs에서 이름을 확인하여 입력) -d paasta -n deploy min-paasta-deployment.yml \
+BOSH_ENVIRONMENT="${BOSH_ENVIRONMENT}"                   # bosh director alias name (PaaS-TA에서 제공되는 create-bosh-login.sh 미 사용시 bosh envs에서 이름을 확인하여 입력)
 
 bosh -e ${BOSH_ENVIRONMENT} -d paasta -n deploy min-paasta-deployment.yml \	# PaaS-TA-min Manifest File
         -o operations/min-aws.yml \					# AWS 설정
@@ -1073,10 +1078,14 @@ BOSH_ENVIRONMENT="${BOSH_ENVIRONMENT}"                   # bosh director alias n
 
 bosh -e ${BOSH_ENVIRONMENT} -d paasta -n deploy min-paasta-deployment.yml \	# PaaS-TA-min Manifest File
         -o operations/min-aws.yml \					# AWS 설정
-	-o operations/min-cce.yml \					# CCE 조치 설정
-	-o operations/min-use-router-public-network.yml \		# Router 외부 접근 설정
+        -o operations/min-cce.yml \					# CCE 조치 설정
+        -o operations/min-create-vm-singleton-blobstore.yml \		# singleton-blobstore VM 배포
+        -o operations/min-create-vm-tcp-router.yml \			# tcp-router VM 배포
+        -o operations/min-use-haproxy.yml \				# HAProxy 적용
+        -o operations/use-haproxy-public-network.yml \			# HAProxy Public Network 적용
         -o operations/min-use-postgres.yml \				# Database Type 설정 (3.5버전 이하에서 Migration 시 필수)
         -o operations/min-rename-network-and-deployment.yml \		# Rename Network and Deployment
+        -o operations/min-option-network-and-deployment.yml \		# singleton-blobstore Rename Network and Deployment
         -l min-vars.yml \						# PaaS-TA-min 설치시 적용하는 변수 설정 파일
         -l ../../common/common_vars.yml					# PaaS-TA 및 각종 Service 설치시 적용하는 공통 변수 설정 파일
 ```
@@ -1187,9 +1196,9 @@ bosh -e ${BOSH_ENVIRONMENT} -d paasta -n deploy min-paasta-deployment.yml \	# Pa
 	-o operations/min-use-router-public-network.yml \		# Router 외부 접근 설정
         -o operations/min-use-postgres.yml \				# Database Type 설정 (3.5버전 이하에서 Migration 시 필수)
         -o operations/min-rename-network-and-deployment.yml \		# Rename Network and Deployment
-	-o operations/use-offline-releases.yml \ 			# paasta-deployment.yml의 오프라인 릴리즈 사용
-	-o operations/use-offline-releases-cce.yml \			# cce.yml의 오프라인 릴리즈 사용
-	-o operations/use-offline-releases-postgres.yml \		# use-postgres.yml의 오프라인 릴리즈 사용
+	-o operations/use-offline-releases.yml \ 			# min-paasta-deployment.yml의 오프라인 릴리즈 사용
+	-o operations/use-offline-releases-cce.yml \			# min-cce.yml의 오프라인 릴리즈 사용
+	-o operations/use-offline-releases-postgres.yml \		# min-use-postgres.yml의 오프라인 릴리즈 사용
         -l min-vars.yml \						# PaaS-TA-min 설치시 적용하는 변수 설정 파일
         -l ../../common/common_vars.yml					# PaaS-TA 및 각종 Service 설치시 적용하는 공통 변수 설정 파일
 ```
@@ -1202,16 +1211,21 @@ BOSH_ENVIRONMENT="${BOSH_ENVIRONMENT}"                   # bosh director alias n
 
 bosh -e ${BOSH_ENVIRONMENT} -d paasta -n deploy min-paasta-deployment.yml \	# PaaS-TA-min Manifest File
         -o operations/min-aws.yml \					# AWS 설정
-	-o operations/min-cce.yml \					# CCE 조치 설정
-	-o operations/min-use-router-public-network.yml \		# Router 외부 접근 설정
+        -o operations/min-cce.yml \					# CCE 조치 설정
+        -o operations/min-create-vm-singleton-blobstore.yml \		# singleton-blobstore VM 배포
+        -o operations/min-create-vm-tcp-router.yml \			# tcp-router VM 배포
+        -o operations/min-use-haproxy.yml \				# HAProxy 적용
+        -o operations/use-haproxy-public-network.yml \			# HAProxy Public Network 적용
         -o operations/min-use-postgres.yml \				# Database Type 설정 (3.5버전 이하에서 Migration 시 필수)
         -o operations/min-rename-network-and-deployment.yml \		# Rename Network and Deployment
-	-o operations/use-offline-releases.yml \ 			# paasta-deployment.yml의 오프라인 릴리즈 사용
-	-o operations/use-offline-releases-cce.yml \			# cce.yml의 오프라인 릴리즈 사용
-	-o operations/use-offline-releases-haproxy.yml \		# use-haproxy.yml의 오프라인 릴리즈 사용
-	-o operations/use-offline-releases-postgres.yml \		# use-postgres.yml의 오프라인 릴리즈 사용
+        -o operations/min-option-network-and-deployment.yml \		# singleton-blobstore Rename Network and Deployment
+	-o operations/use-offline-releases.yml \ 			# min-paasta-deployment.yml의 오프라인 릴리즈 사용
+	-o operations/use-offline-releases-cce.yml \			# min-cce.yml의 오프라인 릴리즈 사용
+	-o operations/use-offline-releases-postgres.yml \		# min-use-postgres.yml의 오프라인 릴리즈 사용
+	-o operations/use-offline-releases-haprxoy.yml \		# min-use-haproxy.yml의 오프라인 릴리즈 사용
         -l min-vars.yml \						# PaaS-TA-min 설치시 적용하는 변수 설정 파일
         -l ../../common/common_vars.yml					# PaaS-TA 및 각종 Service 설치시 적용하는 공통 변수 설정 파일
+
 ```
 
 - PaaS-TA 설치 시 Shell Script 파일 실행 (BOSH 로그인 필요)
