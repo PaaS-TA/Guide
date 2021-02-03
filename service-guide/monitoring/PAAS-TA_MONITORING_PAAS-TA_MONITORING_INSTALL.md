@@ -8,9 +8,8 @@
 　　● [paasta-monitoring-vars.yml](#7)  
 　　● [deploy-paasta-monitoring.sh](#8)  
 　2.4\. [PaaS-TA Monitoring 설치](#9)  
-　2.5\. [PaaS-TA Monitoring 설치 - 다운로드 된 Relases 파일 이용 방식](#10)  
-　2.6\. [서비스 설치 확인](#11)  
-3\. [PaaS-TA Monitoring Dashboard 접속](#12)  
+　2.5\. [서비스 설치 확인](#10)  
+3\. [PaaS-TA Monitoring Dashboard 접속](#11)  
 
 
 ## <div id='1'/>1. 개요
@@ -42,13 +41,13 @@
 ```
 $ cd ${HOME}/workspace/paasta-5.1/deployment
 $ git clone https://github.com/paas-ta/common.git –b v5.0.1
-$ git clone https://github.com/paas-ta/monitoring-deployment.git –b v5.1.0
+$ git clone https://github.com/paas-ta/monitoring-deployment.git –b dev-v5.5.0
 ```
 기본적으로 온라인 설치로 설정되어 있으나 오프라인 설치 시 release, stemcell 설치 파일 다운로드는 아래 다운로드 에서 받고 설치한다.
 
 http://45.248.73.44/index.php/s/PnxxbkmLiLpXdBD  
 
-![PaaSTa_release_dir_5.1]
+![PaaSTa_releases_dir_5.0]
 
 ### <div id='5'/>2.3. PaaS-TA Monitoring 설치 환경설정
 
@@ -195,45 +194,8 @@ $ cd ${HOME}/workspace/paasta-5.1/deployment/monitoring-deployment/paasta-monito
 $ sh deploy-paasta-monitoring.sh
 ```
 
-### <div id='10'/>2.5. PaaS-TA Monitoring 설치 - 다운로드 된 Relases 파일 이용 방식
+### <div id='10'/>2.5. PaaS-TA Monitoring 설치
 
-
-- 서비스 설치에 필요한 릴리즈 파일을 다운로드 받아 Local machine의 작업 경로로 위치시킨다.  
-  
-  - 설치 파일 다운로드 위치 : http://45.248.73.44/index.php/s/PnxxbkmLiLpXdBD  
-
-```
-# 릴리즈 다운로드 파일 위치 경로 생성
-$ mkdir -p ~/workspace/paasta-5.1/release/paasta-monitoring
-
-# 릴리즈 파일 다운로드 및 파일 경로 확인
-$ cd ${HOME}/workspace/paasta-5.1/release/paasta-monitoring
-$ ls
-..................
-bpm-1.1.0-ubuntu-xenial-621.78-20190605-202629-386782261.tgz			paasta-monitoring-release.tgz
-redis-14.0.1.tgz								influxdb.tgz
-..................
-```
-
-- 서버 환경에 맞추어 Deploy 스크립트 파일의 설정을 수정한다. 
-
-> $ vi ${HOME}/workspace/paasta-5.1/deployment/monitoring-deployment/paasta-monitoring/deploy-paasta-monitoring.sh
-
-```
-bosh -e {director_name} -n -d paasta-monitoring deploy paasta-monitoring.yml  \
-	-o use-public-network-openstack.yml \
-	-o use-compiled-releases-paasta-monitoring.yml \
-	-l paasta-monitoring-vars.yml \
-	-l ../../common/common_vars.yml
-```
-
-- PaaS-TA Monitoring 설치 Shell Script 파일 실행 (BOSH 로그인 필요)
-```
-$ cd ${HOME}/workspace/paasta-5.1/deployment/monitoring-deployment/paasta-monitoring
-$ sh deploy-paasta-monitoring.sh
-```
-
-### <div id='11'/>2.6. PaaS-TA Monitoring 설치
 
 PaaS-TA Monitoring이 설치 완료 되었음을 확인한다.
 ```
@@ -242,7 +204,7 @@ $ bosh –e {director_name} vms
 ![PaaSTa_monitoring_vms_5.0]
 
 
-## <div id='12'/>3. PaaS-TA Monitoring Dashboard 접속
+## <div id='11'/>3. PaaS-TA Monitoring Dashboard 접속
  
  http://{monitoring_api_url}:8080/public/login.html 에 접속하여 회원 가입 후 Main Dashboard에 접속한다.
 
@@ -262,7 +224,7 @@ PaaS-TA Monitoring Main Dashboard 화면
  ![PaaSTa_monitoring_main_dashboard_5.0]
 
 
-[PaaSTa_release_dir_5.0]:./images/paasta-release_5.0.png
+[PaaSTa_releases_dir_5.0]:./images/paasta-release_5.0.png
 [PaaSTa_logsearch_vms_5.0]:./images/logsearch_5.0.png
 [PaaSTa_monitoring_vms_5.0]:./images/paasta-monitoring_5.0.png
 

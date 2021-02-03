@@ -14,6 +14,7 @@
   2.5. [서비스 설치](#2.5)    
   2.6. [서비스 설치 - 다운로드 된 PaaS-TA Release 파일 이용 방식](#2.6)   
   2.7. [서비스 설치 확인](#2.7)  
+  2.8. [Portal SSH 설치](#2.8)  
 
 3. [PaaS-TA Portal 운영](#3)  
   3.1. [사용자의 조직 생성 Flag 활성화](#3.1)  
@@ -72,57 +73,18 @@ BOSH CLI v2 가 설치 되어 있지 않을 경우 먼저 BOSH2.0 설치 가이�
   - [BOSH2 사용자 가이드](../../install-guide/bosh/PAAS-TA_BOSH2_INSTALL_GUIDE_V5.0.md)<br>
   - [BOSH CLI V2 사용자 가이드](https://github.com/PaaS-TA/Guide-4.0-ROTELLE/blob/master/Use-Guide/Bosh/PaaS-TA_BOSH_CLI_V2_사용자_가이드v1.0.md)
 
-- bosh runtime-config를 확인하여 bosh-dns include deployments 에 paasta가 있는지 확인한다.<br>
- ※ bosh-dns include deployments에 paasta가 없다면 ~/workspace/paasta-5.0/deployment/paasta-deployment/bosh/runtime-configs 의 dns.yml 을 열어서 paasta를 추가하고, bosh runtime-config를 업데이트 해준다.    
-
-> $ bosh -e micro-bosh runtime-config
-```
-Using environment '10.0.1.6' as client 'admin'
-
----
-addons:
-- include:
-    deployments:
-    - paasta
-    - pinpoint
-    - pinpoint-monitoring
-    stemcell:
-    - os: ubuntu-trusty
-    - os: ubuntu-xenial
-  jobs:
-  - name: bosh-dns
-    properties:
-      api:
-        client:
-          tls: "((/dns_api_client_tls))"
-        server:
-          tls: "((/dns_api_server_tls))"
-      cache:
-        enabled: true
-      health:
-        client:
-          tls: "((/dns_healthcheck_client_tls))"
-        enabled: true
-        server:
-          tls: "((/dns_healthcheck_server_tls))"
-    release: bosh-dns
-  name: bosh-dns
-...(생략)...
-
-Succeeded
-```
 
 ### <div id="2.2"/> 2.2. Stemcell 확인
 
-Stemcell 목록을 확인하여 서비스 설치에 필요한 Stemcell이 업로드 되어 있는 것을 확인한다.  (PaaS-TA 5.0 과 동일 stemcell 사용)
+Stemcell 목록을 확인하여 서비스 설치에 필요한 Stemcell이 업로드 되어 있는 것을 확인한다.  (PaaS-TA 5.5.0 과 동일 stemcell 사용)
 
-> $ bosh -e micro-bosh stemcells
+> $ bosh -e ${BOSH_ENVIRONMENT} stemcells
 
 ```
 Using environment '10.0.1.6' as client 'admin'
 
 Name                                     Version  OS             CPI  CID  
-bosh-aws-xen-hvm-ubuntu-xenial-go_agent  315.64*  ubuntu-xenial  -    ami-0297ff649e8eea21b  
+bosh-aws-xen-hvm-ubuntu-xenial-go_agent  621.94*  ubuntu-xenial  -    ami-038de43e4d9b6f5fb  
 
 (*) Currently deployed
 
@@ -135,15 +97,15 @@ Succeeded
 
 서비스 설치에 필요한 Deployment를 Git Repository에서 받아 서비스 설치 작업 경로로 위치시킨다.  
 
-- Portal Deployment Git Repository URL : https://github.com/PaaS-TA/portal-deployment/tree/v5.0.5
+- Portal Deployment Git Repository URL : https://github.com/PaaS-TA/portal-deployment/tree/v5.1.0
 
 ```
 # Deployment 다운로드 파일 위치 경로 생성 및 설치 경로 이동
-$ mkdir -p ~/workspace/paasta-5.0/deployment
-$ cd ~/workspace/paasta-5.0/deployment
+$ mkdir -p ~/workspace/paasta-5.5.0/deployment
+$ cd ~/workspace/paasta-5.5.0/deployment
 
 # Deployment 파일 다운로드
-$ git clone https://github.com/PaaS-TA/portal-deployment.git -b v5.0.5
+$ git clone https://github.com/PaaS-TA/portal-deployment.git -b v5.1.0
 ```
 
 ### <div id="2.4"/> 2.4. Deployment 파일 수정
@@ -153,7 +115,7 @@ Deployment 파일에서 사용하는 network, vm_type, disk_type 등은 Cloud co
 
 - Cloud config 설정 내용을 확인한다.   
 
-> $ bosh -e micro-bosh cloud-config   
+> $ bosh -e ${BOSH_ENVIRONMENT} cloud-config   
 
 ```
 Using environment '10.0.1.6' as client 'admin'
@@ -213,13 +175,70 @@ vm_types:
 Succeeded
 ```
 
+- common_vars.yml을 서버 환경에 맞게 수정한다. 
+- Portal-UI에서 사용하는 변수는 system_domain, paasta_api_version, uaa_client_portal_secret 이다.
+
+> $ vi ~/workspace/paasta-5.5.0/deployment/common/common_vars.yml
+```
+# BOSH INFO
+bosh_ip: "10.0.1.6"				# BOSH IP
+bosh_url: "https://10.0.1.6"			# BOSH URL (e.g. "https://00.000.0.0")
+bosh_client_admin_id: "admin"			# BOSH Client Admin ID
+bosh_client_admin_secret: "ert7na4jpew"		# BOSH Client Admin Secret('echo $(bosh int ~/workspace/paasta-5.5.0/deployment/paasta-deployment/bosh/{iaas}/creds.yml --path /admin_password)' 명령어를 통해 확인 가능)
+bosh_director_port: 25555			# BOSH director port
+bosh_oauth_port: 8443				# BOSH oauth port
+bosh_version: 271.2				# BOSH version('bosh env' 명령어를 통해 확인 가능, on-demand service용, e.g. "271.2")
+
+# PAAS-TA INFO
+system_domain: "61.252.53.246.xip.io"		# Domain (xip.io를 사용하는 경우 HAProxy Public IP와 동일)
+paasta_admin_username: "admin"			# PaaS-TA Admin Username
+paasta_admin_password: "admin"			# PaaS-TA Admin Password
+paasta_nats_ip: "10.0.1.121"
+paasta_nats_port: 4222
+paasta_nats_user: "nats"
+paasta_nats_password: "7EZB5ZkMLMqT7"		# PaaS-TA Nats Password (CredHub 로그인후 'credhub get -n /micro-bosh/paasta/nats_password' 명령어를 통해 확인 가능)
+paasta_nats_private_networks_name: "default"	# PaaS-TA Nats 의 Network 이름
+paasta_database_ips: "10.0.1.123"		# PaaS-TA Database IP (e.g. "10.0.1.123")
+paasta_database_port: 5524			# PaaS-TA Database Port (e.g. 5524(postgresql)/13307(mysql)) -- Do Not Use "3306"&"13306" in mysql
+paasta_database_type: "postgresql"		# PaaS-TA Database Type (e.g. "postgresql" or "mysql")
+paasta_database_driver_class: "org.postgresql.Driver"	# PaaS-TA Database driver-class (e.g. "org.postgresql.Driver" or "com.mysql.jdbc.Driver")
+paasta_cc_db_id: "cloud_controller"		# CCDB ID (e.g. "cloud_controller")
+paasta_cc_db_password: "cc_admin"		# CCDB Password (e.g. "cc_admin")
+paasta_uaa_db_id: "uaa"				# UAADB ID (e.g. "uaa")
+paasta_uaa_db_password: "uaa_admin"		# UAADB Password (e.g. "uaa_admin")
+paasta_api_version: "v3"
+
+# UAAC INFO
+uaa_client_admin_id: "admin"			# UAAC Admin Client Admin ID
+uaa_client_admin_secret: "admin-secret"		# UAAC Admin Client에 접근하기 위한 Secret 변수
+uaa_client_portal_secret: "clientsecret"	# UAAC Portal Client에 접근하기 위한 Secret 변수
+
+# Monitoring INFO
+metric_url: "10.0.161.101"			# Monitoring InfluxDB IP
+syslog_address: "10.0.121.100"			# Logsearch의 ls-router IP
+syslog_port: "2514"				# Logsearch의 ls-router Port
+syslog_transport: "relp"			# Logsearch Protocol
+saas_monitoring_url: "61.252.53.248"		# Pinpoint HAProxy WEBUI의 Public IP
+monitoring_api_url: "61.252.53.241"		# Monitoring-WEB의 Public IP
+
+### Portal INFO
+portal_web_user_ip: "52.78.88.252"
+portal_web_user_url: "http://portal-web-user.52.78.88.252.xip.io" 
+
+### ETC INFO
+abacus_url: "http://abacus.61.252.53.248.xip.io"	# abacus url (e.g. "http://abacus.xxx.xxx.xxx.xxx.xip.io")
+
+```
+
+
+
 - Deployment YAML에서 사용하는 변수 파일을 서버 환경에 맞게 수정한다.
 
-> $ vi ~/workspace/paasta-5.0/deployment/portal-deployment/portal-ui/vars.yml  
+> $ vi ~/workspace/paasta-5.5.0/deployment/portal-deployment/portal-ui/vars.yml  
 ```
 # STEMCELL INFO
 stemcell_os: "ubuntu-xenial"                                             # stemcell os
-stemcell_version: "315.64"                                               # stemcell version
+stemcell_version: "621.94"                                               # stemcell version
 
 # NETWORKS INFO
 private_networks_name: "default"                                         # private network name
@@ -252,37 +271,39 @@ webuser_vm_type: "small"                                                 # webus
 webuser_monitoring: false                                                # webuser : monitoring 사용 여부. true일 경우 앱 상세정보에서 모니터링창이 활성화 된다.
 webuser_quantity: false                                                  # webuser : 사용량 조회 창 활성화 여부
 webuser_automaticapproval: false                                         # webuser : 회원가입시 PaaS-TA에 접속 가능 여부. true일 경우 관리자 포탈에서 승인을 해주어야 접근이 가능하다.
+user_app_size: 0                                                         # webuser : 사용자 myApp 배포시 용량제한 여부 (값이 0일경우 무제한)
 
 # ETC INFO
-portal_default_api_name: "PaaS-TA 5.0"                                   # ETC : default api name
+portal_default_api_name: "PaaS-TA 5.5.0"                                 # ETC : default api name
 portal_default_api_url: "http://<PORTAL-API-HAPROXY-PUBLIC-IP>:2225"     # ETC : default api url
 portal_default_header_auth: "Basic YWRtaW46b3BlbnBhYXN0YQ=="             # ETC : default header auth
-portal_default_api_desc: "PaaS-TA 5.0 install infra"                     # ETC : default api description
+portal_default_api_desc: "PaaS-TA 5.5.0 install infra"                   # ETC : default api description
 ```
 
 ### <div id="2.5"/> 2.5. 서비스 설치
 
-- 서버 환경에 맞추어 Deploy 스크립트 파일의 VARIABLES 설정을 수정한다. 
+- 서버 환경에 맞추어 Deploy 스크립트 파일의 VARIABLES 설정을 수정하고, Option file을 추가할지 선택한다.  
+     (선택) -o operations/use-compiled-releases.yml (ubuntu-xenial/621.94로 컴파일 된 릴리즈 사용)  
 
-> $ vi ~/workspace/paasta-5.0/deployment/portal-deployment/portal-ui/deploy.sh
+> $ vi ~/workspace/paasta-5.5.0/deployment/portal-deployment/portal-ui/deploy.sh
 ```
 #!/bin/bash
-  
+
 # VARIABLES
-BOSH_NAME="<BOSH_NAME>"                                         # bosh name (e.g. micro-bosh)
-IAAS="<IAAS_NAME>"                                              # IaaS (e.g. aws/azure/gcp/openstack/vsphere)
-COMMON_VARS_PATH="<COMMON_VARS_FILE_PATH>"                      # common_vars.yml File Path (e.g. /home/ubuntu/workspace/paasta-5.0/common/common_vars.yml)
+COMMON_VARS_PATH="<COMMON_VARS_FILE_PATH>"	# common_vars.yml File Path (e.g. ../../common/common_vars.yml)
+CURRENT_IAAS="${CURRENT_IAAS}"			# IaaS Information (PaaS-TA에서 제공되는 create-bosh-login.sh 미 사용시 aws/azure/gcp/openstack/vsphere 입력)
+BOSH_ENVIRONMENT="${BOSH_ENVIRONMENT}"		# bosh director alias name (PaaS-TA에서 제공되는 create-bosh-login.sh 미 사용시 bosh envs에서 이름을 확인하여 입력)
 
 # DEPLOY
-bosh -e ${BOSH_NAME} -n -d portal-ui deploy portal-ui.yml \
-    -o operations/${IAAS}-network.yml \
+bosh -e ${BOSH_ENVIRONMENT} -n -d portal-ui deploy portal-ui.yml \
+    -o operations/${CURRENT_IAAS}-network.yml \
     -l ${COMMON_VARS_PATH} \
     -l vars.yml
 ```
 
 - 서비스를 설치한다.  
 ```
-$ cd ~/workspace/paasta-5.0/deployment/portal-deployment/portal-ui   
+$ cd ~/workspace/paasta-5.5.0/deployment/portal-deployment/portal-ui   
 $ sh ./deploy.sh  
 ``` 
 
@@ -290,43 +311,44 @@ $ sh ./deploy.sh
 
 - 서비스 설치에 필요한 릴리즈 파일을 다운로드 받아 Local machine의 서비스 설치 작업 경로로 위치시킨다.  
   
-  - 설치 릴리즈 파일 다운로드 : [paasta-portal-ui-release-2.3.0.tgz](http://45.248.73.44/index.php/s/LMHjieK6HT8W4wB/download)
+  - 설치 릴리즈 파일 다운로드 : [paasta-portal-ui-release-2.4.0.tgz](http://45.248.73.44/index.php/s/sEF75LCgqCXgF4s/download)
 
 ```
 # 릴리즈 다운로드 파일 위치 경로 생성
-$ mkdir -p ~/workspace/paasta-5.0/release/portal
+$ mkdir -p ~/workspace/paasta-5.5.0/release/portal
 
 # 릴리즈 파일 다운로드 및 파일 경로 확인
-$ ls ~/workspace/paasta-5.0/release/portal
-paasta-portal-ui-release-2.3.0.tgz
+$ ls ~/workspace/paasta-5.5.0/release/portal
+paasta-portal-ui-release-2.4.0.tgz
 ```
   
 - 서버 환경에 맞추어 Deploy 스크립트 파일의 VARIABLES 설정을 수정하고 Option file 및 변수를 추가한다.  
-     (추가) -o operations/use-compiled-releases.yml  
-     (추가) -v inception_os_user_name="<HOME_USER_NAME>"  
+     (추가) -o operations/use-offline-releases.yml (미리 다운받은 offline 릴리즈 사용)  
+     (추가) -v releases_dir="<RELEASE_DIRECTORY>"  
      
-> $ vi ~/workspace/paasta-5.0/deployment/portal-deployment/portal-ui/deploy.sh
+> $ vi ~/workspace/paasta-5.5.0/deployment/portal-deployment/portal-ui/deploy.sh
   
 ```
 #!/bin/bash
-  
+
 # VARIABLES
-BOSH_NAME="<BOSH_NAME>"                                         # bosh name (e.g. micro-bosh)
-IAAS="<IAAS_NAME>"                                              # IaaS (e.g. aws/azure/gcp/openstack/vsphere)
-COMMON_VARS_PATH="<COMMON_VARS_FILE_PATH>"                      # common_vars.yml File Path (e.g. /home/ubuntu/workspace/paasta-5.0/common/common_vars.yml)
+COMMON_VARS_PATH="<COMMON_VARS_FILE_PATH>"	# common_vars.yml File Path (e.g. ../../common/common_vars.yml)
+CURRENT_IAAS="${CURRENT_IAAS}"			# IaaS Information (PaaS-TA에서 제공되는 create-bosh-login.sh 미 사용시 aws/azure/gcp/openstack/vsphere 입력)
+BOSH_ENVIRONMENT="${BOSH_ENVIRONMENT}"		# bosh director alias name (PaaS-TA에서 제공되는 create-bosh-login.sh 미 사용시 bosh envs에서 이름을 확인하여 입력)
 
 # DEPLOY
-bosh -e ${BOSH_NAME} -n -d portal-ui deploy portal-ui.yml \
-    -o operations/${IAAS}-network.yml \
-    -o operations/use-compiled-releases.yml \
+bosh -e ${BOSH_ENVIRONMENT} -n -d portal-ui deploy portal-ui.yml \
+    -o operations/use-offline-releases.yml \
+    -o operations/${CURRENT_IAAS}-network.yml \
     -l ${COMMON_VARS_PATH} \
     -l vars.yml \
-    -v inception_os_user_name="ubuntu"
+    -v releases_dir="/home/ubuntu/workspace/paasta-5.5.0/release"  
+
 ```  
 
 - 서비스를 설치한다.  
 ```
-$ cd ~/workspace/paasta-5.0/deployment/portal-deployment/portal-ui  
+$ cd ~/workspace/paasta-5.5.0/deployment/portal-deployment/portal-ui  
 $ sh ./deploy.sh  
 ```  
 
@@ -334,7 +356,7 @@ $ sh ./deploy.sh
 
 설치 완료된 서비스를 확인한다.  
 
-> $ bosh -e micro-bosh -d portal-ui vms  
+> $ bosh -e ${BOSH_ENVIRONMENT} -d portal-ui vms  
 
 ```
 Using environment '10.0.1.6' as client 'admin'
@@ -354,6 +376,32 @@ paas-ta-portal-webuser/409c038b-d013-41d3-b6b2-aebb4a02d908   running        z6 
 
 Succeeded
 ```
+
+### <div id="2.8"/> 2.8. Portal SSH 설치
+
+Portal 5.1.0 버전 이상부터는 배포된 어플리케이션의 SSH 접속이 가능하다.
+
+이를 위해 Portal SSH App을 먼저 배포해야 한다.
+
+- Portal 배포를 위한 조직 및 공간 생성
+```
+### Portal 배포를 위한 조직 및 공간 생성 및 설정 
+$ cf create-quota portal_quota -m 20G -i -1 -s -1 -r -1 --reserved-route-ports -1 --allow-paid-service-plans
+$ cf create-org portal -q portal_quota
+$ cf create-space system -o portal  
+$ cf target -o portal -s system
+```
+
+
+- Portal SSH 다운로드 및 배포
+```
+$ cd ~/workspace/paasta-5.5.0/release/portal
+$ wget --content-disposition http://45.248.73.44/index.php/s/awPjYDYCMiHY7yF/download
+$ unzip portal-ssh.zip
+$ cd portal-ssh
+$ cf push
+```
+
 
 ## <div id="3"/>3. PaaS-TA Portal 운영
 

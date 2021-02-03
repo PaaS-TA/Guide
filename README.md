@@ -1,4 +1,5 @@
-# PaaS-TA 5.1.0 가이드 문서
+# PaaS-TA 5.5.0 가이드 문서
+
 
 ## 플랫폼 설치 가이드
 - [설치 파일 다운로드 받기](https://paas-ta.kr/download/package)
@@ -49,12 +50,12 @@
   - [애플리케이션 Gateway 서비스](./service-guide/tools/PAAS-TA_APPLICATION_GATEWAY_SERVICE_INSTALL_GUIDE_V1.0.md)
   - [라이프사이클 관리 서비스](./service-guide/tools/PAAS-TA_LIFECYCLE_MANAGEMENT_SERVICE_INSTALL_GUIDE_V1.0.md)
 - 미터링
-  - [CF-Abacus](./install-guide/metering/PAAS-TA_METERING_INSTALL_GUIDE.md)
+  - (Deprecated) ~~[CF-Abacus](./install-guide/metering/PAAS-TA_METERING_INSTALL_GUIDE.md)~~
 
 ## 마켓플레이스 설치 가이드
 **마켓플레이스 설치 전에 BOSH, PaaS-TA, PaaS-TA 포털이 설치되어 있어야 한다.**
 
-- [PaaS-TA 마켓플레이스](./service-guide/marketplace/PAAS-TA_MARKETPLACE_INSTALL_GUIDE_V1.0.md)
+- (Deprecated) ~~[PaaS-TA 마켓플레이스](./service-guide/marketplace/PAAS-TA_MARKETPLACE_INSTALL_GUIDE_V1.0.md)~~
 
 ## 모니터링 설치 가이드
 - [PaaS-TA 모니터링](./service-guide/monitoring/PAAS-TA_MONITORING_INSTALL_GUIDE_V5.0.md)
@@ -70,7 +71,7 @@
 - [PaaS-TA Container 서비스 사용자 가이드](./use-guide/tools/PAAS-TA_CONTAINER_SERVICE_USE_GUIDE_V2.0.md)
 - [PaaS-TA Logging 서비스 사용자 가이드](./use-guide/tools/PAAS-TA_LOGGING_SERVICE_USE_GUIDE_V1.0.md)
 - [PaaS-TA Jenkins 서비스](./use-guide/tools/PAAS-TA_JENKINS_SERVICE_USER_GUIDE.md)
-- [PaaS-TA 마켓플레이스 가이드](./use-guide/marketplace/PAAS-TA_MARKETPLACE_USE_GUIDE_V1.0.md)
+- (Deprecated) ~~[PaaS-TA 마켓플레이스 가이드](./use-guide/marketplace/PAAS-TA_MARKETPLACE_USE_GUIDE_V1.0.md)~~
 ## 개발 언어별 애플리케이션 가이드
 - [Node.js](../../../Guide-1.0-Spaghetti-/blob/master/Sample-App-Guide/OpenPaaS_PaaSTA_Application_Nodejs_develope_guide.md)
 - [PHP](../../../Guide-1.0-Spaghetti-/blob/master/Sample-App-Guide/OpenPaaS_PaaSTA_Application_PHP_develope_guide.md)

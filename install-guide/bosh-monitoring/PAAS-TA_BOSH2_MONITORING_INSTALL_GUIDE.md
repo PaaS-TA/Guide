@@ -56,10 +56,10 @@ BOSH는 초기에 Cloud Foundry PaaS를 위해 개발되었지만, 현재는 Jen
 
 BOSH가 지원하는 IaaS는 VMware vSphere, Google Cloud Platform, Amazon Web Services EC2, Microsoft Azure, OpenStack, Alibaba Cloud가 있다.  
 PaaS-TA는 VMware vSphere, Google Cloud Platform, Amazon Web Services EC2, OpenStack, Microsoft Azure 등의 IaaS를 지원한다.  
-현재 PaaS-TA 5.1.0에서 검증한 IaaS 환경은 AWS, OpenStack 환경이다.
+현재 PaaS-TA 5.5에서 검증한 IaaS 환경은 AWS, OpenStack 환경이다.
 
 PaaS-TA 3.1 버전까지는 Cloud Foundry BOSH1을 기준으로 설치했지만, PaaS-TA 3.5 버전부터 BOSH2를 기준으로 설치하였다.  
-PaaS-TA 5.1.0는 Cloud Foundry에서 제공하는 bosh-deployment를 활용하여 BOSH를 설치한다.
+PaaS-TA 5.5는 Cloud Foundry에서 제공하는 bosh-deployment를 활용하여 BOSH를 설치한다.
 
 BOSH2는 BOSH2 CLI를 통하여 BOSH와 PaaS-TA를 모두 생성한다.  
 bosh-deployment를 이용하여 BOSH를 생성한 후, paasta-deployment로 PaaS-TA를 설치한다.  
@@ -101,7 +101,7 @@ BOSH 및 PaaS-TA 설치를 위해 Inception 서버에 구성해야 할 컴포넌
 - BOSH CLI 6.1.x 이상 
 - BOSH Dependency : ruby, ruby-dev, openssl 등
 - BOSH Deployment: BOSH 설치를 위한 manifest deployment  
-- PaaS-TA Deployment : PaaS-TA 설치를 위한 manifest deployment (cf-deployment v13.12.0 기준)
+- PaaS-TA Deployment : PaaS-TA 설치를 위한 manifest deployment (cf-deployment v13.19.0 기준)
 
 ## <div id='3.3'/>3.3.  BOSH 설치
 
@@ -133,7 +133,7 @@ $ sudo apt install -y libcurl4-openssl-dev gcc g++ build-essential zlibc zlib1g-
 
 ```
 $ sudo apt update
-$ curl -Lo ./bosh https://github.com/cloudfoundry/bosh-cli/releases/download/v6.1.0/bosh-cli-6.1.0-linux-amd64
+$ curl -Lo ./bosh https://github.com/cloudfoundry/bosh-cli/releases/download/v6.4.1/bosh-cli-6.4.1-linux-amd64
 $ chmod +x ./bosh
 $ sudo mv ./bosh /usr/local/bin/bosh
 $ bosh -v
@@ -178,15 +178,19 @@ $ bosh -version
 
 - BOSH를 설치하기 위한 deployment가 존재하지 않는다면 다운로드 받는다
 ```
-$ mkdir -p ${HOME}/workspace/paasta-5.1.0/deployment
-$ cd ${HOME}/workspace/paasta-5.1.0/deployment
-$ git clone https://github.com/PaaS-TA/paasta-deployment.git -b v5.1.0
+$ mkdir -p ${HOME}/workspace/paasta-5.5/deployment
+$ cd ${HOME}/workspace/paasta-5.5/deployment
+$ git clone https://github.com/PaaS-TA/paasta-deployment.git -b working-5.5
+
+# bosh, paasta 모두 common/common_vars.yml 을 사용한다. 다운로드 받는다.
+# cd ${HOME}/workspace/paasta-5.5/deployment 
+$ git clone -b {TagVersion} https://github.com/PaaS-TA/common.git
 ```
 
 - paasta/deployment/paasta-deployment 이하 디렉터리
 
 ```
-$ cd ${HOME}/workspace/paasta-5.1.0/deployment/paasta-deployment
+$ cd ${HOME}/workspace/paasta-5.5/deployment/paasta-deployment
 $ ls
 bosh  cloud-config  paasta
 ```
@@ -209,7 +213,7 @@ bosh  cloud-config  paasta
 
 ### <div id='3.3.4'/>3.3.4.    BOSH 설치 파일
 
-${HOME}/workspace/paasta-5.1.0/deployment/paasta-deployment/bosh 이하 디렉터리에는 BOSH 설치를 위한 IaaS별 Shell Script 파일이 존재한다.  
+${HOME}/workspace/paasta-5.5/deployment/paasta-deployment/bosh 이하 디렉터리에는 BOSH 설치를 위한 IaaS별 Shell Script 파일이 존재한다.  
 Shell Script 파일을 이용하여 BOSH를 설치한다.
 파일명은 deploy-{IaaS}.sh 로 만들어졌다.  
 또한 {IaaS}-vars.yml을 수정하여 BOSH 설치시 적용하는 변수을 설정할 수 있다.
@@ -364,6 +368,12 @@ BOSH 설치 Option은 아래와 같다.
 <td>Requries value: -v metric_url</td>
 </tr>
 <tr>
+<td>paasta-addon/use-compiled-releases-monitoring-agent.yml</td>
+<td>컴파일 된 파일을 미리 다운로드 후 오프라인 방식으로 PaaS-TA Monitoring Agent의 설치.
+deploey-{IaaS}-monitoring.yml 파일과 use-compiled-releases-monitoring-agent.yml 내용 수정 필요 </td>
+<td>Requries value: -v metric_url</td>
+</tr>
+<tr>
 <td>syslog.yml</td>
 <td>Syslog 구성 적용</td>
 <td>Requries value: -v syslog_address -v syslog_port -v syslog_transport</td>
@@ -375,17 +385,6 @@ Syslog Agent는 BOSH VM의 log 정보를 logsearch의 ls-router에 전송하는 
 BOSH 설치 전에 paasta-monitoring의 InfluxDB IP를 metric_url로 사용하기 위해 사전에 정의해야 한다.
 마찬가지로 logsearch의 ls-router IP도 syslog_address로 연동하기 위해 사전에 정의해야 한다.
 
-| 파일명 | 설명 | 요구사항 |
-|:---  |:---     |:---   |
-|paasta-addon/paasta-monitoring-agent.yml | PaaS-TA Monitoring Agent 적용 | Requries value:   -v metric_url  |
-|paasta-addon/use-compiled-releases-monitoring-agent.yml | 다운로드 및 컴파일 없이 PaaS-TA Monitoring Agent의 빠른 설치가 가능하다.	 | |
-|syslog.yml | Syslog 구성 적용 | Requries value: -v syslog_address   -v syslog_port -v syslog_transport |
-|use-compiled-releases-syslog.yml | 다운로드 및 컴파일 없이 Syslog의 빠른 설치가 가능하다.	 |  |
-
-PaaS-TA Monitoring Agent는 BOSH VM의 상태 정보(Metric data)를 paasta-monitoring의 InfluxDB에 전송한다.  
-Syslog Agent는 BOSH VM의 log 정보를 logsearch의 ls-router에 전송하는 역할을 한다.  
-BOSH 설치 전에 paasta-monitoring의 InfluxDB IP를 metric_url로 사용하기 위해 사전에 정의해야 한다.  
-마찬가지로 logsearch의 ls-router IP도 syslog_address로 연동하기 위해 사전에 정의해야 한다.
 
 ##### <div id='3.3.4.3.1'/>● deploy-aws-monitoring.sh
 ```
@@ -421,15 +420,14 @@ bosh create-env bosh.yml \
 - Shell Script 파일에 실행 권한 부여
 
 ```
-$ chmod +x ${HOME}/workspace/paasta-5.1.0/deployment/paasta-deployment/bosh/*.sh  
-```
+$ chmod +x ${HOME}/workspace/paasta-5.5/deployment/paasta-deployment/bosh/*.sh  
 
 
 ### <div id='3.3.5'/>3.3.5. BOSH 설치
 
 - 서버 환경에 맞추어 Deploy 스크립트 파일의 설정을 수정한다. 
 
-> $ vi ~/workspace/paasta-5.1.0/deployment/paasta-deployment/bosh/deploy-aws.sh
+> $ vi ~/workspace/paasta-5.5/deployment/paasta-deployment/bosh/deploy-aws.sh
 ```                     
 bosh create-env bosh.yml \  
 	--state=aws/state.json \  
@@ -446,15 +444,15 @@ bosh create-env bosh.yml \
 - BOSH 설치 Shell Script 파일 실행
 
 ```
-$ cd ${HOME}/workspace/paasta-5.1.0/deployment/paasta-deployment/bosh
+$ cd ${HOME}/workspace/paasta-5.5/deployment/paasta-deployment/bosh
 $ ./deploy-{iaas}.sh
 ```
 
 - BOSH 설치 중
 
 ```
-ubuntu@inception:~/workspace/paasta-5.1.0/deployment/paasta-deployment/bosh$ ./deploy-aws.sh
-Deployment manifest: '/home/ubuntu/workspace/paasta-5.1.0/deployment/paasta-deployment/bosh/bosh.yml'
+ubuntu@inception:~/workspace/paasta-5.5/deployment/paasta-deployment/bosh$ ./deploy-aws.sh
+Deployment manifest: '/home/ubuntu/workspace/paasta-5.5/deployment/paasta-deployment/bosh/bosh.yml'
 Deployment state: 'aws/state.json'
 
 Started validating
@@ -488,7 +486,7 @@ creds.yml은 BOSH 인증정보를 가지고 있으며, creds.yml을 활용하여
 BOSH 로그인 후, BOSH CLI 명령어를 이용하여 PaaS-TA를 설치할 수 있다.
 
 ```
-$ cd ${HOME}/workspace/paasta-5.1.0/deployment/paasta-deployment/bosh
+$ cd ${HOME}/workspace/paasta-5.5/deployment/paasta-deployment/bosh
 $ export BOSH_CA_CERT=$(bosh int ./{iaas}/creds.yml --path /director_ssl/ca)
 $ export BOSH_CLIENT=admin
 $ export BOSH_CLIENT_SECRET=$(bosh int ./{iaas}/creds.yml --path /admin_password)
@@ -507,8 +505,8 @@ PaaS-TA 인증정보가 필요할 때 CredHub을 사용하며, CredHub CLI를 �
 CredHub CLI는 BOSH를 설치한 Inception(설치환경)에 설치한다.
 
 ```
-$ wget https://github.com/cloudfoundry-incubator/credhub-cli/releases/download/2.5.3/credhub-linux-2.5.3.tgz
-$ tar -xvf credhub-linux-2.5.3.tgz 
+$ wget https://github.com/cloudfoundry-incubator/credhub-cli/releases/download/2.9.0/credhub-linux-2.9.0.tgz
+$ tar -xvf credhub-linux-2.9.0.tgz 
 $ chmod +x credhub
 $ sudo mv credhub /usr/local/bin/credhub 
 $ credhub --version
@@ -518,7 +516,7 @@ $ credhub --version
 CredHub에 로그인하기 위해 BOSH를 설치한 bosh-deployment 디렉터리의 creds.yml을 활용하여 로그인한다.
 
 ```
-$ cd ${HOME}/workspace/paasta-5.1.0/deployment/paasta-deployment/bosh
+$ cd ${HOME}/workspace/paasta-5.5/deployment/paasta-deployment/bosh
 $ export CREDHUB_CLIENT=credhub-admin
 $ export CREDHUB_SECRET=$(bosh int --path /credhub_admin_client_secret {iaas}/creds.yml)
 $ export CREDHUB_CA_CERT=$(bosh int --path /credhub_tls/ca {iaas}/creds.yml)
@@ -542,14 +540,14 @@ Jumpbox는 BOSH VM에 접근하기 위한 인증을 적용하게 된다.
 BOSH VM에 이상이 있거나 상태를 체크할 때 Jumpbox를 활용하여 BOSH VM에 접근할 수 있다.
 
 ```
-$ cd ${HOME}/workspace/paasta-5.1.0/deployment/paasta-deployment/bosh
+$ cd ${HOME}/workspace/paasta-5.5/deployment/paasta-deployment/bosh
 $ bosh int {iaas}/creds.yml --path /jumpbox_ssh/private_key > jumpbox.key 
 $ chmod 600 jumpbox.key
 $ ssh jumpbox@{bosh_url} -i jumpbox.key
 ```
 
 ```
-ubuntu@inception:~/workspace/paasta-5.1.0/deployment/paasta-deployment/bosh$ ssh jumpbox@10.0.1.6 -i jumpbox.key
+ubuntu@inception:~/workspace/paasta-5.5/deployment/paasta-deployment/bosh$ ssh jumpbox@10.0.1.6 -i jumpbox.key
 Unauthorized use is strictly prohibited. All access and activity
 is subject to logging and monitoring.
 Welcome to Ubuntu 16.04.6 LTS (GNU/Linux 4.15.0-54-generic x86_64)
