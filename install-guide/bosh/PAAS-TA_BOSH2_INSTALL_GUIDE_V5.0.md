@@ -113,11 +113,24 @@ BOSH 및 PaaS-TA 설치를 위해 Inception 서버에 구성해야 할 컴포넌
 
 - 본 설치 가이드는 Ubuntu 18.04 버전을 기준으로 한다.  
 
+- IaaS Security Group의 열어줘야할 Port를 설정한다.
+
+|포트|비고|
+|---|---|
+|22|BOSH 사용|
+|6868|BOSH 사용|
+|25555|BOSH 사용|
+|53|PaaS-TA 사용|
+|68|PaaS-TA 사용|
+|80|PaaS-TA 사용|
+|443|PaaS-TA 사용|
+|4443|PaaS-TA 사용|
+
+
 - IaaS Security Group의 inbound 의 ICMP types 13 (timestamp request), types 14 (timestamp response) Rule을 비활성화 한다. (CVE-1999-0524 ICMP timestamp response 보안 이슈 적용)  
 
   예 - AWS security group config)  
   ![Security_Group_ICMP_Image1](./images/security-group-icmp-01.png)  
-
 
 ### <div id='3.3.2'/>3.3.2.    BOSH CLI 및 Dependency 설치
 
