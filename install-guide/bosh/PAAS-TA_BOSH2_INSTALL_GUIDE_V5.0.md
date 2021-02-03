@@ -257,7 +257,7 @@ bosh_client_admin_id: "admin"				# Bosh Client Admin ID
 private_cidr: "10.0.1.0/24"				# Private IP Range
 private_gw: "10.0.1.1"					# Private IP Gateway
 bosh_url: "10.0.1.6"					# Private IP 
-releases_dir: "/home/ubuntu/workspace/paasta-5.5/release"	# Release Directory (offline으로 릴리즈 다운받아 사용시 설정)
+releases_dir: "/home/ubuntu/workspace/paasta-5.5.0/release"	# Release Directory (offline으로 릴리즈 다운받아 사용시 설정)
 director_name: "micro-bosh"				# BOSH Director Name
 access_key_id: "XXXXXXXXXXXXXXX"			# AWS Access Key
 secret_access_key: "XXXXXXXXXXXXX"			# AWS Secret Key
@@ -280,7 +280,7 @@ syslog_transport: "relp"				# Logsearch Protocol
 ```
 # BOSH VARIABLE
 bosh_client_admin_id: "admin"				# Bosh Client Admin ID
-releases_dir: "/home/ubuntu/workspace/paasta-5.5/release"	# Release Directory (offline으로 릴리즈 다운받아 사용시 설정)
+releases_dir: "/home/ubuntu/workspace/paasta-5.5.0/release"	# Release Directory (offline으로 릴리즈 다운받아 사용시 설정)
 director_name: "micro-bosh"				# BOSH Director Name
 private_cidr: "10.0.1.0/24"				# Private IP Range
 private_gw: "10.0.1.1"					# Private IP Gateway
@@ -325,7 +325,7 @@ syslog_transport: "relp"				# Logsearch Protocol
 </tr>
 <tr>
 <td>jumpbox-user.yml</td>
-<td>Jumpbox 적용</td>
+<td>Jumpbox-user 적용</td>
 </tr>
 <tr>
 <td>cce.yml</td>
@@ -344,7 +344,7 @@ syslog_transport: "relp"				# Logsearch Protocol
 <td>cce.yml에서 사용되는 릴리즈를 오프라인에 저장된 릴리즈로 사용</td>
 </tr>
 <tr>
-<td>use-offline-release-jumpbox.yml</td>
+<td>use-offline-release-jumpbox-user.yml</td>
 <td>jumpbox-user.yml에서 사용되는 릴리즈를 오프라인에 저장된 릴리즈로 사용</td>
 </tr>
 <tr>
@@ -374,7 +374,7 @@ BOSH 설치 Option은 아래와 같다.
 </tr>   
 <tr>
 <td>-o</td>
-<td>BOSH 설치 시 적용하는 Operation 파일을 설정할 경우 사용한다. IaaS별 CPI 또는 Jumpbox, CredHub 등의 설정을 적용할 수 있다.</td>
+<td>BOSH 설치 시 적용하는 Operation 파일을 설정할 경우 사용한다. IaaS별 CPI 또는 Jumpbox-user, CredHub 등의 설정을 적용할 수 있다.</td>
 </tr>
 <tr>
 <td>-v</td>
@@ -396,7 +396,7 @@ bosh create-env bosh.yml \
 	-o uaa.yml \					# UAA 적용      
 	-o cce.yml \					# CCE 조치 적용
 	-o credhub.yml \				# CredHub 적용    
-	-o jumpbox-user.yml \				# Jumpbox 적용  
+	-o jumpbox-user.yml \				# Jumpbox-user 적용  
  	-l aws-vars.yml					# AWS 환경에 BOSH 설치시 적용하는 변수 설정 파일
 ```
 
@@ -409,7 +409,7 @@ bosh create-env bosh.yml \
 	-o openstack/cpi.yml \				# Openstack CPI 적용
 	-o uaa.yml \					# UAA 적용
 	-o credhub.yml \				# CredHub 적용
-	-o jumpbox-user.yml \				# Jumpbox 적용
+	-o jumpbox-user.yml \				# Jumpbox-user 적용
 	-o openstack/disable-readable-vm-names.yml \	# VM 명을 UUIDs로 적용
 	-l openstack-vars.yml				# OpenStack 환경에 BOSH 설치시 적용하는 변수 설정 파일
 ```
@@ -525,11 +525,12 @@ bosh create-env bosh.yml \
 	-o cce.yml \
 	-o credhub.yml \
 	-o jumpbox-user.yml \
+	-o use-offline-releases.yml \
 	-o use-offline-releases-aws.yml \
 	-o use-offline-releases-uaa.yml \
 	-o use-offline-releases-cce.yml \
 	-o use-offline-releases-credhub.yml \
-	-o use-offline-releases-jumpbox.yml \
+	-o use-offline-releases-jumpbox-user.yml \
  	-l aws-vars.yml
 ```
 
