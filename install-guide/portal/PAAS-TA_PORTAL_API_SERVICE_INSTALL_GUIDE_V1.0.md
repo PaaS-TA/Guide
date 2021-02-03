@@ -184,52 +184,52 @@ Succeeded
 > $ vi ~/workspace/paasta-5.5.0/deployment/common/common_vars.yml
 ```
 # BOSH INFO
-bosh_ip: "10.0.1.6"       # BOSH IP
-bosh_url: "https://10.0.1.6"      # BOSH URL (e.g. "https://00.000.0.0")
-bosh_client_admin_id: "admin"     # BOSH Client Admin ID
-bosh_client_admin_secret: "ert7na4jpew48" # BOSH Client Admin Secret('echo $(bosh int ~/workspace/paasta-5.5.0/deployment/paasta-deployment/bosh/{iaas}/creds.yml --path /admin_password)' 명령어를 통해 확인 가능)
-bosh_director_port: 25555     # BOSH director port
-bosh_oauth_port: 8443       # BOSH oauth port
-bosh_version: 271.2       # BOSH version('bosh env' 명령어를 통해 확인 가능, on-demand service용, e.g. "271.2")
+bosh_ip: "10.0.1.6"				# BOSH IP
+bosh_url: "https://10.0.1.6"			# BOSH URL (e.g. "https://00.000.0.0")
+bosh_client_admin_id: "admin"			# BOSH Client Admin ID
+bosh_client_admin_secret: "ert7na4jpew"		# BOSH Client Admin Secret('echo $(bosh int ~/workspace/paasta-5.5.0/deployment/paasta-deployment/bosh/{iaas}/creds.yml --path /admin_password)' 명령어를 통해 확인 가능)
+bosh_director_port: 25555			# BOSH director port
+bosh_oauth_port: 8443				# BOSH oauth port
+bosh_version: 271.2				# BOSH version('bosh env' 명령어를 통해 확인 가능, on-demand service용, e.g. "271.2")
 
 # PAAS-TA INFO
-system_domain: "61.252.53.246.xip.io"   # Domain (xip.io를 사용하는 경우 HAProxy Public IP와 동일)
-paasta_admin_username: "admin"      # PaaS-TA Admin Username
-paasta_admin_password: "admin"      # PaaS-TA Admin Password
+system_domain: "61.252.53.246.xip.io"		# Domain (xip.io를 사용하는 경우 HAProxy Public IP와 동일)
+paasta_admin_username: "admin"			# PaaS-TA Admin Username
+paasta_admin_password: "admin"			# PaaS-TA Admin Password
 paasta_nats_ip: "10.0.1.121"
 paasta_nats_port: 4222
 paasta_nats_user: "nats"
-paasta_nats_password: "7EZB5ZkMLMqT73h2Jh3UsqO" # PaaS-TA Nats Password (CredHub 로그인후 'credhub get -n /micro-bosh/paasta/nats_password' 명령어를 통해 확인 가능)
-paasta_nats_private_networks_name: "default"  # PaaS-TA Nats 의 Network 이름
-paasta_database_ips: "10.0.1.123"   # PaaS-TA Database IP (e.g. "10.0.1.123")
-paasta_database_port: 5524      # PaaS-TA Database Port (e.g. 5524(postgresql)/13307(mysql)) -- Do Not Use "3306"&"13306" in mysql
-paasta_database_type: "postgresql"                      # PaaS-TA Database Type (e.g. "postgresql" or "mysql")
-paasta_database_driver_class: "org.postgresql.Driver"   # PaaS-TA Database driver-class (e.g. "org.postgresql.Driver" or "com.mysql.jdbc.Driver")
-paasta_cc_db_id: "cloud_controller"   # CCDB ID (e.g. "cloud_controller")
-paasta_cc_db_password: "cc_admin"   # CCDB Password (e.g. "cc_admin")
-paasta_uaa_db_id: "uaa"       # UAADB ID (e.g. "uaa")
-paasta_uaa_db_password: "uaa_admin"   # UAADB Password (e.g. "uaa_admin")
+paasta_nats_password: "7EZB5ZkMLMqT7"		# PaaS-TA Nats Password (CredHub 로그인후 'credhub get -n /micro-bosh/paasta/nats_password' 명령어를 통해 확인 가능)
+paasta_nats_private_networks_name: "default"	# PaaS-TA Nats 의 Network 이름
+paasta_database_ips: "10.0.1.123"		# PaaS-TA Database IP (e.g. "10.0.1.123")
+paasta_database_port: 5524			# PaaS-TA Database Port (e.g. 5524(postgresql)/13307(mysql)) -- Do Not Use "3306"&"13306" in mysql
+paasta_database_type: "postgresql"		# PaaS-TA Database Type (e.g. "postgresql" or "mysql")
+paasta_database_driver_class: "org.postgresql.Driver"	# PaaS-TA Database driver-class (e.g. "org.postgresql.Driver" or "com.mysql.jdbc.Driver")
+paasta_cc_db_id: "cloud_controller"		# CCDB ID (e.g. "cloud_controller")
+paasta_cc_db_password: "cc_admin"		# CCDB Password (e.g. "cc_admin")
+paasta_uaa_db_id: "uaa"				# UAADB ID (e.g. "uaa")
+paasta_uaa_db_password: "uaa_admin"		# UAADB Password (e.g. "uaa_admin")
 paasta_api_version: "v3"
 
 # UAAC INFO
-uaa_client_admin_id: "admin"      # UAAC Admin Client Admin ID
-uaa_client_admin_secret: "admin-secret"   # UAAC Admin Client에 접근하기 위한 Secret 변수
-uaa_client_portal_secret: "clientsecret"  # UAAC Portal Client에 접근하기 위한 Secret 변수
+uaa_client_admin_id: "admin"			# UAAC Admin Client Admin ID
+uaa_client_admin_secret: "admin-secret"		# UAAC Admin Client에 접근하기 위한 Secret 변수
+uaa_client_portal_secret: "clientsecret"	# UAAC Portal Client에 접근하기 위한 Secret 변수
 
 # Monitoring INFO
-metric_url: "10.0.161.101"      # Monitoring InfluxDB IP
-syslog_address: "10.0.121.100"              # Logsearch의 ls-router IP
-syslog_port: "2514"                           # Logsearch의 ls-router Port
-syslog_transport: "relp"                        # Logsearch Protocol
-saas_monitoring_url: "61.252.53.248"      # Pinpoint HAProxy WEBUI의 Public IP
-monitoring_api_url: "61.252.53.241"         # Monitoring-WEB의 Public IP
+metric_url: "10.0.161.101"			# Monitoring InfluxDB IP
+syslog_address: "10.0.121.100"			# Logsearch의 ls-router IP
+syslog_port: "2514"				# Logsearch의 ls-router Port
+syslog_transport: "relp"			# Logsearch Protocol
+saas_monitoring_url: "61.252.53.248"		# Pinpoint HAProxy WEBUI의 Public IP
+monitoring_api_url: "61.252.53.241"		# Monitoring-WEB의 Public IP
 
 ### Portal INFO
 portal_web_user_ip: "52.78.88.252"
 portal_web_user_url: "http://portal-web-user.52.78.88.252.xip.io" 
 
 ### ETC INFO
-abacus_url: "http://abacus.61.252.53.248.xip.io"  # abacus url (e.g. "http://abacus.xxx.xxx.xxx.xxx.xip.io")
+abacus_url: "http://abacus.61.252.53.248.xip.io"	# abacus url (e.g. "http://abacus.xxx.xxx.xxx.xxx.xip.io")
 
 ```
 
