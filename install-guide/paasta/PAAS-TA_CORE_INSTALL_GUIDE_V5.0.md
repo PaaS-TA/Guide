@@ -120,7 +120,6 @@ elif [[ ${CURRENT_IAAS} = "vsphere" ]]; then
 else
         bosh -e ${BOSH_ENVIRONMENT} upload-stemcell https://s3.amazonaws.com/bosh-core-stemcells/${STEMCELL_VERSION}/bosh-stemcell-${STEMCELL_VERSION}-warden-boshlite-ubuntu-xenial-go_agent.tgz -n
 fi
-
 ```
 
 - Stemcell 업로드 Script 실행
@@ -161,7 +160,6 @@ $ wget https://s3.amazonaws.com/bosh-core-stemcells/621.94/bosh-stemcell-621.94-
 $ cd ~/workspace/paasta-5.5.0
 $ wget http://45.248.73.44/index.php/s/RLgPANn7LNmGrqP/download  --content-disposition
 $ unzip stemcell.zip
-
 ```
 
 - 오프라인 Stemcell 업로드 Script의 설정 수정 (BOSH_ENVIRONMENT, STEMCELL_DIR 수정)
@@ -225,7 +223,6 @@ BOSH_ENVIRONMENT="${BOSH_ENVIRONMENT}"			 # bosh director alias name (PaaS-TA에
 
 bosh -e ${BOSH_ENVIRONMENT} update-runtime-config -n runtime-configs/dns.yml
 bosh -e ${BOSH_ENVIRONMENT} update-runtime-config -n --name=os-conf runtime-configs/os-conf.yml
-
 ```
 - Runtime Config 업데이트 Script 실행
 ```                     
@@ -254,7 +251,6 @@ $ wget http://45.248.73.44/index.php/s/8wf2Fjn2ytxsnR7/download --content-dispos
 
 # os-conf 22.1.0 다운로드 
 $ wget http://45.248.73.44/index.php/s/G7ossXeZZHeMPTQ/download --content-disposition
-
 ```
 
 - 오프라인 Runtime Config 업데이트 Script 수정 (BOSH_ENVIRONMENT, RELEASE_DIR 수정)
