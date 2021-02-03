@@ -190,10 +190,10 @@ infra_persistent_disk_type: "20GB"                              # infra : persis
 # MARIADB INFO
 mariadb_port: "<MARIADB_PORT>"                                  # mariadb : database port (e.g. 13306) -- Do Not Use "3306"
 mariadb_admin_password: "<MARIADB_ADMIN_PASSWORD>"              # mariadb : database admin password (e.g. "Paasta@2019")
-portal_default_api_name: "PaaS-TA 5.5.0"                          # portal default api name
+portal_default_api_name: "PaaS-TA 5.5.0"                        # portal default api name
 portal_default_api_url: "http://<PORTAL_GATEWAY_ROUTE>"         # portal default api url (portal gateway url) (e.g. "http://portal-gateway.<DOMAIN>")
 portal_default_header_auth: "Basic YWRtaW46b3BlbnBhYXN0YQ=="    # portal default header auth
-portal_default_api_desc: "PaaS-TA 5.5.0 infra"                    # portal default api description
+portal_default_api_desc: "PaaS-TA 5.5.0 infra"                  # portal default api description
 
 
 # BINARY_STORAGE INFO
