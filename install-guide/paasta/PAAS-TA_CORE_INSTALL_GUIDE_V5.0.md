@@ -98,7 +98,7 @@ PaaS-TA 5.5.0은 Stemcell 업로드 스크립트를 지원하며, BOSH 로그인
 BOSH_ENVIRONMENT는 BOSH 설치 시 사용한 Director 명이고, CURRENT_IAAS는 배포된 환경 IaaS(aws, azure, gcp, openstack, vsphere, 그외 입력시 bosh-lite)에 맞게 입력을 한다. 
 <br>(PaaS-TA에서 제공되는 create-bosh-login.sh을 이용하여 BOSH LOGIN시 BOSH_ENVIRONMENT와 CURRENT_IAAS는 자동입력된다.)
 
-- Stemcell 업로드 Script의 설정 수정
+- Stemcell 업로드 Script의 설정 수정 (BOSH_ENVIRONMENT 수정)
 
 > $ vi ~/workspace/paasta-5.5.0/deployment/paasta-deployment/bosh/upload-stemcell.sh
 ```                     
@@ -164,7 +164,7 @@ $ unzip stemcell.zip
 
 ```
 
-- 오프라인 Stemcell 업로드 Script의 설정 수정(STEMCELL_DIR 수정)
+- 오프라인 Stemcell 업로드 Script의 설정 수정 (STEMCELL_DIR 수정)
 
 > $ vi ~/workspace/paasta-5.5.0/deployment/paasta-deployment/bosh/offline-upload-stemcell.sh
 ```                     
@@ -216,7 +216,7 @@ PaaS-TA에서 적용하는 Runtime Config는 다음과 같다.
 
 PaaS-TA 5.5.0은 Runtime Config 설정 스크립트를 지원하며, BOSH 로그인 후 다음 명령어를 수행하여 Runtime Config를 설정한다.  
 
-  - Runtime Config 업데이트 Script 수정 (BOSH_ENVIRONMENT)
+  - Runtime Config 업데이트 Script 수정 (BOSH_ENVIRONMENT 수정)
 > $ vi ~/workspace/paasta-5.5.0/deployment/paasta-deployment/bosh/update-runtime-config.sh
 ```                     
 #!/bin/bash
@@ -257,7 +257,7 @@ $ wget http://45.248.73.44/index.php/s/G7ossXeZZHeMPTQ/download --content-dispos
 
 ```
 
-- 오프라인 Runtime Config 업데이트 Script 수정 (RELEASE_DIR 수정)
+- 오프라인 Runtime Config 업데이트 Script 수정 (BOSH_ENVIRONMENT, RELEASE_DIR 수정)
 
 > $ vi ~/workspace/paasta-5.5.0/deployment/paasta-deployment/bosh/offline-update-runtime-config.sh
 ```                     
