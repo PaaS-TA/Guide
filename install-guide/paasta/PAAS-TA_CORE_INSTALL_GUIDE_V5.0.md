@@ -164,7 +164,7 @@ $ unzip stemcell.zip
 
 ```
 
-- 오프라인 Stemcell 업로드 Script의 설정 수정 (STEMCELL_DIR 수정)
+- 오프라인 Stemcell 업로드 Script의 설정 수정 (BOSH_ENVIRONMENT, STEMCELL_DIR 수정)
 
 > $ vi ~/workspace/paasta-5.5.0/deployment/paasta-deployment/bosh/offline-upload-stemcell.sh
 ```                     
