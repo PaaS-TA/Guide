@@ -43,28 +43,28 @@ PaaS-TA 3.5 버전부터는 Bosh2.0 기반으로 deploy를 진행하며 기존 B
     <th>스펙</th>
   </tr>
   <tr>
-  <td>Collector/0      </td><td>pinpoint\_medium</td><td>2vCPU / 2GB RAM / 8GB Disk</td>
+  <td>Collector/0      </td><td>pinpoint_medium</td><td>2vCPU / 2GB RAM / 8GB Disk</td>
   </tr>
   <tr>
-  <td>Collector/1      </td><td>pinpoint\_medium</td><td>2vCPU / 2GB RAM / 8GB Disk</td>
+  <td>Collector/1      </td><td>pinpoint_medium</td><td>2vCPU / 2GB RAM / 8GB Disk</td>
   </tr>
   <tr>
-  <td>h\_master/0      </td><td>pinpoint\_medium</td><td>2vCPU / 2GB RAM / 8GB Disk</td>
+  <td>h_master/0      </td><td>pinpoint_medium</td><td>2vCPU / 2GB RAM / 8GB Disk</td>
   </tr>
   <tr>
-  <td>h\_secondary     </td><td>pinpoint\_ small</td><td>1vCPU / 1GB RAM / 4GB Disk</td>
+  <td>h_secondary     </td><td>pinpoint_ small</td><td>1vCPU / 1GB RAM / 4GB Disk</td>
   </tr>
   <tr>
-  <td>h\_slave/0       </td><td>services-small </td><td>1vCPU / 1GB RAM / 4GB Disk</td>
+  <td>h_slave/0       </td><td>services-small </td><td>1vCPU / 1GB RAM / 4GB Disk</td>
   </tr>
   <tr>
-  <td>h\_slave/1       </td><td>services-small </td><td>1vCPU / 1GB RAM / 4GB Disk</td>
+  <td>h_slave/1       </td><td>services-small </td><td>1vCPU / 1GB RAM / 4GB Disk</td>
   </tr>
   <tr>
-  <td>haproxy\_webui/0 </td><td>services-small </td><td>1vCPU / 1GB RAM / 4GB Disk</td>
+  <td>haproxy_webui/0 </td><td>services-small </td><td>1vCPU / 1GB RAM / 4GB Disk</td>
   </tr>
   <tr>
-  <td>pinpoint\_broker/0</<td>services-small </td><td>1vCPU / 1GB RAM / 4GB Disk</td>
+  <td>pinpoint_broker/0</<td>services-small </td><td>1vCPU / 1GB RAM / 4GB Disk</td>
   </tr>
   <tr>
   <td>webui/0          </0><td>services-small </td><td>1vCPU / 1GB RAM / 4GB Disk</td>
