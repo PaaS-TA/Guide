@@ -89,11 +89,16 @@ $ git clone https://github.com/PaaS-TA/paasta-deployment.git -b v5.5.0-min
 
 ## <div id='3.3'/>3.3. Stemcell 업로드
 Stemcell은 배포 시 생성되는 PaaS-TA VM Base OS Image이며, PaaS-TA 5.5.0은 Ubuntu xenial stemcell 621.94를 기반으로 한다.  
-BOSH 로그인 후 다음 명령어를 수행하여 Stemcell을 올린다.  
+기본적인 Stemcell 업로드 명령어는 다음과 같다.  
+```                     
+$ bosh -e ${BOSH_ENVIRONMENT} upload-stemcell {URL}
+```
+
+PaaS-TA 5.5.0은 Stemcell 업로드 스크립트를 지원하며, BOSH 로그인 후 다음 명령어를 수행하여 Stemcell을 올린다.  
 BOSH_ENVIRONMENT는 BOSH 설치 시 사용한 Director 명이고, CURRENT_IAAS는 배포된 환경 IaaS(aws, azure, gcp, openstack, vsphere, 그외 입력시 bosh-lite)에 맞게 입력을 한다. 
 <br>(PaaS-TA에서 제공되는 create-bosh-login.sh을 이용하여 BOSH LOGIN시 BOSH_ENVIRONMENT와 CURRENT_IAAS는 자동입력된다.)
 
-- Stemcell 업로드 Script의 설정 수정
+- Stemcell 업로드 Script의 설정 수정 (BOSH_ENVIRONMENT 수정)
 
 > $ vi ~/workspace/paasta-5.5.0/deployment/paasta-deployment/bosh/upload-stemcell.sh
 ```                     
@@ -130,37 +135,37 @@ $ source upload-stemcell.sh
 - 만약 오프라인 환경에 저장한 스템셀을 사용 하고 싶다면, Stemcell을 저장 한 뒤 경로를 설정 후 Stemcell 업로드 Script를 실행한다. 
 
 ```  
-폴더 생성 및 이동
+# 폴더 생성 및 이동
 $ mkdir -p ~/workspace/paasta-5.5.0/stemcell/paasta
 $ cd ~/workspace/paasta-5.5.0/stemcell/paasta/
 
-개별 Stemcell 다운로드 
-AWS의 경우
+# 개별 Stemcell 다운로드 
+## AWS의 경우
 $ wget https://s3.amazonaws.com/bosh-core-stemcells/621.94/bosh-stemcell-621.94-aws-xen-hvm-ubuntu-xenial-go_agent.tgz
 
-AZURE의 경우
+## AZURE의 경우
 $ wget https://bosh-core-stemcells.s3-accelerate.amazonaws.com/621.94/bosh-stemcell-621.94-azure-hyperv-ubuntu-xenial-go_agent.tgz
 
-GCP의 경우
+## GCP의 경우
 $ wget https://bosh-core-stemcells.s3-accelerate.amazonaws.com/621.94/bosh-stemcell-621.94-google-kvm-ubuntu-xenial-go_agent.tgz
 
-OPENSTACK의 경우
+## OPENSTACK의 경우
 $ wget https://s3.amazonaws.com/bosh-core-stemcells/621.94/bosh-stemcell-621.94-openstack-kvm-ubuntu-xenial-go_agent.tgz
 
-VSHPERE의 경우
+## VSHPERE의 경우
 $ wget https://s3.amazonaws.com/bosh-core-stemcells/621.94/bosh-stemcell-621.94-vsphere-esxi-ubuntu-xenial-go_agent.tgz
 
-BOSH-LITE의 경우
+## BOSH-LITE의 경우
 $ wget https://s3.amazonaws.com/bosh-core-stemcells/621.94/bosh-stemcell-621.94-warden-boshlite-ubuntu-xenial-go_agent.tgz
 
-통합 다운로드의 경우
+# 통합 다운로드의 경우
 $ cd ~/workspace/paasta-5.5.0
 $ wget http://45.248.73.44/index.php/s/RLgPANn7LNmGrqP/download  --content-disposition
 $ unzip stemcell.zip
 
 ```
 
-- 오프라인 Stemcell 업로드 Script의 설정 수정(STEMCELL_DIR 수정)
+- 오프라인 Stemcell 업로드 Script의 설정 수정 (BOSH_ENVIRONMENT, STEMCELL_DIR 수정)
 
 > $ vi ~/workspace/paasta-5.5.0/deployment/paasta-deployment/bosh/offline-upload-stemcell.sh
 ```                     
@@ -193,6 +198,13 @@ $ source offline-upload-stemcell.sh
 ```
 
 ## <div id='3.4'/>3.4. Runtime Config 설정  
+Runtime config는 BOSH로 배포되는 VM에 적용되는 설정이다.  
+기본적인 Runtime Config 설정 명령어는 다음과 같다.  
+```                     
+$ bosh -e ${BOSH_ENVIRONMENT} update-runtime-config {PATH} --name={NAME}
+```
+
+PaaS-TA에서 적용하는 Runtime Config는 다음과 같다.  
 
 - DNS Runtime Config  
   PaaS-TA 4.0부터 적용되는 부분으로 PaaS-TA Component에서 Consul이 대체된 Component이다.  
@@ -201,7 +213,9 @@ $ source offline-upload-stemcell.sh
 - OS Configuration Runtime Config  
   BOSH Linux OS 구성 릴리스를 이용하여 sysctl을 구성한다.  
 
-  - Runtime Config 업데이트 Script 수정 (BOSH_ENVIRONMENT)
+PaaS-TA 5.5.0은 Runtime Config 설정 스크립트를 지원하며, BOSH 로그인 후 다음 명령어를 수행하여 Runtime Config를 설정한다.  
+
+  - Runtime Config 업데이트 Script 수정 (BOSH_ENVIRONMENT 수정)
 > $ vi ~/workspace/paasta-5.5.0/deployment/paasta-deployment/bosh/update-runtime-config.sh
 ```                     
 #!/bin/bash
@@ -229,19 +243,19 @@ $ source update-runtime-config.sh
 - [os-conf-release-22.1.0 다운로드](http://45.248.73.44/index.php/s/G7ossXeZZHeMPTQ/download)
 
 ```  
-폴더 생성 및 이동
+# 폴더 생성 및 이동
 $ mkdir -p ~/workspace/paasta-5.5.0/release/bosh
 $ cd ~/workspace/paasta-5.5.0/release/bosh
 
-bosh-dns-release 1.27.0 다운로드 
+# bosh-dns-release 1.27.0 다운로드 
 $ wget http://45.248.73.44/index.php/s/8wf2Fjn2ytxsnR7/download --content-disposition
 
-os-conf 22.1.0 다운로드 
+# os-conf 22.1.0 다운로드 
 $ wget http://45.248.73.44/index.php/s/G7ossXeZZHeMPTQ/download --content-disposition
 
 ```
 
-- 오프라인 Runtime Config 업데이트 Script 수정 (RELEASE_DIR 수정)
+- 오프라인 Runtime Config 업데이트 Script 수정 (BOSH_ENVIRONMENT, RELEASE_DIR 수정)
 
 > $ vi ~/workspace/paasta-5.5.0/deployment/paasta-deployment/bosh/offline-update-runtime-config.sh
 ```                     
@@ -977,10 +991,10 @@ PaaS-TA VM 중 singleton-blobstore, database의 AZs(zone)을 변경하면 조직
 
 **※ PaaS-TA 설치 시 명령어는 BOSH deploy를 사용한다. (IaaS 환경에 따라 Option이 다름)**
 
-PaaS-TA 배포 BOSH 명령어 예시
+PaaS-TA-min 배포 BOSH 명령어 예시
 
 ```
-$ bosh -e ${BOSH_ENVIRONMENT} -d paasta deploy {deploy.yml}
+$ bosh -e ${BOSH_ENVIRONMENT} -d paasta deploy min-paasta-deployment.yml
 ```
 
 PaaS-TA 배포 시, 설치 Option을 추가해야 한다. 설치 Option에 대한 설명은 아래와 같다.
@@ -1052,7 +1066,7 @@ $ chmod +x ~/workspace/paasta-5.5.0/deployment/paasta-deployment/paasta/*.sh
 
 
 ## <div id='3.7'/>3.7.  PaaS-TA 설치
-- 서버 환경에 맞추어 common_vars.yml과 vars.yml을 수정 한 뒤, Deploy 스크립트 파일의 설정을 수정한다. 
+- 서버 환경에 맞추어 [common_vars.yml](#3.6.1.1)와 [vars.yml]((#3.6.1.2))을 수정 한 뒤, Deploy 스크립트 파일의 설정을 수정한다. 
 
 - 4VM 배포시
 > $ vi ~/workspace/paasta-5.5.0/deployment/paasta-deployment/paasta/deploy-4vm-aws.sh
@@ -1182,7 +1196,7 @@ diego-release-2.48.0.tgz                  php-buildpack-release-4.4.20.tgz
 dotnet-core-buildpack-release-2.3.14.tgz  postgres-release-43.tgz
 ```
 
-- 서버 환경에 맞추어 common_vars.yml과 vars.yml을 수정 한 뒤, Deploy 스크립트 파일의 설정을 수정한다. 
+- 서버 환경에 맞추어 [common_vars.yml](#3.6.1.1)와 [vars.yml]((#3.6.1.2))을 수정 한 뒤, Deploy 스크립트 파일의 설정을 수정한다. 
 
 - 4VM 배포시
 > $ vi ~/workspace/paasta-5.5.0/deployment/paasta-deployment/paasta/deploy-4vm-aws.sh
