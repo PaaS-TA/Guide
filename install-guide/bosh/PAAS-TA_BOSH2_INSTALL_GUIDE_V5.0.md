@@ -31,8 +31,6 @@
 　　3.3.9. [Jumpbox](#3.3.9)  
 　　3.3.10. [BOSH 로그인 생성 스크립트](#3.3.10)
 
-
-
 ## Executive Summary
 
 본 문서는 BOSH2(이하 BOSH)의 설명 및 설치 가이드 문서로, BOSH를 실행할 수 있는 환경을 구성하고 사용하는 방법에 관해서 설명하였다.
@@ -60,10 +58,12 @@ BOSH는 초기에 Cloud Foundry PaaS를 위해 개발되었지만, 현재는 Jen
 
 BOSH가 지원하는 IaaS는 VMware vSphere, Google Cloud Platform, Amazon Web Services EC2, Microsoft Azure, OpenStack, Alibaba Cloud가 있다.  
 PaaS-TA는 VMware vSphere, Google Cloud Platform, Amazon Web Services EC2, OpenStack, Microsoft Azure 등의 IaaS를 지원한다.  
+
 현재 PaaS-TA 5.5.0에서 검증한 IaaS 환경은 AWS, OpenStack 환경이다.
 
 PaaS-TA 3.1 버전까지는 Cloud Foundry BOSH1을 기준으로 설치했지만, PaaS-TA 3.5 버전부터 BOSH2를 기준으로 설치하였다.  
 PaaS-TA 5.5.0는 Cloud Foundry에서 제공하는 bosh-deployment를 활용하여 BOSH를 설치한다.
+
 
 BOSH2는 BOSH2 CLI를 통하여 BOSH와 PaaS-TA를 모두 생성한다.  
 bosh-deployment를 이용하여 BOSH를 생성한 후, paasta-deployment로 PaaS-TA를 설치한다.  
@@ -132,6 +132,7 @@ BOSH 및 PaaS-TA 설치를 위해 Inception 서버에 구성해야 할 컴포넌
   예 - AWS security group config)  
   ![Security_Group_ICMP_Image1](./images/security-group-icmp-01.png)  
 
+
 ### <div id='3.3.2'/>3.3.2.    BOSH CLI 및 Dependency 설치
 
 - BOSH Dependency 설치 (Ubuntu 18.04)
@@ -198,6 +199,7 @@ $ bosh -version
 
 - BOSH를 설치하기 위한 deployment가 존재하지 않는다면 다운로드 받는다
 ```
+
 $ mkdir -p ~/workspace/paasta-5.5.0/deployment
 $ cd ~/workspace/paasta-5.5.0/deployment
 $ git clone https://github.com/PaaS-TA/paasta-deployment.git -b v5.5.0
@@ -230,6 +232,7 @@ README.md  bosh  cloud-config  paasta
 ### <div id='3.3.4'/>3.3.4.    BOSH 설치 파일
 
 ~/workspace/paasta-5.5.0/deployment/paasta-deployment/bosh 폴더에는 BOSH 설치를 위한 IaaS별 Shell Script 파일이 존재한다.  
+
 Shell Script 파일을 이용하여 BOSH를 설치한다.
 파일명은 deploy-{IaaS}.sh 로 만들어졌다.  
 또한 {IaaS}-vars.yml을 수정하여 BOSH 설치시 적용하는 변수을 설정할 수 있다.

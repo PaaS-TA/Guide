@@ -421,7 +421,6 @@ bosh create-env bosh.yml \
 
 ```
 $ chmod +x ${HOME}/workspace/paasta-5.5/deployment/paasta-deployment/bosh/*.sh  
-```
 
 
 ### <div id='3.3.5'/>3.3.5. BOSH 설치

@@ -21,7 +21,7 @@
 
 1. BOSH 설치가 되어있으며, BOSH Login이 되어 있어야 한다.
 2. cloud-config와 runtime-config가 업데이트 되어있는지 확인한다.
-3. Stemcell 목록을 확인하여 서비스 설치에 필요한 Stemcell(ubuntu xenial 315.36)이 업로드 되어 있는 것을 확인한다.
+3. Stemcell 목록을 확인하여 서비스 설치에 필요한 Stemcell(ubuntu xenial 621.78)이 업로드 되어 있는 것을 확인한다.
 
 
 > cloud-config 확인  
@@ -113,7 +113,7 @@ inception_os_user_name: "ubuntu"		# Deployment Name
 
 # STEMCELL
 stemcell_os: "ubuntu-xenial"			# Stemcell OS
-stemcell_version: "315.36"			# Stemcell Version
+stemcell_version: "621.78"			# Stemcell Version
 
 # ELASTICSEARCH-MASTER
 elasticsearch_master_azs: ["z5"]		# Elasticsearch-Master 가용 존
@@ -130,7 +130,7 @@ cluster_monitor_network: "default"		# Cluster-Monitor 네트워크
 cluster_monitor_persistent_disk_type: "10GB"	# Cluster-Monitor 영구 Disk 종류
 
 # MAINTENANCE
-maintenance_azs: ["z5", "z6"]			# Maintenance 가용 존
+maintenance_azs: ["z5"]				# Maintenance 가용 존
 maintenance_instances: 1			# Maintenance 인스턴스 수
 maintenance_vm_type: "medium"			# Maintenance VM 종류
 maintenance_network: "default"			# Maintenance 네트워크
@@ -173,11 +173,13 @@ bosh –e {director_name} -d logsearch deploy logsearch-deployment.yml \
 
 ### <div id='9'/>2.4. Logsearch 설치
 
-- 서버 환경에 맞추어 Deploy 스크립트 파일의 설정을 수정한다. 
+- 서버 환경에 맞추어 Deploy 스크립트 파일의 설정을 수정한다.  
+  기본적으로 온라인 설치로 되어 있음.
 
 > $ vi ${HOME}/workspace/paasta-5.5/deployment/monitoring-deployment/logsearch/deploy-logsearch.sh
 
 ```
+# .yml 파일들 설정 변경 이슈 있는지 같이 확인한다.  
 bosh –e {director_name} -d logsearch deploy logsearch-deployment.yml \	
 	-o operations/enable-router.yml \
 	-l logsearch-vars.yml \

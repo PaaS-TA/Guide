@@ -65,7 +65,7 @@ Pinpoint Server, HBase의 HBase Master, Collector , WebUI2로 최소사항을 �
 
 1. BOSH 설치가 되어있으며, BOSH Login이 되어 있어야 한다.
 2. cloud-config와 runtime-config가 업데이트 되어있는지 확인한다.
-3. Stemcell 목록을 확인하여 서비스 설치에 필요한 Stemcell(ubuntu xenial 315.36)이 업로드 되어 있는 것을 확인한다.
+3. Stemcell 목록을 확인하여 서비스 설치에 필요한 Stemcell(ubuntu xenial 621.78)이 업로드 되어 있는 것을 확인한다.
 
 
 > cloud-config 확인  
@@ -155,7 +155,7 @@ abacus_url: "http://abacus.61.252.53.248.xip.io"	# Abacus URL (e.g. "http://abac
 deployment_name: "pinpoint-monitoring"			# On-Demand Deployment Name
 #### Main Stemcells Setting ###
 stemcell_os: "ubuntu-xenial"				# Deployment Main Stemcell OS
-stemcell_version: "315.36"				# Main Stemcell Version
+stemcell_version: "621.78"				# Main Stemcell Version
 stemcell_alias: "default"   				# Main Stemcell Alias
 #### On-Demand Release Deployment Setting ### 
 releases_name:  "paasta-pinpoint-monitoring-release"	# On-Demand Release Name

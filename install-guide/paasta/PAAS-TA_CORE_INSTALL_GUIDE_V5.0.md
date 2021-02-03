@@ -70,7 +70,6 @@ PaaS-TA 3.1 버전까지는 PaaS-TA Container, Controller를 각각의 deploymen
 ![PaaSTa_BOSH_Use_Guide_Image2]  
 
 # <div id='3'/>3. PaaS-TA 5.5.0 설치
-
 ## <div id='3.1'/>3.1. Prerequisite
 
 - BOSH2 기반의 BOSH를 설치한다.
@@ -79,6 +78,7 @@ PaaS-TA 3.1 버전까지는 PaaS-TA Container, Controller를 각각의 deploymen
 
 ## <div id='3.2'/>3.2. 설치 파일 다운로드
 - PaaS-TA를 설치하기 위한 deployment가 존재하지 않는다면 다운로드 받는다
+
 ```
 $ mkdir -p ~/workspace/paasta-5.5.0/deployment
 $ cd ~/workspace/paasta-5.5.0/deployment
@@ -877,9 +877,11 @@ haproxy_network: "default"		# HAProxy 네트워크
 #### <div id='3.6.1.3'/>● PaaS-TA 그외 Variable List
 
 1. uaa_login_logout_redirect_parameter_whitelist : 포탈 페이지 이동을 위한 UAA Redirect Whitelist 등록 변수
+
 ```
 ex) uaa_login_logout_redirect_parameter_whitelist=["{PaaS-TA PORTAL URI}","{PaaS-TA PORTAL URI}/callback","{PaaS-TA PORTAL URI}/login"]
 ```
+
 > xip.io : 임시 도메인, 기본 DNS 서버가 8.8.8.8로 설정되어야 한다.  
 > xip.io를 사용하지 않고 DNS를 사용할 경우, Whitelist에 포탈 DNS, 포탈 DNS/callback, 포탈 DNS/login 세 개의 항목을 등록해야 한다.
 
@@ -896,46 +898,52 @@ ex) uaa_login_links_signup="{PaaS-TA PORTAL URI}/createuser"
 ```
 
 4. uaa_client_portal_redirect_uri : UAAC Portal Client의 Redirect URI 지정 변수, 포탈에서 로그인 버튼 클릭 후 UAA 페이지에서 로그인 성공 시 이동하는 URI
+
 ```
 ex) uaa_client_portal_redirect_uri="{PaaS-TA PORTAL URI}, {PaaS-TA PORTAL URI}/callback"
 ```
 
 5. uaa_client_portal_secret : UAAC Portal Client에 접근하기 위한 Secret 변수
+
 ```
 ex) uaa_client_portal_secret="portalclient"
 
   paasta-portal deploy 파일 안의 portal_client_secret의 값과 일치해야 한다.
 ```
+
 ![PaaSTa_VALUE_Image]
 
 6. uaa_client_admin_secret : UAAC Admin Client에 접근하기 위한 Secret 변수
+
 ```
 ex) uaa_client_admin_secret="admin-secret"
 ```
 
 - uaa_client_admin_secret 적용 확인 방법
-  
-    (1) PaaS-TA 설치 후 아래 명령어 실행한다.
-    ```
-    $ uaac target
-    $ uaac token client get
-    ```
 
-    (2) 설정한 secret 값으로 admin token을 얻을 경우 아래와 같은 결과가 출력된다.
-    ```
-    ubuntu@inception:~$ uaac target
-    
-    Target: https://uaa.54.180.53.80.xip.io
-    Context: admin, from client admin
-    
-    ubuntu@inception:~$ uaac token client get
-    Client ID:  admin
-    Client secret:  ************
-    
-    Successfully fetched token via client credentials grant.
-    Target: https://uaa.54.180.53.80.xip.io
-    Context: admin, from client admin
-    ```
+  (1) PaaS-TA 설치 후 아래 명령어 실행한다.
+
+  ```
+  $ uaac target
+  $ uaac token client get
+  ```
+
+  (2) 설정한 secret 값으로 admin token을 얻을 경우 아래와 같은 결과가 출력된다.
+
+  ```
+  ubuntu@inception:~$ uaac target
+  
+  Target: https://uaa.54.180.53.80.xip.io
+  Context: admin, from client admin
+  
+  ubuntu@inception:~$ uaac token client get
+  Client ID:  admin
+  Client secret:  ************
+  
+  Successfully fetched token via client credentials grant.
+  Target: https://uaa.54.180.53.80.xip.io
+  Context: admin, from client admin
+  ```
 
 
 
@@ -1022,7 +1030,6 @@ ex) uaa_client_admin_secret="admin-secret"
 </table>
 
 ### <div id='3.6.3'/>3.6.3.   PaaS-TA 설치 Shell Scripts
-
 paasta-deployment.yml 파일은 PaaS-TA를 배포하는 Manifest 파일이며, PaaS-TA VM에 대한 설치 정의를 하게 된다.  
 PaaS-TA VM 중 singleton-blobstore, database의 AZs(zone)을 변경하면 조직(ORG), 스페이스(SPACE), 앱(APP) 정보가 모두 삭제된다. 
 
@@ -1063,6 +1070,7 @@ PaaS-TA 배포 시, 설치 Option을 추가해야 한다. 설치 Option에 대�
 </table>
 
 
+
 ### 
 
 #### <div id='3.6.3.1'/>● deploy-aws.sh
@@ -1091,6 +1099,7 @@ bosh -e ${BOSH_ENVIRONMENT} -d paasta -n deploy paasta-deployment.yml \	# PaaS-T
 	-l vars.yml \							# PaaS-TA 설치시 적용하는 변수 설정 파일
 	-l ../../common/common_vars.yml					# PaaS-TA 및 각종 Service 설치시 적용하는 공통 변수 설정 파일
 ```
+
 - Shell script 파일에 실행 권한 부여
 
 ```

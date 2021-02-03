@@ -608,7 +608,6 @@ bosh_client_admin_secret: "ert7na4jpewsczt"		# BOSH Client Admin Secret('echo $(
 bosh_director_port: 25555				# BOSH Director Port
 bosh_oauth_port: 8443					# BOSH OAuth Port
 bosh_version: 271.2					# BOSH version('bosh env' 명령어를 통해 확인 가능, on-demand service용, e.g. "271.2")
-
 # PAAS-TA INFO
 system_domain: "xx.xx.xxx.xxx.xip.io"			# Domain (xip.io를 사용하는 경우 HAProxy Public IP와 동일)
 paasta_admin_username: "admin"				# PaaS-TA Admin Username
@@ -948,6 +947,11 @@ ex) uaa_client_admin_secret="admin-secret"
 </tr>
 </table>
   
+Monitoring Agent는 BOSH VM의 상태 정보(Metric data)를 paasta-monitoring의 InfluxDB에 전송한다.
+Syslog Agent는 BOSH VM의 log 정보를 logsearch의 ls-router에 전송하는 역할을 한다.
+BOSH 설치 전에 paasta-monitoring의 InfluxDB IP를 metric_url로 사용하기 위해 사전에 정의해야 한다.
+마찬가지로 logsearch의 ls-router IP도 syslog_address로 연동하기 위해 사전에 정의해야 한다.
+  
 ### <div id='1023'/>3.6.3.   PaaS-TA 설치 Shell Scripts
 
 paasta-deployment.yml 파일은 PaaS-TA를 배포하는 Manifest 파일이며, PaaS-TA VM에 대한 설치 정의를 하게 된다.  
@@ -961,6 +965,7 @@ PaaS-TA 배포 BOSH 명령어 예시
 
 ```
 $ bosh -e {director_name} -d paasta deploy {deploy.yml}
+
 ```
 
 PaaS-TA 배포 시, 설치 Option을 추가해야 한다. 설치 Option에 대한 설명은 아래와 같다.
