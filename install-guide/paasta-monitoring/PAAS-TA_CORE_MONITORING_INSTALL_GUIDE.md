@@ -88,7 +88,7 @@ $ git clone https://github.com/PaaS-TA/paasta-deployment.git -b working-5.5
 # paasta-deployment/paasta/ 경로에
 # ./operations/addons/(enable-component-syslog.yml, paasta-monitoring-agent.yml) 와 deployment-{IaaS}-monitoring.sh 가 없을 경우
 # 아래 예제대로 monitoring-deployment 를 git clone 받아 복사하여 놓는다.
-$ git clone https://github.com/PaaS-TA/monitoring-deployment.git -b dev-v5.5.0  # dev-v5.5.0 monitoring-deployment 구성
+$ git clone https://github.com/PaaS-TA/monitoring-deployment.git -b v5.5.0  # v5.5.0 monitoring-deployment 구성
 ```
 
 ## <div id='109'/>3.3. Stemcell 업로드
