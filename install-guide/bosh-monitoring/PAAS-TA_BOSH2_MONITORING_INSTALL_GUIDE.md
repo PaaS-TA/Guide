@@ -178,19 +178,19 @@ $ bosh -version
 
 - BOSH를 설치하기 위한 deployment가 존재하지 않는다면 다운로드 받는다
 ```
-$ mkdir -p ${HOME}/workspace/paasta-5.5/deployment
-$ cd ${HOME}/workspace/paasta-5.5/deployment
-$ git clone https://github.com/PaaS-TA/paasta-deployment.git -b working-5.5
+$ mkdir -p ${HOME}/workspace/paasta-5.5.0/deployment
+$ cd ${HOME}/workspace/paasta-5.5.0/deployment
+$ git clone https://github.com/PaaS-TA/paasta-deployment.git -b v5.5.0
 
 # bosh, paasta 모두 common/common_vars.yml 을 사용한다. 다운로드 받는다.
-# cd ${HOME}/workspace/paasta-5.5/deployment 
+# cd ${HOME}/workspace/paasta-5.5.0/deployment 
 $ git clone -b {TagVersion} https://github.com/PaaS-TA/common.git
 ```
 
 - paasta/deployment/paasta-deployment 이하 디렉터리
 
 ```
-$ cd ${HOME}/workspace/paasta-5.5/deployment/paasta-deployment
+$ cd ${HOME}/workspace/paasta-5.5.0/deployment/paasta-deployment
 $ ls
 bosh  cloud-config  paasta
 ```
@@ -213,7 +213,7 @@ bosh  cloud-config  paasta
 
 ### <div id='3.3.4'/>3.3.4.    BOSH 설치 파일
 
-${HOME}/workspace/paasta-5.5/deployment/paasta-deployment/bosh 이하 디렉터리에는 BOSH 설치를 위한 IaaS별 Shell Script 파일이 존재한다.  
+${HOME}/workspace/paasta-5.5.0/deployment/paasta-deployment/bosh 이하 디렉터리에는 BOSH 설치를 위한 IaaS별 Shell Script 파일이 존재한다.  
 Shell Script 파일을 이용하여 BOSH를 설치한다.
 파일명은 deploy-{IaaS}.sh 로 만들어졌다.  
 또한 {IaaS}-vars.yml을 수정하여 BOSH 설치시 적용하는 변수을 설정할 수 있다.
@@ -420,14 +420,14 @@ bosh create-env bosh.yml \
 - Shell Script 파일에 실행 권한 부여
 
 ```
-$ chmod +x ${HOME}/workspace/paasta-5.5/deployment/paasta-deployment/bosh/*.sh  
+$ chmod +x ${HOME}/workspace/paasta-5.5.0/deployment/paasta-deployment/bosh/*.sh  
 
 
 ### <div id='3.3.5'/>3.3.5. BOSH 설치
 
 - 서버 환경에 맞추어 Deploy 스크립트 파일의 설정을 수정한다. 
 
-> $ vi ~/workspace/paasta-5.5/deployment/paasta-deployment/bosh/deploy-aws.sh
+> $ vi ~/workspace/paasta-5.5.0/deployment/paasta-deployment/bosh/deploy-aws.sh
 ```                     
 bosh create-env bosh.yml \  
 	--state=aws/state.json \  
@@ -444,15 +444,15 @@ bosh create-env bosh.yml \
 - BOSH 설치 Shell Script 파일 실행
 
 ```
-$ cd ${HOME}/workspace/paasta-5.5/deployment/paasta-deployment/bosh
+$ cd ${HOME}/workspace/paasta-5.5.0/deployment/paasta-deployment/bosh
 $ ./deploy-{iaas}.sh
 ```
 
 - BOSH 설치 중
 
 ```
-ubuntu@inception:~/workspace/paasta-5.5/deployment/paasta-deployment/bosh$ ./deploy-aws.sh
-Deployment manifest: '/home/ubuntu/workspace/paasta-5.5/deployment/paasta-deployment/bosh/bosh.yml'
+ubuntu@inception:~/workspace/paasta-5.5.0/deployment/paasta-deployment/bosh$ ./deploy-aws.sh
+Deployment manifest: '/home/ubuntu/workspace/paasta-5.5.0/deployment/paasta-deployment/bosh/bosh.yml'
 Deployment state: 'aws/state.json'
 
 Started validating
@@ -486,7 +486,7 @@ creds.yml은 BOSH 인증정보를 가지고 있으며, creds.yml을 활용하여
 BOSH 로그인 후, BOSH CLI 명령어를 이용하여 PaaS-TA를 설치할 수 있다.
 
 ```
-$ cd ${HOME}/workspace/paasta-5.5/deployment/paasta-deployment/bosh
+$ cd ${HOME}/workspace/paasta-5.5.0/deployment/paasta-deployment/bosh
 $ export BOSH_CA_CERT=$(bosh int ./{iaas}/creds.yml --path /director_ssl/ca)
 $ export BOSH_CLIENT=admin
 $ export BOSH_CLIENT_SECRET=$(bosh int ./{iaas}/creds.yml --path /admin_password)
@@ -516,7 +516,7 @@ $ credhub --version
 CredHub에 로그인하기 위해 BOSH를 설치한 bosh-deployment 디렉터리의 creds.yml을 활용하여 로그인한다.
 
 ```
-$ cd ${HOME}/workspace/paasta-5.5/deployment/paasta-deployment/bosh
+$ cd ${HOME}/workspace/paasta-5.5.0/deployment/paasta-deployment/bosh
 $ export CREDHUB_CLIENT=credhub-admin
 $ export CREDHUB_SECRET=$(bosh int --path /credhub_admin_client_secret {iaas}/creds.yml)
 $ export CREDHUB_CA_CERT=$(bosh int --path /credhub_tls/ca {iaas}/creds.yml)
@@ -540,14 +540,14 @@ Jumpbox는 BOSH VM에 접근하기 위한 인증을 적용하게 된다.
 BOSH VM에 이상이 있거나 상태를 체크할 때 Jumpbox를 활용하여 BOSH VM에 접근할 수 있다.
 
 ```
-$ cd ${HOME}/workspace/paasta-5.5/deployment/paasta-deployment/bosh
+$ cd ${HOME}/workspace/paasta-5.5.0/deployment/paasta-deployment/bosh
 $ bosh int {iaas}/creds.yml --path /jumpbox_ssh/private_key > jumpbox.key 
 $ chmod 600 jumpbox.key
 $ ssh jumpbox@{bosh_url} -i jumpbox.key
 ```
 
 ```
-ubuntu@inception:~/workspace/paasta-5.5/deployment/paasta-deployment/bosh$ ssh jumpbox@10.0.1.6 -i jumpbox.key
+ubuntu@inception:~/workspace/paasta-5.5.0/deployment/paasta-deployment/bosh$ ssh jumpbox@10.0.1.6 -i jumpbox.key
 Unauthorized use is strictly prohibited. All access and activity
 is subject to logging and monitoring.
 Welcome to Ubuntu 16.04.6 LTS (GNU/Linux 4.15.0-54-generic x86_64)

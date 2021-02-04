@@ -4,8 +4,8 @@
    ● [목적](#102)  
    　● [범위](#103)  
    　● [참고 자료](#104)  
-2. [PaaS-TA 5.5](#105)  
-3. [PaaS-TA 5.5 설치](#106)  
+2. [PaaS-TA 5.5.0](#105)  
+3. [PaaS-TA 5.5.0 설치](#106)  
    3.1. [Prerequisite](#107)  
    　3.2. [설치 파일 다운로드](#108)  
    　3.3. [Stemcell 업로드](#109)  
@@ -30,7 +30,7 @@
 
 ## Executive Summary
 
-본 문서는 PaaS-TA 5.5(이하 PaaS-TA)을 수동으로 설치하기 위한 가이드를 제공하는 데 그 목적이 있다.
+본 문서는 PaaS-TA 5.5.0(이하 PaaS-TA)을 수동으로 설치하기 위한 가이드를 제공하는 데 그 목적이 있다.
 
 # <div id='101'/>1.  문서 개요 
 
@@ -79,16 +79,16 @@ PaaS-TA 3.1 버전까지는 PaaS-TA Container, Controller를 각각의 deploymen
 ## <div id='108'/>3.2. 설치 파일 다운로드
 - PaaS-TA를 설치하기 위한 deployment가 존재하지 않는다면 다운로드 받는다
 ```
-$ mkdir -p ${HOME}/workspace/paasta-5.5/deployment
-$ cd ${HOME}/workspace/paasta-5.5/deployment
+$ mkdir -p ${HOME}/workspace/paasta-5.5.0/deployment
+$ cd ${HOME}/workspace/paasta-5.5.0/deployment
 $ git clone https://github.com/PaaS-TA/common.git
-$ cd ${HOME}/workspace/paasta-5.5/deployment
-$ git clone https://github.com/PaaS-TA/paasta-deployment.git -b working-5.5
+$ cd ${HOME}/workspace/paasta-5.5.0/deployment
+$ git clone https://github.com/PaaS-TA/paasta-deployment.git -b v5.5.0
 
 # paasta-deployment/paasta/ 경로에
 # ./operations/addons/(enable-component-syslog.yml, paasta-monitoring-agent.yml) 와 deployment-{IaaS}-monitoring.sh 가 없을 경우
 # 아래 예제대로 monitoring-deployment 를 git clone 받아 복사하여 놓는다.
-$ git clone https://github.com/PaaS-TA/monitoring-deployment.git -b dev-v5.5.0  # dev-v5.5.0 monitoring-deployment 구성
+$ git clone https://github.com/PaaS-TA/monitoring-deployment.git -b v5.5.0  # v5.5.0 monitoring-deployment 구성
 ```
 
 ## <div id='109'/>3.3. Stemcell 업로드
@@ -98,7 +98,7 @@ BOSH_Director_Name는 BOSH 설치 시 사용한 Director 명이고, IaaS에 배�
 
 - Stemcell 업로드 Script의 설정 수정
 
-> $ vi ~/workspace/paasta-5.5/deployment/paasta-deployment/bosh/upload-stemcell.sh
+> $ vi ~/workspace/paasta-5.5.0/deployment/paasta-deployment/bosh/upload-stemcell.sh
 ```                     
 #!/bin/bash
 STEMCELL_VERSION=621.94
@@ -124,7 +124,7 @@ fi
 - Stemcell 업로드 Script 실행
 
 ```
-$ cd ${HOME}/workspace/paasta-5.5/deployment/paasta-deployment/bosh
+$ cd ${HOME}/workspace/paasta-5.5.0/deployment/paasta-deployment/bosh
 $ ./upload-stemcell.sh
 ```
 
@@ -138,7 +138,7 @@ $ ./upload-stemcell.sh
   BOSH Linux OS 구성 릴리스를 이용하여 sysctl을 구성한다.  
 
   - Runtime Config 업데이트 Script 수정 (director_name)
-> $ vi ~/workspace/paasta-5.5/deployment/paasta-deployment/bosh/update-runtime-config.sh
+> $ vi ~/workspace/paasta-5.5.0/deployment/paasta-deployment/bosh/update-runtime-config.sh
 ```                     
 #!/bin/bash
 
@@ -150,7 +150,7 @@ bosh -e ${director_name} update-runtime-config -n --name=os-conf runtime-configs
 ```
 - Runtime Config 업데이트 Script 실행
 ```                     
-$ cd ${HOME}/workspace/paasta-5.5/deployment/paasta-deployment/bosh
+$ cd ${HOME}/workspace/paasta-5.5.0/deployment/paasta-deployment/bosh
 $ ./update-runtime-config.sh
 ```
 
@@ -164,7 +164,7 @@ $ ./update-runtime-config.sh
 ## <div id='1010'/>3.4. Cloud Config 설정
 
 PaaS-TA를 설치하기 위한 IaaS 관련 Network, Storage, VM 관련 설정을 Cloud Config로 정의한다.  
-PaaS-TA 설치 파일을 내려받으면 ${HOME}/workspace/paasta-5.5/deployment/paasta-deployment/cloud-config 디렉터리 이하에 IaaS별 Cloud Config 예제를 확인할 수 있으며, 예제를 참고하여 cloud-config.yml을 IaaS에 맞게 수정한다.  
+PaaS-TA 설치 파일을 내려받으면 ${HOME}/workspace/paasta-5.5.0/deployment/paasta-deployment/cloud-config 디렉터리 이하에 IaaS별 Cloud Config 예제를 확인할 수 있으며, 예제를 참고하여 cloud-config.yml을 IaaS에 맞게 수정한다.  
 PaaS-TA 배포 전에 Cloud Config를 BOSH에 적용해야 한다. 
 
 - AWS을 기준으로 한 cloud-config.yml 예제
@@ -484,7 +484,7 @@ vm_types:
 - Cloud Config 업데이트
 
 ```
-$ bosh -e {director_name} update-cloud-config ${HOME}/workspace/paasta-5.5/deployment/paasta-deployment/cloud-config/{iaas}-cloud-config.yml
+$ bosh -e {director_name} update-cloud-config ${HOME}/workspace/paasta-5.5.0/deployment/paasta-deployment/cloud-config/{iaas}-cloud-config.yml
 ```
 
 - Cloud Config 확인
@@ -530,7 +530,7 @@ Networks는 AZ 별 Subnet Network, DNS, Security Groups, Network ID를 정의한
   - Runtime Config 업데이트  
 
   ```  
-  $ cd ${HOME}/workspace/paasta-5.5/deployment/paasta-deployment/bosh
+  $ cd ${HOME}/workspace/paasta-5.5.0/deployment/paasta-deployment/bosh
   $ bosh -e {director_name} update-runtime-config -n runtime-configs/dns.yml
   ```
 
@@ -546,7 +546,7 @@ Networks는 AZ 별 Subnet Network, DNS, Security Groups, Network ID를 정의한
   - Runtime Config 업데이트  
 
   ```  
-  $ cd ${HOME}/workspace/paasta-5.5/deployment/paasta-deployment/bosh
+  $ cd ${HOME}/workspace/paasta-5.5.0/deployment/paasta-deployment/bosh
   $ bosh -e {director_name} update-runtime-config -n --name=os-conf runtime-configs/os-conf.yml
   ```
 
@@ -604,7 +604,7 @@ PaaS-TA를 설치할 때는 system_domain, paasta_admin_username, paasta_admin_p
 bosh_ip: "10.0.1.6"                        		# BOSH IP
 bosh_url: "http://10.0.1.6"				# BOSH URL (e.g. "https://00.000.0.0")
 bosh_client_admin_id: "admin"				# BOSH Client Admin ID
-bosh_client_admin_secret: "ert7na4jpewsczt"		# BOSH Client Admin Secret('echo $(bosh int ~/workspace/paasta-5.5/deployment/paasta-deployment/bosh/{iaas}/creds.yml —path /admin_password))' 명령어를 통해 확인 가능)
+bosh_client_admin_secret: "ert7na4jpewsczt"		# BOSH Client Admin Secret('echo $(bosh int ~/workspace/paasta-5.5.0/deployment/paasta-deployment/bosh/{iaas}/creds.yml —path /admin_password))' 명령어를 통해 확인 가능)
 bosh_director_port: 25555				# BOSH Director Port
 bosh_oauth_port: 8443					# BOSH OAuth Port
 bosh_version: 271.2					# BOSH version('bosh env' 명령어를 통해 확인 가능, on-demand service용, e.g. "271.2")
@@ -1036,7 +1036,7 @@ bosh -e {director_name} -d paasta -n deploy paasta-deployment.yml \   # PaaS-TA 
 - Shell script 파일에 실행 권한 부여
 
 ```
-$ chmod +x ${HOME}/workspace/paasta-5.5/deployment/paasta-deployment/paasta/*.sh
+$ chmod +x ${HOME}/workspace/paasta-5.5.0/deployment/paasta-deployment/paasta/*.sh
 ```
 
 
@@ -1044,7 +1044,7 @@ $ chmod +x ${HOME}/workspace/paasta-5.5/deployment/paasta-deployment/paasta/*.sh
 ## <div id='1030'/>3.7.  PaaS-TA 설치
 - IaaS 환경에 맞추어 Deploy 스크립트 파일의 설정을 수정한다. 
 
-> $ vi ${HOME}/workspace/paasta-5.5/deployment/paasta-deployment/paasta/deploy-aws-monitoring.sh  
+> $ vi ${HOME}/workspace/paasta-5.5.0/deployment/paasta-deployment/paasta/deploy-aws-monitoring.sh  
 
 ```
 bosh -e {director_name} -d paasta -n deploy paasta-deployment.yml \	# PaaS-TA Manifest File  
@@ -1065,7 +1065,7 @@ bosh -e {director_name} -d paasta -n deploy paasta-deployment.yml \	# PaaS-TA Ma
 - PaaS-TA 설치 시 Shell Script 파일 실행 (BOSH 로그인 필요)
 
 ```
-$ cd ${HOME}/workspace/paasta-5.5/deployment/paasta-deployment/paasta
+$ cd ${HOME}/workspace/paasta-5.5.0/deployment/paasta-deployment/paasta
 $ ./deploy-{IaaS}.sh
 ```
 
