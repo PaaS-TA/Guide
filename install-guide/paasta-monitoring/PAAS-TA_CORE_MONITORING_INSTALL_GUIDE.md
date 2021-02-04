@@ -83,7 +83,7 @@ $ mkdir -p ${HOME}/workspace/paasta-5.5.0/deployment
 $ cd ${HOME}/workspace/paasta-5.5.0/deployment
 $ git clone https://github.com/PaaS-TA/common.git
 $ cd ${HOME}/workspace/paasta-5.5.0/deployment
-$ git clone https://github.com/PaaS-TA/paasta-deployment.git -b working-5.5
+$ git clone https://github.com/PaaS-TA/paasta-deployment.git -b v5.5.0
 
 # paasta-deployment/paasta/ 경로에
 # ./operations/addons/(enable-component-syslog.yml, paasta-monitoring-agent.yml) 와 deployment-{IaaS}-monitoring.sh 가 없을 경우
