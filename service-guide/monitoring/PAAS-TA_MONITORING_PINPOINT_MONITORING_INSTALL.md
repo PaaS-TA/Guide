@@ -83,16 +83,16 @@ Pinpoint Server, HBase의 HBase Master, Collector , WebUI2로 최소사항을 �
 
 - PaaS-TA를 설치하기 위한 deployment가 존재하지 않는다면 다운로드 받는다
 ```
-$ cd ${HOME}/workspace/paasta-5.5/deployment
+$ cd ${HOME}/workspace/paasta-5.5.0/deployment
 $ git clone https://github.com/paas-ta/common.git –b v5.0.1
-$ git clone https://github.com/paas-ta/monitoring-deployment.git –b dev-v5.5.0
+$ git clone https://github.com/paas-ta/monitoring-deployment.git –b v5.5.0
 ```
 
 
 
 ## <div id='23'> 2.3. Pinpoint Monitoring 설치 환경설정
 
-${HOME}/workspace/paasta-5.5/deployment/monitoring-deployment/pinpoint-monitoring 이하 디렉터리에는 Pinpoint Monitoring 설치를 위한 Shell Script 파일이 존재한다.
+${HOME}/workspace/paasta-5.5.0/deployment/monitoring-deployment/pinpoint-monitoring 이하 디렉터리에는 Pinpoint Monitoring 설치를 위한 Shell Script 파일이 존재한다.
 	
 ### <div id='231'/>● common_vars.yml
 common 폴더에 있는 common_vars.yml PaaS-TA 및 각종 Service 설치시 적용하는 공통 변수 설정 파일이 존재한다.  
@@ -102,7 +102,7 @@ Pinpoint-Monitoring을 설치할 때는 saas_monitoring_url 값을 변경 하여
 # BOSH INFO
 bosh_url: "http://10.0.1.6"			# BOSH URL (e.g. "https://00.000.0.0")
 bosh_client_admin_id: "admin"			# BOSH Client Admin ID
-bosh_client_admin_secret: "ert7na4jpewscztsxz48"	# BOSH Client Admin Secret('echo $(bosh int ~/workspace/paasta-5.5/deployment/paasta-deployment/bosh/{iaas}/creds.yml --path /admin_password)' 명령어를 통해 확인 가능)
+bosh_client_admin_secret: "ert7na4jpewscztsxz48"	# BOSH Client Admin Secret('echo $(bosh int ~/workspace/paasta-5.5.0/deployment/paasta-deployment/bosh/{iaas}/creds.yml --path /admin_password)' 명령어를 통해 확인 가능)
 bosh_director_port: 25555			# BOSH Director Port
 bosh_oauth_port: 8443				# BOSH OAuth Port
 
@@ -214,7 +214,7 @@ echo 'y' | bosh -e micro-bosh -d pinpoint-monitoring deploy paasta-pinpoint.yml 
 	
 - 서버 환경에 맞추어 Deploy 스크립트 파일의 설정을 수정한다. 
 
-> $ vi ${HOME}/workspace/paasta-5.5/deployment/monitoring-deployment/pinpoint-monitoring/deploy-pinpoint.sh
+> $ vi ${HOME}/workspace/paasta-5.5.0/deployment/monitoring-deployment/pinpoint-monitoring/deploy-pinpoint.sh
 
 ```
 echo 'y' | bosh -e {director_name} -d pinpoint-monitoring deploy paasta-pinpoint.yml \
@@ -227,7 +227,7 @@ echo 'y' | bosh -e {director_name} -d pinpoint-monitoring deploy paasta-pinpoint
 - Pinpoint Monitoring 설치 Shell Script 파일 실행 (BOSH 로그인 필요)
 
 ```
-$ cd ~/workspace/paasta-5.5/deployment/monitoring-deployment/paasta-monitoring
+$ cd ~/workspace/paasta-5.5.0/deployment/monitoring-deployment/paasta-monitoring
 $ sh deploy-pinpoint.sh
 ```
 
