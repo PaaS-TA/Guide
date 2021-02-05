@@ -25,6 +25,17 @@
 - PaaS-TA 컨테이너에 App Type 배포
   - [PaaS-TA 포털](./install-guide/portal/PAAS-TA_PORTAL_SERVICE_APP_TYPE_INSTALL_GUIDE_V1.0.md)
 
+## Container-Platform 설치 가이드
+- 단독 배포
+  - [단독 배포 설치](https://github.com/PaaS-TA/paas-ta-container-platform/blob/master/install-guide/standalone/paas-ta-container-platform-standalone-deployment-guide-v1.0.md)
+  - [단독 배포용 Release 설치](https://github.com/PaaS-TA/paas-ta-container-platform/blob/master/install-guide/bosh/paas-ta-container-platform-bosh-deployment-spray-guide-v1.0.md)
+- Edge 배포
+  - [Edge 배포 설치](https://github.com/PaaS-TA/paas-ta-container-platform/blob/master/install-guide/edge/paas-ta-container-platform-edge-deployment-guide-v1.0.md)
+  - [Edge 배포용 Release 설치](https://github.com/PaaS-TA/paas-ta-container-platform/blob/master/install-guide/bosh/paas-ta-container-platform-bosh-deployment-edge-guide-v1.0.md)
+- CaaS 서비스 배포
+  - [단독 배포 설치](https://github.com/PaaS-TA/paas-ta-container-platform/blob/master/install-guide/standalone/paas-ta-container-platform-standalone-deployment-guide-v1.0.md)
+  - [CaaS 서비스용 Release 설치](https://github.com/PaaS-TA/paas-ta-container-platform/blob/master/install-guide/bosh/paas-ta-container-platform-bosh-deployment-caas-guide-v1.0.md)
+
 ## 서비스 설치 가이드
 **아래 서비스 설치 전에 BOSH, PaaS-TA, PaaS-TA 포털이 설치되어 있어야 한다.**
 
