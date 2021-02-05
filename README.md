@@ -56,7 +56,7 @@
 - 통합 개발 도구 설치
   - [배포파이프라인](./service-guide/tools/PAAS-TA_DELIVERY_PIPELINE_SERVICE_INSTALL_GUIDE_V1.0.md)
   - [형상관리](./service-guide/tools/PAAS-TA_SOURCE_CONTROL_SERVICE_INSTALL_GUIDE_V1.0.md)
-  - [Container 서비스](./service-guide/tools/PAAS-TA_CONTAINER_SERVICE_INSTALL_GUIDE_V2.0.md)
+  - (Deprecated) ~~[Container 서비스](./service-guide/tools/PAAS-TA_CONTAINER_SERVICE_INSTALL_GUIDE_V2.0.md)~~
   - [Logging 서비스](./service-guide/tools/PAAS-TA_LOGGING_SERVICE_INSTALL_GUIDE_V1.0.md)
   - [애플리케이션 Gateway 서비스](./service-guide/tools/PAAS-TA_APPLICATION_GATEWAY_SERVICE_INSTALL_GUIDE_V1.0.md)
   - [라이프사이클 관리 서비스](./service-guide/tools/PAAS-TA_LIFECYCLE_MANAGEMENT_SERVICE_INSTALL_GUIDE_V1.0.md)
