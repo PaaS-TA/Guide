@@ -1,8 +1,8 @@
 ## 💥 🚨 💥 Notice 💥 🚨 💥
 #### 릴리즈의 경로가 http://45.248.73.44/ 에서 https://nextcloud.paas-ta.org/ 로 변경되었습니다  
-#### 5.5.0 이하의 버전을 사용할 경우 해당 경로를 https://nextcloud.paas-ta.org/~ 로 변경해주세요
+#### 5.5.0 이하의 버전을 사용할 경우 해당 경로를 https://nextcloud.paas-ta.org/~ 로 변경이 필요합니다.
 
-# PaaS-TA 5.5.0 가이드 문서
+# PaaS-TA 5.5.1 가이드 문서
 
 
 ## 플랫폼 설치 가이드

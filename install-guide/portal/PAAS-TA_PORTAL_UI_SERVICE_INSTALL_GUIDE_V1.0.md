@@ -76,7 +76,7 @@ BOSH CLI v2 가 설치 되어 있지 않을 경우 먼저 BOSH2.0 설치 가이�
 
 ### <div id="2.2"/> 2.2. Stemcell 확인
 
-Stemcell 목록을 확인하여 서비스 설치에 필요한 Stemcell이 업로드 되어 있는 것을 확인한다.  (PaaS-TA 5.5.0 과 동일 stemcell 사용)
+Stemcell 목록을 확인하여 서비스 설치에 필요한 Stemcell이 업로드 되어 있는 것을 확인한다.  (PaaS-TA 5.5.1 과 동일 stemcell 사용)
 
 > $ bosh -e ${BOSH_ENVIRONMENT} stemcells
 
@@ -97,15 +97,15 @@ Succeeded
 
 서비스 설치에 필요한 Deployment를 Git Repository에서 받아 서비스 설치 작업 경로로 위치시킨다.  
 
-- Portal Deployment Git Repository URL : https://github.com/PaaS-TA/portal-deployment/tree/v5.1.0
+- Portal Deployment Git Repository URL : https://github.com/PaaS-TA/portal-deployment/tree/v5.1.1
 
 ```
 # Deployment 다운로드 파일 위치 경로 생성 및 설치 경로 이동
-$ mkdir -p ~/workspace/paasta-5.5.0/deployment
-$ cd ~/workspace/paasta-5.5.0/deployment
+$ mkdir -p ~/workspace/paasta-5.5.1/deployment
+$ cd ~/workspace/paasta-5.5.1/deployment
 
 # Deployment 파일 다운로드
-$ git clone https://github.com/PaaS-TA/portal-deployment.git -b v5.1.0
+$ git clone https://github.com/PaaS-TA/portal-deployment.git -b v5.1.1
 ```
 
 ### <div id="2.4"/> 2.4. Deployment 파일 수정
@@ -178,13 +178,13 @@ Succeeded
 - common_vars.yml을 서버 환경에 맞게 수정한다. 
 - Portal-UI에서 사용하는 변수는 system_domain, paasta_api_version, uaa_client_portal_secret 이다.
 
-> $ vi ~/workspace/paasta-5.5.0/deployment/common/common_vars.yml
+> $ vi ~/workspace/paasta-5.5.1/deployment/common/common_vars.yml
 ```
 # BOSH INFO
 bosh_ip: "10.0.1.6"				# BOSH IP
 bosh_url: "https://10.0.1.6"			# BOSH URL (e.g. "https://00.000.0.0")
 bosh_client_admin_id: "admin"			# BOSH Client Admin ID
-bosh_client_admin_secret: "ert7na4jpew"		# BOSH Client Admin Secret('echo $(bosh int ~/workspace/paasta-5.5.0/deployment/paasta-deployment/bosh/{iaas}/creds.yml --path /admin_password)' 명령어를 통해 확인 가능)
+bosh_client_admin_secret: "ert7na4jpew"		# BOSH Client Admin Secret('echo $(bosh int ~/workspace/paasta-5.5.1/deployment/paasta-deployment/bosh/{iaas}/creds.yml --path /admin_password)' 명령어를 통해 확인 가능)
 bosh_director_port: 25555			# BOSH director port
 bosh_oauth_port: 8443				# BOSH oauth port
 bosh_version: 271.2				# BOSH version('bosh env' 명령어를 통해 확인 가능, on-demand service용, e.g. "271.2")
@@ -234,7 +234,7 @@ abacus_url: "http://abacus.61.252.53.248.xip.io"	# abacus url (e.g. "http://abac
 
 - Deployment YAML에서 사용하는 변수 파일을 서버 환경에 맞게 수정한다.
 
-> $ vi ~/workspace/paasta-5.5.0/deployment/portal-deployment/portal-ui/vars.yml  
+> $ vi ~/workspace/paasta-5.5.1/deployment/portal-deployment/portal-ui/vars.yml  
 ```
 # STEMCELL INFO
 stemcell_os: "ubuntu-xenial"                                             # stemcell os
@@ -274,10 +274,10 @@ webuser_automaticapproval: false                                         # webus
 user_app_size: 0                                                         # webuser : 사용자 myApp 배포시 용량제한 여부 (값이 0일경우 무제한)
 
 # ETC INFO
-portal_default_api_name: "PaaS-TA 5.5.0"                                 # ETC : default api name
+portal_default_api_name: "PaaS-TA 5.5.1"                                 # ETC : default api name
 portal_default_api_url: "http://<PORTAL-API-HAPROXY-PUBLIC-IP>:2225"     # ETC : default api url
 portal_default_header_auth: "Basic YWRtaW46b3BlbnBhYXN0YQ=="             # ETC : default header auth
-portal_default_api_desc: "PaaS-TA 5.5.0 install infra"                   # ETC : default api description
+portal_default_api_desc: "PaaS-TA 5.5.1 install infra"                   # ETC : default api description
 ```
 
 ### <div id="2.5"/> 2.5. 서비스 설치
@@ -285,7 +285,7 @@ portal_default_api_desc: "PaaS-TA 5.5.0 install infra"                   # ETC :
 - 서버 환경에 맞추어 Deploy 스크립트 파일의 VARIABLES 설정을 수정하고, Option file을 추가할지 선택한다.  
      (선택) -o operations/use-compiled-releases.yml (ubuntu-xenial/621.94로 컴파일 된 릴리즈 사용)  
 
-> $ vi ~/workspace/paasta-5.5.0/deployment/portal-deployment/portal-ui/deploy.sh
+> $ vi ~/workspace/paasta-5.5.1/deployment/portal-deployment/portal-ui/deploy.sh
 ```
 #!/bin/bash
 
@@ -303,7 +303,7 @@ bosh -e ${BOSH_ENVIRONMENT} -n -d portal-ui deploy portal-ui.yml \
 
 - 서비스를 설치한다.  
 ```
-$ cd ~/workspace/paasta-5.5.0/deployment/portal-deployment/portal-ui   
+$ cd ~/workspace/paasta-5.5.1/deployment/portal-deployment/portal-ui   
 $ sh ./deploy.sh  
 ``` 
 
@@ -311,14 +311,14 @@ $ sh ./deploy.sh
 
 - 서비스 설치에 필요한 릴리즈 파일을 다운로드 받아 Local machine의 서비스 설치 작업 경로로 위치시킨다.  
   
-  - 설치 릴리즈 파일 다운로드 : [paasta-portal-ui-release-2.4.0.tgz](http://45.248.73.44/index.php/s/sEF75LCgqCXgF4s/download)
+  - 설치 릴리즈 파일 다운로드 : [paasta-portal-ui-release-2.4.0.tgz](https://nextcloud.paas-ta.org/index.php/s/sEF75LCgqCXgF4s/download)
 
 ```
 # 릴리즈 다운로드 파일 위치 경로 생성
-$ mkdir -p ~/workspace/paasta-5.5.0/release/portal
+$ mkdir -p ~/workspace/paasta-5.5.1/release/portal
 
 # 릴리즈 파일 다운로드 및 파일 경로 확인
-$ ls ~/workspace/paasta-5.5.0/release/portal
+$ ls ~/workspace/paasta-5.5.1/release/portal
 paasta-portal-ui-release-2.4.0.tgz
 ```
   
@@ -326,7 +326,7 @@ paasta-portal-ui-release-2.4.0.tgz
      (추가) -o operations/use-offline-releases.yml (미리 다운받은 offline 릴리즈 사용)  
      (추가) -v releases_dir="<RELEASE_DIRECTORY>"  
      
-> $ vi ~/workspace/paasta-5.5.0/deployment/portal-deployment/portal-ui/deploy.sh
+> $ vi ~/workspace/paasta-5.5.1/deployment/portal-deployment/portal-ui/deploy.sh
   
 ```
 #!/bin/bash
@@ -342,13 +342,13 @@ bosh -e ${BOSH_ENVIRONMENT} -n -d portal-ui deploy portal-ui.yml \
     -o operations/${CURRENT_IAAS}-network.yml \
     -l ${COMMON_VARS_PATH} \
     -l vars.yml \
-    -v releases_dir="/home/ubuntu/workspace/paasta-5.5.0/release"  
+    -v releases_dir="/home/ubuntu/workspace/paasta-5.5.1/release"  
 
 ```  
 
 - 서비스를 설치한다.  
 ```
-$ cd ~/workspace/paasta-5.5.0/deployment/portal-deployment/portal-ui  
+$ cd ~/workspace/paasta-5.5.1/deployment/portal-deployment/portal-ui  
 $ sh ./deploy.sh  
 ```  
 
@@ -395,8 +395,8 @@ $ cf target -o portal -s system
 
 - Portal SSH 다운로드 및 배포
 ```
-$ cd ~/workspace/paasta-5.5.0/release/portal
-$ wget --content-disposition http://45.248.73.44/index.php/s/awPjYDYCMiHY7yF/download
+$ cd ~/workspace/paasta-5.5.1/release/portal
+$ wget --content-disposition https://nextcloud.paas-ta.org/index.php/s/awPjYDYCMiHY7yF/download
 $ unzip portal-ssh.zip
 $ cd portal-ssh
 $ cf push

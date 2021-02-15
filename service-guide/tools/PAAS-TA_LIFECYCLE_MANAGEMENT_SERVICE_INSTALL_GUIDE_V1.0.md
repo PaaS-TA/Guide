@@ -55,7 +55,7 @@ app-lifecycle | N | 1 | 4 |  Root 10G + Persistent disk 20G
 
 ### <div id="2.2"/> 2.2. Stemcell 확인  
 
-Stemcell 목록을 확인하여 서비스 설치에 필요한 Stemcell이 업로드 되어 있는 것을 확인한다.  (PaaS-TA 5.5.0 과 동일 stemcell 사용)
+Stemcell 목록을 확인하여 서비스 설치에 필요한 Stemcell이 업로드 되어 있는 것을 확인한다.  (PaaS-TA 5.5.1 과 동일 stemcell 사용)
 
 > $ bosh -e micro-bosh stemcells  
 
@@ -76,15 +76,15 @@ Succeeded
 
 서비스 설치에 필요한 Deployment를 Git Repository에서 받아 서비스 설치 작업 경로로 위치시킨다.  
 
-- Service Deployment Git Repository URL : https://github.com/PaaS-TA/service-deployment/tree/v5.0.5
+- Service Deployment Git Repository URL : https://github.com/PaaS-TA/service-deployment/tree/v5.0.6
 
 ```
 # Deployment 다운로드 파일 위치 경로 생성 및 설치 경로 이동
-$ mkdir -p ~/workspace/paasta-5.5.0/deployment
-$ cd ~/workspace/paasta-5.5.0/deployment
+$ mkdir -p ~/workspace/paasta-5.5.1/deployment
+$ cd ~/workspace/paasta-5.5.1/deployment
 
 # Deployment 파일 다운로드
-$ git clone https://github.com/PaaS-TA/service-deployment.git -b v5.0.5
+$ git clone https://github.com/PaaS-TA/service-deployment.git -b v5.0.6
 
 # common_vars.yml 파일 다운로드(common_vars.yml가 존재하지 않는다면 다운로드)
 $ git clone https://github.com/PaaS-TA/common.git
@@ -160,13 +160,13 @@ Succeeded
 - common_vars.yml을 서버 환경에 맞게 수정한다. 
 - Lifecycle 서비스에서 사용하는 변수는 bosh_url, bosh_client_admin_id, bosh_client_admin_secret, bosh_director_port, bosh_oauth_port이다.
 
-> $ vi ~/workspace/paasta-5.5.0/deployment/common/common_vars.yml
+> $ vi ~/workspace/paasta-5.5.1/deployment/common/common_vars.yml
 ```
 # BOSH INFO
 bosh_ip: "10.0.1.6"				# BOSH IP
 bosh_url: "https://10.0.1.6"			# BOSH URL (e.g. "https://00.000.0.0")
 bosh_client_admin_id: "admin"			# BOSH Client Admin ID
-bosh_client_admin_secret: "ert7na4jpew48"	# BOSH Client Admin Secret('echo $(bosh int ~/workspace/paasta-5.5.0/deployment/paasta-deployment/bosh/{iaas}/creds.yml --path /admin_password)' 명령어를 통해 확인 가능)
+bosh_client_admin_secret: "ert7na4jpew48"	# BOSH Client Admin Secret('echo $(bosh int ~/workspace/paasta-5.5.1/deployment/paasta-deployment/bosh/{iaas}/creds.yml --path /admin_password)' 명령어를 통해 확인 가능)
 bosh_director_port: 25555			# BOSH director port
 bosh_oauth_port: 8443				# BOSH oauth port
 bosh_version: 271.2				# BOSH version('bosh env' 명령어를 통해 확인 가능, on-demand service용, e.g. "271.2")
@@ -215,7 +215,7 @@ abacus_url: "http://abacus.61.252.53.248.xip.io"	# abacus url (e.g. "http://abac
 
 - Deployment YAML에서 사용하는 변수 파일을 서버 환경에 맞게 수정한다.
 
-> $ vi ~/workspace/paasta-5.5.0/deployment/service-deployment/lifecycle-service/vars.yml
+> $ vi ~/workspace/paasta-5.5.1/deployment/service-deployment/lifecycle-service/vars.yml
 
 ```
 # STEMCELL
@@ -262,7 +262,7 @@ app_lifecycle_serviceadmin_password: "<APP_LIFECYCLE_SERVICEADMIN_INIT_PASSWORD>
 - 서버 환경에 맞추어 Deploy 스크립트 파일의 VARIABLES 설정을 수정하고, Option file을 추가할지 선택한다.  
      (선택) -o operations/use-compiled-releases.yml (ubuntu-xenial/621.94로 컴파일 된 릴리즈 사용) 
 
-> $ vi ~/workspace/paasta-5.5.0/deployment/service-deployment/lifecycle-service/deploy.sh
+> $ vi ~/workspace/paasta-5.5.1/deployment/service-deployment/lifecycle-service/deploy.sh
 
 ```
 #!/bin/bash
@@ -281,7 +281,7 @@ bosh -e ${BOSH_ENVIRONMENT} -n -d lifecycle-service deploy --no-redact lifecycle
 
 - 서비스를 설치한다.  
 ```
-$ cd ~/workspace/paasta-5.5.0/deployment/service-deployment/lifecycle-service
+$ cd ~/workspace/paasta-5.5.1/deployment/service-deployment/lifecycle-service
 $ sh ./deploy.sh  
 ```  
 
@@ -293,10 +293,10 @@ $ sh ./deploy.sh
 
 ```
 # 릴리즈 다운로드 파일 위치 경로 생성
-$ mkdir -p ~/workspace/paasta-5.5.0/release/service
+$ mkdir -p ~/workspace/paasta-5.5.1/release/service
 
 # 릴리즈 파일 다운로드 및 파일 경로 확인
-$ ls ~/workspace/paasta-5.5.0/release/service
+$ ls ~/workspace/paasta-5.5.1/release/service
 paasta-app-lifecycle-service-release.tgz
 ```
   
@@ -304,7 +304,7 @@ paasta-app-lifecycle-service-release.tgz
      (추가) -o operations/use-offline-releases.yml (미리 다운받은 offline 릴리즈 사용)  
      (추가) -v releases_dir="<RELEASE_DIRECTORY>"  
      
-> $ vi ~/workspace/paasta-5.5.0/deployment/service-deployment/lifecycle-service/deploy.sh
+> $ vi ~/workspace/paasta-5.5.1/deployment/service-deployment/lifecycle-service/deploy.sh
 
 ```
 #!/bin/bash
@@ -319,12 +319,12 @@ bosh -e ${BOSH_ENVIRONMENT} -n -d lifecycle-service deploy --no-redact lifecycle
     -o operations/${CURRENT_IAAS}-network.yml \
     -l ${COMMON_VARS_PATH} \
     -l vars.yml \
-    -v releases_dir="/home/ubuntu/workspace/paasta-5.5.0/release"  
+    -v releases_dir="/home/ubuntu/workspace/paasta-5.5.1/release"  
 ```  
 
 - 서비스를 설치한다.  
 ```
-$ cd ~/workspace/paasta-5.5.0/deployment/service-deployment/lifecycle-service
+$ cd ~/workspace/paasta-5.5.1/deployment/service-deployment/lifecycle-service
 $ sh ./deploy.sh  
 ```  
 
