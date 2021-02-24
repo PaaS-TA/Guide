@@ -23,11 +23,13 @@
 　　　　● [deploy-aws-monitoring.sh](#3.3.4.3.1)  
 　　　　● [deploy-openstack-monitoring.sh](#3.3.4.3.2)  
 　　3.3.5. [BOSH 설치](#3.3.5)  
-　　3.3.6. [BOSH 로그인](#3.3.6)  
-　　3.3.7. [CredHub](#3.3.7)  
-　　　3.3.7.1. [CredHub CLI 설치](#3.3.7.1)  
-　　　3.3.7.2. [CredHub 로그인](#3.3.7.2)  
-　　3.3.8. [Jumpbox](#3.3.8)  
+　　3.3.6. [BOSH 설치 - 다운로드 된 Release 파일 이용 방식](#3.3.6)  
+　　3.3.7. [BOSH 로그인](#3.3.7)  
+　　3.3.8. [CredHub](#3.3.8)  
+　　　3.3.8.1. [CredHub CLI 설치](#3.3.8.1)  
+　　　3.3.8.2. [CredHub 로그인](#3.3.8.2)  
+　　3.3.9. [Jumpbox](#3.3.9)  
+　　3.3.10. [BOSH 로그인 생성 스크립트](#3.3.10)
 
 ## Executive Summary
 
@@ -56,10 +58,12 @@ BOSH는 초기에 Cloud Foundry PaaS를 위해 개발되었지만, 현재는 Jen
 
 BOSH가 지원하는 IaaS는 VMware vSphere, Google Cloud Platform, Amazon Web Services EC2, Microsoft Azure, OpenStack, Alibaba Cloud가 있다.  
 PaaS-TA는 VMware vSphere, Google Cloud Platform, Amazon Web Services EC2, OpenStack, Microsoft Azure 등의 IaaS를 지원한다.  
-현재 PaaS-TA 5.5에서 검증한 IaaS 환경은 AWS, OpenStack 환경이다.
+
+현재 PaaS-TA 5.5.0에서 검증한 IaaS 환경은 AWS, OpenStack 환경이다.
 
 PaaS-TA 3.1 버전까지는 Cloud Foundry BOSH1을 기준으로 설치했지만, PaaS-TA 3.5 버전부터 BOSH2를 기준으로 설치하였다.  
-PaaS-TA 5.5는 Cloud Foundry에서 제공하는 bosh-deployment를 활용하여 BOSH를 설치한다.
+PaaS-TA 5.5.0는 Cloud Foundry에서 제공하는 bosh-deployment를 활용하여 BOSH를 설치한다.
+
 
 BOSH2는 BOSH2 CLI를 통하여 BOSH와 PaaS-TA를 모두 생성한다.  
 bosh-deployment를 이용하여 BOSH를 생성한 후, paasta-deployment로 PaaS-TA를 설치한다.  
@@ -109,6 +113,20 @@ BOSH 및 PaaS-TA 설치를 위해 Inception 서버에 구성해야 할 컴포넌
 
 - 본 설치 가이드는 Ubuntu 18.04 버전을 기준으로 한다.  
 
+- IaaS Security Group의 열어줘야할 Port를 설정한다.
+
+|포트|비고|
+|---|---|
+|22|BOSH 사용|
+|6868|BOSH 사용|
+|25555|BOSH 사용|
+|53|PaaS-TA 사용|
+|68|PaaS-TA 사용|
+|80|PaaS-TA 사용|
+|443|PaaS-TA 사용|
+|4443|PaaS-TA 사용|
+
+
 - IaaS Security Group의 inbound 의 ICMP types 13 (timestamp request), types 14 (timestamp response) Rule을 비활성화 한다. (CVE-1999-0524 ICMP timestamp response 보안 이슈 적용)  
 
   예 - AWS security group config)  
@@ -132,6 +150,8 @@ $ sudo apt install -y libcurl4-openssl-dev gcc g++ build-essential zlibc zlib1g-
 - BOSH CLI 설치
 
 ```
+$ mkdir -p ~/workspace
+$ cd ~/workspace
 $ sudo apt update
 $ curl -Lo ./bosh https://github.com/cloudfoundry/bosh-cli/releases/download/v6.4.1/bosh-cli-6.4.1-linux-amd64
 $ chmod +x ./bosh
@@ -147,13 +167,14 @@ BOSH 인증서는 BOSH 내부 Component 간의 통신 시 필요한 certificate�
 BOSH2 CLI 6.1 이상 버전은 create-env의 config-server를 통해 생성된 인증서를 1년 이상 구성할 수 있다.
 
 BOSH2 CLI 6.0 이하 버전 사용 시, 인증서 기간을 늘리고 싶다면 BOSH CLI 소스를 다운로드해 컴파일하여 사용해야 한다.  
+BOSH2 CLI 버전은 bosh -v로 확인이 가능하다.   
 소스 컴파일 방법은 다음 가이드를 참고한다.  
 
 - 소스 build 전제 조건 :: Ubuntu, go 1.9.2 버전 이상
 
 ```
-$ mkdir -p ${HOME}/workspace/bosh-cli/src/
-$ cd ${HOME}/workspace/bosh-cli
+$ mkdir -p ~/workspace/bosh-cli/src/
+$ cd ~/workspace/bosh-cli
 
 $ export GOPATH=$PWD
 $ export PATH=$GOPATH/bin:$PATH
@@ -178,44 +199,49 @@ $ bosh -version
 
 - BOSH를 설치하기 위한 deployment가 존재하지 않는다면 다운로드 받는다
 ```
-$ mkdir -p ${HOME}/workspace/paasta-5.5.0/deployment
-$ cd ${HOME}/workspace/paasta-5.5.0/deployment
+$ mkdir -p ~/workspace/paasta-5.5.0/deployment
+$ cd ~/workspace/paasta-5.5.0/deployment
 $ git clone https://github.com/PaaS-TA/paasta-deployment.git -b v5.5.0
 
 # bosh, paasta 모두 common/common_vars.yml 을 사용한다. 다운로드 받는다.
-# cd ${HOME}/workspace/paasta-5.5.0/deployment 
+$ cd ~/workspace/paasta-5.5.0/deployment 
 $ git clone -b {TagVersion} https://github.com/PaaS-TA/common.git
+
+# monitoirng 을 위한 deployment 를 다운로드 받는다.  
+$ cd ~/workspace/paasta-5.5.0/deployment   
+$ git clone -b {TagVersion} https://github.com/PaaS-TA/monitoring-deployment.git
 ```
 
-- paasta/deployment/paasta-deployment 이하 디렉터리
+- paasta/deployment/paasta-deployment 이하 폴더 확인
 
 ```
-$ cd ${HOME}/workspace/paasta-5.5.0/deployment/paasta-deployment
+$ cd ~/workspace/paasta-5.5.0/deployment/paasta-deployment
 $ ls
-bosh  cloud-config  paasta
+README.md  bosh  cloud-config  paasta
 ```
 
 <table>
 <tr>
 <td>bosh</td>
-<td>BOSH 설치를 위한 manifest 및 설치 파일이 존재하는 디렉터리</td>
+<td>BOSH 설치를 위한 manifest 및 설치 파일이 존재하는 폴더</td>
 </tr>
 <tr>
 <td>cloud-config</td>
-<td>PaaS-TA 설치를 위한 IaaS network, storage, vm 관련 설정 파일이 존재하는 디렉터리</td>
+<td>PaaS-TA 설치를 위한 IaaS network, storage, vm 관련 설정 파일이 존재하는 폴더</td>
 </tr>
 <tr>
 <td>paasta</td>
-<td>PaaS-TA 설치를 위한 manifest 및 설치 파일이 존재하는 디렉터리</td>
+<td>PaaS-TA 설치를 위한 manifest 및 설치 파일이 존재하는 폴더</td>
 </tr>
 </table>
 
 
 ### <div id='3.3.4'/>3.3.4.    BOSH 설치 파일
 
-${HOME}/workspace/paasta-5.5.0/deployment/paasta-deployment/bosh 이하 디렉터리에는 BOSH 설치를 위한 IaaS별 Shell Script 파일이 존재한다.  
+~/workspace/paasta-5.5.0/deployment/paasta-deployment/bosh 폴더에는 BOSH 설치를 위한 IaaS별 Shell Script 파일이 존재한다.  
+
 Shell Script 파일을 이용하여 BOSH를 설치한다.
-파일명은 deploy-{IaaS}.sh 로 만들어졌다.  
+파일명은 deploy-{IaaS}-monitoring.sh 로 만들어졌다.  
 또한 {IaaS}-vars.yml을 수정하여 BOSH 설치시 적용하는 변수을 설정할 수 있다.
 
 <table>
@@ -229,11 +255,11 @@ Shell Script 파일을 이용하여 BOSH를 설치한다.
 </tr>
 <tr>
 <td>deploy-aws-monitoring.sh</td>
-<td>AWS 환경에 monitoring 을 적용한 BOSH 설치를 위한 Shell Script 파일</td>
+<td>AWS 환경에 BOSH 설치를 위한 Shell Script 파일. 존재하지 않는다면 git clone 해두었던 .../monitoring-deployment/bosh-addon/ 에서 복사해 놓는다.</td>
 </tr>
 <tr>
 <td>deploy-openstack-monitoring.sh</td>
-<td>OpenStack 환경에 monitoring 을 적용한 BOSH 설치를 위한 Shell Script 파일</td>
+<td>OpenStack 환경에 BOSH 설치를 위한 Shell Script 파일. 존재하지 않는다면 git clone 해두었던 .../monitoring-deployment/bosh-addon/ 에서 복사해 놓는다.</td>
 </tr>
 <tr>
 <td>bosh.yml</td>
@@ -254,7 +280,7 @@ bosh_client_admin_id: "admin"				# Bosh Client Admin ID
 private_cidr: "10.0.1.0/24"				# Private IP Range
 private_gw: "10.0.1.1"					# Private IP Gateway
 bosh_url: "10.0.1.6"					# Private IP 
-inception_os_user_name: "ubuntu"			# Home User Name
+releases_dir: "/home/ubuntu/workspace/paasta-5.5.0/release"	# Release Directory (offline으로 릴리즈 다운받아 사용시 설정)
 director_name: "micro-bosh"				# BOSH Director Name
 access_key_id: "XXXXXXXXXXXXXXX"			# AWS Access Key
 secret_access_key: "XXXXXXXXXXXXX"			# AWS Secret Key
@@ -263,7 +289,7 @@ az: "ap-northeast-2a"					# AWS AZ Zone
 default_key_name: "aws-paasta.pem"			# AWS Key Name
 default_security_groups: ["bosh"]			# AWS Security-Group
 subnet_id: "paasta-subnet"				# AWS Subnet
-private_key: "~/.ssh/aws-paasta.pem"			# SSH Private Key Path
+private_key: "~/.ssh/aws-paasta.pem"			# SSH Private Key Path (해당 IaaS에 접근권한을 가진 Private key의 경로)
 
 # MONITORING VARIABLE(PaaS-TA Monitoring을 설치할 경우 향후 설치할 VM의 값으로 미리 수정)
 metric_url: "xx.xx.xxx.xxx"				# PaaS-TA Monitoring InfluxDB IP
@@ -277,7 +303,7 @@ syslog_transport: "relp"				# Logsearch Protocol
 ```
 # BOSH VARIABLE
 bosh_client_admin_id: "admin"				# Bosh Client Admin ID
-inception_os_user_name: "ubuntu"			# Home User Name
+releases_dir: "/home/ubuntu/workspace/paasta-5.5.0/release"	# Release Directory (offline으로 릴리즈 다운받아 사용시 설정)
 director_name: "micro-bosh"				# BOSH Director Name
 private_cidr: "10.0.1.0/24"				# Private IP Range
 private_gw: "10.0.1.1"					# Private IP Gateway
@@ -291,8 +317,8 @@ openstack_password: "XXXXXX"				# Openstack User Password
 openstack_username: "XXXXXX"				# Openstack User Name
 openstack_domain: "XXXXXXX"				# Openstack Domain Name
 openstack_project: "PaaSTA"				# Openstack Project
-private_key: "~/.ssh/id_rsa.pem"			# Openstack Region
-region: "RegionOne"					# SSH Private Key Path
+private_key: "~/.ssh/id_rsa.pem"			# SSH Private Key Path (해당 IaaS에 접근권한을 가진 Private key의 경로)
+region: "RegionOne"					# Openstack Region
 
 # MONITORING VARIABLE(PaaS-TA Monitoring을 설치할 경우 향후 설치할 VM의 값으로 미리 수정)
 metric_url: "10.0.161.101"				# PaaS-TA Monitoring InfluxDB IP
@@ -321,8 +347,32 @@ syslog_transport: "relp"				# Logsearch Protocol
 <td>CredHub 적용</td>
 </tr>
 <tr>
-<td>jumpbox.yml</td>
-<td>Jumpbox 적용</td>
+<td>jumpbox-user.yml</td>
+<td>Jumpbox-user 적용</td>
+</tr>
+<tr>
+<td>cce.yml</td>
+<td>CCE 조치 적용</td>
+</tr>
+<tr>
+<td>use-offline-release.yml</td>
+<td>bosh.yml 에서 사용되는 릴리즈를 오프라인에 저장된 릴리즈로 사용</td>
+</tr>
+<tr>
+<td>use-offline-release-{IaaS}.yml</td>
+<td>{IaaS}/cpi.yml에서 사용되는 릴리즈를 오프라인에 저장된 릴리즈로 사용</td>
+</tr>
+<tr>
+<td>use-offline-release-cce.yml</td>
+<td>cce.yml에서 사용되는 릴리즈를 오프라인에 저장된 릴리즈로 사용</td>
+</tr>
+<tr>
+<td>use-offline-release-jumpbox-user.yml</td>
+<td>jumpbox-user.yml에서 사용되는 릴리즈를 오프라인에 저장된 릴리즈로 사용</td>
+</tr>
+<tr>
+<td>use-offline-release-uaa.yml</td>
+<td>uaa.yml에서 사용되는 릴리즈를 오프라인에 저장된 릴리즈로 사용</td>
 </tr>
 </table>
 
@@ -347,7 +397,7 @@ BOSH 설치 Option은 아래와 같다.
 </tr>   
 <tr>
 <td>-o</td>
-<td>BOSH 설치 시 적용하는 Operation 파일을 설정할 경우 사용한다. IaaS별 CPI 또는 Jumpbox, CredHub 등의 설정을 적용할 수 있다.</td>
+<td>BOSH 설치 시 적용하는 Operation 파일을 설정할 경우 사용한다. IaaS별 CPI 또는 Jumpbox-user, CredHub 등의 설정을 적용할 수 있다.</td>
 </tr>
 <tr>
 <td>-v</td>
@@ -364,13 +414,13 @@ BOSH 설치 Option은 아래와 같다.
 </tr>
 <tr>
 <td>paasta-addon/paasta-monitoring-agent.yml</td>
-<td>PaaS-TA Monitoring Agent 적용</td>
+<td>PaaS-TA Monitoring Agent 적용. 존재하지 않는다면 git clone 해 두었던 .../monitoring-deployment/bosh-addon/paasta-addon/ 에서 복사해 온다.</td>
 <td>Requries value: -v metric_url</td>
 </tr>
 <tr>
 <td>paasta-addon/use-compiled-releases-monitoring-agent.yml</td>
 <td>컴파일 된 파일을 미리 다운로드 후 오프라인 방식으로 PaaS-TA Monitoring Agent의 설치.
-deploey-{IaaS}-monitoring.yml 파일과 use-compiled-releases-monitoring-agent.yml 내용 수정 필요 </td>
+deploey-{IaaS}-monitoring.yml 파일과 use-compiled-releases-monitoring-agent.yml 내용 수정 필요. 존재하지 않는다면 git clone 해 두었던 .../monitoring-deployment/bosh-addon/paasta-addon/ 에서 복사해 온다.</td>
 <td>Requries value: -v metric_url</td>
 </tr>
 <tr>
@@ -385,67 +435,167 @@ Syslog Agent는 BOSH VM의 log 정보를 logsearch의 ls-router에 전송하는 
 BOSH 설치 전에 paasta-monitoring의 InfluxDB IP를 metric_url로 사용하기 위해 사전에 정의해야 한다.
 마찬가지로 logsearch의 ls-router IP도 syslog_address로 연동하기 위해 사전에 정의해야 한다.
 
-
 ##### <div id='3.3.4.3.1'/>● deploy-aws-monitoring.sh
+
 ```
 bosh create-env bosh.yml \                         
-	--state=aws/state.json \			# BOSH Latest Running State, 설치 시 생성, Backup 필요  
-	--vars-store=aws/creds.yml \			# BOSH Credentials and Certs, 설치 시 생성, Backup 필요   
-	-o aws/cpi.yml \				# AWS CPI 적용  
-	-o uaa.yml \					# UAA 적용  
-	-o credhub.yml \				# CredHub 적용  
-	-o jumpbox-user.yml \				# Jumpbox 적용  
+	--state=aws/state.json \			# BOSH Latest Running State, 설치 시 생성, Backup 필요
+	--vars-store=aws/creds.yml \			# BOSH Credentials and Certs, 설치 시 생성, Backup 필요 
+	-o aws/cpi.yml \				# AWS CPI 적용
+	-o uaa.yml \					# UAA 적용      
+	-o cce.yml \					# CCE 조치 적용
+	-o credhub.yml \				# CredHub 적용    
+	-o jumpbox-user.yml \				# Jumpbox-user 적용  
 	-o syslog.yml \					# [MONITORING] Monitoring Logging Agent 적용  
-	-o paasta-addon/paasta-monitoring-agent.yml \	# [MONITORING] Monitoring Metric Agent 적용  
- 	-l aws-vars.yml					# AWS 환경에 BOSH 설치시 적용하는 변수 설정 파일  
+	-o paasta-addon/paasta-monitoring-agent.yml \	# [MONITORING] Monitoring Metric Agent 적용
+ 	-l aws-vars.yml					# AWS 환경에 BOSH 설치시 적용하는 변수 설정 파일
 ```
 
 ##### <div id='3.3.4.3.2'/>● deploy-openstack-monitoring.sh
 
 ```
 bosh create-env bosh.yml \                       
-	--state=openstack/state.json \			# BOSH Latest Running State, 설치 시 생성, Backup 필요  
-	--vars-store=openstack/creds.yml \		# BOSH Credentials and Certs, 설치 시 생성, Backup 필요  
-	-o openstack/cpi.yml \				# Openstack CPI 적용  
-	-o uaa.yml \					# UAA 적용  
-	-o credhub.yml \				# CredHub 적용  
-	-o jumpbox-user.yml \				# Jumpbox 적용  
+	--state=openstack/state.json \			# BOSH Latest Running State, 설치 시 생성, Backup 필요
+	--vars-store=openstack/creds.yml \		# BOSH Credentials and Certs, 설치 시 생성, Backup 필요
+	-o openstack/cpi.yml \				# Openstack CPI 적용
+	-o uaa.yml \					# UAA 적용
+	-o credhub.yml \				# CredHub 적용
+	-o jumpbox-user.yml \				# Jumpbox-user 적용
 	-o openstack/disable-readable-vm-names.yml \	# VM 명을 UUIDs로 적용  
 	-o syslog.yml \				# [MONITORING] Monitoring Logging Agent 적용  
 	-o paasta-addon/paasta-monitoring-agent.yml \	# [MONITORING] Monitoring Metric Agent 적용  
-	-l openstack-vars.yml				# OpenStack 환경에 BOSH 설치시 적용하는 변수 설정 파일  
+	-l openstack-vars.yml				# OpenStack 환경에 BOSH 설치시 적용하는 변수 설정 파일
 ```
 
 
 - Shell Script 파일에 실행 권한 부여
 
 ```
-$ chmod +x ${HOME}/workspace/paasta-5.5.0/deployment/paasta-deployment/bosh/*.sh  
+$ chmod +x ~/workspace/paasta-5.5.0/deployment/paasta-deployment/bosh/*.sh  
+```
 
 
 ### <div id='3.3.5'/>3.3.5. BOSH 설치
 
 - 서버 환경에 맞추어 Deploy 스크립트 파일의 설정을 수정한다. 
 
-> $ vi ~/workspace/paasta-5.5.0/deployment/paasta-deployment/bosh/deploy-aws.sh
+> $ vi ~/workspace/paasta-5.5.0/deployment/paasta-deployment/bosh/deploy-aws-monitoring.sh
 ```                     
-bosh create-env bosh.yml \  
-	--state=aws/state.json \  
-	--vars-store=aws/creds.yml \  
-	-o aws/cpi.yml \  
-	-o uaa.yml \  
-	-o credhub.yml \  
-	-o jumpbox-user.yml \  
+bosh create-env bosh.yml \                         
+	--state=aws/state.json \	
+	--vars-store=aws/creds.yml \ 
+	-o aws/cpi.yml \
+	-o uaa.yml \
+	-o cce.yml \
+	-o credhub.yml \
+	-o jumpbox-user.yml \
 	-o syslog.yml \  
 	-o paasta-addon/paasta-monitoring-agent.yml \  
- 	-l aws-vars.yml  
+ 	-l aws-vars.yml
 ```
 
 - BOSH 설치 Shell Script 파일 실행
 
 ```
-$ cd ${HOME}/workspace/paasta-5.5.0/deployment/paasta-deployment/bosh
-$ ./deploy-{iaas}.sh
+$ cd ~/workspace/paasta-5.5.0/deployment/paasta-deployment/bosh
+$ ./deploy-{iaas}-monitoring.sh
+```
+
+- BOSH 설치 중
+
+```
+ubuntu@inception:~/workspace/paasta-5.5.0/deployment/paasta-deployment/bosh$ ./deploy-aws-monitoring.sh
+Deployment manifest: '/home/ubuntu/workspace/paasta-5.5.0/deployment/paasta-deployment/bosh/bosh.yml'
+Deployment state: 'aws/state.json'
+
+Started validating
+  Validating release 'bosh'... Finished (00:00:01)
+  Validating release 'bpm'... Finished (00:00:01)
+  Validating release 'bosh-aws-cpi'... Finished (00:00:00)
+  Validating release 'uaa'... Finished (00:00:03)
+  Validating release 'credhub'...
+```
+
+- BOSH 설치 완료
+
+```
+  Compiling package 'uaa_utils/90097ea98715a560867052a2ff0916ec3460aabb'... Skipped [Package already compiled] (00:00:00)
+  Compiling package 'davcli/f8a86e0b88dd22cb03dec04e42bdca86b07f79c3'... Skipped [Package already compiled] (00:00:00)
+  Updating instance 'bosh/0'... Finished (00:01:44)
+  Waiting for instance 'bosh/0' to be running... Finished (00:02:16)
+  Running the post-start scripts 'bosh/0'... Finished (00:00:13)
+Finished deploying (00:11:54)
+
+Stopping registry... Finished (00:00:00)
+Cleaning up rendered CPI jobs... Finished (00:00:00)
+
+Succeeded
+```
+
+
+### <div id='3.3.6'/>3.3.6. BOSH 설치 - 다운로드 된 Release 파일 이용 방식
+
+- 서비스 설치에 필요한 릴리즈 파일을 다운로드 받아 Local machine의 작업 경로로 위치시킨다.  
+  
+  - 설치 파일 통합 다운로드 위치 : https://paas-ta.kr/download/package    
+  - PaaS-TA 5.5.0 BOSH 설치 릴리즈 파일 다운로드 : [bosh.zip](https://nextcloud.paas-ta.org/index.php/s/fy83bkQQCcek2yk/download)
+
+```
+# 릴리즈 다운로드 파일 위치 경로 생성
+$ mkdir -p ~/workspace/paasta-5.5.0/release
+
+# 릴리즈 파일 다운로드 및 파일 경로 확인
+$ cd ~/workspace/paasta-5.5.0/release
+$ wget http://45.248.73.44/index.php/s/fy83bkQQCcek2yk/download --content-disposition
+$ unzip bosh.zip
+$ cd ~/workspace/paasta-5.5.0/release/bosh
+$ ls
+bosh-271.2.0-PaaS-TA.tgz                                                        bosh-vsphere-cpi-release-54.1.1.tgz
+bosh-271.2.0-ubuntu-xenial-621.93-20201130-224348-505837986-20201130224349.tgz  bosh-warden-cpi-41-ubuntu-xenial-621.93-20201130-224003-395585274-20201130224004.tgz
+bosh-aws-cpi-release-83.tgz                                                     bpm-1.1.9-ubuntu-xenial-621.93-20201130-224507-912672592-20201130224509.tgz
+bosh-azure-cpi-release-37.3.0.tgz                                               credhub-2.9.0-ubuntu-xenial-621.93-20201130-223813-836755462-20201130223815.tgz
+bosh-dns-release-1.27.0.tgz                                                     garden-runc-1.19.17-ubuntu-xenial-621.93-20201202-140222-317108723-20201202140224.tgz
+bosh-google-cpi-release-40.0.3.tgz                                              light-bosh-stemcell-621.93-aws-xen-hvm-ubuntu-xenial-go_agent.tgz
+bosh-openstack-cpi-release-44.tgz                                               light-bosh-stemcell-621.93-google-kvm-ubuntu-xenial-go_agent.tgz
+bosh-stemcell-621.93-azure-hyperv-ubuntu-xenial-go_agent.tgz                    os-conf-release-18.tgz
+bosh-stemcell-621.93-openstack-kvm-ubuntu-xenial-go_agent.tgz                   os-conf-release-22.1.0.tgz
+bosh-stemcell-621.93-vsphere-esxi-ubuntu-xenial-go_agent.tgz                    uaa-74.29.0-ubuntu-xenial-621.93-20201130-224014-789299918-20201130224017.tgz
+bosh-virtualbox-cpi-release-0.2.0.tgz
+
+```
+
+
+
+- 서버 환경에 맞추어 Deploy 스크립트 파일의 설정을 수정한다. 
+
+> $ vi ~/workspace/paasta-5.5.0/deployment/paasta-deployment/bosh/deploy-aws-monitoring.sh
+
+
+```                     
+bosh create-env bosh.yml \                         
+	--state=aws/state.json \	
+	--vars-store=aws/creds.yml \ 
+	-o aws/cpi.yml \
+	-o uaa.yml \
+	-o cce.yml \
+	-o credhub.yml \
+	-o jumpbox-user.yml \
+	-o use-offline-releases.yml \
+	-o use-offline-releases-aws.yml \
+	-o use-offline-releases-uaa.yml \
+	-o use-offline-releases-cce.yml \
+	-o use-offline-releases-credhub.yml \
+	-o use-offline-releases-jumpbox-user.yml \
+	-o syslog.yml \  
+	-o paasta-addon/paasta-monitoring-agent.yml \  
+ 	-l aws-vars.yml
+```
+
+- BOSH 설치 Shell Script 파일 실행
+
+```
+$ cd ~/workspace/paasta-5.5.0/deployment/paasta-deployment/bosh
+$ ./deploy-{iaas}-monitoring.sh
 ```
 
 - BOSH 설치 중
@@ -480,13 +630,17 @@ Succeeded
 ```
 
 
-### <div id='3.3.6'/>3.3.6. BOSH 로그인
-BOSH가 설치되면, BOSH 설치 디렉터리 이하 {iaas}/creds.yml 파일이 생성된다.  
+
+
+### <div id='3.3.7'/>3.3.7. BOSH 로그인
+BOSH가 설치되면, BOSH 설치 폴더 이하 {iaas}/creds.yml 파일이 생성된다.  
 creds.yml은 BOSH 인증정보를 가지고 있으며, creds.yml을 활용하여 BOSH에 로그인한다.  
-BOSH 로그인 후, BOSH CLI 명령어를 이용하여 PaaS-TA를 설치할 수 있다.
+BOSH 로그인 후, BOSH CLI 명령어를 이용하여 PaaS-TA를 설치할 수 있다.  
+**BOSH를 이용하여 VM를 배포하려면 반드시 BOSH에 로그인을 해야한다.**  
+BOSH 로그인 명령어는 다음과 같다.  
 
 ```
-$ cd ${HOME}/workspace/paasta-5.5.0/deployment/paasta-deployment/bosh
+$ cd ~/workspace/paasta-5.5.0/deployment/paasta-deployment/bosh
 $ export BOSH_CA_CERT=$(bosh int ./{iaas}/creds.yml --path /director_ssl/ca)
 $ export BOSH_CLIENT=admin
 $ export BOSH_CLIENT_SECRET=$(bosh int ./{iaas}/creds.yml --path /admin_password)
@@ -494,13 +648,14 @@ $ bosh alias-env {director_name} -e {bosh_url} --ca-cert <(bosh int ./{iaas}/cre
 $ bosh -e {director_name} env
 ```
 
-### <div id='3.3.7'/>3.3.7. CredHub
+
+### <div id='3.3.8'/>3.3.8. CredHub
 CredHub은 인증정보 저장소이다.  
 BOSH 설치 시 Operation 파일로 credhub.yml을 추가하였다.  
 BOSH 설치 시 credhub.yml을 적용하면, PaaS-TA 설치 시 PaaS-TA에서 사용하는 인증정보(Certificate, Password)를 CredHub에 저장한다.  
 PaaS-TA 인증정보가 필요할 때 CredHub을 사용하며, CredHub CLI를 통해 CredHub에 로그인하여 인증정보 조회, 수정, 삭제를 할 수 있다.
 
-#### <div id='3.3.7.1'/>3.3.7.1. CredHub CLI 설치
+#### <div id='3.3.8.1'/>3.3.8.1. CredHub CLI 설치
 
 CredHub CLI는 BOSH를 설치한 Inception(설치환경)에 설치한다.
 
@@ -512,11 +667,11 @@ $ sudo mv credhub /usr/local/bin/credhub
 $ credhub --version
 ```
 
-#### <div id='3.3.7.2'/>3.3.7.2. CredHub 로그인
+#### <div id='3.3.8.2'/>3.3.8.2. CredHub 로그인
 CredHub에 로그인하기 위해 BOSH를 설치한 bosh-deployment 디렉터리의 creds.yml을 활용하여 로그인한다.
 
 ```
-$ cd ${HOME}/workspace/paasta-5.5.0/deployment/paasta-deployment/bosh
+$ cd ~/workspace/paasta-5.5.0/deployment/paasta-deployment/bosh
 $ export CREDHUB_CLIENT=credhub-admin
 $ export CREDHUB_SECRET=$(bosh int --path /credhub_admin_client_secret {iaas}/creds.yml)
 $ export CREDHUB_CA_CERT=$(bosh int --path /credhub_tls/ca {iaas}/creds.yml)
@@ -533,14 +688,14 @@ PaaS-TA를 설치하면 인증 정보가 저장되어 조회할 수 있다.
 $ credhub get -n /{director}/{deployment}/uaa_ca
 ```
 
-### <div id='3.3.8'/>3.3.8. Jumpbox
+### <div id='3.3.9'/>3.3.9. Jumpbox
 BOSH 설치 시 Operation 파일로 jumpbox-user.yml을 추가하였다.  
 Jumpbox는 BOSH VM에 접근하기 위한 인증을 적용하게 된다.  
 인증키는 BOSH에서 자체적으로 생성하며, 인증키를 통해 BOSH VM에 접근할 수 있다.  
 BOSH VM에 이상이 있거나 상태를 체크할 때 Jumpbox를 활용하여 BOSH VM에 접근할 수 있다.
 
 ```
-$ cd ${HOME}/workspace/paasta-5.5.0/deployment/paasta-deployment/bosh
+$ cd ~/workspace/paasta-5.5.0/deployment/paasta-deployment/bosh
 $ bosh int {iaas}/creds.yml --path /jumpbox_ssh/private_key > jumpbox.key 
 $ chmod 600 jumpbox.key
 $ ssh jumpbox@{bosh_url} -i jumpbox.key
@@ -559,3 +714,56 @@ Last login: Thu Oct 17 03:57:48 UTC 2019 from 10.0.0.9 on pts/0
 Last login: Fri Oct 25 07:05:42 2019 from 10.0.0.9
 bosh/0:~$
 ```
+
+
+
+
+### <div id='3.3.10'/>3.3.10. BOSH 로그인 생성 스크립트
+
+PaaS-TA 5.5부터 BOSH 로그인을 하는 스크립트의 생성을 지원한다.
+해당 스크립트의 BOSH_DEPLOYMENT_PATH, CURRENT_IAAS, BOSH_IP, BOSH_CLIENT_ADMIN_ID, BOSH_ENVIRONMENT, BOSH_LOGIN_FILE_PATH, BOSH_LOGIN_FILE_NAME를 BOSH 환경과 스크립트를 저장하고 싶은 위치로 변경 후 실행한다.
+
+- BOSH Login 생성 Script의 설정 수정
+
+> vi ~/workspace/paasta-5.5.0/deployment/paasta-deployment/bosh/create-bosh-login.sh
+
+```
+#!/bin/bash
+
+BOSH_DEPLOYMENT_PATH="~/workspace/paasta-5.5/deployment/paasta-deployment/bosh" # (e.g. ~/workspace/paasta-5.5/deployment/paasta-deployment/bosh)
+CURRENT_IAAS="aws"				# (e.g. aws/azure/gcp/openstack/vsphere/bosh-lite)
+BOSH_IP="10.0.1.6"				# (e.g. 10.0.1.6)
+BOSH_CLIENT_ADMIN_ID="admin"			# (e.g. admin)
+BOSH_ENVIRONMENT="micro-bosh"			# (e.g. micro-bosh)
+BOSH_LOGIN_FILE_PATH="/home/ubuntu/.env"	# (e.g. /home/ubuntu/.env)
+BOSH_LOGIN_FILE_NAME="micro-bosh-login-env"	# (e.g. micro-bosh-login-env)
+
+echo 'export CRED_PATH='${BOSH_DEPLOYMENT_PATH}'
+export CURRENT_IAAS='${CURRENT_IAAS}'
+export BOSH_CA_CERT=$(bosh int $CRED_PATH/$CURRENT_IAAS/creds.yml --path /director_ssl/ca)
+export BOSH_CLIENT='${BOSH_CLIENT_ADMIN_ID}'
+export BOSH_CLIENT_SECRET=$(bosh int $CRED_PATH/$CURRENT_IAAS/creds.yml --path /admin_password)
+export BOSH_ENVIRONMENT='${BOSH_ENVIRONMENT}'
+bosh alias-env $BOSH_ENVIRONMENT -e '${BOSH_IP}' --ca-cert <(bosh int $CRED_PATH/$CURRENT_IAAS/creds.yml --path /director_ssl/ca)
+export CREDHUB_CLIENT=credhub-admin
+export CREDHUB_SECRET=$(bosh int --path /credhub_admin_client_secret $CRED_PATH/$CURRENT_IAAS/creds.yml)
+export CREDHUB_CA_CERT=$(bosh int --path /credhub_tls/ca $CRED_PATH/$CURRENT_IAAS/creds.yml)
+credhub login -s https://'${BOSH_IP}':8844 --skip-tls-validation
+' > ${BOSH_LOGIN_FILE_PATH}/${BOSH_LOGIN_FILE_NAME}
+
+```
+
+- BOSH Login 생성 Script 실행
+
+```
+$ cd ~/workspace/paasta-5.5.0/deployment/paasta-deployment/bosh
+$ source create-bosh-login.sh
+```
+
+
+- 생성된 Script로 BOSH Login 실행
+
+```
+$ source {BOSH_LOGIN_FILE_PATH}/{BOSH_LOGIN_FILE_NAME}
+```
+
