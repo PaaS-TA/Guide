@@ -44,10 +44,13 @@ $ git clone https://github.com/paas-ta/common.git –b v5.0.1
 $ git clone https://github.com/paas-ta/monitoring-deployment.git –b v5.5.0
 ```
 기본적으로 온라인 설치로 설정되어 있으나 오프라인 설치 시 release, stemcell 설치 파일 다운로드는 아래 다운로드 에서 받고 설치한다.
+```
+아래 주소로 이동한다. 관련 release, stemcell 파일들을 받을 수 있다.
+https://nextcloud.paas-ta.org/index.php/s/Z2zfK6RjYNE3CeT
 
-http://45.248.73.44/index.php/s/PnxxbkmLiLpXdBD  
-
-![PaaSTa_releases_dir_5.0]
+위 주소 항목 중 아래 경로로 이동하면 paasta-monitoring 파일을 받을 수 있다
+release > paasta-monitoring > paasta-monitoring-release-5.5.tgz
+```
 
 ### <div id='5'/>2.3. PaaS-TA Monitoring 설치 환경설정
 
