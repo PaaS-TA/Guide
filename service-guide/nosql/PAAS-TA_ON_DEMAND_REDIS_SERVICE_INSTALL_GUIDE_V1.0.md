@@ -174,7 +174,7 @@ Succeeded
 ```
 
 - common_vars.yml을 서버 환경에 맞게 수정한다. 
-- redis에서 사용하는 변수는 bosh_url, bosh_client_admin_id, bosh_client_admin_secret, bosh_director_port, bosh_oauth_port, system_domain, paasta_admin_username, paasta_admin_password 이다.
+- redis에서 사용하는 변수는 bosh_url, bosh_client_admin_id, bosh_client_admin_secret, bosh_director_port, bosh_oauth_port, system_domain, paasta_admin_username, paasta_admin_password, bosh_version 이다.
 
 > $ vi ~/workspace/paasta-5.5.1/deployment/common/common_vars.yml
 ```
