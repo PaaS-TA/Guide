@@ -203,7 +203,7 @@ $ mkdir -p ~/workspace/paasta-5.5.0/deployment
 $ cd ~/workspace/paasta-5.5.0/deployment
 $ git clone https://github.com/PaaS-TA/paasta-deployment.git -b v5.5.0
 
-# bosh, paasta 모두 common/common_vars.yml 을 사용한다. 다운로드 받는다.
+# 공통 사용 부분이다. 다운로드 받는다.
 $ cd ~/workspace/paasta-5.5.0/deployment 
 $ git clone -b {TagVersion} https://github.com/PaaS-TA/common.git
 
@@ -237,6 +237,9 @@ README.md  bosh  cloud-config  paasta
 
 
 ### <div id='3.3.4'/>3.3.4.    BOSH 설치 파일
+
+모니터링이 적용된 bosh 구성의 경우 모니터링이 적용된 설치 파일 등 추가 구성해 주어야 한다.  
+[모니터링 bosh-addon 참조 가이드](https://github.com/PaaS-TA/monitoring-deployment/blob/master/bosh-addon/README.md)
 
 ~/workspace/paasta-5.5.0/deployment/paasta-deployment/bosh 폴더에는 BOSH 설치를 위한 IaaS별 Shell Script 파일이 존재한다.  
 

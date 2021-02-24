@@ -92,6 +92,9 @@ $ git clone https://github.com/PaaS-TA/paasta-deployment.git -b v5.5.0
 $ git clone https://github.com/PaaS-TA/monitoring-deployment.git -b v5.5.0  # v5.5.0 monitoring-deployment 구성
 ```
 
+모니터링이 적용된 paas-ta 구성의 경우 모니터링이 적용된 설치 파일 등 추가 구성해 주어야 한다.  
+[모니터링 paasta-addon 참조 가이드](https://github.com/PaaS-TA/monitoring-deployment/blob/master/paasta-addon/README.md)
+
 ## <div id='3.3'/>3.3. Stemcell 업로드
 Stemcell은 배포 시 생성되는 PaaS-TA VM Base OS Image이며, PaaS-TA 5.5.0은 Ubuntu xenial stemcell 621.94를 기반으로 한다.  
 기본적인 Stemcell 업로드 명령어는 다음과 같다.  
