@@ -69,13 +69,13 @@ BOSH2는 BOSH2 CLI를 통하여 BOSH와 PaaS-TA를 모두 생성한다.
 bosh-deployment를 이용하여 BOSH를 생성한 후, paasta-deployment로 PaaS-TA를 설치한다.  
 PaaS-TA 3.1 버전까지는 PaaS-TA Container, Controller를 별도의 deployment로 설치했지만, PaaS-TA 3.5 버전부터는 paasta-deployment 하나로 통합되어 한 번에 PaaS-TA를 설치한다.
 
-![PaaSTa_BOSH_Use_Guide_Image2](https://github.com/PaaS-TA/Guide-5.0-Ravioli/blob/master/install-guide/bosh/images/bosh2.png)
+![PaaSTa_BOSH_Use_Guide_Image2](https://github.com/PaaS-TA/Guide/tree/v5.5.0/install-guide/bosh/images/bosh2.png)
 
 ## <div id='2.1'/>● BOSH 컴포넌트 구성
 
 BOSH의 컴포넌트 구성은 다음과 같다.
 
-![PaaSTa_BOSH_Use_Guide_Image3](https://github.com/PaaS-TA/Guide-5.0-Ravioli/blob/master/install-guide/bosh/images/bosh3.png)
+![PaaSTa_BOSH_Use_Guide_Image3](https://github.com/PaaS-TA/Guide/tree/v5.5.0/install-guide/bosh/images/bosh3.png)
 
 - Director: Director는 VM 생성 또는 수정 시 설정 정보를 레지스트리에 저장한다.  
 저장된 레지스트리 정보는 VM의 Bootstrapping Stage에서 이용된다.
