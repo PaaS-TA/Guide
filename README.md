@@ -7,7 +7,6 @@
 
 
 ## 플랫폼 설치 가이드
-- [설치 파일 다운로드 받기](https://paas-ta.kr/download/package)
 - 운영 환경 설치
   - PaaS-TA 플랫폼 자동화 설치
     - (Deprecated) ~~[플랫폼 설치 자동화  설치](./use-guide/platform/PAAS-TA_PLATFORM_INSTALL_AUTOMATION_INSTALL_GUIDE_v1.0.md)~~
