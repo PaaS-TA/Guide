@@ -745,7 +745,7 @@ haproxy_instances: 1				# HAPROXY 인스턴스 수
 haproxy_vm_type: minimal			# HAPROXY VM 종류
 haproxy_network: default			# HAPROXY 네트워크
 ```
-
+* haproxy_public_ip : AWS 콘솔 > 탄력적 IP(Elastic IP) 에서 Public IP를 할당받은 후, 할당받은 IP주소를 설정해야 한다.
 
 #### <div id='1021'/>● PaaS-TA 그외 Variable List
 
