@@ -300,6 +300,9 @@ syslog_address: "xx.xx.xxx.xxx"				# Logsearch의 ls-router IP
 syslog_port: "2514"					# Logsearch의 ls-router Port
 syslog_transport: "relp"				# Logsearch Protocol
 ```
+* access_key_id : AWS 계정의 Access Key 값을 입력한다.
+* secret_access_key : AWS 계정의 Secret Key 값을 입력한다.
+* subnet_id : AWS 콘솔상에서 등록된 서브넷 중 Bosh의 IP 주소 대역에 속하는 서브넷의 ID값을 입력한다. 서브넷의 ID는 AWS 콘솔에서 확인할 수 있다.
 
 ##### <div id='3.3.4.1.2'/>● openstack-vars.yml
 
