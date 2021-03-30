@@ -464,13 +464,16 @@ $  kubectl config set-context --current --namespace=""
 ```
 
 
-## <div id='3'/>3.	PaaS-TA Container Monitoring 설치 확인 
+## <div id='3'/>3.	PaaS-TA Container Monitoring 설치 확인
+
+>  Monitoring-Web에 접속하여 CaaS 메뉴를 클릭하여 확인한다.
+ 
 ![paasta_container_monitoring]
 
 
 ## <div id='4'/>4.	Prometheus 정보 확인 
 
->  Kubernetes Master IP와 Prometheus의 외부 포트를 입력하여 접속한다.
+>  Kubernetes Master IP와 Prometheus의 외부 포트를 통해 접속하여 확인한다.
 
 ![paasta_container_monitoring_prometheus]
 
@@ -503,7 +506,7 @@ $  kubectl get secret kube-prometheus-stack-1617006674-grafana -o jsonpath="{.da
  *************
  ```
 
->  Kubernetes Master IP와 Grafana의 외부 포트를 입력하여 접속한다. 
+>  Kubernetes Master IP와 Grafana의 외부 포트를 통해 접속하여 확인한다. 
 
 ![paasta_container_monitoring_grafana]
 
