@@ -67,7 +67,7 @@ WEB-IDE 는 0개 부터 N개 까지 VM INSTANCE 를 생성, 삭제 할 수 있�
 
 ### <div id="2.2"/> 2.2. Stemcell 확인  
 
-Stemcell 목록을 확인하여 서비스 설치에 필요한 Stemcell이 업로드 되어 있는 것을 확인한다.  (PaaS-TA 5.5 과 동일 stemcell 사용)
+Stemcell 목록을 확인하여 서비스 설치에 필요한 Stemcell이 업로드 되어 있는 것을 확인한다.  (PaaS-TA 5.5.2 과 동일 stemcell 사용)
 
 > $ bosh -e micro-bosh stemcells  
 
@@ -88,15 +88,15 @@ Succeeded
 
 서비스 설치에 필요한 Deployment를 Git Repository에서 받아 서비스 설치 작업 경로로 위치시킨다.  
 
-- Service Deployment Git Repository URL : https://github.com/PaaS-TA/service-deployment/tree/v#.#.#
+- Service Deployment Git Repository URL : https://github.com/PaaS-TA/service-deployment/tree/v5.1.0
 
 ```
 # Deployment 다운로드 파일 위치 경로 생성 및 설치 경로 이동
-$ mkdir -p ~/workspace/paasta-5.5/deployment
-$ cd ~/workspace/paasta-5.5/deployment
+$ mkdir -p ~/workspace/paasta-5.5.2/deployment
+$ cd ~/workspace/paasta-5.5.2/deployment
 
 # Deployment 파일 다운로드
-$ git clone https://github.com/PaaS-TA/service-deployment.git -b v#.#.#
+$ git clone https://github.com/PaaS-TA/service-deployment.git -b v5.1.0
 ```
 
 ### <div id="2.4"/> 2.4. Deployment 파일 수정
@@ -166,9 +166,68 @@ vm_types:
 Succeeded
 ```
 
+- common_vars.yml을 서버 환경에 맞게 수정한다. 
+- WEB IDE에서 사용하는 변수는 bosh_url, bosh_client_admin_id, bosh_client_admin_secret, bosh_director_port,  bosh_oauth_port, bosh_version, system_domain, paasta_admin_username, paasta_admin_password 이다.
+
+> $ vi ~/workspace/paasta-5.5.2/deployment/common/common_vars.yml
+```
+# BOSH INFO
+bosh_ip: "10.0.1.6"				# BOSH IP
+bosh_url: "https://10.0.1.6"			# BOSH URL (e.g. "https://00.000.0.0")
+bosh_client_admin_id: "admin"			# BOSH Client Admin ID
+bosh_client_admin_secret: "ert7na4jpew"		# BOSH Client Admin Secret('echo $(bosh int ~/workspace/paasta-5.5.2/deployment/paasta-deployment/bosh/{iaas}/creds.yml --path /admin_password)' 명령어를 통해 확인 가능)
+bosh_director_port: 25555			# BOSH director port
+bosh_oauth_port: 8443				# BOSH oauth port
+bosh_version: 271.2				# BOSH version('bosh env' 명령어를 통해 확인 가능, on-demand service용, e.g. "271.2")
+
+# PAAS-TA INFO
+system_domain: "61.252.53.246.xip.io"		# Domain (xip.io를 사용하는 경우 HAProxy Public IP와 동일)
+paasta_admin_username: "admin"			# PaaS-TA Admin Username
+paasta_admin_password: "admin"			# PaaS-TA Admin Password
+paasta_nats_ip: "10.0.1.121"
+paasta_nats_port: 4222
+paasta_nats_user: "nats"
+paasta_nats_password: "7EZB5ZkMLMqT7"		# PaaS-TA Nats Password (CredHub 로그인후 'credhub get -n /micro-bosh/paasta/nats_password' 명령어를 통해 확인 가능)
+paasta_nats_private_networks_name: "default"	# PaaS-TA Nats 의 Network 이름
+paasta_database_ips: "10.0.1.123"		# PaaS-TA Database IP (e.g. "10.0.1.123")
+paasta_database_port: 5524			# PaaS-TA Database Port (e.g. 5524(postgresql)/13307(mysql)) -- Do Not Use "3306"&"13306" in mysql
+paasta_database_type: "postgresql"		# PaaS-TA Database Type (e.g. "postgresql" or "mysql")
+paasta_database_driver_class: "org.postgresql.Driver"	# PaaS-TA Database driver-class (e.g. "org.postgresql.Driver" or "com.mysql.jdbc.Driver")
+paasta_cc_db_id: "cloud_controller"		# CCDB ID (e.g. "cloud_controller")
+paasta_cc_db_password: "cc_admin"		# CCDB Password (e.g. "cc_admin")
+paasta_uaa_db_id: "uaa"				# UAADB ID (e.g. "uaa")
+paasta_uaa_db_password: "uaa_admin"		# UAADB Password (e.g. "uaa_admin")
+paasta_api_version: "v3"
+
+# UAAC INFO
+uaa_client_admin_id: "admin"			# UAAC Admin Client Admin ID
+uaa_client_admin_secret: "admin-secret"		# UAAC Admin Client에 접근하기 위한 Secret 변수
+uaa_client_portal_secret: "clientsecret"	# UAAC Portal Client에 접근하기 위한 Secret 변수
+
+# Monitoring INFO
+metric_url: "10.0.161.101"			# Monitoring InfluxDB IP
+elasticsearch_master_ip: "10.0.1.146"           # Logsearch의 elasticsearch master IP
+elasticsearch_master_port: 9200                 # Logsearch의 elasticsearch master Port
+syslog_address: "10.0.121.100"			# Logsearch의 ls-router IP
+syslog_port: "2514"				# Logsearch의 ls-router Port
+syslog_transport: "relp"			# Logsearch Protocol
+saas_monitoring_url: "61.252.53.248"		# Pinpoint HAProxy WEBUI의 Public IP
+monitoring_api_url: "61.252.53.241"		# Monitoring-WEB의 Public IP
+
+### Portal INFO
+portal_web_user_ip: "52.78.88.252"
+portal_web_user_url: "http://portal-web-user.52.78.88.252.xip.io" 
+
+### ETC INFO
+abacus_url: "http://abacus.61.252.53.248.xip.io"	# abacus url (e.g. "http://abacus.xxx.xxx.xxx.xxx.xip.io")
+
+```
+
+
+
 - Deployment YAML에서 사용하는 변수 파일을 서버 환경에 맞게 수정한다.
 
-> $ vi ~/workspace/paasta-5.5/deployment/service-deployment/web-ide/vars.yml
+> $ vi ~/workspace/paasta-5.5.2/deployment/service-deployment/web-ide/vars.yml
 
 ```
 deployment_name: "web-ide"                                                # 서비스 배포 명
@@ -219,28 +278,30 @@ cloudfoundry_sslSkipValidation: "true"
 
 ### <div id="2.5"/> 2.5. 서비스 설치
 
-- 서버 환경에 맞추어 Deploy 스크립트 파일의 VARIABLES 설정을 수정한다. 
+- 서버 환경에 맞추어 Deploy 스크립트 파일의 VARIABLES 설정을 수정한다.
+  (선택) -o operations/cce.yml (CCE 조치를 적용하여 설치) 
 
-> $ vi ~/workspace/paasta-5.5/deployment/service-deployment/web-ide/deploy.sh
+> $ vi ~/workspace/paasta-5.5.2/deployment/service-deployment/web-ide/deploy.sh
 
 ```
 #!/bin/bash
   
 # VARIABLES
-BOSH_NAME="micro-bosh"                           # bosh name (e.g. micro-bosh)
-IAAS="openstack"                                 # IaaS (e.g. aws/azure/gcp/openstack/vsphere)
-COMMON_VARS_PATH="<COMMON_VARS_FILE_PATH>"       # common_vars.yml File Path (e.g. /home/ubuntu/paasta-5.5/common/common_vars.yml)
+COMMON_VARS_PATH="<COMMON_VARS_FILE_PATH>"       # common_vars.yml File Path (e.g. ../../common/common_vars.yml)
+CURRENT_IAAS="${CURRENT_IAAS}"					 # IaaS Information (PaaS-TA에서 제공되는 create-bosh-login.sh 미 사용시 aws/azure/gcp/openstack/vsphere 입력)
+BOSH_ENVIRONMENT="${BOSH_ENVIRONMENT}"			 # bosh director alias name (PaaS-TA에서 제공되는 create-bosh-login.sh 미 사용시 bosh envs에서 이름을 확인하여 입력)
 
 # DEPLOY
 bosh -e ${BOSH_NAME} -n -d web-ide deploy --no-redact web-ide.yml \
     -o operations/${IAAS}-network.yml \
+    -o operations/cce.yml \
     -l ${COMMON_VARS_PATH} \
     -l vars.yml      
 ```
 
 - 서비스를 설치한다.  
 ```
-$ cd ~/workspace/paasta-5.5/deployment/service-deployment/web-ide
+$ cd ~/workspace/paasta-5.5.2/deployment/service-deployment/web-ide
 $ sh ./deploy.sh  
 ```  
 
@@ -248,43 +309,45 @@ $ sh ./deploy.sh
 
 - 서비스 설치에 필요한 릴리즈 파일을 다운로드 받아 Local machine의 서비스 설치 작업 경로로 위치시킨다.  
   
-  - 설치 릴리즈 파일 다운로드 : [paasta-webide-release-2.0.tgz](http://45.248.73.44/index.php/s/NCCxrnHDcYqP776/download)
+  - 설치 릴리즈 파일 다운로드 : [paas-ta-webide-release-2.1.0.tgz](https://nextcloud.paas-ta.org/index.php/s/kYSnWLNCRDBRcrA/download)
 
 ```
 # 릴리즈 다운로드 파일 위치 경로 생성
-$ mkdir -p ~/workspace/paasta-5.5/release/service
+$ mkdir -p ~/workspace/paasta-5.5.2/release/service
 
 # 릴리즈 파일 다운로드 및 파일 경로 확인
-$ ls ~/workspace/paasta-5.5/release/service
+$ ls ~/workspace/paasta-5.5.2/release/service
 paasta-webide-release-2.0.tgz
 ```
   
 - 서버 환경에 맞추어 Deploy 스크립트 파일의 VARIABLES 설정을 수정하고 Option file 및 변수를 추가한다.  
-     (추가) -o operations/use-compiled-releases.yml  
-     (추가) -v inception_os_user_name="<HOME_USER_NAME>"  
+     (추가) -o operations/use-offline-releases.yml  
+     (추가) -v releases_dir="<RELEASE_DIRECTORY>"  
      
-> $ vi ~/workspace/paasta-5.5/deployment/service-deployment/web-ide/deploy.sh
+> $ vi ~/workspace/paasta-5.5.2/deployment/service-deployment/web-ide/deploy.sh
 
 ```
 #!/bin/bash
 
 # VARIABLES
-BOSH_NAME="micro-bosh"                           # bosh name (e.g. micro-bosh)
-IAAS="openstack"                                 # IaaS (e.g. aws/azure/gcp/openstack/vsphere)
-COMMON_VARS_PATH="<COMMON_VARS_FILE_PATH>"       # common_vars.yml File Path (e.g. /home/ubuntu/paasta-5.5/common/common_vars.yml)
+COMMON_VARS_PATH="<COMMON_VARS_FILE_PATH>"       # common_vars.yml File Path (e.g. ../../common/common_vars.yml)
+CURRENT_IAAS="${CURRENT_IAAS}"					 # IaaS Information (PaaS-TA에서 제공되는 create-bosh-login.sh 미 사용시 aws/azure/gcp/openstack/vsphere 입력)
+BOSH_ENVIRONMENT="${BOSH_ENVIRONMENT}"			 # bosh director alias name (PaaS-TA에서 제공되는 create-bosh-login.sh 미 사용시 bosh envs에서 이름을 확인하여 입력)
+
 
 # DEPLOY
 bosh -e ${BOSH_NAME} -n -d web-ide deploy --no-redact web-ide.yml \
+    -o operations/use-offline-releases.yml \
     -o operations/${IAAS}-network.yml \
-    -o operations/use-compiled-releases.yml \
+    -o operations/cce.yml \
     -l ${COMMON_VARS_PATH} \
     -l vars.yml\
-    -v inception_os_user_name="ubuntu"
+    -v releases_dir="/home/ubuntu/workspace/paasta-5.5.2/release"  
 ```  
 
 - 서비스를 설치한다.  
 ```
-$ cd ~/workspace/paasta-5.5/deployment/service-deployment/web-ide
+$ cd ~/workspace/paasta-5.5.2/deployment/service-deployment/web-ide
 $ sh ./deploy.sh  
 ```  
 
@@ -517,7 +580,7 @@ Succeeded
 기존 설치할때 사용했던 Deployment YAML에서 eclipse_che_instances의 값을 배포된 eclipse-che의 수만큼 변경을 해주고 eclipse_che_public_ips에 설치된 public ip를 입력한다.  
 그리고 WEB-IDE에 추가시킬 IP를 eclipse_che_buffer_ips에 추가한다.
 
-> $ vi ~/workspace/paasta-5.5/deployment/service-deployment/web-ide/vars.yml
+> $ vi ~/workspace/paasta-5.5.2/deployment/service-deployment/web-ide/vars.yml
 
 ```
 .....
@@ -536,7 +599,7 @@ eclipse_che_instance_name: "eclipse-che"                                # eclips
 
 이후 web-ide.yml에 있는 eclipse_che_public_ips를 사용할 수 있게 주석을 해제한다.
 
-> $ vi ~/workspace/paasta-5.5/deployment/service-deployment/web-ide/web-ide.yml
+> $ vi ~/workspace/paasta-5.5.2/deployment/service-deployment/web-ide/web-ide.yml
 
 ```
 수정 전
@@ -592,7 +655,7 @@ instance_groups:
 
 - 서비스를 재 설치한다.  
 ```
-$ cd ~/workspace/paasta-5.5/deployment/service-deployment/web-ide
+$ cd ~/workspace/paasta-5.5.2/deployment/service-deployment/web-ide
 $ sh ./deploy.sh  
 
 Using environment '10.0.1.6' as client 'admin'
