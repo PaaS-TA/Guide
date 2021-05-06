@@ -3,7 +3,7 @@
 #### 5.5.0 이하의 버전을 사용할 경우 해당 경로를 https://nextcloud.paas-ta.org/~ 로 변경이 필요합니다.  
 
 
-# PaaS-TA 5.5.1 가이드 문서
+# PaaS-TA 5.5.2 가이드 문서
 
 
 ## 플랫폼 설치 가이드
@@ -54,7 +54,7 @@
 - MessageQueue 설치
   - [RabbitMQ](./service-guide/messagequeue/PAAS-TA_RABBITMQ_SERVICE_INSTALL_GUIDE_V1.0.md)
 - Web IDE 설치
-  - [Web IDE](./service-guide/webide/PAAS-TA_WEB_IDE_INSTALL_GUIDE_V1.0.md)
+  - [Web IDE](./service-guide/webide/PAAS-TA_WEB_IDE_INSTALL_GUIDE_V2.0.md)
 - Pinpoint APM 설치
   - [Pinpoint APM](./service-guide/etc/PAAS-TA_PINPOINT_SERVICE_INSTALL_GUIDE_V1.0.md)  
 - 통합 개발 도구 설치
