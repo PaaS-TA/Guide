@@ -568,9 +568,9 @@ Sample Web App에서 Mongodb 서비스를 사용하기 위해서는 서비스 �
 
 
 ##### Sample Web App 디렉토리로 이동하여 manifest 파일을 확인한다.
-다운로드 :: http://45.248.73.44/index.php/s/x8Tg37WDFiL5ZDi/download
+다운로드 :: http://nextcloud.paas-ta.org/index.php/s/x8Tg37WDFiL5ZDi/download
 ```
-$ wget -O sample.zip http://45.248.73.44/index.php/s/x8Tg37WDFiL5ZDi/download
+$ wget -O sample.zip http://nextcloud.paas-ta.org/index.php/s/x8Tg37WDFiL5ZDi/download
 $ unzip sample.zip -d sample
 $ cd sample/Service/hello-spring-mongodb
 
@@ -581,14 +581,11 @@ $ cd sample/Service/hello-spring-mongodb
 ```
 ---
 applications:
-- name: hello-spring-mysql       #배포할 App 이름
+- name: hello-spring-mongodb       #배포할 App 이름
   memory: 1G                # 배포시 메모리 사이즈
   instances: 1                    # 배포 인스턴스 수
-path: target/hello-spring-mysql-1.0.0-BUILD-SNAPSHOT.war      #배포하는 App 파일 PATH
+path: ./build/libs/hello-spring-mongodb.war      #배포하는 App 파일 PATH
 ```
-
-참고: target/hello-spring-mysql-1.0.0-BUILD-SNAPSHOT.war파일이 존재 하지 않을 경우 mvn 빌드를 수행 하면 파일이 생성된다.
-<br>
 
 ##### --no-start 옵션으로 App을 배포한다.
 - -no-start: App 배포시 구동은 하지 않는다.
@@ -672,12 +669,12 @@ $ cf restart hello-spring-Mongodb
 
 > curl 로 확인
 
->`$  curl hello-spring-Mongodb.115.68.46.30.xip.io` 
+>`$  curl hello-spring-Mongodb.<System_Domain>` 
 
 > ![mongodb_image_22]
 
 
-##### 브라우에서 확인
+##### 브라우저에서 확인
 > ![mongodb_image_23]
 
 
