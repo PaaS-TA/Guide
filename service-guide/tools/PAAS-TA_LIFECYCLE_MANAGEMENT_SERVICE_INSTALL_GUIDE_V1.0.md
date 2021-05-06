@@ -257,6 +257,7 @@ app_lifecycle_persistent_disk_type: "20GB"                                      
 app_lifecycle_public_ips: "<APP_LIFECYCLE_PUBLIC_IPS>"                               # app-lifecycle : public ips (e.g. ["00.00.00.00" , "11.11.11.11"])
 app_lifecycle_admin_password: "<APP_LIFECYCLE_ADMIN_PASSWORD>"                       # app-lifecycle : app-lifecycle super admin password (e.g. "admin!super")
 app_lifecycle_serviceadmin_password: "<APP_LIFECYCLE_SERVICEADMIN_INIT_PASSWORD>"    # app-lifecycle : app-lifecycle serviceadmin user init password (e.g. "Service!admin")    
+postgres_port: "<APP_LIFECYCLE_POSTGRES_PORT>"                                       # app-lifecycle : app-lifecycle postgres port (e.g. "5524" default:5432)
 ```
 
 ### <div id="2.5"/> 2.5. 서비스 설치
