@@ -597,59 +597,6 @@ eclipse_che_instance_name: "eclipse-che"                                # eclips
 
 ```
 
-이후 web-ide.yml에 있는 eclipse_che_public_ips를 사용할 수 있게 주석을 해제한다.
-
-> $ vi ~/workspace/paasta-5.5.2/deployment/service-deployment/web-ide/web-ide.yml
-
-```
-수정 전
-
-.....
-
-instance_groups:
-- name: eclipse-che                                           # 작업 이름(필수)
-  azs: ((eclipse_che_azs))
-  instances: ((eclipse_che_instances))
-  vm_type: ((eclipse_che_vm_type))
-  stemcell: "((stemcell_alias))"
-  networks:
-  - name: ((private_networks_name))
-#  - name: ((public_networks_name))                           
-#    static_ips: ((eclipse_che_public_ips))                   # 배포시 사용할 public ips, OnDemand instance를 초기에 0 으로 셋
-팅해서 주석처리.
-  jobs:
-  - name: "((eclipse_che_instance_name))"
-    release: "((releases_name))"
-
-.....
-
----------------------------------------------------
-수정 후
-
-.....
-
-instance_groups:
-- name: eclipse-che                                           # 작업 이름(필수)
-  azs: ((eclipse_che_azs))
-  instances: ((eclipse_che_instances))
-  vm_type: ((eclipse_che_vm_type))
-  stemcell: "((stemcell_alias))"
-  networks:
-  - name: ((private_networks_name))
-  - name: ((public_networks_name))                           
-    static_ips: ((eclipse_che_public_ips))                   # 배포시 사용할 public ips, OnDemand instance를 초기에 0 으로 셋
-팅해서 주석처리.
-  jobs:
-  - name: "((eclipse_che_instance_name))"
-    release: "((releases_name))"
-
-.....
-
-```
-
-
-
-
 
 ### <div id="5.3"/> 5.3. 서비스 재 설치
 
