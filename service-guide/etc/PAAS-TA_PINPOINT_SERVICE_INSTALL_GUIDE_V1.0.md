@@ -34,7 +34,7 @@ PaaS-TA 3.5 버전부터는 Bosh2.0 기반으로 deploy를 진행하며 기존 B
 
 본 문서의 설치된 시스템 구성도이다. Pinpoint Server, HBase의 HBase Master2, HBase Slave2, Collector 2, Pinpoint 서비스 브로커, WebUI3로 최소사항을 구성하였다.
 
-![시스템구성도][pinpoint_image_01]
+![시스템구성도][pinpoint_image_01-1]
 
 <table>
   <tr>
@@ -52,19 +52,10 @@ PaaS-TA 3.5 버전부터는 Bosh2.0 기반으로 deploy를 진행하며 기존 B
   <td>h_master/0      </td><td>pinpoint_medium</td><td>2vCPU / 2GB RAM / 8GB Disk</td>
   </tr>
   <tr>
-  <td>h_secondary     </td><td>pinpoint_ small</td><td>1vCPU / 1GB RAM / 4GB Disk</td>
-  </tr>
-  <tr>
-  <td>h_slave/0       </td><td>services-small </td><td>1vCPU / 1GB RAM / 4GB Disk</td>
-  </tr>
-  <tr>
-  <td>h_slave/1       </td><td>services-small </td><td>1vCPU / 1GB RAM / 4GB Disk</td>
-  </tr>
-  <tr>
   <td>haproxy_webui/0 </td><td>services-small </td><td>1vCPU / 1GB RAM / 4GB Disk</td>
   </tr>
   <tr>
-  <td>pinpoint_broker/0</<td>services-small </td><td>1vCPU / 1GB RAM / 4GB Disk</td>
+  <td>pinpoint_broker/0</<td><td>services-small </td><td>1vCPU / 1GB RAM / 4GB Disk</td>
   </tr>
   <tr>
   <td>webui/0          </0><td>services-small </td><td>1vCPU / 1GB RAM / 4GB Disk</td>
@@ -476,7 +467,7 @@ Sample Web App은 PaaS-TA에 App으로 배포가 된다. 배포된 App에 Pinpoi
 -   앱을 다운로드 후 –b 옵션을 주어 buildpack을 지정하여 push 해 놓는다.
 
 ```
-$ cf push -b java_buildpack_pinpoint --no-start
+$ cf push spring-music-pinpoint -b java_buildpack_pinpoint --no-start
 ```
 
 ```
@@ -589,7 +580,7 @@ my_rabbitmq_service      p-rabbitmq               standard                      
 - 서비스 바인드
 ```:q!
 
-$ cf bind-service spring-music-pinpoint PS1 -c '{"application_name":"spring-music"}'
+$ cf bind-service spring-music-pinpoint PS1 -c '{"application_name":"spring-music-pinpoint"}'
 ```
 ```
 Binding service PS1 to app spring-music-pinpoint in org org / space space as admin...
@@ -746,5 +737,6 @@ $ curl http://<URL(IP)>/#/main/spring-music-pinpoint@TOMCAT
 ```
 
 [pinpoint_image_01]:/service-guide/images/pinpoint/pinpoint-image1.png
+[pinpoint_image_01-1]:/service-guide/images/pinpoint/pinpoint-image1-1.png
 [pinpoint_image_02]:/service-guide/images/pinpoint/pinpoint-image2.png
 [pinpoint_image_03]:/service-guide/images/pinpoint/pinpoint-image3.png
