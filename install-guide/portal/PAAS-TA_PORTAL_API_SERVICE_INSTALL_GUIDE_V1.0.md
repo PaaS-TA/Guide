@@ -79,7 +79,7 @@ BOSH CLI v2 가 설치 되어 있지 않을 경우 먼저 BOSH2.0 설치 가이�
 
 ### <div id="2.2"/> 2.2. Stemcell 확인
 
-Stemcell 목록을 확인하여 서비스 설치에 필요한 Stemcell이 업로드 되어 있는 것을 확인한다.  (PaaS-TA 5.5.1 과 동일 stemcell 사용)
+Stemcell 목록을 확인하여 서비스 설치에 필요한 Stemcell이 업로드 되어 있는 것을 확인한다.  (PaaS-TA 5.5.2 과 동일 stemcell 사용)
 
 > $ bosh -e ${BOSH_ENVIRONMENT} stemcells
 
@@ -100,15 +100,15 @@ Succeeded
 
 서비스 설치에 필요한 Deployment를 Git Repository에서 받아 서비스 설치 작업 경로로 위치시킨다.  
 
-- Portal Deployment Git Repository URL : https://github.com/PaaS-TA/portal-deployment/tree/v5.1.1
+- Portal Deployment Git Repository URL : https://github.com/PaaS-TA/portal-deployment/tree/v5.2.0
 
 ```
 # Deployment 다운로드 파일 위치 경로 생성 및 설치 경로 이동
-$ mkdir -p ~/workspace/paasta-5.5.1/deployment
-$ cd ~/workspace/paasta-5.5.1/deployment
+$ mkdir -p ~/workspace/paasta-5.5.2/deployment
+$ cd ~/workspace/paasta-5.5.2/deployment
 
 # Deployment 파일 다운로드
-$ git clone https://github.com/PaaS-TA/portal-deployment.git -b v5.1.1
+$ git clone https://github.com/PaaS-TA/portal-deployment.git -b v5.2.0
 ```
 
 ### <div id="2.4"/> 2.4. Deployment 파일 수정
@@ -181,19 +181,19 @@ Succeeded
 - common_vars.yml을 서버 환경에 맞게 수정한다. 
 - Portal-API에서 사용하는 변수는 system_domain, paasta_admin_username, paasta_admin_password, paasta_database_ips, paasta_database_port, paasta_database_type, paasta_database_driver_class, paasta_cc_db_id, paasta_cc_db_password, paasta_uaa_db_id, paasta_uaa_db_password, uaa_client_admin_id, uaa_client_admin_secret, monitoring_api_url, portal_web_user_url이다.
 
-> $ vi ~/workspace/paasta-5.5.1/deployment/common/common_vars.yml
+> $ vi ~/workspace/paasta-5.5.2/deployment/common/common_vars.yml
 ```
 # BOSH INFO
 bosh_ip: "10.0.1.6"				# BOSH IP
 bosh_url: "https://10.0.1.6"			# BOSH URL (e.g. "https://00.000.0.0")
 bosh_client_admin_id: "admin"			# BOSH Client Admin ID
-bosh_client_admin_secret: "ert7na4jpew"		# BOSH Client Admin Secret('echo $(bosh int ~/workspace/paasta-5.5.1/deployment/paasta-deployment/bosh/{iaas}/creds.yml --path /admin_password)' 명령어를 통해 확인 가능)
+bosh_client_admin_secret: "ert7na4jpew"		# BOSH Client Admin Secret('echo $(bosh int ~/workspace/paasta-5.5.2/deployment/paasta-deployment/bosh/{iaas}/creds.yml --path /admin_password)' 명령어를 통해 확인 가능)
 bosh_director_port: 25555			# BOSH director port
 bosh_oauth_port: 8443				# BOSH oauth port
 bosh_version: 271.2				# BOSH version('bosh env' 명령어를 통해 확인 가능, on-demand service용, e.g. "271.2")
 
 # PAAS-TA INFO
-system_domain: "61.252.53.246.xip.io"		# Domain (xip.io를 사용하는 경우 HAProxy Public IP와 동일)
+system_domain: "61.252.53.246.nip.io"		# Domain (nip.io를 사용하는 경우 HAProxy Public IP와 동일)
 paasta_admin_username: "admin"			# PaaS-TA Admin Username
 paasta_admin_password: "admin"			# PaaS-TA Admin Password
 paasta_nats_ip: "10.0.1.121"
@@ -218,6 +218,8 @@ uaa_client_portal_secret: "clientsecret"	# UAAC Portal Client에 접근하기 �
 
 # Monitoring INFO
 metric_url: "10.0.161.101"			# Monitoring InfluxDB IP
+elasticsearch_master_ip: "10.0.1.146"           # Logsearch의 elasticsearch master IP
+elasticsearch_master_port: 9200                 # Logsearch의 elasticsearch master Port
 syslog_address: "10.0.121.100"			# Logsearch의 ls-router IP
 syslog_port: "2514"				# Logsearch의 ls-router Port
 syslog_transport: "relp"			# Logsearch Protocol
@@ -226,10 +228,10 @@ monitoring_api_url: "61.252.53.241"		# Monitoring-WEB의 Public IP
 
 ### Portal INFO
 portal_web_user_ip: "52.78.88.252"
-portal_web_user_url: "http://portal-web-user.52.78.88.252.xip.io" 
+portal_web_user_url: "http://portal-web-user.52.78.88.252.nip.io" 
 
 ### ETC INFO
-abacus_url: "http://abacus.61.252.53.248.xip.io"	# abacus url (e.g. "http://abacus.xxx.xxx.xxx.xxx.xip.io")
+abacus_url: "http://abacus.61.252.53.248.nip.io"	# abacus url (e.g. "http://abacus.xxx.xxx.xxx.xxx.nip.io")
 
 ```
 
@@ -237,7 +239,7 @@ abacus_url: "http://abacus.61.252.53.248.xip.io"	# abacus url (e.g. "http://abac
 
 - Deployment YAML에서 사용하는 변수 파일을 서버 환경에 맞게 수정한다.
 
-> $ vi ~/workspace/paasta-5.5.1/deployment/portal-deployment/portal-api/vars.yml
+> $ vi ~/workspace/paasta-5.5.2/deployment/portal-deployment/portal-api/vars.yml
 
 ```
 # STEMCELL INFO
@@ -324,9 +326,9 @@ mail_smtp_properties_subject: "<MAIL_SMTP_PROPERTIES_SUBJECT>"  # mail-smtp : pr
 ### <div id="2.5"/> 2.5. 서비스 설치
 
 - 서버 환경에 맞추어 Deploy 스크립트 파일의 VARIABLES 설정을 수정하고, Option file을 추가할지 선택한다.  
-     (선택) -o operations/use-compiled-releases.yml (ubuntu-xenial/621.94로 컴파일 된 릴리즈 사용) 
+  (선택) -o operations/cce.yml (CCE 조치를 적용하여 설치)
 
-> $ vi ~/workspace/paasta-5.5.1/deployment/portal-deployment/portal-api/deploy.sh
+> $ vi ~/workspace/paasta-5.5.2/deployment/portal-deployment/portal-api/deploy.sh
 ```
 #!/bin/bash
 
@@ -338,13 +340,14 @@ BOSH_ENVIRONMENT="${BOSH_ENVIRONMENT}"		# bosh director alias name (PaaS-TA에�
 # DEPLOY
 bosh -e ${BOSH_ENVIRONMENT} -n -d portal-api deploy --no-redact portal-api.yml \
    -o operations/${CURRENT_IAAS}-network.yml \
+   -o operations/cce.yml \
    -l ${COMMON_VARS_PATH} \
    -l vars.yml
 ```
 
 - 서비스를 설치한다.  
 ```
-$ cd ~/workspace/paasta-5.5.1/deployment/portal-deployment/portal-api   
+$ cd ~/workspace/paasta-5.5.2/deployment/portal-deployment/portal-api   
 $ sh ./deploy.sh  
 ```  
 
@@ -352,22 +355,22 @@ $ sh ./deploy.sh
 
 - 서비스 설치에 필요한 릴리즈 파일을 다운로드 받아 Local machine의 서비스 설치 작업 경로로 위치시킨다.  
   
-  - 설치 릴리즈 파일 다운로드 : [paasta-portal-api-release-2.4.0.tgz](https://nextcloud.paas-ta.org/index.php/s/im9LWHZGs9aaP2d/download)
+  - 설치 릴리즈 파일 다운로드 : [paasta-portal-api-release-2.5.0.tgz](https://nextcloud.paas-ta.org/index.php/s/zFBSa7Ys3Edztxg/download)
 
 ```
 # 릴리즈 다운로드 파일 위치 경로 생성
-$ mkdir -p ~/workspace/paasta-5.5.1/release/portal
+$ mkdir -p ~/workspace/paasta-5.5.2/release/portal
 
 # 릴리즈 파일 다운로드 및 파일 경로 확인
-$ ls ~/workspace/paasta-5.5.1/release/portal
-paasta-portal-api-release-2.4.0.tgz
+$ ls ~/workspace/paasta-5.5.2/release/portal
+paasta-portal-api-release-2.5.0.tgz
 ```
   
 - 서버 환경에 맞추어 Deploy 스크립트 파일의 VARIABLES 설정을 수정하고 Option file 및 변수를 추가한다.  
      (추가) -o operations/use-offline-releases.yml (미리 다운받은 offline 릴리즈 사용)  
      (추가) -v releases_dir="<RELEASE_DIRECTORY>"  
      
-> $ vi ~/workspace/paasta-5.5.1/deployment/portal-deployment/portal-api/deploy.sh
+> $ vi ~/workspace/paasta-5.5.2/deployment/portal-deployment/portal-api/deploy.sh
   
 ```
 #!/bin/bash
@@ -381,14 +384,15 @@ BOSH_ENVIRONMENT="${BOSH_ENVIRONMENT}"		# bosh director alias name (PaaS-TA에�
 bosh -e ${BOSH_ENVIRONMENT} -n -d portal-api deploy --no-redact portal-api.yml \
    -o operations/use-offline-releases.yml \
    -o operations/${CURRENT_IAAS}-network.yml \
+   -o operations/cce.yml \
    -l ${COMMON_VARS_PATH} \
    -l vars.yml \
-   -v releases_dir="/home/ubuntu/workspace/paasta-5.5.1/release"  
+   -v releases_dir="/home/ubuntu/workspace/paasta-5.5.2/release"  
 ```  
 
 - 서비스를 설치한다.  
 ```
-$ cd ~/workspace/paasta-5.5.1/deployment/portal-deployment/portal-api  
+$ cd ~/workspace/paasta-5.5.2/deployment/portal-deployment/portal-api  
 $ sh ./deploy.sh  
 ```  
 
@@ -450,7 +454,7 @@ Feature user_org_creation Enabled.
         
 3. uaac client add portalclient –s “portalclient Secret” 
 >--redirect_uri "사용자포탈 Url, 사용자포탈 Url/callback"\
-$ uaac client add portalclient -s xxxxx --redirect_uri "http://portal-web-user.xxxx.xip.io, http://portal-web-user.xxxx.xip.io/callback" \
+$ uaac client add portalclient -s xxxxx --redirect_uri "http://portal-web-user.xxxx.nip.io, http://portal-web-user.xxxx.nip.io/callback" \
 --scope "cloud_controller_service_permissions.read , openid , cloud_controller.read , cloud_controller.write , cloud_controller.admin" \
 --authorized_grant_types "authorization_code , client_credentials , refresh_token" \
 --authorities="uaa.resource" \
@@ -464,7 +468,7 @@ $ uaac client add portalclient -s xxxxx --redirect_uri "http://portal-web-user.x
    Client ID:  admin\
    Client secret:  *****
 3. uaac client update portalclient --redirect_uri "사용자포탈 Url, 사용자포탈 Url/callback"
-    >$ uaac client update portalclient --redirect_uri "http://portal-web-user.xxxx.xip.io, http://portal-web-user.xxxx.xip.io/callback"
+    >$ uaac client update portalclient --redirect_uri "http://portal-web-user.xxxx.nip.io, http://portal-web-user.xxxx.nip.io/callback"
 
 ### <div id="3.3"/> 3.3. 운영자 포탈 유저 페이지 조회 오류
 1. 페이지 이동시 정보를 가져오지 못하고 오류가 났을 경우 common-api VM으로 이동후에 DB 정보 config를 수정후 재시작을 해 주어야 한다.
@@ -588,7 +592,7 @@ Paas-TA Portal 각각 Instance의 log를 확인 할 수 있다.
 ##### 1. Catalog 빌드팩, 서비스팩 추가
 Paas-TA Portal 설치 후에 관리자 포탈에서 빌드팩, 서비스팩을 등록해야 사용자 포탈에서 사용이 가능하다.
  
- 1. 관리자 포탈에 접속한다.(portal-web-admin.[public ip].xip.io)
+ 1. 관리자 포탈에 접속한다.(portal-web-admin.[public ip].nip.io)
     >![paas-ta-portal-15]
  2. 운영관리를 누른다.
     >![paas-ta-portal-16]

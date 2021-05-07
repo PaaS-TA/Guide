@@ -4,8 +4,8 @@
 　● [목적](#1.1)  
 　● [범위](#1.2)  
 　● [참고 자료](#1.3)  
-2. [PaaS-TA 5.5.1](#2)  
-3. [PaaS-TA 5.5.1 설치](#3)  
+2. [PaaS-TA 5.5.2](#2)  
+3. [PaaS-TA 5.5.2 설치](#3)  
 　3.1. [Prerequisite](#3.1)  
 　3.2. [설치 파일 다운로드](#3.2)  
 　3.3. [Stemcell 업로드](#3.3)  
@@ -31,7 +31,7 @@
 
 ## Executive Summary
 
-본 문서는 PaaS-TA 5.5.1(이하 PaaS-TA)을 수동으로 설치하기 위한 가이드를 제공하는 데 그 목적이 있다.
+본 문서는 PaaS-TA 5.5.2(이하 PaaS-TA)을 수동으로 설치하기 위한 가이드를 제공하는 데 그 목적이 있다.
 
 # <div id='1'/>1.  문서 개요 
 
@@ -47,7 +47,7 @@ PaaS-TA 설치 시 필요한 Stemcell은 기존 ubuntu-xenial-621.78에서 ubunt
 
 PaaS-TA는 VMware vSphere, Google Cloud Platform, Amazon Web Services EC2, OpenStack, Microsoft Azure 등의 IaaS를 지원한다.  
 
-현재 PaaS-TA 5.5.1에서 검증한 IaaS 환경은 AWS, OpenStack 환경이다.
+현재 PaaS-TA 5.5.2에서 검증한 IaaS 환경은 AWS, OpenStack 환경이다.
 
 ## <div id='1.3'/>● 참고 자료
 
@@ -61,7 +61,7 @@ BOSH Deployment: [https://github.com/cloudfoundry/bosh-deployment](https://githu
 
 CF Deployment: [https://github.com/cloudfoundry/cf-deployment](https://github.com/cloudfoundry/cf-deployment)
 
-# <div id='2'/>2. PaaS-TA 5.5.1
+# <div id='2'/>2. PaaS-TA 5.5.2
 
 PaaS-TA는 BOSH를 기반으로 설치된다. BOSH CLI를 사용하여 BOSH를 생성한 후, paasta-deployment로 PaaS-TA를 배포한다. 
 
@@ -69,38 +69,38 @@ PaaS-TA 3.1 버전까지는 PaaS-TA Container, Controller를 각각의 deploymen
 
 ![PaaSTa_BOSH_Use_Guide_Image2]  
 
-# <div id='3'/>3. PaaS-TA 5.5.1 설치
+# <div id='3'/>3. PaaS-TA 5.5.2 설치
 ## <div id='3.1'/>3.1. Prerequisite
 
 - BOSH2 기반의 BOSH를 설치한다.
 - PaaS-TA 설치는 BOSH를 설치한 Inception(설치 환경)에서 작업한다.
-- PaaS-TA 설치를 위해 BOSH LOGIN을 진행한다. ([BOSH 로그인](https://github.com/PaaS-TA/Guide/blob/v5.5.1/install-guide/bosh/PAAS-TA_BOSH2_INSTALL_GUIDE_V5.0.md#3.3.7))
+- PaaS-TA 설치를 위해 BOSH LOGIN을 진행한다. ([BOSH 로그인](https://github.com/PaaS-TA/Guide/blob/v5.5.2/install-guide/bosh/PAAS-TA_BOSH2_INSTALL_GUIDE_V5.0.md#3.3.7))
 
 ## <div id='3.2'/>3.2. 설치 파일 다운로드
 - PaaS-TA를 설치하기 위한 deployment가 존재하지 않는다면 다운로드 받는다
 
 ```
-$ mkdir -p ~/workspace/paasta-5.5.1/deployment
-$ cd ~/workspace/paasta-5.5.1/deployment
+$ mkdir -p ~/workspace/paasta-5.5.2/deployment
+$ cd ~/workspace/paasta-5.5.2/deployment
 $ git clone https://github.com/PaaS-TA/common.git
-$ cd ~/workspace/paasta-5.5.1/deployment
-$ git clone https://github.com/PaaS-TA/paasta-deployment.git -b v5.5.1
+$ cd ~/workspace/paasta-5.5.2/deployment
+$ git clone https://github.com/PaaS-TA/paasta-deployment.git -b v5.5.2
 ```
 
 ## <div id='3.3'/>3.3. Stemcell 업로드
-Stemcell은 배포 시 생성되는 PaaS-TA VM Base OS Image이며, PaaS-TA 5.5.1은 Ubuntu xenial stemcell 621.94를 기반으로 한다.  
+Stemcell은 배포 시 생성되는 PaaS-TA VM Base OS Image이며, PaaS-TA 5.5.2은 Ubuntu xenial stemcell 621.94를 기반으로 한다.  
 기본적인 Stemcell 업로드 명령어는 다음과 같다.  
 ```                     
 $ bosh -e ${BOSH_ENVIRONMENT} upload-stemcell {URL}
 ```
 
-PaaS-TA 5.5.1은 Stemcell 업로드 스크립트를 지원하며, BOSH 로그인 후 다음 명령어를 수행하여 Stemcell을 올린다.  
+PaaS-TA 5.5.2은 Stemcell 업로드 스크립트를 지원하며, BOSH 로그인 후 다음 명령어를 수행하여 Stemcell을 올린다.  
 BOSH_ENVIRONMENT는 BOSH 설치 시 사용한 Director 명이고, CURRENT_IAAS는 배포된 환경 IaaS(aws, azure, gcp, openstack, vsphere, 그외 입력시 bosh-lite)에 맞게 입력을 한다. 
 <br>(PaaS-TA에서 제공되는 create-bosh-login.sh을 이용하여 BOSH LOGIN시 BOSH_ENVIRONMENT와 CURRENT_IAAS는 자동입력된다.)
 
 - Stemcell 업로드 Script의 설정 수정 (BOSH_ENVIRONMENT 수정)
 
-> $ vi ~/workspace/paasta-5.5.1/deployment/paasta-deployment/bosh/upload-stemcell.sh
+> $ vi ~/workspace/paasta-5.5.2/deployment/paasta-deployment/bosh/upload-stemcell.sh
 ```                     
 #!/bin/bash
 STEMCELL_VERSION=621.94
@@ -125,17 +125,17 @@ fi
 - Stemcell 업로드 Script 실행
 
 ```
-$ cd ~/workspace/paasta-5.5.1/deployment/paasta-deployment/bosh
+$ cd ~/workspace/paasta-5.5.2/deployment/paasta-deployment/bosh
 $ source upload-stemcell.sh
 ```
 
-- [PaaS-TA 5.5.1 스템셀 통합 다운로드](https://nextcloud.paas-ta.org/index.php/s/RLgPANn7LNmGrqP/download)  
+- [PaaS-TA 5.5.2 스템셀 통합 다운로드](https://nextcloud.paas-ta.org/index.php/s/RLgPANn7LNmGrqP/download)  
 - 만약 오프라인 환경에 저장한 스템셀을 사용 하고 싶다면, Stemcell을 저장 한 뒤 경로를 설정 후 Stemcell 업로드 Script를 실행한다. 
 
 ```  
 # 폴더 생성 및 이동
-$ mkdir -p ~/workspace/paasta-5.5.1/stemcell/paasta
-$ cd ~/workspace/paasta-5.5.1/stemcell/paasta/
+$ mkdir -p ~/workspace/paasta-5.5.2/stemcell/paasta
+$ cd ~/workspace/paasta-5.5.2/stemcell/paasta/
 
 # 개별 Stemcell 다운로드 
 ## AWS의 경우
@@ -157,18 +157,18 @@ $ wget https://s3.amazonaws.com/bosh-core-stemcells/621.94/bosh-stemcell-621.94-
 $ wget https://s3.amazonaws.com/bosh-core-stemcells/621.94/bosh-stemcell-621.94-warden-boshlite-ubuntu-xenial-go_agent.tgz
 
 # 통합 다운로드의 경우
-$ cd ~/workspace/paasta-5.5.1
+$ cd ~/workspace/paasta-5.5.2
 $ wget https://nextcloud.paas-ta.org/index.php/s/RLgPANn7LNmGrqP/download  --content-disposition
 $ unzip stemcell.zip
 ```
 
 - 오프라인 Stemcell 업로드 Script의 설정 수정 (BOSH_ENVIRONMENT, STEMCELL_DIR 수정)
 
-> $ vi ~/workspace/paasta-5.5.1/deployment/paasta-deployment/bosh/offline-upload-stemcell.sh
+> $ vi ~/workspace/paasta-5.5.2/deployment/paasta-deployment/bosh/offline-upload-stemcell.sh
 ```                     
 #!/bin/bash
 STEMCELL_VERSION=621.94
-STEMCELL_DIR="/home/ubuntu/workspace/paasta-5.5.1/stemcell/paasta"
+STEMCELL_DIR="/home/ubuntu/workspace/paasta-5.5.2/stemcell/paasta"
 CURRENT_IAAS="${CURRENT_IAAS}"				# IaaS Information (PaaS-TA에서 제공되는 create-bosh-login.sh 미 사용시 aws/azure/gcp/openstack/vsphere 입력, 미 입력시 bosh-lite)
 BOSH_ENVIRONMENT="${BOSH_ENVIRONMENT}"			# bosh director alias name (PaaS-TA에서 제공되는 create-bosh-login.sh 미 사용시 bosh envs에서 이름을 확인하여 입력)
 
@@ -190,7 +190,7 @@ fi
 - 오프라인 Stemcell 업로드 Script 실행
 
 ```
-$ cd ~/workspace/paasta-5.5.1/deployment/paasta-deployment/bosh
+$ cd ~/workspace/paasta-5.5.2/deployment/paasta-deployment/bosh
 $ source offline-upload-stemcell.sh
 ```
 
@@ -212,10 +212,10 @@ PaaS-TA에서 적용하는 Runtime Config는 다음과 같다.
 - OS Configuration Runtime Config  
   BOSH Linux OS 구성 릴리스를 이용하여 sysctl을 구성한다.  
 
-PaaS-TA 5.5.1은 Runtime Config 설정 스크립트를 지원하며, BOSH 로그인 후 다음 명령어를 수행하여 Runtime Config를 설정한다.  
+PaaS-TA 5.5.2은 Runtime Config 설정 스크립트를 지원하며, BOSH 로그인 후 다음 명령어를 수행하여 Runtime Config를 설정한다.  
 
   - Runtime Config 업데이트 Script 수정 (BOSH_ENVIRONMENT 수정)
-> $ vi ~/workspace/paasta-5.5.1/deployment/paasta-deployment/bosh/update-runtime-config.sh
+> $ vi ~/workspace/paasta-5.5.2/deployment/paasta-deployment/bosh/update-runtime-config.sh
 ```                     
 #!/bin/bash
 
@@ -226,7 +226,7 @@ bosh -e ${BOSH_ENVIRONMENT} update-runtime-config -n --name=os-conf runtime-conf
 ```
 - Runtime Config 업데이트 Script 실행
 ```                     
-$ cd ~/workspace/paasta-5.5.1/deployment/paasta-deployment/bosh
+$ cd ~/workspace/paasta-5.5.2/deployment/paasta-deployment/bosh
 $ source update-runtime-config.sh
 ```
 
@@ -243,8 +243,8 @@ $ source update-runtime-config.sh
 
 ```  
 # 폴더 생성 및 이동
-$ mkdir -p ~/workspace/paasta-5.5.1/release/bosh
-$ cd ~/workspace/paasta-5.5.1/release/bosh
+$ mkdir -p ~/workspace/paasta-5.5.2/release/bosh
+$ cd ~/workspace/paasta-5.5.2/release/bosh
 
 # bosh-dns-release 1.27.0 다운로드 
 $ wget https://nextcloud.paas-ta.org/index.php/s/8wf2Fjn2ytxsnR7/download --content-disposition
@@ -255,12 +255,12 @@ $ wget https://nextcloud.paas-ta.org/index.php/s/G7ossXeZZHeMPTQ/download --cont
 
 - 오프라인 Runtime Config 업데이트 Script 수정 (BOSH_ENVIRONMENT, RELEASE_DIR 수정)
 
-> $ vi ~/workspace/paasta-5.5.1/deployment/paasta-deployment/bosh/offline-update-runtime-config.sh
+> $ vi ~/workspace/paasta-5.5.2/deployment/paasta-deployment/bosh/offline-update-runtime-config.sh
 ```                     
 #!/bin/bash
   
 BOSH_ENVIRONMENT="${BOSH_ENVIRONMENT}"                    # bosh director alias name (PaaS-TA에서 제공되는 create-bosh-login.sh 미 사용시 bosh envs에서 이름을 확인하여 입력)
-RELEASE_DIR="/home/ubuntu/workspace/paasta-5.5.1/release" # Release Directory (offline으로 릴리즈 다운받아 사용시 설정)
+RELEASE_DIR="/home/ubuntu/workspace/paasta-5.5.2/release" # Release Directory (offline으로 릴리즈 다운받아 사용시 설정)
 
 bosh -e ${BOSH_ENVIRONMENT} update-runtime-config -n runtime-configs/dns-offline.yml \
                 -v releases_dir=${RELEASE_DIR}
@@ -271,7 +271,7 @@ bosh -e ${BOSH_ENVIRONMENT} update-runtime-config -n --name=os-conf runtime-conf
 - 오프라인 Runtime Config 업데이트 Script 실행
 
 ```
-$ cd ~/workspace/paasta-5.5.1/deployment/paasta-deployment/bosh
+$ cd ~/workspace/paasta-5.5.2/deployment/paasta-deployment/bosh
 $ source offline-update-runtime-config.sh
 ```
 
@@ -281,7 +281,7 @@ $ source offline-update-runtime-config.sh
 ## <div id='3.5'/>3.5. Cloud Config 설정
 
 PaaS-TA를 설치하기 위한 IaaS 관련 Network, Storage, VM 관련 설정을 Cloud Config로 정의한다.  
-PaaS-TA 설치 파일을 내려받으면 ~/workspace/paasta-5.5.1/deployment/paasta-deployment/cloud-config 디렉터리 이하에 IaaS별 Cloud Config 예제를 확인할 수 있으며, 예제를 참고하여 cloud-config.yml을 IaaS에 맞게 수정한다.  
+PaaS-TA 설치 파일을 내려받으면 ~/workspace/paasta-5.5.2/deployment/paasta-deployment/cloud-config 디렉터리 이하에 IaaS별 Cloud Config 예제를 확인할 수 있으며, 예제를 참고하여 cloud-config.yml을 IaaS에 맞게 수정한다.  
 PaaS-TA 배포 전에 Cloud Config를 BOSH에 적용해야 한다. 
 
 - AWS을 기준으로 한 cloud-config.yml 예제
@@ -601,7 +601,7 @@ vm_types:
 - Cloud Config 업데이트
 
 ```
-$ bosh -e ${BOSH_ENVIRONMENT} update-cloud-config ~/workspace/paasta-5.5.1/deployment/paasta-deployment/cloud-config/{iaas}-cloud-config.yml
+$ bosh -e ${BOSH_ENVIRONMENT} update-cloud-config ~/workspace/paasta-5.5.2/deployment/paasta-deployment/cloud-config/{iaas}-cloud-config.yml
 ```
 
 - Cloud Config 확인
@@ -671,23 +671,23 @@ common_vars.yml파일과 vars.yml을 수정하여 PaaS-TA 설치시 적용하는
 
 
 #### <div id='3.6.1.1'/>● common_vars.yml
-~/workspace/paasta-5.5.1/deployment/common 폴더에 있는 common_vars.yml PaaS-TA 및 각종 Service 설치시 적용하는 공통 변수 설정 파일이 존재한다.  
-PaaS-TA 5.5.1을 설치할 때는 system_domain, paasta_admin_username, paasta_admin_password, uaa_client_admin_secret, uaa_client_portal_secret, paasta_database_port의 값을 변경 하여 설치 할 수 있다.
+~/workspace/paasta-5.5.2/deployment/common 폴더에 있는 common_vars.yml PaaS-TA 및 각종 Service 설치시 적용하는 공통 변수 설정 파일이 존재한다.  
+PaaS-TA 5.5.2을 설치할 때는 system_domain, paasta_admin_username, paasta_admin_password, uaa_client_admin_secret, uaa_client_portal_secret, paasta_database_port의 값을 변경 하여 설치 할 수 있다.
 
-> $ vi ~/workspace/paasta-5.5.1/deployment/common/common_vars.yml
+> $ vi ~/workspace/paasta-5.5.2/deployment/common/common_vars.yml
 
 ```
 # BOSH INFO
 bosh_ip: "10.0.1.6"                        		# BOSH IP
 bosh_url: "http://10.0.1.6"				# BOSH URL (e.g. "https://00.000.0.0")
 bosh_client_admin_id: "admin"				# BOSH Client Admin ID
-bosh_client_admin_secret: "ert7na4jpewsczt"		# BOSH Client Admin Secret('echo $(bosh int ~/workspace/paasta-5.5.1/deployment/paasta-deployment/bosh/{iaas}/creds.yml —path /admin_password))' 명령어를 통해 확인 가능)
+bosh_client_admin_secret: "ert7na4jpewsczt"		# BOSH Client Admin Secret('echo $(bosh int ~/workspace/paasta-5.5.2/deployment/paasta-deployment/bosh/{iaas}/creds.yml —path /admin_password))' 명령어를 통해 확인 가능)
 bosh_director_port: 25555				# BOSH Director Port
 bosh_oauth_port: 8443					# BOSH OAuth Port
 bosh_version: 271.2					# BOSH version('bosh env' 명령어를 통해 확인 가능, on-demand service용, e.g. "271.2")
 
 # PAAS-TA INFO
-system_domain: "xx.xx.xxx.xxx.xip.io"			# Domain (xip.io를 사용하는 경우 HAProxy Public IP와 동일)
+system_domain: "xx.xx.xxx.xxx.nip.io"			# Domain (nip.io를 사용하는 경우 HAProxy Public IP와 동일)
 paasta_admin_username: "admin"				# PaaS-TA Admin Username
 paasta_admin_password: "admin"				# PaaS-TA Admin Password
 paasta_nats_ip: "10.0.1.121"				# PaaS-TA Nats IP(e.g. "10.0.1.121")
@@ -711,6 +711,8 @@ uaa_client_portal_secret: "clientsecret"		# UAAC Portal Client에 접근하기 �
 
 # Monitoring INFO
 metric_url: "10.0.161.101"				# Monitoring InfluxDB IP
+elasticsearch_master_ip: "10.0.1.146"			# Logsearch의 elasticsearch master IP
+elasticsearch_master_port: 9200				# Logsearch의 elasticsearch master Port
 syslog_address: "10.0.121.100"            		# Logsearch의 ls-router IP
 syslog_port: "2514"                          		# Logsearch의 ls-router Port
 syslog_transport: "relp"                        	# Logsearch Protocol
@@ -719,22 +721,22 @@ monitoring_api_url: "xx.xx.xxx.xxx"        		# Monitoring-WEB의 Public IP
 
 ### Portal INFO
 portal_web_user_ip: "52.78.88.252"
-portal_web_user_url: "http://portal-web-user.xx.xx.xxx.xxx.xip.io" 
+portal_web_user_url: "http://portal-web-user.xx.xx.xxx.xxx.nip.io" 
 
 ### ETC INFO
-abacus_url: "http://abacus.xx.xx.xxx.xxx.xip.io"	# Abacus URL (e.g. "http://abacus.xxx.xxx.xxx.xxx.xip.io")
+abacus_url: "http://abacus.xx.xx.xxx.xxx.nip.io"	# Abacus URL (e.g. "http://abacus.xxx.xxx.xxx.xxx.nip.io")
 ```
 
 #### <div id='3.6.1.2'/>● vars.yml
 
 PaaS-TA를 설치 할 때 적용되는 각종 변수값이나 배포 될 VM의 설정을 변경할 수 있다.
 
-> $ vi ~/workspace/paasta-5.5.1/deployment/paasta-deployment/paasta/vars.yml
+> $ vi ~/workspace/paasta-5.5.2/deployment/paasta-deployment/paasta/vars.yml
 ```
 # SERVICE VARIABLE
 deployment_name: "paasta"			# Deployment Name
 network_name: "default"				# VM에 별도로 지정하지 않는 Default Network Name
-releases_dir: "/home/ubuntu/workspace/paasta-5.5.1/release"	# Release Directory (offline으로 릴리즈 다운받아 사용시 설정)
+releases_dir: "/home/ubuntu/workspace/paasta-5.5.2/release"	# Release Directory (offline으로 릴리즈 다운받아 사용시 설정)
 haproxy_public_ip: "52.78.32.153"		# HAProxy IP (Public IP, HAproxy VM 배포시 필요)
 haproxy_public_network_name: "vip"		# PaaS-TA Public Network Name
 haproxy_private_network_name: "private" 	# PaaS-TA Private Network Name (vSphere use-haproxy-public-network-vsphere.yml 포함 배포시 설정 필요)
@@ -742,14 +744,14 @@ cc_db_encryption_key: "db-encryption-key"	# Database Encryption Key (Version Upg
 cert_days: 3650					# PaaS-TA 인증서 유효기간
 private_ip: "10.244.0.34"   			# Proxy IP (Private IP, BOSH-LITE 사용시 설정 필요)
 uaa_login_logout_redirect_parameter_disable: "false"	
-uaa_login_logout_redirect_parameter_whitelist: ["http://portal-web-user.15.165.2.88.xip.io","http://portal-web-user.15.165.2.88.xip.io/callback","http://portal-web-user.15.165.2.88.xip.io/login"]	# 포탈 페이지 이동을 위한 UAA Redirect Whitelist 등록 변수
+uaa_login_logout_redirect_parameter_whitelist: ["http://portal-web-user.15.165.2.88.nip.io","http://portal-web-user.15.165.2.88.nip.io/callback","http://portal-web-user.15.165.2.88.nip.io/login"]	# 포탈 페이지 이동을 위한 UAA Redirect Whitelist 등록 변수
 uaa_login_branding_company_name: "PaaS-TA R&D"	# UAA 페이지 타이틀 명
 uaa_login_branding_footer_legal_text: "Copyright © PaaS-TA R&D Foundation, Inc. 2017. All Rights Reserved."	# UAA 페이지 하단 영역 텍스트 
 uaa_login_branding_product_logo: "iVBORw0KGgoAAAANSUhEUgAAAM0AAAAdCAYAAAAJguhGAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMy1jMDExIDY2LjE0NTY2MSwgMjAxMi8wMi8wNi0xNDo1NjoyNyAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNiAoV2luZG93cykiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6QUNDMTA1MTZCRDNBMTFFNjkzMTVEQjMxRkE5QjkxNUMiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6QUNDMTA1MTdCRDNBMTFFNjkzMTVEQjMxRkE5QjkxNUMiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDpBQ0MxMDUxNEJEM0ExMUU2OTMxNURCMzFGQTlCOTE1QyIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDpBQ0MxMDUxNUJEM0ExMUU2OTMxNURCMzFGQTlCOTE1QyIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/Piy2YkgAAA9pSURBVHja7FwJeBRF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"	 # UAA 페이지 로고 이미지 (Base64)
 uaa_login_branding_square_logo: "iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyhpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMTMyIDc5LjE1OTI4NCwgMjAxNi8wNC8xOS0xMzoxMzo0MCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6QkIwMjA5M0U5NEQ0MTFFNjk1M0FFQ0UxNkIxNEZFNjciIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6QkIwMjA5M0Q5NEQ0MTFFNjk1M0FFQ0UxNkIxNEZFNjciIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIDIwMTUuNSAoV2luZG93cykiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDpEMzRGNDdCNTgxNEIxMUU2QjJFODk1MEQzM0EzNkMxOSIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDpEMzRGNDdCNjgxNEIxMUU2QjJFODk1MEQzM0EzNkMxOSIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/Psx4+gAAAASbSURBVHja7FZ9aFVlGP8973vOud9Tt7nl1lzNOWailKkV/iEohYn2Vx/QHxKCQkUUmEFhREXQvxJGhSFRlERFhEk1K9PUjJk0dZJzzuGc+3B3997tfp3zfvScu0X4T1AQ/nPP5eGce17e5/l9PO9zL1lrcTMvgZt8VQFUAVQBVAE4KHbDZIYWq1P7dpiJwQ7HdYxZsOyiXLzmYxGvOwJZD6ICDFxQKQeKNgEyi6A8BYcUSE0CJKCpDkExikgyBmTLQJzXhIaVSejxfsjaZtDkeaD3M9iVu6ByKbiNc+GYsUtt5R/fPIzxoSaSUZhIADM9sN5c/WG707Z2r+jc8gJFvAz0/zOyhTrf9RImBptsOQ4bSA4P0Alma8hcOLAtOPnaT7pwbQXJ2H+vQsRaRzkis8+ci5wZAHb4+EYpErBFbgdWzpYJ1p8NHQeNnVuuj7/epca6N89spH9ZOAb+vZsf9B18Juj97osgkznk9+zfY0ojbeEaFd9tT0OV55lhycwJFGOpoxbkcoSAIxZClmHiXkCdD7/qLtr6BkSa/Z74xx6gFBOwvtSXf9mp+r5+mrJDt5IRMNIB+T5MtHHUXfvyFvnKltUbbP7KbRRzoDMSxHBp9hNetnLnTaE/6d/XmdLwUjuvuRtOKiNCALpQYWopDqMcOB43q/Zggusd6rf3PjF9X26ncr5GOGyxGwUZJiq4TmkyqXOjHXLXi8/l7eCRR0WUi3gWekowKxGaMyvjXzd+z0wp27tUjZ18TFiboljdALleNlTAEjdw4MKJp2CvdW/2T+/5VEz03FmRee4S8NECpljSUqTiv5U+53N9spM/o3TsrYN06dCDSDCLPCcb4apBaAdXjhkg3OOZmYgISLfMCdiWRPN1arz7Qzm//aCNd5wIVEPeyXZvs6d2v0N+UZhIDUztWqgreYjRiywk53QjHFzD9oI6H/mIrD4Pk0svKH+zo8tJX1hqonwCmLyeZFlzrET4pVJYQ3isgxf2iOZ3mokXWBkNlWyHbX3oLBVL31P//mcpKMFG50PVb4Y+fQZycoDJJBkAd75gFeU4bFPT2ei6nRvJls9W5qEZOrYoOLHvADIXOxHzWB62RGnoosfyJhlAimW07CNHRCK0TM6tBSX4BAlen7gASp8GBQo62XLF1G4S9ujRZuQGYNkWwX1C0Qh0jeu7i5Z/7tz7xPNCmOEZAIbP3/QgjK9a/F/3vY+x7vtlCMrjQoI3Oi4XTUE5c2CcGsDlo8XKRHhC2uJViOkxBltkLdirhnu+dToff0qd6LnDz11/wHHVLcKUha5bOCXdfA9aFh7y6u46g4aFQG4QfwPI9LGsNbD5aaHT57bq/sNPYuryCjLTDEJUpLbcmCTNjC0cllvFWrYHcWbd2idvX/+2bNq0m8HY4PhRFNrXYI6bBQpp2LZVMP2HYVIJuBEe541tQP4qnBsGh1FhIeO0rN6L1pUfmNFz99HIHxtsYXCZ1qoO0taTKgs+a4xAjguZmaLaVSNINHS5NUu+Eqn6HFTAeYIQGdtRRGW6KR/w+VkrXtM3zqrq3/IqgCqAKoCbDeBPAQYAvdcfKsxKtoUAAAAASUVORK5CYII="	# UAA 페이지 타이틀 로고 이미지 (Base64)
-uaa_login_links_passwd: "http://portal-web-user.15.165.2.88.xip.io/resetpasswd"	# UAA 페이지에서 Reset Password 누를 시 이동하는 링크 주소
-uaa_login_links_signup: "http://portal-web-user.15.165.2.88.xip.io/createuser"	# UAA 페이지에서 Create Account 누를 시 이동하는 링크 주소
-uaa_client_portal_redirect_uri: "http://portal-web-user.15.165.2.88.xip.io,http://portal-web-user.15.165.2.88.xip.io/callback"	# UAA Portal Client의 Redirect URI 지정 변수, 포탈에서 로그인 버튼 클릭 후 UAA 페이지에서 성공적으로 로그인했을 경우 이동하는 URI 경로
+uaa_login_links_passwd: "http://portal-web-user.15.165.2.88.nip.io/resetpasswd"	# UAA 페이지에서 Reset Password 누를 시 이동하는 링크 주소
+uaa_login_links_signup: "http://portal-web-user.15.165.2.88.nip.io/createuser"	# UAA 페이지에서 Create Account 누를 시 이동하는 링크 주소
+uaa_client_portal_redirect_uri: "http://portal-web-user.15.165.2.88.nip.io,http://portal-web-user.15.165.2.88.nip.io/callback"	# UAA Portal Client의 Redirect URI 지정 변수, 포탈에서 로그인 버튼 클릭 후 UAA 페이지에서 성공적으로 로그인했을 경우 이동하는 URI 경로
 
 syslog_custom_rule: 'if ($msg contains "DEBUG") then stop'	# [MONITORING] PaaS-TA Logging Agent에서 전송할 Custom Rule
 syslog_fallback_servers: []					# [MONITORING] PaaS-TA Syslog Fallback Servers
@@ -878,8 +880,8 @@ haproxy_network: "default"		# HAProxy 네트워크
 ex) uaa_login_logout_redirect_parameter_whitelist=["{PaaS-TA PORTAL URI}","{PaaS-TA PORTAL URI}/callback","{PaaS-TA PORTAL URI}/login"]
 ```
 
-> xip.io : 임시 도메인, 기본 DNS 서버가 8.8.8.8로 설정되어야 한다.  
-> xip.io를 사용하지 않고 DNS를 사용할 경우, Whitelist에 포탈 DNS, 포탈 DNS/callback, 포탈 DNS/login 세 개의 항목을 등록해야 한다.
+> nip.io : 임시 도메인, 기본 DNS 서버가 8.8.8.8로 설정되어야 한다.  
+> nip.io를 사용하지 않고 DNS를 사용할 경우, Whitelist에 포탈 DNS, 포탈 DNS/callback, 포탈 DNS/login 세 개의 항목을 등록해야 한다.
 
 2. uaa_login_links_passwd : UAA 페이지에서 Reset Password 버튼 클릭 시 이동하는 링크 주소
 
@@ -929,7 +931,7 @@ ex) uaa_client_admin_secret="admin-secret"
   ```
   ubuntu@inception:~$ uaac target
   
-  Target: https://uaa.54.180.53.80.xip.io
+  Target: https://uaa.54.180.53.80.nip.io
   Context: admin, from client admin
   
   ubuntu@inception:~$ uaac token client get
@@ -937,7 +939,7 @@ ex) uaa_client_admin_secret="admin-secret"
   Client secret:  ************
   
   Successfully fetched token via client credentials grant.
-  Target: https://uaa.54.180.53.80.xip.io
+  Target: https://uaa.54.180.53.80.nip.io
   Context: admin, from client admin
   ```
 
@@ -968,11 +970,6 @@ ex) uaa_client_admin_secret="admin-secret"
     - 3.5 이전 버전에서 Migration 시 필수  
 </td>
 <td></td>
-</tr>
-<tr>
-<td>operations/use-compiled-releases-postgres.yml</td>
-<td>인터넷이 연결된 환경에서 컴파일 없이 Postgres의 빠른 설치가 가능하다.</td>
-<td>Requires: use-postgres.yml</td>
 </tr>
 <tr>
 <td>operations/use-offline-releases-postgres.yml</td>
@@ -1013,14 +1010,31 @@ ex) uaa_client_admin_secret="admin-secret"
 </td>
 </tr>
 <tr>
-<td>operations/use-compiled-releases-haproxy.yml</td>
-<td>인터넷이 연결된 환경에서 컴파일 없이 HAProxy의 빠른 설치가 가능하다.</td>
-<td>Requires: use-haproxy.yml</td>
-</tr>
-<tr>
 <td>operations/use-offline-releases-haproxy.yml</td>
 <td>use-haproxy.yml에서 사용되는 릴리즈를 오프라인에 저장된 릴리즈로 설치가 가능하다.</td>
 <td>Requires: use-haproxy.yml<br>
+    Requires value :  -v releases_dir</td>
+</tr>
+<tr>
+<td>operations/cce.yml</td>
+<td>CCE 조치를 적용하여 설치한다. (MySQL)</td>
+<td></td>
+</tr>
+<tr>
+<td>operations/use-offline-releases-cce.yml</td>
+<td>cce.yml에서 사용되는 릴리즈를 오프라인에 저장된 릴리즈로 설치가 가능하다.</td>
+<td>Requires: cce.yml<br>
+    Requires value :  -v releases_dir</td>
+</tr>
+<tr>
+<td>operations/cce-postgres.yml</td>
+<td>CCE 조치를 적용하여 설치한다. (PostgreSQL)</td>
+<td>Requires: use-postgres.yml</td>
+</tr>
+<tr>
+<td>operations/use-offline-releases-cce-postgres.yml</td>
+<td>cce-postgres.yml에서 사용되는 릴리즈를 오프라인에 저장된 릴리즈로 설치가 가능하다.</td>
+<td>Requires: cce-postgres.yml<br>
     Requires value :  -v releases_dir</td>
 </tr>
 </table>
@@ -1071,14 +1085,14 @@ PaaS-TA 배포 시, 설치 Option을 추가해야 한다. 설치 Option에 대�
 
 #### <div id='3.6.3.1'/>● deploy-aws.sh
 ```
-BOSH_ENVIRONMENT="${BOSH_ENVIRONMENT}"			 # bosh director alias name (PaaS-TA에서 제공되는 create-bosh-login.sh 미 사용시 bosh envs에서 이름을 확인하여 입력)
+BOSH_ENVIRONMENT="${BOSH_ENVIRONMENT}"					 # bosh director alias name (PaaS-TA에서 제공되는 create-bosh-login.sh 미 사용시 bosh envs에서 이름을 확인하여 입력)
 
 bosh -e ${BOSH_ENVIRONMENT} -d paasta -n deploy paasta-deployment.yml \	# PaaS-TA Manifest File
 	-o operations/aws.yml \						# AWS 설정
-	-o operations/cce.yml \						# CCE 조치 적용
 	-o operations/use-haproxy.yml \					# HAProxy 적용
 	-o operations/use-haproxy-public-network.yml \			# HAProxy Public Network 적용
 	-o operations/use-postgres.yml \				# Database Type 설정 (3.5버전 이하에서 Migration 시 필수)
+	-o operations/cce-postgres.yml \				# CCE 조치 적용
 	-o operations/rename-network-and-deployment.yml \		# Rename Network and Deployment
 	-l vars.yml \							# 환경에 PaaS-TA 설치시 적용하는 변수 설정 파일
 	-l ../../common/common_vars.yml					# PaaS-TA 및 각종 Service 설치시 적용하는 공통 변수 설정 파일
@@ -1086,11 +1100,14 @@ bosh -e ${BOSH_ENVIRONMENT} -d paasta -n deploy paasta-deployment.yml \	# PaaS-T
 
 #### <div id='3.6.3.2'/>● deploy-openstack.sh
 ```
+BOSH_ENVIRONMENT="${BOSH_ENVIRONMENT}"					 # bosh director alias name (PaaS-TA에서 제공되는 create-bosh-login.sh 미 사용시 bosh envs에서 이름을 확인하여 입력)
+
 bosh -e ${BOSH_ENVIRONMENT} -d paasta -n deploy paasta-deployment.yml \	# PaaS-TA Manifest File
 	-o operations/openstack.yml \					# OpenStack 설정
 	-o operations/use-haproxy.yml \					# HAProxy 적용
 	-o operations/use-haproxy-public-network.yml \			# HAProxy Public Network 적용
 	-o operations/use-postgres.yml \				# Database Type 설정 (3.5버전 이하에서 Migration 시 필수)
+	-o operations/cce-postgres.yml \				# CCE 조치 적용
 	-o operations/rename-network-and-deployment.yml \		# Rename Network and Deployment
 	-l vars.yml \							# PaaS-TA 설치시 적용하는 변수 설정 파일
 	-l ../../common/common_vars.yml					# PaaS-TA 및 각종 Service 설치시 적용하는 공통 변수 설정 파일
@@ -1099,7 +1116,7 @@ bosh -e ${BOSH_ENVIRONMENT} -d paasta -n deploy paasta-deployment.yml \	# PaaS-T
 - Shell script 파일에 실행 권한 부여
 
 ```
-$ chmod +x ~/workspace/paasta-5.5.1/deployment/paasta-deployment/paasta/*.sh
+$ chmod +x ~/workspace/paasta-5.5.2/deployment/paasta-deployment/paasta/*.sh
 ```
 
 
@@ -1107,17 +1124,17 @@ $ chmod +x ~/workspace/paasta-5.5.1/deployment/paasta-deployment/paasta/*.sh
 ## <div id='3.7'/>3.7.  PaaS-TA 설치
 - 서버 환경에 맞추어 [common_vars.yml](#3.6.1.1)와 [vars.yml]((#3.6.1.2))을 수정 한 뒤, Deploy 스크립트 파일의 설정을 수정한다. 
 
-> $ vi ~/workspace/paasta-5.5.1/deployment/paasta-deployment/paasta/deploy-aws.sh
+> $ vi ~/workspace/paasta-5.5.2/deployment/paasta-deployment/paasta/deploy-aws.sh
 
 ```
-BOSH_ENVIRONMENT="${BOSH_ENVIRONMENT}"			 # bosh director alias name (PaaS-TA에서 제공되는 create-bosh-login.sh 미 사용시 bosh envs에서 이름을 확인하여 입력)
+BOSH_ENVIRONMENT="${BOSH_ENVIRONMENT}"			 		# bosh director alias name (PaaS-TA에서 제공되는 create-bosh-login.sh 미 사용시 bosh envs에서 이름을 확인하여 입력)
 
 bosh -e ${BOSH_ENVIRONMENT} -d paasta -n deploy paasta-deployment.yml \	# PaaS-TA Manifest File
 	-o operations/aws.yml \						# AWS 설정
-	-o operations/cce.yml \						# CCE 조치 
 	-o operations/use-haproxy.yml \					# HAProxy 적용
 	-o operations/use-haproxy-public-network.yml \			# HAProxy Public Network 적용
 	-o operations/use-postgres.yml \				# Database Type 설정 (3.5버전 이하에서 Migration 시 필수)
+	-o operations/cce-postgres.yml \				# CCE 조치 적용
 	-o operations/rename-network-and-deployment.yml \		# Rename Network and Deployment
 	-l vars.yml \							# 환경에 PaaS-TA 설치시 적용하는 변수 설정 파일
 	-l ../../common/common_vars.yml					# PaaS-TA 및 각종 Service 설치시 적용하는 공통 변수 설정 파일
@@ -1126,7 +1143,7 @@ bosh -e ${BOSH_ENVIRONMENT} -d paasta -n deploy paasta-deployment.yml \	# PaaS-T
 - PaaS-TA 설치 시 Shell Script 파일 실행 (BOSH 로그인 필요)
 
 ```
-$ cd ~/workspace/paasta-5.5.1/deployment/paasta-deployment/paasta
+$ cd ~/workspace/paasta-5.5.2/deployment/paasta-deployment/paasta
 $ ./deploy-{IaaS}.sh
 ```
 
@@ -1186,40 +1203,42 @@ Succeeded
 - 서비스 설치에 필요한 릴리즈 파일을 다운로드 받아 Local machine의 작업 경로로 위치시킨다.  
   
   - 설치 파일 통합 다운로드 위치 : https://paas-ta.kr/download/package    
-  - PaaS-TA 5.5.1 설치 릴리즈 파일 다운로드 : [paasta.zip](https://nextcloud.paas-ta.org/index.php/s/TS6M2MTBkYsX8Lq/download)
+  - PaaS-TA 5.5.2 설치 릴리즈 파일 다운로드 : [paasta.zip](https://nextcloud.paas-ta.org/index.php/s/TS6M2MTBkYsX8Lq/download)
 
 ```
 # 릴리즈 다운로드 파일 위치 경로 생성
-$ mkdir -p ~/workspace/paasta-5.5.1/release
+$ mkdir -p ~/workspace/paasta-5.5.2/release
 
 # 릴리즈 파일 다운로드 및 파일 경로 확인
-$ cd ~/workspace/paasta-5.5.1/release
+$ cd ~/workspace/paasta-5.5.2/release
 $ wget https://nextcloud.paas-ta.org/index.php/s/TS6M2MTBkYsX8Lq/download --content-disposition
 $ unzip paasta.zip
-$ cd ~/workspace/paasta-5.5.1/release/paasta
+$ cd ~/workspace/paasta-5.5.2/release/paasta
 $ ls
-binary-buildpack-release-1.0.36.tgz       garden-runc-release-1.19.16.tgz      pxc-release-0.29.0.tgz
-bosh-dns-aliases-release-0.0.3.tgz        go-buildpack-release-1.9.17.tgz      python-buildpack-release-1.7.20.tgz
-bpm-release-1.1.9.tgz                     haproxy-boshrelease-10.1.0.tgz       r-buildpack-release-1.1.7.tgz
-capi-release-1.98.0-PaaS-TA.tgz           java-buildpack-release-4.32.1.tgz    routing-release-0.207.0-PaaS-TA.tgz
-capi-release-1.98.0.tgz                   log-cache-release-2.8.0.tgz          routing-release-0.207.0.tgz
-cf-cli-release-1.29.0.tgz                 loggregator-agent-release-6.1.1.tgz  ruby-buildpack-release-1.8.23.tgz
-cf-networking-release-2.33.0-PaaS-TA.tgz  loggregator-release-106.3.10.tgz     silk-release-2.33.0-PaaS-TA.tgz
-cf-networking-release-2.33.0.tgz          metrics-discovery-release-3.0.1.tgz  silk-release-2.33.0.tgz
-cf-smoke-tests-release-41.0.1.tgz         nats-release-34.tgz                  staticfile-buildpack-release-1.5.10.tgz
-cflinuxfs3-release-0.204.0.tgz            nginx-buildpack-release-1.1.14.tgz   statsd-injector-release-1.11.15.tgz
-credhub-release-2.8.0.tgz                 nodejs-buildpack-release-1.7.26.tgz  uaa-release-74.24.0.tgz
-diego-release-2.48.0-PaaS-TA.tgz          os-conf-release-22.1.0.tgz           uaa-relese-74.29.0-PaaS-TA.tgz
-diego-release-2.48.0.tgz                  php-buildpack-release-4.4.20.tgz
-dotnet-core-buildpack-release-2.3.14.tgz  postgres-release-43.tgz
+binary-buildpack-release-1.0.36.tgz          garden-runc-release-1.19.16.tgz           pxc-release-0.29.0.tgz
+bosh-dns-aliases-release-0.0.3.tgz           go-buildpack-release-1.9.17.tgz           python-buildpack-release-1.7.20.tgz
+bpm-release-1.1.9.tgz                        haproxy-boshrelease-10.1.0.tgz            r-buildpack-release-1.1.7.tgz
+capi-release-1.98.0-PaaS-TA-v3.tgz           java-buildpack-release-4.32.1.tgz         routing-release-0.207.0-PaaS-TA-v2.tgz
+capi-release-1.98.0-PaaS-TA.tgz              log-cache-release-2.8.0.tgz               routing-release-0.207.0-PaaS-TA.tgz
+capi-release-1.98.0.tgz                      loggregator-agent-release-6.1.1.tgz       routing-release-0.207.0.tgz
+cf-cli-release-1.29.0.tgz                    loggregator-release-106.3.10.tgz          ruby-buildpack-release-1.8.23.tgz
+cf-networking-release-2.33.0-PaaS-TA-v2.tgz  metrics-discovery-release-3.0.1.tgz       silk-release-2.33.0-PaaS-TA-v2.tgz
+cf-networking-release-2.33.0-PaaS-TA.tgz     nats-release-34.tgz                       silk-release-2.33.0-PaaS-TA.tgz
+cf-networking-release-2.33.0.tgz             nginx-buildpack-release-1.1.14.tgz        silk-release-2.33.0.tgz
+cf-smoke-tests-release-41.0.1.tgz            nodejs-buildpack-release-1.7.26.tgz       staticfile-buildpack-release-1.5.10.tgz
+cflinuxfs3-release-0.204.0.tgz               os-conf-release-22.1.0.tgz                statsd-injector-release-1.11.15.tgz
+credhub-release-2.8.0.tgz                    paasta-conf-release-1.0.1.tgz             uaa-release-74.24.0.tgz
+diego-release-2.48.0-PaaS-TA.tgz             paasta-conf-release-1.0.2.tgz             uaa-release-74.29.0-PaaS-TA-v2.tgz
+diego-release-2.48.0.tgz                     php-buildpack-release-4.4.20.tgz          uaa-relese-74.29.0-PaaS-TA.tgz
+
 ```
 
 - 서버 환경에 맞추어 [common_vars.yml](#3.6.1.1)와 [vars.yml]((#3.6.1.2))을 수정 한 뒤, Deploy 스크립트 파일의 설정을 수정한다.   
 
-> $ vi ~/workspace/paasta-5.5.1/deployment/paasta-deployment/paasta/deploy-aws.sh
+> $ vi ~/workspace/paasta-5.5.2/deployment/paasta-deployment/paasta/deploy-aws.sh
 
 ```
-BOSH_ENVIRONMENT="${BOSH_ENVIRONMENT}"			 # bosh director alias name (PaaS-TA에서 제공되는 create-bosh-login.sh 미 사용시 bosh envs에서 이름을 확인하여 입력)
+BOSH_ENVIRONMENT="${BOSH_ENVIRONMENT}"			 		# bosh director alias name (PaaS-TA에서 제공되는 create-bosh-login.sh 미 사용시 bosh envs에서 이름을 확인하여 입력)
 
 bosh -e ${BOSH_ENVIRONMENT} -d paasta -n deploy paasta-deployment.yml \	# PaaS-TA Manifest File
 	-o operations/aws.yml \						# AWS 설정
@@ -1227,9 +1246,10 @@ bosh -e ${BOSH_ENVIRONMENT} -d paasta -n deploy paasta-deployment.yml \	# PaaS-T
 	-o operations/use-haproxy.yml \					# HAProxy 적용
 	-o operations/use-haproxy-public-network.yml \			# HAProxy Public Network 적용
 	-o operations/use-postgres.yml \				# Database Type 설정 (3.5버전 이하에서 Migration 시 필수)
+	-o operations/cce-postgres.yml \				# CCE 조치 적용
 	-o operations/rename-network-and-deployment.yml \		# Rename Network and Deployment
 	-o operations/use-offline-releases.yml \ 			# paasta-deployment.yml의 오프라인 릴리즈 사용
-	-o operations/use-offline-releases-cce.yml \			# cce.yml의 오프라인 릴리즈 사용
+	-o operations/use-offline-releases-cce-postgres.yml \		# cce-postgres.yml의 오프라인 릴리즈 사용
 	-o operations/use-offline-releases-haproxy.yml \		# use-haproxy.yml의 오프라인 릴리즈 사용
 	-o operations/use-offline-releases-postgres.yml \		# use-postgres.yml의 오프라인 릴리즈 사용
 	-l vars.yml \							# 환경에 PaaS-TA 설치시 적용하는 변수 설정 파일
@@ -1239,7 +1259,7 @@ bosh -e ${BOSH_ENVIRONMENT} -d paasta -n deploy paasta-deployment.yml \	# PaaS-T
 - PaaS-TA 설치 시 Shell Script 파일 실행 (BOSH 로그인 필요)
 
 ```
-$ cd ~/workspace/paasta-5.5.1/deployment/paasta-deployment/paasta
+$ cd ~/workspace/paasta-5.5.2/deployment/paasta-deployment/paasta
 $ ./deploy-{IaaS}.sh
 ```
 
@@ -1326,11 +1346,11 @@ $ cf --version
 > $ cf api api.{system_domain} --skip-ssl-validation
 
 ```
-ubuntu@inception:~$ cf api api.54.180.53.80.xip.io --skip-ssl-validation
-Setting api endpoint to api.54.180.53.80.xip.io...
+ubuntu@inception:~$ cf api api.54.180.53.80.nip.io --skip-ssl-validation
+Setting api endpoint to api.54.180.53.80.nip.io...
 OK
 
-api endpoint:   https://api.54.180.53.80.xip.io
+api endpoint:   https://api.54.180.53.80.nip.io
 api version:    3.87.0
 ```
 
@@ -1340,7 +1360,7 @@ api version:    3.87.0
 
 ```
 ubuntu@inception:~$ cf login
-API endpoint: https://api.54.180.53.80.xip.io
+API endpoint: https://api.54.180.53.80.nip.io
 
 Email> admin
 

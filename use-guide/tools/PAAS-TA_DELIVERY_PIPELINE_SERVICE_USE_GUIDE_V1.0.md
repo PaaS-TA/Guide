@@ -634,7 +634,7 @@
 ![134]
 4. URL에는 “URL 관리” 버튼을 클릭한 후 팝업 창이 뜨면 “URL 등록” 버튼을 클릭하여 Cloud Foundry 계정 정보를 등록하도록 한다.<br>
 ![135]
-5. Cloud Foundry API 명(ex. api)을 입력하고, Job 배포 계정으로 사용하고자 하는 Cloud Foundry target API URL(ex. https://api.115.68.46.186.xip.io) 을 입력한 후 “URL 저장” 버튼을 클릭한다.
+5. Cloud Foundry API 명(ex. api)을 입력하고, Job 배포 계정으로 사용하고자 하는 Cloud Foundry target API URL(ex. https://api.115.68.46.186.nip.io) 을 입력한 후 “URL 저장” 버튼을 클릭한다.
 ![136]
 6. URL이 등록되었음을 확인한다.<br>
 ![137]

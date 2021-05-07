@@ -66,7 +66,7 @@ PaaS-TA 3.5 버전부터는 Bosh2.0 기반으로 deploy를 진행하며 기존 B
 
 ### <div id="2.2"/> 2.2. Stemcell 확인
 
-Stemcell 목록을 확인하여 서비스 설치에 필요한 Stemcell이 업로드 되어 있는 것을 확인한다.  (PaaS-TA 5.5.1 과 동일 stemcell 사용)
+Stemcell 목록을 확인하여 서비스 설치에 필요한 Stemcell이 업로드 되어 있는 것을 확인한다.  (PaaS-TA 5.5.2 과 동일 stemcell 사용)
 
 > $ bosh -e micro-bosh stemcells
 
@@ -87,15 +87,15 @@ Succeeded
 
 서비스 설치에 필요한 Deployment를 Git Repository에서 받아 서비스 설치 작업 경로로 위치시킨다.  
 
-- Service Deployment Git Repository URL : https://github.com/PaaS-TA/service-deployment/tree/v5.0.6
+- Service Deployment Git Repository URL : https://github.com/PaaS-TA/service-deployment/tree/v5.1.0
 
 ```
 # Deployment 다운로드 파일 위치 경로 생성 및 설치 경로 이동
-$ mkdir -p ~/workspace/paasta-5.5.1/deployment
-$ cd ~/workspace/paasta-5.5.1/deployment
+$ mkdir -p ~/workspace/paasta-5.5.2/deployment
+$ cd ~/workspace/paasta-5.5.2/deployment
 
 # Deployment 파일 다운로드
-$ git clone https://github.com/PaaS-TA/service-deployment.git -b v5.0.6
+$ git clone https://github.com/PaaS-TA/service-deployment.git -b v5.1.0
 
 
 # common_vars.yml 파일 다운로드(common_vars.yml가 존재하지 않는다면 다운로드)
@@ -172,19 +172,19 @@ Succeeded
 - common_vars.yml을 서버 환경에 맞게 수정한다. 
 - RabbitMQ에서 사용하는 변수는 system_domain, paasta_admin_username, paasta_admin_password 이다.
 
-> $ vi ~/workspace/paasta-5.5.1/deployment/common/common_vars.yml
+> $ vi ~/workspace/paasta-5.5.2/deployment/common/common_vars.yml
 ```
 # BOSH INFO
 bosh_ip: "10.0.1.6"				# BOSH IP
 bosh_url: "https://10.0.1.6"			# BOSH URL (e.g. "https://00.000.0.0")
 bosh_client_admin_id: "admin"			# BOSH Client Admin ID
-bosh_client_admin_secret: "ert7na4jpew48"	# BOSH Client Admin Secret('echo $(bosh int ~/workspace/paasta-5.5.1/deployment/paasta-deployment/bosh/{iaas}/creds.yml --path /admin_password)' 명령어를 통해 확인 가능)
+bosh_client_admin_secret: "ert7na4jpew48"	# BOSH Client Admin Secret('echo $(bosh int ~/workspace/paasta-5.5.2/deployment/paasta-deployment/bosh/{iaas}/creds.yml --path /admin_password)' 명령어를 통해 확인 가능)
 bosh_director_port: 25555			# BOSH director port
 bosh_oauth_port: 8443				# BOSH oauth port
 bosh_version: 271.2				# BOSH version('bosh env' 명령어를 통해 확인 가능, on-demand service용, e.g. "271.2")
 
 # PAAS-TA INFO
-system_domain: "61.252.53.246.xip.io"		# Domain (xip.io를 사용하는 경우 HAProxy Public IP와 동일)
+system_domain: "61.252.53.246.nip.io"		# Domain (nip.io를 사용하는 경우 HAProxy Public IP와 동일)
 paasta_admin_username: "admin"			# PaaS-TA Admin Username
 paasta_admin_password: "admin"			# PaaS-TA Admin Password
 paasta_nats_ip: "10.0.1.121"
@@ -209,6 +209,8 @@ uaa_client_portal_secret: "clientsecret"	# UAAC Portal Client에 접근하기 �
 
 # Monitoring INFO
 metric_url: "10.0.161.101"			# Monitoring InfluxDB IP
+elasticsearch_master_ip: "10.0.1.146"           # Logsearch의 elasticsearch master IP
+elasticsearch_master_port: 9200                 # Logsearch의 elasticsearch master Port
 syslog_address: "10.0.121.100"            	# Logsearch의 ls-router IP
 syslog_port: "2514"                          	# Logsearch의 ls-router Port
 syslog_transport: "relp"                        # Logsearch Protocol
@@ -217,17 +219,17 @@ monitoring_api_url: "61.252.53.241"        	# Monitoring-WEB의 Public IP
 
 ### Portal INFO
 portal_web_user_ip: "52.78.88.252"
-portal_web_user_url: "http://portal-web-user.52.78.88.252.xip.io" 
+portal_web_user_url: "http://portal-web-user.52.78.88.252.nip.io" 
 
 ### ETC INFO
-abacus_url: "http://abacus.61.252.53.248.xip.io"	# abacus url (e.g. "http://abacus.xxx.xxx.xxx.xxx.xip.io")
+abacus_url: "http://abacus.61.252.53.248.nip.io"	# abacus url (e.g. "http://abacus.xxx.xxx.xxx.xxx.nip.io")
 
 ```
 
 
 - Deployment YAML에서 사용하는 변수 파일을 서버 환경에 맞게 수정한다.
 
-> $ vi ~/workspace/paasta-5.0/deployment/service-deployment/rabbitmq/vars.yml
+> $ vi ~/workspace/paasta-5.5.2/deployment/service-deployment/rabbitmq/vars.yml
 
 ```
 # STEMCELL
@@ -268,9 +270,9 @@ broker_deregistrar_instances: 1                             # broker-deregistrar
 ### <div id="2.5"/> 2.5. 서비스 설치
 
 - 서버 환경에 맞추어 Deploy 스크립트 파일의 VARIABLES 설정을 수정하고, Option file을 추가할지 선택한다.  
-     (선택) -o operations/use-compiled-releases.yml (ubuntu-xenial/621.94로 컴파일 된 릴리즈 사용) 
+     (선택) -o operations/cce.yml (CCE 조치를 적용하여 설치)
 
-> $ vi ~/workspace/paasta-5.5.1/deployment/service-deployment/rabbitmq/deploy.sh
+> $ vi ~/workspace/paasta-5.5.2/deployment/service-deployment/rabbitmq/deploy.sh
 
 ```
 #!/bin/bash
@@ -281,13 +283,14 @@ BOSH_ENVIRONMENT="${BOSH_ENVIRONMENT}"      # bosh director alias name (PaaS-TA�
 
 # DEPLOY
 bosh -e ${BOSH_ENVIRONMENT} -n -d rabbitmq deploy --no-redact rabbitmq.yml \
+    -o operations/cce.yml \
     -l ${COMMON_VARS_PATH} \
     -l vars.yml
 ```
 
 - 서비스를 설치한다.  
 ```
-$ cd ~/workspace/paasta-5.5.1/deployment/service-deployment/rabbitmq  
+$ cd ~/workspace/paasta-5.5.2/deployment/service-deployment/rabbitmq  
 $ sh ./deploy.sh  
 ```  
 
@@ -295,22 +298,22 @@ $ sh ./deploy.sh
 
 - 서비스 설치에 필요한 릴리즈 파일을 다운로드 받아 Local machine의 서비스 설치 작업 경로로 위치시킨다.  
   
-  - 설치 릴리즈 파일 다운로드 : [paasta-rabbitmq-2.0.tgz](http://45.248.73.44/index.php/s/3eT2Zmia5Jww5Gx/download)
+  - 설치 릴리즈 파일 다운로드 : [paasta-rabbitmq-release-2.1.0.tgz](https://nextcloud.paas-ta.org/index.php/s/o4HQoeYbEKPdNma/download)
 
 ```
 # 릴리즈 다운로드 파일 위치 경로 생성
-$ mkdir -p ~/workspace/paasta-5.5.1/release/service
+$ mkdir -p ~/workspace/paasta-5.5.2/release/service
 
 # 릴리즈 파일 다운로드 및 파일 경로 확인
-$ ls ~/workspace/paasta-5.5.1/release/service
-paasta-rabbitmq-2.0.tgz
+$ ls ~/workspace/paasta-5.5.2/release/service
+paasta-rabbitmq-release-2.1.0.tgz
 ```
   
 - 서버 환경에 맞추어 Deploy 스크립트 파일의 VARIABLES 설정을 수정하고 Option file 및 변수를 추가한다.  
      (추가) -o operations/use-offline-releases.yml (미리 다운받은 offline 릴리즈 사용)  
      (추가) -v releases_dir="<RELEASE_DIRECTORY>"  
      
-> $ vi ~/workspace/paasta-5.5.1/deployment/service-deployment/rabbitmq/deploy.sh
+> $ vi ~/workspace/paasta-5.5.2/deployment/service-deployment/rabbitmq/deploy.sh
   
 ```
 #!/bin/bash
@@ -321,14 +324,15 @@ BOSH_ENVIRONMENT="${BOSH_ENVIRONMENT}"      # bosh director alias name (PaaS-TA�
 
 # DEPLOY
 bosh -e ${BOSH_ENVIRONMENT} -n -d rabbitmq deploy --no-redact rabbitmq.yml \
+    -o operations/cce.yml \
     -l ${COMMON_VARS_PATH} \
     -l vars.yml \
-    -v releases_dir="/home/ubuntu/workspace/paasta-5.5.1/release"  
+    -v releases_dir="/home/ubuntu/workspace/paasta-5.5.2/release"  
 ```  
 
 - 서비스를 설치한다.  
 ```
-$ cd ~/workspace/paasta-5.5.1/deployment/service-deployment/rabbitmq  
+$ cd ~/workspace/paasta-5.5.2/deployment/service-deployment/rabbitmq  
 $ sh ./deploy.sh  
 ```  
 
@@ -416,24 +420,24 @@ $ cf service-access
 Getting service access as admin...
 broker: rabbitmq-service-broker
    service      plan       access   orgs
-   p-rabbitmq   standard   none      
+   rabbitmq     standard   none      
 ```
 
 - 서비스 브로커 등록시 최초에는 접근을 허용하지 않는다. 따라서 access는 none으로 설정된다.
 
 #### 특정 조직에 해당 서비스 접근 허용을 할당하고 접근 서비스 목록을 다시 확인한다. (전체 조직)
 
->`$ cf enable-service-access p-rabbitmq`
+>`$ cf enable-service-access rabbitmq`
 
 ```
-Enabling access to all plans of service p-rabbitmq for all orgs as admin...
+Enabling access to all plans of service rabbitmq for all orgs as admin...
 OK
 
 $ cf service-access
 Getting service access as admin...
 broker: rabbitmq-service-broker
    service      plan       access   orgs
-   p-rabbitmq   standard   all      
+   rabbitmq     standard   all      
 ```
 
 ### <div id='3.2'> 3.2. 서비스 신청
@@ -450,7 +454,7 @@ getting services from marketplace in org system / space dev as admin...
 OK
 
 service      plans         description                                                                           broker
-p-rabbitmq   standard      RabbitMQ is a robust and scalable high-performance multi-protocol messaging broker.   rabbitmq-service-broker
+rabbitmq     standard      RabbitMQ is a robust and scalable high-performance multi-protocol messaging broker.   rabbitmq-service-broker
 
 TIP: Use 'cf marketplace -s SERVICE' to view descriptions of individual plans of a given service.
 ```
@@ -459,12 +463,12 @@ TIP: Use 'cf marketplace -s SERVICE' to view descriptions of individual plans of
 #### Marketplace에서 원하는 서비스가 있으면 서비스 신청(Provision)을 한다.
 
 >`$ cf create-service {서비스명} {서비스 플랜} {내 서비스명}`
-- **서비스명** : p-rabbitmq로 Marketplace에서 보여지는 서비스 명칭이다.
+- **서비스명** : rabbitmq로 Marketplace에서 보여지는 서비스 명칭이다.
 - **서비스플랜** : 서비스에 대한 정책으로 plans에 있는 정보 중 하나를 선택한다. RabbitMQ 서비스는 standard plan만 지원한다.
 - **내 서비스명** : 내 서비스에서 보여지는 명칭이다. 이 명칭을 기준으로 환경 설정 정보를 가져온다.
 
 ```
-$ cf create-service p-rabbitmq standard my_rabbitmq_service
+$ cf create-service rabbitmq standard my_rabbitmq_service
 Creating service instance my_rabbitmq_service in org system / space dev as admin...
 OK
 ```
@@ -480,7 +484,7 @@ $ cf services
 Getting services in org system / space dev as admin...
 
 name                  service      plan       bound apps   last operation     broker                    upgrade available
-my_rabbitmq_service   p-rabbitmq   standard                create succeeded   rabbitmq-service-broker   
+my_rabbitmq_service   rabbitmq     standard                create succeeded   rabbitmq-service-broker   
 ```
 
 <br>
@@ -492,60 +496,49 @@ my_rabbitmq_service   p-rabbitmq   standard                create succeeded   ra
 #### git을 통해 sample-app을 다운로드 한다.
 
 ```
-$ git clone https://github.com/pivotal-cf/rabbit-example-app.git
-Cloning into 'rabbit-example-app'...
-remote: Enumerating objects: 297, done.
-remote: Total 297 (delta 0), reused 0 (delta 0), pack-reused 297
-Receiving objects: 100% (297/297), 10.59 MiB | 4.48 MiB/s, done.
-Resolving deltas: 100% (87/87), done.
-Checking connectivity... done
+$ https://github.com/cloudfoundry-community/cf-rabbitmq-example-app.git
+Cloning into 'cf-rabbitmq-example-app'...
+remote: Enumerating objects: 91, done.
+remote: Total 91 (delta 0), reused 0 (delta 0), pack-reused 91
+Unpacking objects: 100% (91/91), done.
 ```
 
 #### --no-start 옵션으로 App을 배포한다. 
 --no-start: App 배포시 구동은 하지 않는다.
 
->`$cd rabbit-example-app`<br>
+>`$ cd cf-rabbitmq-example-app`<br>
 
->`$cf push rabbit-example-app --no-start`<br>
+>`$ cf push rabbit-example-app --no-start -i 1`<br>
 
 ```
-$ cf push rabbit-example-app --no-start
-Pushing from manifest to org system / space dev as admin...
-Using manifest file /home/inception/workspace/user/cheolhan/rabbit-example-app/manifest.yml
-Getting app info...
-Creating app with these attributes...
-+ name:       test-app
-  path:       /home/inception/workspace/user/cheolhan/rabbit-example-app
-+ command:    thin -R config.ru start
-  routes:
-
-Creating app test-app...
-Mapping routes...
-Comparing local files to remote cache...
+$ cf push rabbit-example-app --no-start -i 1
+Pushing app rabbit-example-app to org system / space dev as admin...
+Applying manifest file /home/ubuntu/workspace/ruby/tmp/cf-rabbitmq-example-app/manifest.yml...
+Manifest applied
 Packaging files to upload...
 Uploading files...
- 3.24 MiB / 3.24 MiB [============================================================================================================================================================================================================================================] 100.00% 1s
+ 230.44 KiB / 230.44 KiB [===================================================================================================] 100.00% 1s
 
 Waiting for API to complete processing files...
 
-name:              test-app
+name:              rabbit-example-app
 requested state:   stopped
-routes:            test-app.115.68.47.178.xip.io
+routes:            rabbit-example-app.115.68.47.178.nip.io
 last uploaded:     
 stack:             
 buildpacks:        
 
-type:            web
-instances:       0/1
-memory usage:    1024M
-start command:   thin -R config.ru start
+type:           web
+sidecars:       
+instances:      0/1
+memory usage:   256M
      state   since                  cpu    memory   disk     details
-#0   down    2019-11-19T01:24:08Z   0.0%   0 of 0   0 of 0   
+#0   down    2021-05-07T02:18:19Z   0.0%   0 of 0   0 of 0   
 ```
 
 #### Sample App에서 생성한 서비스 인스턴스 바인드 신청을 한다. 
 
->`cf bind-service test-app my_rabbitmq_service`<br>
+>`cf bind-service rabbit-example-app my_rabbitmq_service`<br>
 
 <br>
 
@@ -582,33 +575,32 @@ start command:   thin -R config.ru start
 
 #### 바인드가 적용되기 위해서 App을 재기동한다.
 
->`cf restart test-app`
+>`cf restart rabbit-example-app`
 
 <br>
 
 ####  App이 정상적으로 RabbitMQ 서비스를 사용하는지 확인한다.
 
+```
+$ export APP=https://rabbit-example-app.<System_Domain>
 
-####  브라우저에서 확인
->`http://test-app.<YOUR_DOMAIN>/write`
+$ curl $APP/ping -k
+OK
 
->`http://test-app.<YOUR_DOMAIN>/read`
+$ curl -X POST $APP/queues -d 'name=test-queue' -k
+SUCCESS
 
->![rabbitmq_image_12]
+$ curl $APP/queues -k
+test.mq.test-queue
 
-####  스토어 엔드포인트 테스트
->`curl -XPOST -d 'test' http://test-app.<YOUR-DOMAIN>/store`
+$ curl -X PUT $APP/queue/test-queue -d 'data=Hello-PaaS-TA' -k
+SUCCESS
 
->`curl -XGET http://test-app.<YOUR-DOMAIN>/store`
+$ curl -X GET $APP/queue/test-queue -k
+Hello-PaaS-TA
+```
 
->![rabbitmq_image_13]
 
-####  큐 엔드포인트 테스트
->`curl -XPOST -d 'test' http://test-app.<YOUR-DOMAIN>/queues/<YOUR-QUEUE-NAME>`
-
->`curl -XGET http://test-app.<YOUR-DOMAIN>/queues/<YOUR-QUEUE-NAME>`
-
->![rabbitmq_image_14]
 
 [rabbitmq_image_01]:/service-guide/images/rabbitmq/rabbitmq_image_01.png
 

@@ -34,7 +34,7 @@ PaaS-TA 3.5 버전부터는 Bosh2.0 기반으로 deploy를 진행하며 기존 B
 
 본 문서의 설치된 시스템 구성도이다. Pinpoint Server, HBase의 HBase Master2, HBase Slave2, Collector 2, Pinpoint 서비스 브로커, WebUI3로 최소사항을 구성하였다.
 
-![시스템구성도][pinpoint_image_01]
+![시스템구성도][pinpoint_image_01-1]
 
 <table>
   <tr>
@@ -52,19 +52,10 @@ PaaS-TA 3.5 버전부터는 Bosh2.0 기반으로 deploy를 진행하며 기존 B
   <td>h_master/0      </td><td>pinpoint_medium</td><td>2vCPU / 2GB RAM / 8GB Disk</td>
   </tr>
   <tr>
-  <td>h_secondary     </td><td>pinpoint_ small</td><td>1vCPU / 1GB RAM / 4GB Disk</td>
-  </tr>
-  <tr>
-  <td>h_slave/0       </td><td>services-small </td><td>1vCPU / 1GB RAM / 4GB Disk</td>
-  </tr>
-  <tr>
-  <td>h_slave/1       </td><td>services-small </td><td>1vCPU / 1GB RAM / 4GB Disk</td>
-  </tr>
-  <tr>
   <td>haproxy_webui/0 </td><td>services-small </td><td>1vCPU / 1GB RAM / 4GB Disk</td>
   </tr>
   <tr>
-  <td>pinpoint_broker/0</<td>services-small </td><td>1vCPU / 1GB RAM / 4GB Disk</td>
+  <td>pinpoint_broker/0</<td><td>services-small </td><td>1vCPU / 1GB RAM / 4GB Disk</td>
   </tr>
   <tr>
   <td>webui/0          </0><td>services-small </td><td>1vCPU / 1GB RAM / 4GB Disk</td>
@@ -85,7 +76,7 @@ PaaS-TA 3.5 버전부터는 Bosh2.0 기반으로 deploy를 진행하며 기존 B
 본 설치 가이드는 Linux 환경에서 설치하는 것을 기준으로 하였다. 서비스 설치를 위해서는 BOSH 2.0과 PaaS-TA 5.0 이상, PaaS-TA 포털이 설치되어 있어야 한다. 
 
 - bosh runtime-config를 확인하여 bosh-dns include deployments 에 pinpoint가 있는지 확인한다.  
- ※ bosh-dns include deployments에 pinpoint가 없다면 ~/workspace/paasta-5.5.1/deployment/paasta-deployment/bosh/runtime-configs 의 dns.yml 을 열어서 pinpoint를 추가하고, bosh runtime-config를 업데이트 해준다.    
+ ※ bosh-dns include deployments에 pinpoint가 없다면 ~/workspace/paasta-5.5.2/deployment/paasta-deployment/bosh/runtime-configs 의 dns.yml 을 열어서 pinpoint를 추가하고, bosh runtime-config를 업데이트 해준다.    
 
 > $ bosh -e micro-bosh runtime-config
 ```
@@ -126,7 +117,7 @@ Succeeded
 
 ### <div id="2.2"/> 2.2. Stemcell 확인
 
-Stemcell 목록을 확인하여 서비스 설치에 필요한 Stemcell이 업로드 되어 있는 것을 확인한다.  (PaaS-TA 5.5.1 과 동일 stemcell 사용)
+Stemcell 목록을 확인하여 서비스 설치에 필요한 Stemcell이 업로드 되어 있는 것을 확인한다.  (PaaS-TA 5.5.2 과 동일 stemcell 사용)
 
 > $ bosh -e micro-bosh stemcells
 
@@ -147,15 +138,15 @@ Succeeded
 
 서비스 설치에 필요한 Deployment를 Git Repository에서 받아 서비스 설치 작업 경로로 위치시킨다.  
 
-- Service Deployment Git Repository URL : https://github.com/PaaS-TA/service-deployment/tree/v5.0.6
+- Service Deployment Git Repository URL : https://github.com/PaaS-TA/service-deployment/tree/v5.1.0
 
 ```
 # Deployment 다운로드 파일 위치 경로 생성 및 설치 경로 이동
-$ mkdir -p ~/workspace/paasta-5.5.1/deployment
-$ cd ~/workspace/paasta-5.5.1/deployment
+$ mkdir -p ~/workspace/paasta-5.5.2/deployment
+$ cd ~/workspace/paasta-5.5.2/deployment
 
 # Deployment 파일 다운로드
-$ git clone https://github.com/PaaS-TA/service-deployment.git -b v5.0.6
+$ git clone https://github.com/PaaS-TA/service-deployment.git -b v5.1.0
 ```
 
 ### <div id="2.4"/> 2.4. Deployment 파일 수정
@@ -227,7 +218,7 @@ Succeeded
 
 - Deployment YAML에서 사용하는 변수 파일을 서버 환경에 맞게 수정한다.
 
-> $ vi ~/workspace/paasta-5.5.1/deployment/service-deployment/pinpoint/vars.yml
+> $ vi ~/workspace/paasta-5.5.2/deployment/service-deployment/pinpoint/vars.yml
 ```
 # STEMCELL
 stemcell_os: "ubuntu-xenial"                                     # stemcell os
@@ -284,9 +275,9 @@ resourcemanager_port: 8040                                       # resourcemanag
 ### <div id="2.5"/> 2.5. 서비스 설치
 
 - 서버 환경에 맞추어 Deploy 스크립트 파일의 VARIABLES 설정을 수정하고, Option file을 추가할지 선택한다.  
-     (선택) -o operations/use-compiled-releases.yml (ubuntu-xenial/621.94로 컴파일 된 릴리즈 사용) 
+     (선택) -o operations/cce.yml (CCE 조치를 적용하여 설치)
 
-> $ vi ~/workspace/paasta-5.5.1/deployment/service-deployment/pinpoint/deploy.sh
+> $ vi ~/workspace/paasta-5.5.2/deployment/service-deployment/pinpoint/deploy.sh
 
 ```
 #!/bin/bash
@@ -299,14 +290,14 @@ BOSH_ENVIRONMENT="${BOSH_ENVIRONMENT}"		# bosh director alias name (PaaS-TA에�
 # DEPLOY
 bosh -e ${BOSH_ENVIRONMENT} -n -d pinpoint deploy --no-redact pinpoint.yml \
     -o operations/${CURRENT_IAAS}-network.yml \
+    -o operations/cce.yml \
     -l ${COMMON_VARS_PATH} \
-    -l vars.yml \
-    -l operations/pem.yml
+    -l vars.yml
 ```
 
 - 서비스를 설치한다.  
 ```
-$ cd ~/workspace/paasta-5.5.1/deployment/service-deployment/pinpoint  
+$ cd ~/workspace/paasta-5.5.2/deployment/service-deployment/pinpoint  
 $ sh ./deploy.sh  
 ```  
 
@@ -314,22 +305,22 @@ $ sh ./deploy.sh
 
 - 서비스 설치에 필요한 릴리즈 파일을 다운로드 받아 Local machine의 서비스 설치 작업 경로로 위치시킨다.  
   
-  - 설치 릴리즈 파일 다운로드 : [paasta-pinpoint-release.tgz](http://45.248.73.44/index.php/s/SJ6SoLksWEc3ckJ/download)
+  - 설치 릴리즈 파일 다운로드 : [paasta-pinpoint-release-1.1.0.tgz](https://nextcloud.paas-ta.org/index.php/s/W537HGSMNPH3qfo/download)
 
 ```
 # 릴리즈 다운로드 파일 위치 경로 생성
-$ mkdir -p ~/workspace/paasta-5.5.1/release/service
+$ mkdir -p ~/workspace/paasta-5.5.2/release/service
 
 # 릴리즈 파일 다운로드 및 파일 경로 확인
-$ ls ~/workspace/paasta-5.5.1/release/service
-paasta-pinpoint-release.tgz
+$ ls ~/workspace/paasta-5.5.2/release/service
+paasta-pinpoint-release-1.1.0.tgz
 ```
 
 - 서버 환경에 맞추어 Deploy 스크립트 파일의 VARIABLES 설정을 수정하고 Option file 및 변수를 추가한다.  
      (추가) -o operations/use-offline-releases.yml (미리 다운받은 offline 릴리즈 사용)  
      (추가) -v releases_dir="<RELEASE_DIRECTORY>"  
      
-> $ vi ~/workspace/paasta-5.5.1/deployment/service-deployment/pinpoint/deploy.sh
+> $ vi ~/workspace/paasta-5.5.2/deployment/service-deployment/pinpoint/deploy.sh
 ```
 #!/bin/bash
 
@@ -341,15 +332,15 @@ BOSH_ENVIRONMENT="${BOSH_ENVIRONMENT}"		# bosh director alias name (PaaS-TA에�
 # DEPLOY
 bosh -e ${BOSH_ENVIRONMENT} -n -d pinpoint deploy --no-redact pinpoint.yml \
     -o operations/${CURRENT_IAAS}-network.yml \
+    -o operations/cce.yml \
     -l ${COMMON_VARS_PATH} \
     -l vars.yml \
-    -l operations/pem.yml \ 
-    -v releases_dir="/home/ubuntu/workspace/paasta-5.5.1/release"  
+    -v releases_dir="/home/ubuntu/workspace/paasta-5.5.2/release"  
 ```
 
 - 서비스를 설치한다.  
 ```
-$ cd ~/workspace/paasta-5.5.1/deployment/service-deployment/pinpoint  
+$ cd ~/workspace/paasta-5.5.2/deployment/service-deployment/pinpoint  
 $ sh ./deploy.sh  
 ```  
 
@@ -476,7 +467,7 @@ Sample Web App은 PaaS-TA에 App으로 배포가 된다. 배포된 App에 Pinpoi
 -   앱을 다운로드 후 –b 옵션을 주어 buildpack을 지정하여 push 해 놓는다.
 
 ```
-$ cf push -b java_buildpack_pinpoint --no-start
+$ cf push spring-music-pinpoint -b java_buildpack_pinpoint --no-start
 ```
 
 ```
@@ -589,7 +580,7 @@ my_rabbitmq_service      p-rabbitmq               standard                      
 - 서비스 바인드
 ```:q!
 
-$ cf bind-service spring-music-pinpoint PS1 -c '{"application_name":"spring-music"}'
+$ cf bind-service spring-music-pinpoint PS1 -c '{"application_name":"spring-music-pinpoint"}'
 ```
 ```
 Binding service PS1 to app spring-music-pinpoint in org org / space space as admin...
@@ -746,5 +737,6 @@ $ curl http://<URL(IP)>/#/main/spring-music-pinpoint@TOMCAT
 ```
 
 [pinpoint_image_01]:/service-guide/images/pinpoint/pinpoint-image1.png
+[pinpoint_image_01-1]:/service-guide/images/pinpoint/pinpoint-image1-1.png
 [pinpoint_image_02]:/service-guide/images/pinpoint/pinpoint-image2.png
 [pinpoint_image_03]:/service-guide/images/pinpoint/pinpoint-image3.png

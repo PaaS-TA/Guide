@@ -22,7 +22,6 @@
     3.1.3. [Portal App Manifest 변경 Script 실행](#3.1.3)  
     3.1.4. [Portal App 배포 Script 변수 설정](#3.1.4)  
     3.1.5. [Portal App 배포 Script 실행](#3.1.5)  
-    3.1.6. [Portal SSH 설치](#3.1.6)  
     
 4. [PaaS-TA Portal 운영](#4)  
   4.1. [사용자의 조직 생성 Flag 활성화](#4.1)  
@@ -71,7 +70,7 @@
 본 설치 가이드는 Linux 환경에서 설치하는 것을 기준으로 하였다. 서비스 설치를 위해서는 BOSH 2.0과 5.0 이상의 PaaS-TA가 설치 되어 있어야 한다.
 
 ### <div id="2.2"/> 2.2. Stemcell 확인
-Stemcell 목록을 확인하여 서비스 설치에 필요한 Stemcell이 업로드 되어 있는 것을 확인한다.  (PaaS-TA 5.5.1 과 동일 stemcell 사용)  
+Stemcell 목록을 확인하여 서비스 설치에 필요한 Stemcell이 업로드 되어 있는 것을 확인한다.  (PaaS-TA 5.5.2 과 동일 stemcell 사용)  
 
 > $ bosh -e ${BOSH_ENVIRONMENT} stemcells
 
@@ -92,15 +91,15 @@ Succeeded
 
 서비스 설치에 필요한 Deployment를 Git Repository에서 받아 서비스 설치 작업 경로로 위치시킨다.  
 
-- Portal Deployment Git Repository URL : https://github.com/PaaS-TA/portal-deployment/tree/v5.1.1
+- Portal Deployment Git Repository URL : https://github.com/PaaS-TA/portal-deployment/tree/v5.2.0
 
 ```
 # Deployment 다운로드 파일 위치 경로 생성 및 설치 경로 이동
-$ mkdir -p ~/workspace/paasta-5.5.1/deployment
-$ cd ~/workspace/paasta-5.5.1/deployment
+$ mkdir -p ~/workspace/paasta-5.5.2/deployment
+$ cd ~/workspace/paasta-5.5.2/deployment
 
 # Deployment 파일 다운로드
-$ git clone https://github.com/PaaS-TA/portal-deployment.git -b v5.1.1
+$ git clone https://github.com/PaaS-TA/portal-deployment.git -b v5.2.0
 ```
 
 ### <div id="2.4"/> 2.4. Deployment 파일 수정  
@@ -170,7 +169,7 @@ Succeeded
 
 - Deployment YAML에서 사용하는 변수 파일을 서버 환경에 맞게 수정한다.
 
-> $ vi ~/workspace/paasta-5.5.1/deployment/portal-deployment/portal-container-infra/vars.yml
+> $ vi ~/workspace/paasta-5.5.2/deployment/portal-deployment/portal-container-infra/vars.yml
 
 ```
 # STEMCELL INFO
@@ -190,10 +189,10 @@ infra_persistent_disk_type: "20GB"                              # infra : persis
 # MARIADB INFO
 mariadb_port: "<MARIADB_PORT>"                                  # mariadb : database port (e.g. 13306) -- Do Not Use "3306"
 mariadb_admin_password: "<MARIADB_ADMIN_PASSWORD>"              # mariadb : database admin password (e.g. "Paasta@2019")
-portal_default_api_name: "PaaS-TA 5.5.1"                        # portal default api name
+portal_default_api_name: "PaaS-TA 5.5.2"                        # portal default api name
 portal_default_api_url: "http://<PORTAL_GATEWAY_ROUTE>"         # portal default api url (portal gateway url) (e.g. "http://portal-gateway.<DOMAIN>")
 portal_default_header_auth: "Basic YWRtaW46b3BlbnBhYXN0YQ=="    # portal default header auth
-portal_default_api_desc: "PaaS-TA 5.5.1 infra"                  # portal default api description
+portal_default_api_desc: "PaaS-TA 5.5.2 infra"                  # portal default api description
 
 
 # BINARY_STORAGE INFO
@@ -207,9 +206,9 @@ binary_storage_email: "<BINARY_STORAGE_EMAIL>"                  # binary storage
 ### <div id="2.5"/> 2.5. 서비스 설치
 
 - 서버 환경에 맞추어 Deploy 스크립트 파일의 VARIABLES 설정을 수정하고, Option file을 추가할지 선택한다.  
-     (선택) -o operations/use-compiled-releases.yml (ubuntu-xenial/621.94로 컴파일 된 릴리즈 사용)  
+     (선택) -o operations/cce.yml (CCE 조치를 적용하여 설치)
 
-> $ vi ~/workspace/paasta-5.5.1/deployment/portal-deployment/portal-container-infra/deploy.sh
+> $ vi ~/workspace/paasta-5.5.2/deployment/portal-deployment/portal-container-infra/deploy.sh
 ```
 #!/bin/bash
 
@@ -219,13 +218,14 @@ BOSH_ENVIRONMENT="${BOSH_ENVIRONMENT}"      # bosh director alias name (PaaS-TA�
 
 # DEPLOY
 bosh -e ${BOSH_ENVIRONMENT} -n -d portal-container-infra deploy --no-redact portal-container-infra.yml \
+   -o operations/cce.yml \
    -l ${COMMON_VARS_PATH} \
    -l vars.yml
 ```
 
 - 서비스를 설치한다.  
 ```
-$ cd ~/workspace/paasta-5.5.1/deployment/portal-deployment/portal-container-infra    
+$ cd ~/workspace/paasta-5.5.2/deployment/portal-deployment/portal-container-infra    
 $ sh ./deploy.sh  
 ```  
 
@@ -233,22 +233,22 @@ $ sh ./deploy.sh
 
 - 서비스 설치에 필요한 릴리즈 파일을 다운로드 받아 Local machine의 서비스 설치 작업 경로로 위치시킨다.  
   
-  - 설치 릴리즈 파일 다운로드 : [paasta-portal-api-release-2.3.0-ctn.tgz](https://nextcloud.paas-ta.org/index.php/s/eKf8XWwt8Wy9HrA/download)
+  - 설치 릴리즈 파일 다운로드 : [paasta-portal-api-release-2.5.0-ctn.tgz](https://nextcloud.paas-ta.org/index.php/s/fexrDefqmj4kgys/download)
 
 ```
 # 릴리즈 다운로드 파일 위치 경로 생성
-$ mkdir -p ~/workspace/paasta-5.5.1/release/portal
+$ mkdir -p ~/workspace/paasta-5.5.2/release/portal
 
 # 릴리즈 파일 다운로드 및 파일 경로 확인
-$ ls ~/workspace/paasta-5.5.1/release/portal
-paasta-portal-api-release-2.3.0-ctn.tgz
+$ ls ~/workspace/paasta-5.5.2/release/portal
+paasta-portal-api-release-2.5.0-ctn.tgz
 ```
   
 - 서버 환경에 맞추어 Deploy 스크립트 파일의 VARIABLES 설정을 수정하고 Option file 및 변수를 추가한다.  
      (추가) -o operations/use-offline-releases.yml (미리 다운받은 offline 릴리즈 사용)  
      (추가) -v releases_dir="<RELEASE_DIRECTORY>"  
      
-> $ vi ~/workspace/paasta-5.5.1/deployment/portal-deployment/portal-container-infra/deploy.sh
+> $ vi ~/workspace/paasta-5.5.2/deployment/portal-deployment/portal-container-infra/deploy.sh
   
 ```
 #!/bin/bash
@@ -260,14 +260,15 @@ BOSH_ENVIRONMENT="${BOSH_ENVIRONMENT}"      # bosh director alias name (PaaS-TA�
 # DEPLOY
 bosh -e ${BOSH_ENVIRONMENT} -n -d portal-container-infra deploy --no-redact portal-container-infra.yml \
    -o operations/use-offline-releases.yml \
+   -o operations/cce.yml \
    -l ${COMMON_VARS_PATH} \
    -l vars.yml \
-   -v releases_dir="/home/ubuntu/workspace/paasta-5.5.1/release"     
+   -v releases_dir="/home/ubuntu/workspace/paasta-5.5.2/release"     
 ```  
 
 - 서비스를 설치한다.  
 ```
-$ cd ~/workspace/paasta-5.5.1/deployment/portal-deployment/portal-container-infra   
+$ cd ~/workspace/paasta-5.5.2/deployment/portal-deployment/portal-container-infra   
 $ sh ./deploy.sh  
 ```  
 
@@ -299,14 +300,14 @@ Portal 설치에 필요한 App 파일 및 Manifest 파일을 다운로드 받아
 
 ```
 ### 설치 작업 경로  
-$ cd ~/workspace/paasta-5.5.1/release/portal
+$ cd ~/workspace/paasta-5.5.2/release/portal
 
 ### portal app 파일을 다운로드한다
-$ wget --content-disposition https://nextcloud.paas-ta.org/index.php/s/jcDJmxrnsnc772E/download
-$ unzip portal-app.zip 
+$ wget --content-disposition https://nextcloud.paas-ta.org/index.php/s/cRHds5osDff5G3f/download
+$ unzip portal-app-1.2.0.zip 
 
 ### 설치 디렉토리 (파일) 구성  
-portal-app
+portal-app-1.2.0
 ├── portal-api-2.3.0
 │   ├── manifest.yml
 │   └── paas-ta-portal-api.jar
@@ -322,6 +323,9 @@ portal-app
 ├── portal-registration-2.1.0
 │   ├── manifest.yml
 │   └── paas-ta-portal-registration.jar
+├── portal-ssh-1.0.0
+│   ├── manifest.yml
+│   └── portal-ssh-package
 ├── portal-storage-api-2.1.0
 │   ├── manifest.yml
 │   └── paas-ta-portal-storage-api.jar
@@ -346,7 +350,7 @@ manifest는 Components 요소 및 배포의 속성을 정의한 YAML 파일이�
 ```
 ### e.g.) common_vars.yml의 PaaS-TA 정보
 # PAAS-TA INFO
-system_domain: "61.252.53.246.xip.io"                   # Domain (xip.io를 사용하는 경우 HAProxy Public IP와 동일)
+system_domain: "61.252.53.246.nip.io"                   # Domain (nip.io를 사용하는 경우 HAProxy Public IP와 동일)
 paasta_admin_username: "admin"                          # PaaS-TA Admin Username
 paasta_admin_password: "admin"                          # PaaS-TA Admin Password
 paasta_nats_ip: "10.0.1.121"
@@ -373,17 +377,17 @@ uaa_client_portal_secret: "clientsecret"                # UAAC Portal Client에 
 monitoring_api_url: "61.252.53.241"                     # Monitoring-WEB의 Public IP
 
 ### ETC INFO
-abacus_url: "http://abacus.61.252.53.248.xip.io"        # abacus url (e.g. "http://abacus.xxx.xxx.xxx.xxx.xip.io")
+abacus_url: "http://abacus.61.252.53.248.nip.io"        # abacus url (e.g. "http://abacus.xxx.xxx.xxx.xxx.nip.io")
 ```
 
 Portal을 PaaS-TA에 App으로 배포하기 전에 Portal App의 Manifest의 변수를 일괄 변경해주는 Script 동작을 위해 Portal 설치에 필요한 PaaS-TA 및 infra 정보를 확인하여 Script의 변수를 설정한다.
 
-> $ vi ~/workspace/paasta-5.5.1/release/portal/portal-app/1.applyChangeVariable.sh
+> $ vi ~/workspace/paasta-5.5.2/release/portal/portal-app/1.applyChangeVariable.sh
 ```
 #!/bin/bash
 
 # COMMON VARIABLE
-DOMAIN="xx.xxx.xx.xxx.xip.io"           # PaaS-TA System Domain
+DOMAIN="xx.xxx.xx.xxx.nip.io"           # PaaS-TA System Domain
 CF_USER_ADMIN_USERNAME="admin"          # PaaS-TA Admin Username
 CF_USER_ADMIN_PASSWORD="admin"          # PaaS-TA Admin Password
 UAA_CLIENT_ID="admin"                   # UAA Client ID
@@ -398,7 +402,7 @@ PORTAL_DB_USER_PASSWORD="Paasta@2019"   # portal-container-infra DB Password
 
 # PORTAL-API
 ABACUS_URL=""                           # Abacus URL(Not required)
-MONITORING_API_URL=""                   # Monitoring API URL(Not required)
+MONITORING_API_URL=""                   # Monitoring API URL(Not required) (e.g. 45.55.120.54)
 
 # PORTAL-COMMON-API
 PAASTA_DB_DRIVER="org.postgresql.Driver"  # PaaS-TA DB Driver (e.g. org.postgresql.Driver OR com.mysql.jdbc.Driver)
@@ -429,6 +433,7 @@ OBJECTSTORAGE_PORT="15001"                # portal-container-infra Binary Storag
 UAAC_PORTAL_CLIENT_ID="portalclient"      # UAAC Portal Client ID
 UAAC_PORTAL_CLIENT_SECRET="clientsecret"  # UAAC Poral Client Secret
 USER_APP_SIZE_MB=0                        # USER My App size(MB), if value==0 -> unlimited
+MONITORING_ENABLE=false						        # Monitoring Enable Option
 
 ......
 
@@ -439,14 +444,14 @@ USER_APP_SIZE_MB=0                        # USER My App size(MB), if value==0 ->
 Portal을 PaaS-TA에 App으로 배포하기 전에 Portal App의 Manifest의 변수를 일괄 변경해주는 Script를 실행한다.
 
 ```
-$ cd ~/workspace/paasta-5.5.1/release/portal/portal-app
+$ cd ~/workspace/paasta-5.5.2/release/portal/portal-app
 $ source 1.applyChangeVariable.sh
 
 
 ### 이후 각 Manifest.yml 파일을 확인하여 값이 정상적으로 바뀌었는지 확인한다.
 
 e.g.) portal-registration
-$ vi ~/workspace/paasta-5.5.1/release/portal/portal-app/portal-registration-2.1.0/manifest.yml
+$ vi ~/workspace/paasta-5.5.2/release/portal/portal-app/portal-registration-2.1.0/manifest.yml
 
 applications:
   - name: portal-registration
@@ -455,7 +460,7 @@ applications:
     buildpacks:
     - java_buildpack
     routes:
-    - route: portal-registration.xx.xxx.xxx.xxx.xip.io
+    - route: portal-registration.xx.xxx.xxx.xxx.nip.io
     path: paas-ta-portal-registration.jar
     env:
       server_port: 80
@@ -480,12 +485,12 @@ applications:
 ### <div id="3.1.4"/> 3.1.4. Portal App 배포 Script 변수 설정
 Portal을 PaaS-TA에 App으로 배포해주는 Script 동작을 위해 Script의 접속정보 변수를 설정한다.
 
-> $ vi ~/workspace/paasta-5.5.1/release/portal/portal-app/2.portalContainerPush.sh
+> $ vi ~/workspace/paasta-5.5.2/release/portal/portal-app/2.portalContainerPush.sh
 ```
 #!/bin/bash
 
 #VARIABLE
-DOMAIN="xx.xxx.xx.xxx.xip.io"           # PaaS-TA System Domain
+DOMAIN="xx.xxx.xx.xxx.nip.io"           # PaaS-TA System Domain
 PAASTA_USER_ADMIN_USERNAME="admin"      # PaaS-TA Admin Username
 PAASTA_USER_ADMIN_PASSWORD="admin"      # PaaS-TA Admin Password
 PORTAL_QUOTA_NAME="portal_quota"        # PaaS-TA Portal Quota Name
@@ -501,38 +506,23 @@ PORTAL_SECURITY_GROUP_NAME="portal"     # PaaS-TA Portal Space Name
 Portal을 PaaS-TA에 App으로 배포해주는 Script를 실행한다.
 
 ```
-$ cd ~/workspace/paasta-5.5.1/release/portal/portal-app
+$ cd ~/workspace/paasta-5.5.2/release/portal/portal-app
 $ source 2.portalContainerPush.sh
 
 .....
 
 name                  requested state   processes           routes
-portal-api            started           web:1/1, task:0/0   portal-api.61.252.53.246.xip.io
-portal-common-api     started           web:1/1, task:0/0   portal-common-api.61.252.53.246.xip.io
-portal-gateway        started           web:1/1, task:0/0   portal-gateway.61.252.53.246.xip.io
-portal-log-api        started           web:1/1, task:0/0   portal-log-api.61.252.53.246.xip.io
-portal-registration   started           web:1/1, task:0/0   portal-registration.61.252.53.246.xip.io
-portal-storage-api    started           web:1/1, task:0/0   portal-storage-api.61.252.53.246.xip.io
-portal-web-admin      started           web:1/1, task:0/0   portal-web-admin.61.252.53.246.xip.io
-portal-web-user       started           web:1/1             portal-web-user.61.252.53.246.xip.io
+portal-api            started           web:1/1, task:0/0   portal-api.61.252.53.246.nip.io
+portal-common-api     started           web:1/1, task:0/0   portal-common-api.61.252.53.246.nip.io
+portal-gateway        started           web:1/1, task:0/0   portal-gateway.61.252.53.246.nip.io
+portal-log-api        started           web:1/1, task:0/0   portal-log-api.61.252.53.246.nip.io
+portal-registration   started           web:1/1, task:0/0   portal-registration.61.252.53.246.nip.io
+portal-storage-api    started           web:1/1, task:0/0   portal-storage-api.61.252.53.246.nip.io
+portal-web-admin      started           web:1/1, task:0/0   portal-web-admin.61.252.53.246.nip.io
+portal-web-user       started           web:1/1             portal-web-user.61.252.53.246.nip.io
+ssh-app               started           web:1/1             ssh-app.61.252.53.246.nip.io
 
 ```
-
-### <div id="3.1.6"/> 3.1.6. Portal SSH 설치
-
-Portal 5.1.0 버전 이상부터는 배포된 어플리케이션의 SSH 접속이 가능하다.
-
-이를 위해 Portal SSH App을 먼저 배포해야 한다.
-
-
-- Portal SSH 다운로드 및 배포
-```
-$ wget --content-disposition https://nextcloud.paas-ta.org/index.php/s/awPjYDYCMiHY7yF/download
-$ unzip portal-ssh.zip
-$ cd portal-ssh
-$ cf push
-```
-
 
 
 ## <div id="4"/>4. PaaS-TA Portal 운영

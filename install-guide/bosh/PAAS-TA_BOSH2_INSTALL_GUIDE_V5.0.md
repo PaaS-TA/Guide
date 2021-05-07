@@ -59,10 +59,10 @@ BOSH는 초기에 Cloud Foundry PaaS를 위해 개발되었지만, 현재는 Jen
 BOSH가 지원하는 IaaS는 VMware vSphere, Google Cloud Platform, Amazon Web Services EC2, Microsoft Azure, OpenStack, Alibaba Cloud가 있다.  
 PaaS-TA는 VMware vSphere, Google Cloud Platform, Amazon Web Services EC2, OpenStack, Microsoft Azure 등의 IaaS를 지원한다.  
 
-현재 PaaS-TA 5.5.1에서 검증한 IaaS 환경은 AWS, OpenStack 환경이다.
+현재 PaaS-TA 5.5.2에서 검증한 IaaS 환경은 AWS, OpenStack 환경이다.
 
 PaaS-TA 3.1 버전까지는 Cloud Foundry BOSH1을 기준으로 설치했지만, PaaS-TA 3.5 버전부터 BOSH2를 기준으로 설치하였다.  
-PaaS-TA 5.5.1는 Cloud Foundry에서 제공하는 bosh-deployment를 활용하여 BOSH를 설치한다.
+PaaS-TA 5.5.2는 Cloud Foundry에서 제공하는 bosh-deployment를 활용하여 BOSH를 설치한다.
 
 
 BOSH2는 BOSH2 CLI를 통하여 BOSH와 PaaS-TA를 모두 생성한다.  
@@ -199,15 +199,15 @@ $ bosh -version
 
 - BOSH를 설치하기 위한 deployment가 존재하지 않는다면 다운로드 받는다
 ```
-$ mkdir -p ~/workspace/paasta-5.5.1/deployment
-$ cd ~/workspace/paasta-5.5.1/deployment
-$ git clone https://github.com/PaaS-TA/paasta-deployment.git -b v5.5.1
+$ mkdir -p ~/workspace/paasta-5.5.2/deployment
+$ cd ~/workspace/paasta-5.5.2/deployment
+$ git clone https://github.com/PaaS-TA/paasta-deployment.git -b v5.5.2
 ```
 
 - paasta/deployment/paasta-deployment 이하 폴더 확인
 
 ```
-$ cd ~/workspace/paasta-5.5.1/deployment/paasta-deployment
+$ cd ~/workspace/paasta-5.5.2/deployment/paasta-deployment
 $ ls
 README.md  bosh  cloud-config  paasta
 ```
@@ -230,7 +230,7 @@ README.md  bosh  cloud-config  paasta
 
 ### <div id='3.3.4'/>3.3.4.    BOSH 설치 파일
 
-~/workspace/paasta-5.5.1/deployment/paasta-deployment/bosh 폴더에는 BOSH 설치를 위한 IaaS별 Shell Script 파일이 존재한다.  
+~/workspace/paasta-5.5.2/deployment/paasta-deployment/bosh 폴더에는 BOSH 설치를 위한 IaaS별 Shell Script 파일이 존재한다.  
 
 Shell Script 파일을 이용하여 BOSH를 설치한다.
 파일명은 deploy-{IaaS}.sh 로 만들어졌다.  
@@ -272,7 +272,7 @@ bosh_client_admin_id: "admin"				# Bosh Client Admin ID
 private_cidr: "10.0.1.0/24"				# Private IP Range
 private_gw: "10.0.1.1"					# Private IP Gateway
 bosh_url: "10.0.1.6"					# Private IP 
-releases_dir: "/home/ubuntu/workspace/paasta-5.5.1/release"	# Release Directory (offline으로 릴리즈 다운받아 사용시 설정)
+releases_dir: "/home/ubuntu/workspace/paasta-5.5.2/release"	# Release Directory (offline으로 릴리즈 다운받아 사용시 설정)
 director_name: "micro-bosh"				# BOSH Director Name
 access_key_id: "XXXXXXXXXXXXXXX"			# AWS Access Key
 secret_access_key: "XXXXXXXXXXXXX"			# AWS Secret Key
@@ -295,7 +295,7 @@ syslog_transport: "relp"				# Logsearch Protocol
 ```
 # BOSH VARIABLE
 bosh_client_admin_id: "admin"				# Bosh Client Admin ID
-releases_dir: "/home/ubuntu/workspace/paasta-5.5.1/release"	# Release Directory (offline으로 릴리즈 다운받아 사용시 설정)
+releases_dir: "/home/ubuntu/workspace/paasta-5.5.2/release"	# Release Directory (offline으로 릴리즈 다운받아 사용시 설정)
 director_name: "micro-bosh"				# BOSH Director Name
 private_cidr: "10.0.1.0/24"				# Private IP Range
 private_gw: "10.0.1.1"					# Private IP Gateway
@@ -433,7 +433,7 @@ bosh create-env bosh.yml \
 - Shell Script 파일에 실행 권한 부여
 
 ```
-$ chmod +x ~/workspace/paasta-5.5.1/deployment/paasta-deployment/bosh/*.sh  
+$ chmod +x ~/workspace/paasta-5.5.2/deployment/paasta-deployment/bosh/*.sh  
 ```
 
 
@@ -441,7 +441,7 @@ $ chmod +x ~/workspace/paasta-5.5.1/deployment/paasta-deployment/bosh/*.sh
 
 - 서버 환경에 맞추어 Deploy 스크립트 파일의 설정을 수정한다. 
 
-> $ vi ~/workspace/paasta-5.5.1/deployment/paasta-deployment/bosh/deploy-aws.sh
+> $ vi ~/workspace/paasta-5.5.2/deployment/paasta-deployment/bosh/deploy-aws.sh
 ```                     
 bosh create-env bosh.yml \                         
 	--state=aws/state.json \	
@@ -457,15 +457,15 @@ bosh create-env bosh.yml \
 - BOSH 설치 Shell Script 파일 실행
 
 ```
-$ cd ~/workspace/paasta-5.5.1/deployment/paasta-deployment/bosh
+$ cd ~/workspace/paasta-5.5.2/deployment/paasta-deployment/bosh
 $ ./deploy-{iaas}.sh
 ```
 
 - BOSH 설치 중
 
 ```
-ubuntu@inception:~/workspace/paasta-5.5.1/deployment/paasta-deployment/bosh$ ./deploy-aws.sh
-Deployment manifest: '/home/ubuntu/workspace/paasta-5.5.1/deployment/paasta-deployment/bosh/bosh.yml'
+ubuntu@inception:~/workspace/paasta-5.5.2/deployment/paasta-deployment/bosh$ ./deploy-aws.sh
+Deployment manifest: '/home/ubuntu/workspace/paasta-5.5.2/deployment/paasta-deployment/bosh/bosh.yml'
 Deployment state: 'aws/state.json'
 
 Started validating
@@ -498,37 +498,40 @@ Succeeded
 - 서비스 설치에 필요한 릴리즈 파일을 다운로드 받아 Local machine의 작업 경로로 위치시킨다.  
   
   - 설치 파일 통합 다운로드 위치 : https://paas-ta.kr/download/package    
-  - PaaS-TA 5.5.1 BOSH 설치 릴리즈 파일 다운로드 : [bosh.zip](https://nextcloud.paas-ta.org/index.php/s/fy83bkQQCcek2yk/download)
+  - PaaS-TA 5.5.2 BOSH 설치 릴리즈 파일 다운로드 : [bosh.zip](https://nextcloud.paas-ta.org/index.php/s/fy83bkQQCcek2yk/download)
 
 ```
 # 릴리즈 다운로드 파일 위치 경로 생성
-$ mkdir -p ~/workspace/paasta-5.5.1/release
+$ mkdir -p ~/workspace/paasta-5.5.2/release
 
 # 릴리즈 파일 다운로드 및 파일 경로 확인
-$ cd ~/workspace/paasta-5.5.1/release
+$ cd ~/workspace/paasta-5.5.2/release
 $ wget https://nextcloud.paas-ta.org/index.php/s/fy83bkQQCcek2yk/download --content-disposition
 $ unzip bosh.zip
-$ cd ~/workspace/paasta-5.5.1/release/bosh
-$ ls
-bosh-271.2.0-PaaS-TA.tgz                                                        bosh-vsphere-cpi-release-54.1.1.tgz
-bosh-271.2.0-ubuntu-xenial-621.93-20201130-224348-505837986-20201130224349.tgz  bosh-warden-cpi-41-ubuntu-xenial-621.93-20201130-224003-395585274-20201130224004.tgz
-bosh-aws-cpi-release-83.tgz                                                     bpm-1.1.9-ubuntu-xenial-621.93-20201130-224507-912672592-20201130224509.tgz
-bosh-azure-cpi-release-37.3.0.tgz                                               credhub-2.9.0-ubuntu-xenial-621.93-20201130-223813-836755462-20201130223815.tgz
-bosh-dns-release-1.27.0.tgz                                                     garden-runc-1.19.17-ubuntu-xenial-621.93-20201202-140222-317108723-20201202140224.tgz
-bosh-google-cpi-release-40.0.3.tgz                                              light-bosh-stemcell-621.93-aws-xen-hvm-ubuntu-xenial-go_agent.tgz
-bosh-openstack-cpi-release-44.tgz                                               light-bosh-stemcell-621.93-google-kvm-ubuntu-xenial-go_agent.tgz
-bosh-stemcell-621.93-azure-hyperv-ubuntu-xenial-go_agent.tgz                    os-conf-release-18.tgz
-bosh-stemcell-621.93-openstack-kvm-ubuntu-xenial-go_agent.tgz                   os-conf-release-22.1.0.tgz
-bosh-stemcell-621.93-vsphere-esxi-ubuntu-xenial-go_agent.tgz                    uaa-74.29.0-ubuntu-xenial-621.93-20201130-224014-789299918-20201130224017.tgz
-bosh-virtualbox-cpi-release-0.2.0.tgz
+$ cd ~/workspace/paasta-5.5.2/release/bosh
 
+# paasta-conf-release 다운로드
+$ wget https://nextcloud.paas-ta.org/index.php/s/CTDsro382NyyAEL/download --content-disposition
+$ ls
+bosh-271.2.0-PaaS-TA-v2.tgz                                                     bosh-virtualbox-cpi-release-0.2.0.tgz
+bosh-271.2.0-PaaS-TA-v3.tgz                                                     bosh-vsphere-cpi-release-54.1.1.tgz
+bosh-271.2.0-PaaS-TA.tgz                                                        bosh-warden-cpi-41-ubuntu-xenial-621.93-20201130-224003-395585274-20201130224004.tgz
+bosh-271.2.0-ubuntu-xenial-621.93-20201130-224348-505837986-20201130224349.tgz  bpm-1.1.9-ubuntu-xenial-621.93-20201130-224507-912672592-20201130224509.tgz
+bosh-aws-cpi-release-83.tgz                                                     credhub-2.9.0-ubuntu-xenial-621.93-20201130-223813-836755462-20201130223815.tgz
+bosh-azure-cpi-release-37.3.0.tgz                                               garden-runc-1.19.17-ubuntu-xenial-621.93-20201202-140222-317108723-20201202140224.tgz
+bosh-dns-release-1.27.0.tgz                                                     light-bosh-stemcell-621.93-aws-xen-hvm-ubuntu-xenial-go_agent.tgz
+bosh-google-cpi-release-40.0.3.tgz                                              light-bosh-stemcell-621.93-google-kvm-ubuntu-xenial-go_agent.tgz
+bosh-openstack-cpi-release-44.tgz                                               os-conf-release-18.tgz
+bosh-stemcell-621.93-azure-hyperv-ubuntu-xenial-go_agent.tgz                    os-conf-release-22.1.0.tgz
+bosh-stemcell-621.93-openstack-kvm-ubuntu-xenial-go_agent.tgz                   paasta-conf-release-1.0.1.tgz
+bosh-stemcell-621.93-vsphere-esxi-ubuntu-xenial-go_agent.tgz                    uaa-74.29.0-ubuntu-xenial-621.93-20201130-224014-789299918-20201130224017.tgz
 ```
 
 
 
 - 서버 환경에 맞추어 Deploy 스크립트 파일의 설정을 수정한다. 
 
-> $ vi ~/workspace/paasta-5.5.1/deployment/paasta-deployment/bosh/deploy-aws.sh
+> $ vi ~/workspace/paasta-5.5.2/deployment/paasta-deployment/bosh/deploy-aws.sh
 
 
 ```                     
@@ -552,15 +555,15 @@ bosh create-env bosh.yml \
 - BOSH 설치 Shell Script 파일 실행
 
 ```
-$ cd ~/workspace/paasta-5.5.1/deployment/paasta-deployment/bosh
+$ cd ~/workspace/paasta-5.5.2/deployment/paasta-deployment/bosh
 $ ./deploy-{iaas}.sh
 ```
 
 - BOSH 설치 중
 
 ```
-ubuntu@inception:~/workspace/paasta-5.5.1/deployment/paasta-deployment/bosh$ ./deploy-aws.sh
-Deployment manifest: '/home/ubuntu/workspace/paasta-5.5.1/deployment/paasta-deployment/bosh/bosh.yml'
+ubuntu@inception:~/workspace/paasta-5.5.2/deployment/paasta-deployment/bosh$ ./deploy-aws.sh
+Deployment manifest: '/home/ubuntu/workspace/paasta-5.5.2/deployment/paasta-deployment/bosh/bosh.yml'
 Deployment state: 'aws/state.json'
 
 Started validating
@@ -598,7 +601,7 @@ BOSH 로그인 후, BOSH CLI 명령어를 이용하여 PaaS-TA를 설치할 수 
 BOSH 로그인 명령어는 다음과 같다.  
 
 ```
-$ cd ~/workspace/paasta-5.5.1/deployment/paasta-deployment/bosh
+$ cd ~/workspace/paasta-5.5.2/deployment/paasta-deployment/bosh
 $ export BOSH_CA_CERT=$(bosh int ./{iaas}/creds.yml --path /director_ssl/ca)
 $ export BOSH_CLIENT=admin
 $ export BOSH_CLIENT_SECRET=$(bosh int ./{iaas}/creds.yml --path /admin_password)
@@ -629,7 +632,7 @@ $ credhub --version
 CredHub에 로그인하기 위해 BOSH를 설치한 bosh-deployment 디렉터리의 creds.yml을 활용하여 로그인한다.
 
 ```
-$ cd ~/workspace/paasta-5.5.1/deployment/paasta-deployment/bosh
+$ cd ~/workspace/paasta-5.5.2/deployment/paasta-deployment/bosh
 $ export CREDHUB_CLIENT=credhub-admin
 $ export CREDHUB_SECRET=$(bosh int --path /credhub_admin_client_secret {iaas}/creds.yml)
 $ export CREDHUB_CA_CERT=$(bosh int --path /credhub_tls/ca {iaas}/creds.yml)
@@ -683,7 +686,7 @@ PaaS-TA 5.5부터 BOSH 로그인을 하는 스크립트의 생성을 지원한�
 
 - BOSH Login 생성 Script의 설정 수정
 
-> vi ~/workspace/paasta-5.5.1/deployment/paasta-deployment/bosh/create-bosh-login.sh
+> vi ~/workspace/paasta-5.5.2/deployment/paasta-deployment/bosh/create-bosh-login.sh
 
 ```
 #!/bin/bash
@@ -714,7 +717,7 @@ credhub login -s https://'${BOSH_IP}':8844 --skip-tls-validation
 - BOSH Login 생성 Script 실행
 
 ```
-$ cd ~/workspace/paasta-5.5.1/deployment/paasta-deployment/bosh
+$ cd ~/workspace/paasta-5.5.2/deployment/paasta-deployment/bosh
 $ source create-bosh-login.sh
 ```
 
