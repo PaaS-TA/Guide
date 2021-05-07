@@ -509,6 +509,8 @@ $ cd ~/workspace/paasta-5.5.2/release
 $ wget https://nextcloud.paas-ta.org/index.php/s/fy83bkQQCcek2yk/download --content-disposition
 $ unzip bosh.zip
 $ cd ~/workspace/paasta-5.5.2/release/bosh
+
+# paasta-conf-release 다운로드
 $ wget https://nextcloud.paas-ta.org/index.php/s/CTDsro382NyyAEL/download --content-disposition
 $ ls
 bosh-271.2.0-PaaS-TA-v2.tgz                                                     bosh-virtualbox-cpi-release-0.2.0.tgz
