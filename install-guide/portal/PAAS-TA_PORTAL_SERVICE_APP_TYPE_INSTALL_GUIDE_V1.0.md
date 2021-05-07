@@ -22,7 +22,6 @@
     3.1.3. [Portal App Manifest 변경 Script 실행](#3.1.3)  
     3.1.4. [Portal App 배포 Script 변수 설정](#3.1.4)  
     3.1.5. [Portal App 배포 Script 실행](#3.1.5)  
-    3.1.6. [Portal SSH 설치](#3.1.6)  
     
 4. [PaaS-TA Portal 운영](#4)  
   4.1. [사용자의 조직 생성 Flag 활성화](#4.1)  
@@ -324,6 +323,9 @@ portal-app
 ├── portal-registration-2.1.0
 │   ├── manifest.yml
 │   └── paas-ta-portal-registration.jar
+├── portal-ssh-1.0.0
+│   ├── manifest.yml
+│   └── portal-ssh-package
 ├── portal-storage-api-2.1.0
 │   ├── manifest.yml
 │   └── paas-ta-portal-storage-api.jar
@@ -400,7 +402,7 @@ PORTAL_DB_USER_PASSWORD="Paasta@2019"   # portal-container-infra DB Password
 
 # PORTAL-API
 ABACUS_URL=""                           # Abacus URL(Not required)
-MONITORING_API_URL=""                   # Monitoring API URL(Not required)
+MONITORING_API_URL=""                   # Monitoring API URL(Not required) (e.g. 45.55.120.54)
 
 # PORTAL-COMMON-API
 PAASTA_DB_DRIVER="org.postgresql.Driver"  # PaaS-TA DB Driver (e.g. org.postgresql.Driver OR com.mysql.jdbc.Driver)
@@ -431,6 +433,7 @@ OBJECTSTORAGE_PORT="15001"                # portal-container-infra Binary Storag
 UAAC_PORTAL_CLIENT_ID="portalclient"      # UAAC Portal Client ID
 UAAC_PORTAL_CLIENT_SECRET="clientsecret"  # UAAC Poral Client Secret
 USER_APP_SIZE_MB=0                        # USER My App size(MB), if value==0 -> unlimited
+MONITORING_ENABLE=false						        # Monitoring Enable Option
 
 ......
 
@@ -517,24 +520,9 @@ portal-registration   started           web:1/1, task:0/0   portal-registration.
 portal-storage-api    started           web:1/1, task:0/0   portal-storage-api.61.252.53.246.xip.io
 portal-web-admin      started           web:1/1, task:0/0   portal-web-admin.61.252.53.246.xip.io
 portal-web-user       started           web:1/1             portal-web-user.61.252.53.246.xip.io
+ssh-app               started           web:1/1             ssh-app.61.252.53.246.xip.io
 
 ```
-
-### <div id="3.1.6"/> 3.1.6. Portal SSH 설치
-
-Portal 5.1.0 버전 이상부터는 배포된 어플리케이션의 SSH 접속이 가능하다.
-
-이를 위해 Portal SSH App을 먼저 배포해야 한다.
-
-
-- Portal SSH 다운로드 및 배포
-```
-$ wget --content-disposition https://nextcloud.paas-ta.org/index.php/s/awPjYDYCMiHY7yF/download
-$ unzip portal-ssh.zip
-$ cd portal-ssh
-$ cf push
-```
-
 
 
 ## <div id="4"/>4. PaaS-TA Portal 운영
