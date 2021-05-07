@@ -76,15 +76,16 @@ PaaS-TA 3.1 버전까지는 PaaS-TA Container, Controller를 각각의 deploymen
 - BOSH2 기반의 BOSH를 설치한다.
 - PaaS-TA 설치는 BOSH를 설치한 Inception(설치 환경)에서 작업한다.
 - PaaS-TA 설치를 위해 BOSH LOGIN을 진행한다. ([BOSH 로그인](https://github.com/PaaS-TA/Guide/blob/v5.5.2/install-guide/bosh/PAAS-TA_BOSH2_INSTALL_GUIDE_V5.0.md#3.3.7))
+- 가이드 내에 BOSH 폴더에서 실행되는 작업은 [BOSH 설치](./install-guide/bosh/PAAS-TA_BOSH2_INSTALL_GUIDE_V5.0.md#3.3.3) 가이드에서 다운받은 paasta-deployment를 이용한다.
 
 ## <div id='3.2'/>3.2. 설치 파일 다운로드
-- PaaS-TA를 설치하기 위한 deployment가 존재하지 않는다면 다운로드 받는다
+- PaaS-TA min을 설치하기 위한 deployment가 존재하지 않는다면 다운로드 받는다
 ```
 $ mkdir -p ~/workspace/paasta-5.5.2/deployment
 $ cd ~/workspace/paasta-5.5.2/deployment
 $ git clone https://github.com/PaaS-TA/common.git
 $ cd ~/workspace/paasta-5.5.2/deployment
-$ git clone https://github.com/PaaS-TA/paasta-deployment.git -b v5.5.2-min
+$ git clone https://github.com/PaaS-TA/paasta-deployment.git -b v5.5.2-min paasta-deployment-min
 ```
 
 ## <div id='3.3'/>3.3. Stemcell 업로드
@@ -281,7 +282,7 @@ $ source offline-update-runtime-config.sh
 ## <div id='3.5'/>3.5. Cloud Config 설정
 
 PaaS-TA를 설치하기 위한 IaaS 관련 Network, Storage, VM 관련 설정을 Cloud Config로 정의한다.  
-PaaS-TA 설치 파일을 내려받으면 ~/workspace/paasta-5.5.2/deployment/paasta-deployment/cloud-config 디렉터리 이하에 IaaS별 Cloud Config 예제를 확인할 수 있으며, 예제를 참고하여 cloud-config.yml을 IaaS에 맞게 수정한다.  
+PaaS-TA 설치 파일을 내려받으면 ~/workspace/paasta-5.5.2/deployment/paasta-deployment-min/cloud-config 디렉터리 이하에 IaaS별 Cloud Config 예제를 확인할 수 있으며, 예제를 참고하여 cloud-config.yml을 IaaS에 맞게 수정한다.  
 PaaS-TA 배포 전에 Cloud Config를 BOSH에 적용해야 한다. 
 
 - AWS을 기준으로 한 cloud-config.yml 예제
@@ -601,7 +602,7 @@ vm_types:
 - Cloud Config 업데이트
 
 ```
-$ bosh -e ${BOSH_ENVIRONMENT} update-cloud-config ~/workspace/paasta-5.5.2/deployment/paasta-deployment/cloud-config/{iaas}-cloud-config.yml
+$ bosh -e ${BOSH_ENVIRONMENT} update-cloud-config ~/workspace/paasta-5.5.2/deployment/paasta-deployment-min/cloud-config/{iaas}-cloud-config.yml
 ```
 
 - Cloud Config 확인
@@ -733,7 +734,7 @@ abacus_url: "http://abacus.xx.xx.xxx.xxx.xip.io"	# Abacus URL (e.g. "http://abac
 
 PaaS-TA를 설치 할 때 적용되는 각종 변수값이나 배포 될 VM의 설정을 변경할 수 있다.
 
-> $ vi ~/workspace/paasta-5.5.2/deployment/paasta-deployment/paasta/min-vars.yml
+> $ vi ~/workspace/paasta-5.5.2/deployment/paasta-deployment-min/paasta/min-vars.yml
 ```
 # SERVICE VARIABLE
 deployment_name: "paasta"					# Deployment Name
@@ -1076,7 +1077,7 @@ bosh -e ${BOSH_ENVIRONMENT} -d paasta -n deploy min-paasta-deployment.yml \	# Pa
 - Shell script 파일에 실행 권한 부여
 
 ```
-$ chmod +x ~/workspace/paasta-5.5.2/deployment/paasta-deployment/paasta/*.sh
+$ chmod +x ~/workspace/paasta-5.5.2/deployment/paasta-deployment-min/paasta/*.sh
 ```
 
 
@@ -1085,7 +1086,7 @@ $ chmod +x ~/workspace/paasta-5.5.2/deployment/paasta-deployment/paasta/*.sh
 - 서버 환경에 맞추어 [common_vars.yml](#3.6.1.1)와 [vars.yml]((#3.6.1.2))을 수정 한 뒤, Deploy 스크립트 파일의 설정을 수정한다. 
 
 - 4VM 배포시
-> $ vi ~/workspace/paasta-5.5.2/deployment/paasta-deployment/paasta/deploy-4vm-aws.sh
+> $ vi ~/workspace/paasta-5.5.2/deployment/paasta-deployment-min/paasta/deploy-4vm-aws.sh
 
 ```
 BOSH_ENVIRONMENT="${BOSH_ENVIRONMENT}"                   # bosh director alias name (PaaS-TA에서 제공되는 create-bosh-login.sh 미 사용시 bosh envs에서 이름을 확인하여 입력)
@@ -1102,7 +1103,7 @@ bosh -e ${BOSH_ENVIRONMENT} -d paasta -n deploy min-paasta-deployment.yml \	# Pa
 ```
 
 - 7VM 배포시
-> $ vi ~/workspace/paasta-5.5.2/deployment/paasta-deployment/paasta/deploy-7vm-aws.sh
+> $ vi ~/workspace/paasta-5.5.2/deployment/paasta-deployment-min/paasta/deploy-7vm-aws.sh
 
 ```
 BOSH_ENVIRONMENT="${BOSH_ENVIRONMENT}"                   # bosh director alias name (PaaS-TA에서 제공되는 create-bosh-login.sh 미 사용시 bosh envs에서 이름을 확인하여 입력)
@@ -1124,7 +1125,7 @@ bosh -e ${BOSH_ENVIRONMENT} -d paasta -n deploy min-paasta-deployment.yml \	# Pa
 - PaaS-TA 설치 시 Shell Script 파일 실행 (BOSH 로그인 필요)
 
 ```
-$ cd ~/workspace/paasta-5.5.2/deployment/paasta-deployment/paasta
+$ cd ~/workspace/paasta-5.5.2/deployment/paasta-deployment-min/paasta
 $ ./deploy-{IaaS}-{VMs_Number}.sh
 ```
 
@@ -1218,7 +1219,7 @@ diego-release-2.48.0.tgz                     php-buildpack-release-4.4.20.tgz   
 - 서버 환경에 맞추어 [common_vars.yml](#3.6.1.1)와 [vars.yml]((#3.6.1.2))을 수정 한 뒤, Deploy 스크립트 파일의 설정을 수정한다. 
 
 - 4VM 배포시
-> $ vi ~/workspace/paasta-5.5.2/deployment/paasta-deployment/paasta/deploy-4vm-aws.sh
+> $ vi ~/workspace/paasta-5.5.2/deployment/paasta-deployment-min/paasta/deploy-4vm-aws.sh
 
 ```
 BOSH_ENVIRONMENT="${BOSH_ENVIRONMENT}"                   # bosh director alias name (PaaS-TA에서 제공되는 create-bosh-login.sh 미 사용시 bosh envs에서 이름을 확인하여 입력)
@@ -1238,7 +1239,7 @@ bosh -e ${BOSH_ENVIRONMENT} -d paasta -n deploy min-paasta-deployment.yml \	# Pa
 ```
 
 - 7VM 배포시
-> $ vi ~/workspace/paasta-5.5.2/deployment/paasta-deployment/paasta/deploy-7vm-aws.sh
+> $ vi ~/workspace/paasta-5.5.2/deployment/paasta-deployment-min/paasta/deploy-7vm-aws.sh
 
 ```
 BOSH_ENVIRONMENT="${BOSH_ENVIRONMENT}"                   # bosh director alias name (PaaS-TA에서 제공되는 create-bosh-login.sh 미 사용시 bosh envs에서 이름을 확인하여 입력)
@@ -1265,7 +1266,7 @@ bosh -e ${BOSH_ENVIRONMENT} -d paasta -n deploy min-paasta-deployment.yml \	# Pa
 - PaaS-TA 설치 시 Shell Script 파일 실행 (BOSH 로그인 필요)
 
 ```
-$ cd ~/workspace/paasta-5.5.2/deployment/paasta-deployment/paasta
+$ cd ~/workspace/paasta-5.5.2/deployment/paasta-deployment-min/paasta
 $ ./deploy-{IaaS}-{VMs_Number}.sh
 ```
 
