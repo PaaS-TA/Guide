@@ -719,6 +719,8 @@ uaa_client_portal_secret: "clientsecret"		# UAAC Portal Client에 접근하기 �
 
 # Monitoring INFO
 metric_url: "10.0.161.101"				# Monitoring InfluxDB IP
+elasticsearch_master_ip: "10.0.1.146"           	# Logsearch의 elasticsearch master IP
+elasticsearch_master_port: 9200                 	# Logsearch의 elasticsearch master Port
 syslog_address: "10.0.121.100"            		# Logsearch의 ls-router IP
 syslog_port: "2514"                          		# Logsearch의 ls-router Port
 syslog_transport: "relp"                        	# Logsearch Protocol
