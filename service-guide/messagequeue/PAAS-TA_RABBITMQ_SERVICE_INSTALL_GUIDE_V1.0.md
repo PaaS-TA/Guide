@@ -420,24 +420,24 @@ $ cf service-access
 Getting service access as admin...
 broker: rabbitmq-service-broker
    service      plan       access   orgs
-   p-rabbitmq   standard   none      
+   rabbitmq     standard   none      
 ```
 
 - 서비스 브로커 등록시 최초에는 접근을 허용하지 않는다. 따라서 access는 none으로 설정된다.
 
 #### 특정 조직에 해당 서비스 접근 허용을 할당하고 접근 서비스 목록을 다시 확인한다. (전체 조직)
 
->`$ cf enable-service-access p-rabbitmq`
+>`$ cf enable-service-access rabbitmq`
 
 ```
-Enabling access to all plans of service p-rabbitmq for all orgs as admin...
+Enabling access to all plans of service rabbitmq for all orgs as admin...
 OK
 
 $ cf service-access
 Getting service access as admin...
 broker: rabbitmq-service-broker
    service      plan       access   orgs
-   p-rabbitmq   standard   all      
+   rabbitmq     standard   all      
 ```
 
 ### <div id='3.2'> 3.2. 서비스 신청
@@ -454,7 +454,7 @@ getting services from marketplace in org system / space dev as admin...
 OK
 
 service      plans         description                                                                           broker
-p-rabbitmq   standard      RabbitMQ is a robust and scalable high-performance multi-protocol messaging broker.   rabbitmq-service-broker
+rabbitmq     standard      RabbitMQ is a robust and scalable high-performance multi-protocol messaging broker.   rabbitmq-service-broker
 
 TIP: Use 'cf marketplace -s SERVICE' to view descriptions of individual plans of a given service.
 ```
@@ -463,12 +463,12 @@ TIP: Use 'cf marketplace -s SERVICE' to view descriptions of individual plans of
 #### Marketplace에서 원하는 서비스가 있으면 서비스 신청(Provision)을 한다.
 
 >`$ cf create-service {서비스명} {서비스 플랜} {내 서비스명}`
-- **서비스명** : p-rabbitmq로 Marketplace에서 보여지는 서비스 명칭이다.
+- **서비스명** : rabbitmq로 Marketplace에서 보여지는 서비스 명칭이다.
 - **서비스플랜** : 서비스에 대한 정책으로 plans에 있는 정보 중 하나를 선택한다. RabbitMQ 서비스는 standard plan만 지원한다.
 - **내 서비스명** : 내 서비스에서 보여지는 명칭이다. 이 명칭을 기준으로 환경 설정 정보를 가져온다.
 
 ```
-$ cf create-service p-rabbitmq standard my_rabbitmq_service
+$ cf create-service rabbitmq standard my_rabbitmq_service
 Creating service instance my_rabbitmq_service in org system / space dev as admin...
 OK
 ```
@@ -484,7 +484,7 @@ $ cf services
 Getting services in org system / space dev as admin...
 
 name                  service      plan       bound apps   last operation     broker                    upgrade available
-my_rabbitmq_service   p-rabbitmq   standard                create succeeded   rabbitmq-service-broker   
+my_rabbitmq_service   rabbitmq     standard                create succeeded   rabbitmq-service-broker   
 ```
 
 <br>
