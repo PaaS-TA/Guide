@@ -382,7 +382,7 @@ Sample App 구조는 다음과 같다.
 | mysql-sample-app.war | mysql sample app war 파일  
 
 - Sample App 다운로드
-> $ wget -O mysql-sample-app.zip https://nextcloud.paas-ta.org/index.php/s/nKQAM3SiRdEdZTf/download
+> $ wget -O mysql-sample-app.zip https://nextcloud.paas-ta.org/index.php/s/nKQAM3SiRdEdZTf/download  
 > $ unzip mysql-sample-app.zip  
 > $ cd mysql-sample-app  
 
