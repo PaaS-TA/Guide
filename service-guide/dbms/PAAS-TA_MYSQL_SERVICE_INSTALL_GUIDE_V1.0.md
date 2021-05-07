@@ -382,7 +382,7 @@ Sample App 구조는 다음과 같다.
 | mysql-sample-app.war | mysql sample app war 파일  
 
 - Sample App 다운로드
-> $ wget -O mysql-sample-app.zip http://45.248.73.44/index.php/s/nKQAM3SiRdEdZTf/download  
+> $ wget -O mysql-sample-app.zip https://nextcloud.paas-ta.org/index.php/s/nKQAM3SiRdEdZTf/download
 > $ unzip mysql-sample-app.zip  
 > $ cd mysql-sample-app  
 
@@ -392,7 +392,7 @@ $ ls -all
 drwxr-xr-x 1 demo 197121        0 Nov 20 20:14 ./
 drwxr-xr-x 1 demo 197121        0 Nov 20 19:40 ../
 -rw-r--r-- 1 demo 197121      523 Nov 20 20:05 manifest.yml
--rw-r--r-- 1 demo 197121 38043286 Nov 20 19:46 mysql-sample-app.war
+-rw-r--r-- 1 demo 197121 35238277 Nov 20 19:46 mysql-sample-app.war
 ```  
 
 ### <div id='3.3'> 3.3. PaaS-TA에서 서비스 신청  
