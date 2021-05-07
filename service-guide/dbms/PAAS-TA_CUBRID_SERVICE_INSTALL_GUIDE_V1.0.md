@@ -482,10 +482,10 @@ Using manifest file D:\sample-app\hello-spring-cubrid\manifest.yml
 Creating app hello-spring-cubrid in org demo / space dev as demo...
 OK
 
-Creating route hello-spring-cubrid.115.68.47.178.xip.io...
+Creating route hello-spring-cubrid.115.68.47.178.nip.io...
 OK
 
-Binding hello-spring-cubrid.115.68.47.178.xip.io to hello-spring-cubrid...
+Binding hello-spring-cubrid.115.68.47.178.nip.io to hello-spring-cubrid...
 OK
 
 Uploading hello-spring-cubrid...
@@ -504,8 +504,8 @@ Getting apps in org demo / space dev as demo...
 OK
 
 name                  requested state   instances   memory   disk   urls
-hello-spring-cubrid   stopped           0/1         1G       1G     hello-spring-cubrid.115.68.47.178.xip.io
-sampleapp             started           1/1         1G       1G     sampleapp.115.68.47.178.xip.io
+hello-spring-cubrid   stopped           0/1         1G       1G     hello-spring-cubrid.115.68.47.178.nip.io
+sampleapp             started           1/1         1G       1G     sampleapp.115.68.47.178.nip.io
 ```  
 
 >`$ cf logs {배포된 App명}` <br>
@@ -603,7 +603,7 @@ OK
 requested state: started
 instances: 1/1
 usage: 1G x 1 instances
-urls: hello-spring-cubrid.115.68.47.178.xip.io
+urls: hello-spring-cubrid.115.68.47.178.nip.io
 last uploaded: Mon Nov 18 08:47:44 UTC 2019
 stack: cflinuxfs3
 buildpack: client-certificate-mapper=1.8.0_RELEASE container-security-provider=1.16.0_RELEASE java-buildpack=v4.19.1-https://github.com/cloudfoundry/java-buildpack.git#3f4eee2 java-opts java-security jvmkill-agent=1.16.0_RELEASE open-jdk-like-jre=1.8.0_2...
@@ -635,9 +635,9 @@ $ cf restart hello-spring-cubrid
 ##### App이 정상적으로 Cubrid 서비스를 사용하는지 확인한다.
 
 ##### curl 로 확인
->`$ curl hello-spring-cubrid.115.68.47.178.xip.io`
+>`$ curl hello-spring-cubrid.115.68.47.178.nip.io`
 ```  
-$ curl hello-spring-cubrid.115.68.47.178.xip.io
+$ curl hello-spring-cubrid.115.68.47.178.nip.io
 
 
 <html>

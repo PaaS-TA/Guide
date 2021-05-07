@@ -188,7 +188,7 @@ bosh_oauth_port: 8443				# BOSH oauth port
 bosh_version: 271.2				# BOSH version('bosh env' 명령어를 통해 확인 가능, on-demand service용, e.g. "271.2")
 
 # PAAS-TA INFO
-system_domain: "61.252.53.246.xip.io"		# Domain (xip.io를 사용하는 경우 HAProxy Public IP와 동일)
+system_domain: "61.252.53.246.nip.io"		# Domain (nip.io를 사용하는 경우 HAProxy Public IP와 동일)
 paasta_admin_username: "admin"			# PaaS-TA Admin Username
 paasta_admin_password: "admin"			# PaaS-TA Admin Password
 paasta_nats_ip: "10.0.1.121"
@@ -223,10 +223,10 @@ monitoring_api_url: "61.252.53.241"        	# Monitoring-WEB의 Public IP
 
 ### Portal INFO
 portal_web_user_ip: "52.78.88.252"
-portal_web_user_url: "http://portal-web-user.52.78.88.252.xip.io" 
+portal_web_user_url: "http://portal-web-user.52.78.88.252.nip.io" 
 
 ### ETC INFO
-abacus_url: "http://abacus.61.252.53.248.xip.io"	# abacus url (e.g. "http://abacus.xxx.xxx.xxx.xxx.xip.io")
+abacus_url: "http://abacus.61.252.53.248.nip.io"	# abacus url (e.g. "http://abacus.xxx.xxx.xxx.xxx.nip.io")
 
 ```
 
@@ -566,7 +566,7 @@ Creating app with these attributes...
 + instances:    1
 + memory:       256M
   routes:
-+   redis-example-app.115.68.47.178.xip.io
++   redis-example-app.115.68.47.178.nip.io
 
 Creating app redis-example-app...
 Mapping routes...
@@ -579,7 +579,7 @@ Waiting for API to complete processing files...
 
 name:              redis-example-app
 requested state:   stopped
-routes:            redis-example-app.115.68.47.178.xip.io
+routes:            redis-example-app.115.68.47.178.nip.io
 last uploaded:     
 stack:             
 buildpacks:        
@@ -613,7 +613,7 @@ Waiting for app to start...
 
 name:              redis-example-app
 requested state:   started
-routes:            redis-example-app.115.68.47.178.xip.io
+routes:            redis-example-app.115.68.47.178.nip.io
 last uploaded:     Wed 20 Nov 10:12:51 KST 2019
 stack:             cflinuxfs3
 buildpacks:        ruby

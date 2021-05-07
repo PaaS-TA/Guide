@@ -532,7 +532,7 @@ OK
 requested state: started
 instances: 1/1
 usage: 1G x 1 instances
-urls: mysql-sample-app.115.68.47.178.xip.io
+urls: mysql-sample-app.115.68.47.178.nip.io
 last uploaded: Wed Nov 20 11:05:39 UTC 2019
 stack: cflinuxfs3
 buildpack: java_buildpack
@@ -598,7 +598,7 @@ OK
 requested state: started
 instances: 1/1
 usage: 1G x 1 instances
-urls: mysql-sample-app.115.68.47.178.xip.io
+urls: mysql-sample-app.115.68.47.178.nip.io
 last uploaded: Wed Nov 20 11:05:39 UTC 2019
 stack: cflinuxfs3
 buildpack: java_buildpack

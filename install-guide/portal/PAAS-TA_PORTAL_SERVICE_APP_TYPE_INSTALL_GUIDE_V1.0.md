@@ -350,7 +350,7 @@ manifest는 Components 요소 및 배포의 속성을 정의한 YAML 파일이�
 ```
 ### e.g.) common_vars.yml의 PaaS-TA 정보
 # PAAS-TA INFO
-system_domain: "61.252.53.246.xip.io"                   # Domain (xip.io를 사용하는 경우 HAProxy Public IP와 동일)
+system_domain: "61.252.53.246.nip.io"                   # Domain (nip.io를 사용하는 경우 HAProxy Public IP와 동일)
 paasta_admin_username: "admin"                          # PaaS-TA Admin Username
 paasta_admin_password: "admin"                          # PaaS-TA Admin Password
 paasta_nats_ip: "10.0.1.121"
@@ -377,7 +377,7 @@ uaa_client_portal_secret: "clientsecret"                # UAAC Portal Client에 
 monitoring_api_url: "61.252.53.241"                     # Monitoring-WEB의 Public IP
 
 ### ETC INFO
-abacus_url: "http://abacus.61.252.53.248.xip.io"        # abacus url (e.g. "http://abacus.xxx.xxx.xxx.xxx.xip.io")
+abacus_url: "http://abacus.61.252.53.248.nip.io"        # abacus url (e.g. "http://abacus.xxx.xxx.xxx.xxx.nip.io")
 ```
 
 Portal을 PaaS-TA에 App으로 배포하기 전에 Portal App의 Manifest의 변수를 일괄 변경해주는 Script 동작을 위해 Portal 설치에 필요한 PaaS-TA 및 infra 정보를 확인하여 Script의 변수를 설정한다.
@@ -387,7 +387,7 @@ Portal을 PaaS-TA에 App으로 배포하기 전에 Portal App의 Manifest의 변
 #!/bin/bash
 
 # COMMON VARIABLE
-DOMAIN="xx.xxx.xx.xxx.xip.io"           # PaaS-TA System Domain
+DOMAIN="xx.xxx.xx.xxx.nip.io"           # PaaS-TA System Domain
 CF_USER_ADMIN_USERNAME="admin"          # PaaS-TA Admin Username
 CF_USER_ADMIN_PASSWORD="admin"          # PaaS-TA Admin Password
 UAA_CLIENT_ID="admin"                   # UAA Client ID
@@ -460,7 +460,7 @@ applications:
     buildpacks:
     - java_buildpack
     routes:
-    - route: portal-registration.xx.xxx.xxx.xxx.xip.io
+    - route: portal-registration.xx.xxx.xxx.xxx.nip.io
     path: paas-ta-portal-registration.jar
     env:
       server_port: 80
@@ -490,7 +490,7 @@ Portal을 PaaS-TA에 App으로 배포해주는 Script 동작을 위해 Script의
 #!/bin/bash
 
 #VARIABLE
-DOMAIN="xx.xxx.xx.xxx.xip.io"           # PaaS-TA System Domain
+DOMAIN="xx.xxx.xx.xxx.nip.io"           # PaaS-TA System Domain
 PAASTA_USER_ADMIN_USERNAME="admin"      # PaaS-TA Admin Username
 PAASTA_USER_ADMIN_PASSWORD="admin"      # PaaS-TA Admin Password
 PORTAL_QUOTA_NAME="portal_quota"        # PaaS-TA Portal Quota Name
@@ -512,15 +512,15 @@ $ source 2.portalContainerPush.sh
 .....
 
 name                  requested state   processes           routes
-portal-api            started           web:1/1, task:0/0   portal-api.61.252.53.246.xip.io
-portal-common-api     started           web:1/1, task:0/0   portal-common-api.61.252.53.246.xip.io
-portal-gateway        started           web:1/1, task:0/0   portal-gateway.61.252.53.246.xip.io
-portal-log-api        started           web:1/1, task:0/0   portal-log-api.61.252.53.246.xip.io
-portal-registration   started           web:1/1, task:0/0   portal-registration.61.252.53.246.xip.io
-portal-storage-api    started           web:1/1, task:0/0   portal-storage-api.61.252.53.246.xip.io
-portal-web-admin      started           web:1/1, task:0/0   portal-web-admin.61.252.53.246.xip.io
-portal-web-user       started           web:1/1             portal-web-user.61.252.53.246.xip.io
-ssh-app               started           web:1/1             ssh-app.61.252.53.246.xip.io
+portal-api            started           web:1/1, task:0/0   portal-api.61.252.53.246.nip.io
+portal-common-api     started           web:1/1, task:0/0   portal-common-api.61.252.53.246.nip.io
+portal-gateway        started           web:1/1, task:0/0   portal-gateway.61.252.53.246.nip.io
+portal-log-api        started           web:1/1, task:0/0   portal-log-api.61.252.53.246.nip.io
+portal-registration   started           web:1/1, task:0/0   portal-registration.61.252.53.246.nip.io
+portal-storage-api    started           web:1/1, task:0/0   portal-storage-api.61.252.53.246.nip.io
+portal-web-admin      started           web:1/1, task:0/0   portal-web-admin.61.252.53.246.nip.io
+portal-web-user       started           web:1/1             portal-web-user.61.252.53.246.nip.io
+ssh-app               started           web:1/1             ssh-app.61.252.53.246.nip.io
 
 ```
 

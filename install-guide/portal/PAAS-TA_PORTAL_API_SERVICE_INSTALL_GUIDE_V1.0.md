@@ -193,7 +193,7 @@ bosh_oauth_port: 8443				# BOSH oauth port
 bosh_version: 271.2				# BOSH version('bosh env' 명령어를 통해 확인 가능, on-demand service용, e.g. "271.2")
 
 # PAAS-TA INFO
-system_domain: "61.252.53.246.xip.io"		# Domain (xip.io를 사용하는 경우 HAProxy Public IP와 동일)
+system_domain: "61.252.53.246.nip.io"		# Domain (nip.io를 사용하는 경우 HAProxy Public IP와 동일)
 paasta_admin_username: "admin"			# PaaS-TA Admin Username
 paasta_admin_password: "admin"			# PaaS-TA Admin Password
 paasta_nats_ip: "10.0.1.121"
@@ -228,10 +228,10 @@ monitoring_api_url: "61.252.53.241"		# Monitoring-WEB의 Public IP
 
 ### Portal INFO
 portal_web_user_ip: "52.78.88.252"
-portal_web_user_url: "http://portal-web-user.52.78.88.252.xip.io" 
+portal_web_user_url: "http://portal-web-user.52.78.88.252.nip.io" 
 
 ### ETC INFO
-abacus_url: "http://abacus.61.252.53.248.xip.io"	# abacus url (e.g. "http://abacus.xxx.xxx.xxx.xxx.xip.io")
+abacus_url: "http://abacus.61.252.53.248.nip.io"	# abacus url (e.g. "http://abacus.xxx.xxx.xxx.xxx.nip.io")
 
 ```
 
@@ -454,7 +454,7 @@ Feature user_org_creation Enabled.
         
 3. uaac client add portalclient –s “portalclient Secret” 
 >--redirect_uri "사용자포탈 Url, 사용자포탈 Url/callback"\
-$ uaac client add portalclient -s xxxxx --redirect_uri "http://portal-web-user.xxxx.xip.io, http://portal-web-user.xxxx.xip.io/callback" \
+$ uaac client add portalclient -s xxxxx --redirect_uri "http://portal-web-user.xxxx.nip.io, http://portal-web-user.xxxx.nip.io/callback" \
 --scope "cloud_controller_service_permissions.read , openid , cloud_controller.read , cloud_controller.write , cloud_controller.admin" \
 --authorized_grant_types "authorization_code , client_credentials , refresh_token" \
 --authorities="uaa.resource" \
@@ -468,7 +468,7 @@ $ uaac client add portalclient -s xxxxx --redirect_uri "http://portal-web-user.x
    Client ID:  admin\
    Client secret:  *****
 3. uaac client update portalclient --redirect_uri "사용자포탈 Url, 사용자포탈 Url/callback"
-    >$ uaac client update portalclient --redirect_uri "http://portal-web-user.xxxx.xip.io, http://portal-web-user.xxxx.xip.io/callback"
+    >$ uaac client update portalclient --redirect_uri "http://portal-web-user.xxxx.nip.io, http://portal-web-user.xxxx.nip.io/callback"
 
 ### <div id="3.3"/> 3.3. 운영자 포탈 유저 페이지 조회 오류
 1. 페이지 이동시 정보를 가져오지 못하고 오류가 났을 경우 common-api VM으로 이동후에 DB 정보 config를 수정후 재시작을 해 주어야 한다.
@@ -592,7 +592,7 @@ Paas-TA Portal 각각 Instance의 log를 확인 할 수 있다.
 ##### 1. Catalog 빌드팩, 서비스팩 추가
 Paas-TA Portal 설치 후에 관리자 포탈에서 빌드팩, 서비스팩을 등록해야 사용자 포탈에서 사용이 가능하다.
  
- 1. 관리자 포탈에 접속한다.(portal-web-admin.[public ip].xip.io)
+ 1. 관리자 포탈에 접속한다.(portal-web-admin.[public ip].nip.io)
     >![paas-ta-portal-15]
  2. 운영관리를 누른다.
     >![paas-ta-portal-16]
