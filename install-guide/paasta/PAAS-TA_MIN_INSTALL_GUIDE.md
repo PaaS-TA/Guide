@@ -4,8 +4,8 @@
 　● [목적](#1.1)  
 　● [범위](#1.2)  
 　● [참고 자료](#1.3)  
-2. [PaaS-TA 5.5.1](#2)  
-3. [PaaS-TA 5.5.1 설치](#3)  
+2. [PaaS-TA 5.5.2](#2)  
+3. [PaaS-TA 5.5.2 설치](#3)  
 　3.1. [Prerequisite](#3.1)  
 　3.2. [설치 파일 다운로드](#3.2)  
 　3.3. [Stemcell 업로드](#3.3)  
@@ -31,7 +31,7 @@
 
 ## Executive Summary
 
-본 문서는 PaaS-TA 5.5.1-min(이하 PaaS-TA)을 수동으로 설치하기 위한 가이드를 제공하는 데 그 목적이 있다.
+본 문서는 PaaS-TA 5.5.2-min(이하 PaaS-TA)을 수동으로 설치하기 위한 가이드를 제공하는 데 그 목적이 있다.
 
 # <div id='1'/>1.  문서 개요 
 
@@ -47,7 +47,7 @@ PaaS-TA-min 설치 시 필요한 Stemcell은 기존 ubuntu-xenial-315.64에서 u
 
 PaaS-TA는 VMware vSphere, Google Cloud Platform, Amazon Web Services EC2, OpenStack, Microsoft Azure 등의 IaaS를 지원한다.  
 
-현재 PaaS-TA 5.5.1에서 검증한 IaaS 환경은 AWS 환경이다.
+현재 PaaS-TA 5.5.2에서 검증한 IaaS 환경은 AWS 환경이다.
 
 ## <div id='1.3'/>● 참고 자료
 
@@ -61,7 +61,7 @@ BOSH Deployment: [https://github.com/cloudfoundry/bosh-deployment](https://githu
 
 CF Deployment: [https://github.com/cloudfoundry/cf-deployment](https://github.com/cloudfoundry/cf-deployment)
 
-# <div id='2'/>2. PaaS-TA 5.5.1
+# <div id='2'/>2. PaaS-TA 5.5.2
 
 PaaS-TA는 BOSH를 기반으로 설치된다. BOSH CLI를 사용하여 BOSH를 생성한 후, paasta-deployment로 PaaS-TA를 배포한다. 
 
@@ -69,38 +69,38 @@ PaaS-TA 3.1 버전까지는 PaaS-TA Container, Controller를 각각의 deploymen
 
 ![PaaSTa_BOSH_Use_Guide_Image2]  
 
-# <div id='3'/>3. PaaS-TA 5.5.1 설치
+# <div id='3'/>3. PaaS-TA 5.5.2 설치
 
 ## <div id='3.1'/>3.1. Prerequisite
 
 - BOSH2 기반의 BOSH를 설치한다.
 - PaaS-TA 설치는 BOSH를 설치한 Inception(설치 환경)에서 작업한다.
-- PaaS-TA 설치를 위해 BOSH LOGIN을 진행한다. ([BOSH 로그인](https://github.com/PaaS-TA/Guide/blob/v5.5.1/install-guide/bosh/PAAS-TA_BOSH2_INSTALL_GUIDE_V5.0.md#3.3.7))
+- PaaS-TA 설치를 위해 BOSH LOGIN을 진행한다. ([BOSH 로그인](https://github.com/PaaS-TA/Guide/blob/v5.5.2/install-guide/bosh/PAAS-TA_BOSH2_INSTALL_GUIDE_V5.0.md#3.3.7))
 
 ## <div id='3.2'/>3.2. 설치 파일 다운로드
 - PaaS-TA를 설치하기 위한 deployment가 존재하지 않는다면 다운로드 받는다
 ```
-$ mkdir -p ~/workspace/paasta-5.5.1/deployment
-$ cd ~/workspace/paasta-5.5.1/deployment
+$ mkdir -p ~/workspace/paasta-5.5.2/deployment
+$ cd ~/workspace/paasta-5.5.2/deployment
 $ git clone https://github.com/PaaS-TA/common.git
-$ cd ~/workspace/paasta-5.5.1/deployment
-$ git clone https://github.com/PaaS-TA/paasta-deployment.git -b v5.5.1-min
+$ cd ~/workspace/paasta-5.5.2/deployment
+$ git clone https://github.com/PaaS-TA/paasta-deployment.git -b v5.5.2-min
 ```
 
 ## <div id='3.3'/>3.3. Stemcell 업로드
-Stemcell은 배포 시 생성되는 PaaS-TA VM Base OS Image이며, PaaS-TA 5.5.1은 Ubuntu xenial stemcell 621.94를 기반으로 한다.  
+Stemcell은 배포 시 생성되는 PaaS-TA VM Base OS Image이며, PaaS-TA 5.5.2은 Ubuntu xenial stemcell 621.94를 기반으로 한다.  
 기본적인 Stemcell 업로드 명령어는 다음과 같다.  
 ```                     
 $ bosh -e ${BOSH_ENVIRONMENT} upload-stemcell {URL}
 ```
 
-PaaS-TA 5.5.1은 Stemcell 업로드 스크립트를 지원하며, BOSH 로그인 후 다음 명령어를 수행하여 Stemcell을 올린다.  
+PaaS-TA 5.5.2은 Stemcell 업로드 스크립트를 지원하며, BOSH 로그인 후 다음 명령어를 수행하여 Stemcell을 올린다.  
 BOSH_ENVIRONMENT는 BOSH 설치 시 사용한 Director 명이고, CURRENT_IAAS는 배포된 환경 IaaS(aws, azure, gcp, openstack, vsphere, 그외 입력시 bosh-lite)에 맞게 입력을 한다. 
 <br>(PaaS-TA에서 제공되는 create-bosh-login.sh을 이용하여 BOSH LOGIN시 BOSH_ENVIRONMENT와 CURRENT_IAAS는 자동입력된다.)
 
 - Stemcell 업로드 Script의 설정 수정 (BOSH_ENVIRONMENT 수정)
 
-> $ vi ~/workspace/paasta-5.5.1/deployment/paasta-deployment/bosh/upload-stemcell.sh
+> $ vi ~/workspace/paasta-5.5.2/deployment/paasta-deployment/bosh/upload-stemcell.sh
 ```                     
 #!/bin/bash
 STEMCELL_VERSION=621.94
@@ -126,18 +126,18 @@ fi
 - Stemcell 업로드 Script 실행
 
 ```
-$ cd ~/workspace/paasta-5.5.1/deployment/paasta-deployment/bosh
+$ cd ~/workspace/paasta-5.5.2/deployment/paasta-deployment/bosh
 $ source upload-stemcell.sh
 ```
 
 
-- [PaaS-TA 5.5.1 스템셀 통합 다운로드](https://nextcloud.paas-ta.org/index.php/s/RLgPANn7LNmGrqP/download)
+- [PaaS-TA 5.5.2 스템셀 통합 다운로드](https://nextcloud.paas-ta.org/index.php/s/RLgPANn7LNmGrqP/download)
 - 만약 오프라인 환경에 저장한 스템셀을 사용 하고 싶다면, Stemcell을 저장 한 뒤 경로를 설정 후 Stemcell 업로드 Script를 실행한다. 
 
 ```  
 # 폴더 생성 및 이동
-$ mkdir -p ~/workspace/paasta-5.5.1/stemcell/paasta
-$ cd ~/workspace/paasta-5.5.1/stemcell/paasta/
+$ mkdir -p ~/workspace/paasta-5.5.2/stemcell/paasta
+$ cd ~/workspace/paasta-5.5.2/stemcell/paasta/
 
 # 개별 Stemcell 다운로드 
 ## AWS의 경우
@@ -159,7 +159,7 @@ $ wget https://s3.amazonaws.com/bosh-core-stemcells/621.94/bosh-stemcell-621.94-
 $ wget https://s3.amazonaws.com/bosh-core-stemcells/621.94/bosh-stemcell-621.94-warden-boshlite-ubuntu-xenial-go_agent.tgz
 
 # 통합 다운로드의 경우
-$ cd ~/workspace/paasta-5.5.1
+$ cd ~/workspace/paasta-5.5.2
 $ wget https://nextcloud.paas-ta.org/index.php/s/RLgPANn7LNmGrqP/download  --content-disposition
 $ unzip stemcell.zip
 
@@ -167,11 +167,11 @@ $ unzip stemcell.zip
 
 - 오프라인 Stemcell 업로드 Script의 설정 수정 (BOSH_ENVIRONMENT, STEMCELL_DIR 수정)
 
-> $ vi ~/workspace/paasta-5.5.1/deployment/paasta-deployment/bosh/offline-upload-stemcell.sh
+> $ vi ~/workspace/paasta-5.5.2/deployment/paasta-deployment/bosh/offline-upload-stemcell.sh
 ```                     
 #!/bin/bash
 STEMCELL_VERSION=621.94
-STEMCELL_DIR="/home/ubuntu/workspace/paasta-5.5.1/stemcell/paasta"
+STEMCELL_DIR="/home/ubuntu/workspace/paasta-5.5.2/stemcell/paasta"
 CURRENT_IAAS="${CURRENT_IAAS}"				# IaaS Information (PaaS-TA에서 제공되는 create-bosh-login.sh 미 사용시 aws/azure/gcp/openstack/vsphere 입력, 미 입력시 bosh-lite)
 BOSH_ENVIRONMENT="${BOSH_ENVIRONMENT}"			# bosh director alias name (PaaS-TA에서 제공되는 create-bosh-login.sh 미 사용시 bosh envs에서 이름을 확인하여 입력)
 
@@ -193,7 +193,7 @@ fi
 - 오프라인 Stemcell 업로드 Script 실행
 
 ```
-$ cd ~/workspace/paasta-5.5.1/deployment/paasta-deployment/bosh
+$ cd ~/workspace/paasta-5.5.2/deployment/paasta-deployment/bosh
 $ source offline-upload-stemcell.sh
 ```
 
@@ -213,10 +213,10 @@ PaaS-TA에서 적용하는 Runtime Config는 다음과 같다.
 - OS Configuration Runtime Config  
   BOSH Linux OS 구성 릴리스를 이용하여 sysctl을 구성한다.  
 
-PaaS-TA 5.5.1은 Runtime Config 설정 스크립트를 지원하며, BOSH 로그인 후 다음 명령어를 수행하여 Runtime Config를 설정한다.  
+PaaS-TA 5.5.2은 Runtime Config 설정 스크립트를 지원하며, BOSH 로그인 후 다음 명령어를 수행하여 Runtime Config를 설정한다.  
 
   - Runtime Config 업데이트 Script 수정 (BOSH_ENVIRONMENT 수정)
-> $ vi ~/workspace/paasta-5.5.1/deployment/paasta-deployment/bosh/update-runtime-config.sh
+> $ vi ~/workspace/paasta-5.5.2/deployment/paasta-deployment/bosh/update-runtime-config.sh
 ```                     
 #!/bin/bash
 
@@ -228,7 +228,7 @@ bosh -e ${BOSH_ENVIRONMENT} update-runtime-config -n --name=os-conf runtime-conf
 ```
 - Runtime Config 업데이트 Script 실행
 ```                     
-$ cd ~/workspace/paasta-5.5.1/deployment/paasta-deployment/bosh
+$ cd ~/workspace/paasta-5.5.2/deployment/paasta-deployment/bosh
 $ source update-runtime-config.sh
 ```
 
@@ -244,8 +244,8 @@ $ source update-runtime-config.sh
 
 ```  
 # 폴더 생성 및 이동
-$ mkdir -p ~/workspace/paasta-5.5.1/release/bosh
-$ cd ~/workspace/paasta-5.5.1/release/bosh
+$ mkdir -p ~/workspace/paasta-5.5.2/release/bosh
+$ cd ~/workspace/paasta-5.5.2/release/bosh
 
 # bosh-dns-release 1.27.0 다운로드 
 $ wget https://nextcloud.paas-ta.org/index.php/s/8wf2Fjn2ytxsnR7/download --content-disposition
@@ -257,12 +257,12 @@ $ wget https://nextcloud.paas-ta.org/index.php/s/G7ossXeZZHeMPTQ/download --cont
 
 - 오프라인 Runtime Config 업데이트 Script 수정 (BOSH_ENVIRONMENT, RELEASE_DIR 수정)
 
-> $ vi ~/workspace/paasta-5.5.1/deployment/paasta-deployment/bosh/offline-update-runtime-config.sh
+> $ vi ~/workspace/paasta-5.5.2/deployment/paasta-deployment/bosh/offline-update-runtime-config.sh
 ```                     
 #!/bin/bash
   
 BOSH_ENVIRONMENT="${BOSH_ENVIRONMENT}"                    # bosh director alias name (PaaS-TA에서 제공되는 create-bosh-login.sh 미 사용시 bosh envs에서 이름을 확인하여 입력)
-RELEASE_DIR="/home/ubuntu/workspace/paasta-5.5.1/release" # Release Directory (offline으로 릴리즈 다운받아 사용시 설정)
+RELEASE_DIR="/home/ubuntu/workspace/paasta-5.5.2/release" # Release Directory (offline으로 릴리즈 다운받아 사용시 설정)
 
 bosh -e ${BOSH_ENVIRONMENT} update-runtime-config -n runtime-configs/dns-offline.yml \
                 -v releases_dir=${RELEASE_DIR}
@@ -273,7 +273,7 @@ bosh -e ${BOSH_ENVIRONMENT} update-runtime-config -n --name=os-conf runtime-conf
 - 오프라인 Runtime Config 업데이트 Script 실행
 
 ```
-$ cd ~/workspace/paasta-5.5.1/deployment/paasta-deployment/bosh
+$ cd ~/workspace/paasta-5.5.2/deployment/paasta-deployment/bosh
 $ source offline-update-runtime-config.sh
 ```
 
@@ -281,7 +281,7 @@ $ source offline-update-runtime-config.sh
 ## <div id='3.5'/>3.5. Cloud Config 설정
 
 PaaS-TA를 설치하기 위한 IaaS 관련 Network, Storage, VM 관련 설정을 Cloud Config로 정의한다.  
-PaaS-TA 설치 파일을 내려받으면 ~/workspace/paasta-5.5.1/deployment/paasta-deployment/cloud-config 디렉터리 이하에 IaaS별 Cloud Config 예제를 확인할 수 있으며, 예제를 참고하여 cloud-config.yml을 IaaS에 맞게 수정한다.  
+PaaS-TA 설치 파일을 내려받으면 ~/workspace/paasta-5.5.2/deployment/paasta-deployment/cloud-config 디렉터리 이하에 IaaS별 Cloud Config 예제를 확인할 수 있으며, 예제를 참고하여 cloud-config.yml을 IaaS에 맞게 수정한다.  
 PaaS-TA 배포 전에 Cloud Config를 BOSH에 적용해야 한다. 
 
 - AWS을 기준으로 한 cloud-config.yml 예제
@@ -601,7 +601,7 @@ vm_types:
 - Cloud Config 업데이트
 
 ```
-$ bosh -e ${BOSH_ENVIRONMENT} update-cloud-config ~/workspace/paasta-5.5.1/deployment/paasta-deployment/cloud-config/{iaas}-cloud-config.yml
+$ bosh -e ${BOSH_ENVIRONMENT} update-cloud-config ~/workspace/paasta-5.5.2/deployment/paasta-deployment/cloud-config/{iaas}-cloud-config.yml
 ```
 
 - Cloud Config 확인
@@ -672,10 +672,10 @@ common_vars.yml파일과 vars.yml을 수정하여 PaaS-TA 설치시 적용하는
 
 
 #### <div id='3.6.1.1'/>● common_vars.yml
-~/workspace/paasta-5.5.1/deployment/common 폴더에 있는 common_vars.yml PaaS-TA 및 각종 Service 설치시 적용하는 공통 변수 설정 파일이 존재한다.  
-PaaS-TA 5.5.1을 설치할 때는 system_domain, paasta_admin_username, paasta_admin_password, uaa_client_admin_secret, uaa_client_portal_secret, paasta_database_port의 값을 변경 하여 설치 할 수 있다.
+~/workspace/paasta-5.5.2/deployment/common 폴더에 있는 common_vars.yml PaaS-TA 및 각종 Service 설치시 적용하는 공통 변수 설정 파일이 존재한다.  
+PaaS-TA 5.5.2을 설치할 때는 system_domain, paasta_admin_username, paasta_admin_password, uaa_client_admin_secret, uaa_client_portal_secret, paasta_database_port의 값을 변경 하여 설치 할 수 있다.
 
-> $ vi ~/workspace/paasta-5.5.1/deployment/common/common_vars.yml
+> $ vi ~/workspace/paasta-5.5.2/deployment/common/common_vars.yml
 
 
 ```
@@ -683,7 +683,7 @@ PaaS-TA 5.5.1을 설치할 때는 system_domain, paasta_admin_username, paasta_a
 bosh_ip: "10.0.1.6"                        		# BOSH IP
 bosh_url: "http://10.0.1.6"				# BOSH URL (e.g. "https://00.000.0.0")
 bosh_client_admin_id: "admin"				# BOSH Client Admin ID
-bosh_client_admin_secret: "ert7na4jpewsczt"		# BOSH Client Admin Secret('echo $(bosh int ~/workspace/paasta-5.5.1/deployment/paasta-deployment/bosh/{iaas}/creds.yml —path /admin_password))' 명령어를 통해 확인 가능)
+bosh_client_admin_secret: "ert7na4jpewsczt"		# BOSH Client Admin Secret('echo $(bosh int ~/workspace/paasta-5.5.2/deployment/paasta-deployment/bosh/{iaas}/creds.yml —path /admin_password))' 명령어를 통해 확인 가능)
 bosh_director_port: 25555				# BOSH Director Port
 bosh_oauth_port: 8443					# BOSH OAuth Port
 bosh_version: 271.2					# BOSH version('bosh env' 명령어를 통해 확인 가능, on-demand service용, e.g. "271.2")
@@ -713,6 +713,8 @@ uaa_client_portal_secret: "clientsecret"		# UAAC Portal Client에 접근하기 �
 
 # Monitoring INFO
 metric_url: "10.0.161.101"				# Monitoring InfluxDB IP
+elasticsearch_master_ip: "10.0.1.146"          		# Logsearch의 elasticsearch master IP
+elasticsearch_master_port: 9200                 	# Logsearch의 elasticsearch master Port
 syslog_address: "10.0.121.100"            		# Logsearch의 ls-router IP
 syslog_port: "2514"                          		# Logsearch의 ls-router Port
 syslog_transport: "relp"                        	# Logsearch Protocol
@@ -731,12 +733,12 @@ abacus_url: "http://abacus.xx.xx.xxx.xxx.xip.io"	# Abacus URL (e.g. "http://abac
 
 PaaS-TA를 설치 할 때 적용되는 각종 변수값이나 배포 될 VM의 설정을 변경할 수 있다.
 
-> $ vi ~/workspace/paasta-5.5.1/deployment/paasta-deployment/paasta/min-vars.yml
+> $ vi ~/workspace/paasta-5.5.2/deployment/paasta-deployment/paasta/min-vars.yml
 ```
 # SERVICE VARIABLE
 deployment_name: "paasta"					# Deployment Name
 network_name: "default"						# VM에 별도로 지정하지 않는 Default Network Name
-releases_dir: "/home/ubuntu/workspace/paasta-5.5.1/release"	# Release Directory (offline으로 릴리즈 다운받아 사용시 설정)
+releases_dir: "/home/ubuntu/workspace/paasta-5.5.2/release"	# Release Directory (offline으로 릴리즈 다운받아 사용시 설정)
 haproxy_public_ip: "52.78.32.153"				# HAProxy IP (Public IP, HAproxy VM 배포시 필요)
 haproxy_public_network_name: "vip"				# PaaS-TA Public Network Name
 haproxy_private_network_name: "private"				# PaaS-TA Private Network Name (vSphere use-haproxy-public-network-vsphere.yml 포함 배포시 설정 필요)
@@ -922,11 +924,6 @@ ex) uaa_client_admin_secret="admin-secret"
 <td></td>
 </tr>
 <tr>
-<td>operations/use-compiled-releases-postgres.yml</td>
-<td>인터넷이 연결된 환경에서 컴파일 없이 Postgres의 빠른 설치가 가능하다.</td>
-<td>Requires: use-postgres.yml</td>
-</tr>
-<tr>
 <td>operations/use-offline-releases-postgres.yml</td>
 <td>min-use-postgres.yml에서 사용되는 릴리즈를 오프라인에 저장된 릴리즈로 설치가 가능하다.</td>
 <td>Requires: min-use-postgres.yml<br>
@@ -953,11 +950,6 @@ ex) uaa_client_admin_secret="admin-secret"
 </td>
 </tr>
 <tr>
-<td>operations/use-compiled-releases-haproxy.yml</td>
-<td>인터넷이 연결된 환경에서 컴파일 없이 HAProxy의 빠른 설치가 가능하다.</td>
-<td>Requires: min-use-haproxy.yml</td>
-</tr>
-<tr>
 <td>operations/use-offline-releases-haproxy.yml</td>
 <td>min-use-haproxy.yml에서 사용되는 릴리즈를 오프라인에 저장된 릴리즈로 설치가 가능하다.</td>
 <td>Requires: min-use-haproxy.yml<br>
@@ -979,6 +971,29 @@ ex) uaa_client_admin_secret="admin-secret"
 <td>operations/min-create-vm-tcp-router.yml</td>
 <td>4VMs에서 사용되는 router의 tcp-router를<br>단일 VM으로 배포한다.</td>
 <td>7VMs 배포시 사용</td>
+</tr>
+<tr>
+<td>operations/min-cce.yml</td>
+<td>CCE 조치를 적용하여 설치한다. (MySQL)</td>
+<td></td>
+</tr>
+<tr>
+<td>operations/use-offline-releases-cce.yml</td>
+<td>cce.yml에서 사용되는 릴리즈를 오프라인에 저장된 릴리즈로 설치가 가능하다.</td>
+<td>Requires: min-cce.yml<br>
+    Requires value :  -v releases_dir</td>
+</tr>
+<tr>
+<td>operations/min-cce-postgres.yml</td>
+<td>CCE 조치를 적용하여 설치한다. (PostgreSQL)</td>
+<td>Requires: min-use-postgres.yml<br>
+	</td>
+</tr>
+<tr>
+<td>operations/use-offline-releases-cce-postgres.yml</td>
+<td>cce-postgres.yml에서 사용되는 릴리즈를 오프라인에 저장된 릴리즈로 설치가 가능하다.</td>
+<td>Requires: min-cce-postgres.yml<br>
+    Requires value :  -v releases_dir</td>
 </tr>
 </table>
 
@@ -1032,8 +1047,9 @@ BOSH_ENVIRONMENT="${BOSH_ENVIRONMENT}"                   # bosh director alias n
 
 bosh -e ${BOSH_ENVIRONMENT} -d paasta -n deploy min-paasta-deployment.yml \	# PaaS-TA-min Manifest File
         -o operations/min-aws.yml \					# AWS 설정
-	-o operations/min-cce.yml \					# CCE 조치 설정
+	-o operations/min-cce-postgres.yml \					# CCE 조치 설정
 	-o operations/min-use-router-public-network.yml \		# Router 외부 접근 설정
+	-o operations/min-use-router-public-network-aws.yml \
         -o operations/min-use-postgres.yml \				# Database Type 설정 (3.5버전 이하에서 Migration 시 필수)
         -o operations/min-rename-network-and-deployment.yml \		# Rename Network and Deployment
         -l min-vars.yml \						# PaaS-TA-min 설치시 적용하는 변수 설정 파일
@@ -1046,7 +1062,7 @@ BOSH_ENVIRONMENT="${BOSH_ENVIRONMENT}"                   # bosh director alias n
 
 bosh -e ${BOSH_ENVIRONMENT} -d paasta -n deploy min-paasta-deployment.yml \	# PaaS-TA-min Manifest File
         -o operations/min-aws.yml \					# AWS 설정
-        -o operations/min-cce.yml \					# CCE 조치 설정
+        -o operations/min-cce-postgres.yml \					# CCE 조치 설정
         -o operations/min-create-vm-singleton-blobstore.yml \		# singleton-blobstore VM 배포
         -o operations/min-create-vm-tcp-router.yml \			# tcp-router VM 배포
         -o operations/min-use-haproxy.yml \				# HAProxy 적용
@@ -1060,7 +1076,7 @@ bosh -e ${BOSH_ENVIRONMENT} -d paasta -n deploy min-paasta-deployment.yml \	# Pa
 - Shell script 파일에 실행 권한 부여
 
 ```
-$ chmod +x ~/workspace/paasta-5.5.1/deployment/paasta-deployment/paasta/*.sh
+$ chmod +x ~/workspace/paasta-5.5.2/deployment/paasta-deployment/paasta/*.sh
 ```
 
 
@@ -1069,7 +1085,7 @@ $ chmod +x ~/workspace/paasta-5.5.1/deployment/paasta-deployment/paasta/*.sh
 - 서버 환경에 맞추어 [common_vars.yml](#3.6.1.1)와 [vars.yml]((#3.6.1.2))을 수정 한 뒤, Deploy 스크립트 파일의 설정을 수정한다. 
 
 - 4VM 배포시
-> $ vi ~/workspace/paasta-5.5.1/deployment/paasta-deployment/paasta/deploy-4vm-aws.sh
+> $ vi ~/workspace/paasta-5.5.2/deployment/paasta-deployment/paasta/deploy-4vm-aws.sh
 
 ```
 BOSH_ENVIRONMENT="${BOSH_ENVIRONMENT}"                   # bosh director alias name (PaaS-TA에서 제공되는 create-bosh-login.sh 미 사용시 bosh envs에서 이름을 확인하여 입력)
@@ -1078,6 +1094,7 @@ bosh -e ${BOSH_ENVIRONMENT} -d paasta -n deploy min-paasta-deployment.yml \	# Pa
         -o operations/min-aws.yml \					# AWS 설정
 	-o operations/min-cce.yml \					# CCE 조치 설정
 	-o operations/min-use-router-public-network.yml \		# Router 외부 접근 설정
+	-o operations/min-use-router-public-network-aws.yml \
         -o operations/min-use-postgres.yml \				# Database Type 설정 (3.5버전 이하에서 Migration 시 필수)
         -o operations/min-rename-network-and-deployment.yml \		# Rename Network and Deployment
         -l min-vars.yml \						# PaaS-TA-min 설치시 적용하는 변수 설정 파일
@@ -1085,7 +1102,7 @@ bosh -e ${BOSH_ENVIRONMENT} -d paasta -n deploy min-paasta-deployment.yml \	# Pa
 ```
 
 - 7VM 배포시
-> $ vi ~/workspace/paasta-5.5.1/deployment/paasta-deployment/paasta/deploy-7vm-aws.sh
+> $ vi ~/workspace/paasta-5.5.2/deployment/paasta-deployment/paasta/deploy-7vm-aws.sh
 
 ```
 BOSH_ENVIRONMENT="${BOSH_ENVIRONMENT}"                   # bosh director alias name (PaaS-TA에서 제공되는 create-bosh-login.sh 미 사용시 bosh envs에서 이름을 확인하여 입력)
@@ -1107,7 +1124,7 @@ bosh -e ${BOSH_ENVIRONMENT} -d paasta -n deploy min-paasta-deployment.yml \	# Pa
 - PaaS-TA 설치 시 Shell Script 파일 실행 (BOSH 로그인 필요)
 
 ```
-$ cd ~/workspace/paasta-5.5.1/deployment/paasta-deployment/paasta
+$ cd ~/workspace/paasta-5.5.2/deployment/paasta-deployment/paasta
 $ ./deploy-{IaaS}-{VMs_Number}.sh
 ```
 
@@ -1168,38 +1185,40 @@ Succeeded
 - 서비스 설치에 필요한 릴리즈 파일을 다운로드 받아 Local machine의 작업 경로로 위치시킨다.  
   
   - 설치 파일 통합 다운로드 위치 : https://paas-ta.kr/download/package    
-  - PaaS-TA 5.5.1 설치 릴리즈 파일 다운로드 : [paasta.zip](https://nextcloud.paas-ta.org/index.php/s/TS6M2MTBkYsX8Lq/download)
+  - PaaS-TA 5.5.2 설치 릴리즈 파일 다운로드 : [paasta.zip](https://nextcloud.paas-ta.org/index.php/s/TS6M2MTBkYsX8Lq/download)
 
 ```
 # 릴리즈 다운로드 파일 위치 경로 생성
-$ mkdir -p ~/workspace/paasta-5.5.1/release
+$ mkdir -p ~/workspace/paasta-5.5.2/release
 
 # 릴리즈 파일 다운로드 및 파일 경로 확인
-$ cd ~/workspace/paasta-5.5.1/release
+$ cd ~/workspace/paasta-5.5.2/release
 $ wget https://nextcloud.paas-ta.org/index.php/s/TS6M2MTBkYsX8Lq/download --content-disposition
 $ unzip paasta.zip
-$ cd ~/workspace/paasta-5.5.1/release/paasta
+$ cd ~/workspace/paasta-5.5.2/release/paasta
 $ ls
-binary-buildpack-release-1.0.36.tgz       garden-runc-release-1.19.16.tgz      pxc-release-0.29.0.tgz
-bosh-dns-aliases-release-0.0.3.tgz        go-buildpack-release-1.9.17.tgz      python-buildpack-release-1.7.20.tgz
-bpm-release-1.1.9.tgz                     haproxy-boshrelease-10.1.0.tgz       r-buildpack-release-1.1.7.tgz
-capi-release-1.98.0-PaaS-TA.tgz           java-buildpack-release-4.32.1.tgz    routing-release-0.207.0-PaaS-TA.tgz
-capi-release-1.98.0.tgz                   log-cache-release-2.8.0.tgz          routing-release-0.207.0.tgz
-cf-cli-release-1.29.0.tgz                 loggregator-agent-release-6.1.1.tgz  ruby-buildpack-release-1.8.23.tgz
-cf-networking-release-2.33.0-PaaS-TA.tgz  loggregator-release-106.3.10.tgz     silk-release-2.33.0-PaaS-TA.tgz
-cf-networking-release-2.33.0.tgz          metrics-discovery-release-3.0.1.tgz  silk-release-2.33.0.tgz
-cf-smoke-tests-release-41.0.1.tgz         nats-release-34.tgz                  staticfile-buildpack-release-1.5.10.tgz
-cflinuxfs3-release-0.204.0.tgz            nginx-buildpack-release-1.1.14.tgz   statsd-injector-release-1.11.15.tgz
-credhub-release-2.8.0.tgz                 nodejs-buildpack-release-1.7.26.tgz  uaa-release-74.24.0.tgz
-diego-release-2.48.0-PaaS-TA.tgz          os-conf-release-22.1.0.tgz           uaa-relese-74.29.0-PaaS-TA.tgz
-diego-release-2.48.0.tgz                  php-buildpack-release-4.4.20.tgz
-dotnet-core-buildpack-release-2.3.14.tgz  postgres-release-43.tgz
+binary-buildpack-release-1.0.36.tgz          garden-runc-release-1.19.16.tgz           pxc-release-0.29.0.tgz
+bosh-dns-aliases-release-0.0.3.tgz           go-buildpack-release-1.9.17.tgz           python-buildpack-release-1.7.20.tgz
+bpm-release-1.1.9.tgz                        haproxy-boshrelease-10.1.0.tgz            r-buildpack-release-1.1.7.tgz
+capi-release-1.98.0-PaaS-TA-v3.tgz           java-buildpack-release-4.32.1.tgz         routing-release-0.207.0-PaaS-TA-v2.tgz
+capi-release-1.98.0-PaaS-TA.tgz              log-cache-release-2.8.0.tgz               routing-release-0.207.0-PaaS-TA.tgz
+capi-release-1.98.0.tgz                      loggregator-agent-release-6.1.1.tgz       routing-release-0.207.0.tgz
+cf-cli-release-1.29.0.tgz                    loggregator-release-106.3.10.tgz          ruby-buildpack-release-1.8.23.tgz
+cf-networking-release-2.33.0-PaaS-TA-v2.tgz  metrics-discovery-release-3.0.1.tgz       silk-release-2.33.0-PaaS-TA-v2.tgz
+cf-networking-release-2.33.0-PaaS-TA.tgz     nats-release-34.tgz                       silk-release-2.33.0-PaaS-TA.tgz
+cf-networking-release-2.33.0.tgz             nginx-buildpack-release-1.1.14.tgz        silk-release-2.33.0.tgz
+cf-smoke-tests-release-41.0.1.tgz            nodejs-buildpack-release-1.7.26.tgz       staticfile-buildpack-release-1.5.10.tgz
+cflinuxfs3-release-0.204.0.tgz               os-conf-release-22.1.0.tgz                statsd-injector-release-1.11.15.tgz
+credhub-release-2.8.0.tgz                    paasta-conf-release-1.0.1.tgz             uaa-release-74.24.0.tgz
+diego-release-2.48.0-PaaS-TA.tgz             paasta-conf-release-1.0.2.tgz             uaa-release-74.29.0-PaaS-TA-v2.tgz
+diego-release-2.48.0.tgz                     php-buildpack-release-4.4.20.tgz          uaa-relese-74.29.0-PaaS-TA.tgz
+
 ```
 
 - 서버 환경에 맞추어 [common_vars.yml](#3.6.1.1)와 [vars.yml]((#3.6.1.2))을 수정 한 뒤, Deploy 스크립트 파일의 설정을 수정한다. 
 
 - 4VM 배포시
-> $ vi ~/workspace/paasta-5.5.1/deployment/paasta-deployment/paasta/deploy-4vm-aws.sh
+> $ vi ~/workspace/paasta-5.5.2/deployment/paasta-deployment/paasta/deploy-4vm-aws.sh
 
 ```
 BOSH_ENVIRONMENT="${BOSH_ENVIRONMENT}"                   # bosh director alias name (PaaS-TA에서 제공되는 create-bosh-login.sh 미 사용시 bosh envs에서 이름을 확인하여 입력)
@@ -1208,6 +1227,7 @@ bosh -e ${BOSH_ENVIRONMENT} -d paasta -n deploy min-paasta-deployment.yml \	# Pa
         -o operations/min-aws.yml \					# AWS 설정
 	-o operations/min-cce.yml \					# CCE 조치 설정
 	-o operations/min-use-router-public-network.yml \		# Router 외부 접근 설정
+	-o operations/min-use-router-public-network-aws.yml \
         -o operations/min-use-postgres.yml \				# Database Type 설정 (3.5버전 이하에서 Migration 시 필수)
         -o operations/min-rename-network-and-deployment.yml \		# Rename Network and Deployment
 	-o operations/use-offline-releases.yml \ 			# min-paasta-deployment.yml의 오프라인 릴리즈 사용
@@ -1218,7 +1238,7 @@ bosh -e ${BOSH_ENVIRONMENT} -d paasta -n deploy min-paasta-deployment.yml \	# Pa
 ```
 
 - 7VM 배포시
-> $ vi ~/workspace/paasta-5.5.1/deployment/paasta-deployment/paasta/deploy-7vm-aws.sh
+> $ vi ~/workspace/paasta-5.5.2/deployment/paasta-deployment/paasta/deploy-7vm-aws.sh
 
 ```
 BOSH_ENVIRONMENT="${BOSH_ENVIRONMENT}"                   # bosh director alias name (PaaS-TA에서 제공되는 create-bosh-login.sh 미 사용시 bosh envs에서 이름을 확인하여 입력)
@@ -1245,7 +1265,7 @@ bosh -e ${BOSH_ENVIRONMENT} -d paasta -n deploy min-paasta-deployment.yml \	# Pa
 - PaaS-TA 설치 시 Shell Script 파일 실행 (BOSH 로그인 필요)
 
 ```
-$ cd ~/workspace/paasta-5.5.1/deployment/paasta-deployment/paasta
+$ cd ~/workspace/paasta-5.5.2/deployment/paasta-deployment/paasta
 $ ./deploy-{IaaS}-{VMs_Number}.sh
 ```
 
