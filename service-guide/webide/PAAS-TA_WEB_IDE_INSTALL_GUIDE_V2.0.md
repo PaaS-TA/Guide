@@ -278,7 +278,7 @@ cloudfoundry_sslSkipValidation: "true"
 
 ### <div id="2.5"/> 2.5. 서비스 설치
 
-- 서버 환경에 맞추어 Deploy 스크립트 파일의 VARIABLES 설정을 수정한다.
+- 서버 환경에 맞추어 Deploy 스크립트 파일의 VARIABLES 설정을 수정한다.  
   (선택) -o operations/cce.yml (CCE 조치를 적용하여 설치) 
 
 > $ vi ~/workspace/paasta-5.5.2/deployment/service-deployment/web-ide/deploy.sh
