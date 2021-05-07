@@ -229,7 +229,7 @@ abacus_url: "http://abacus.61.252.53.248.nip.io"	# abacus url (e.g. "http://abac
 
 - Deployment YAML에서 사용하는 변수 파일을 서버 환경에 맞게 수정한다.
 
-> $ vi ~/workspace/paasta-5.0/deployment/service-deployment/rabbitmq/vars.yml
+> $ vi ~/workspace/paasta-5.5.2/deployment/service-deployment/rabbitmq/vars.yml
 
 ```
 # STEMCELL
