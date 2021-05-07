@@ -303,11 +303,11 @@ Portal 설치에 필요한 App 파일 및 Manifest 파일을 다운로드 받아
 $ cd ~/workspace/paasta-5.5.2/release/portal
 
 ### portal app 파일을 다운로드한다
-$ wget --content-disposition https://nextcloud.paas-ta.org/index.php/s/jcDJmxrnsnc772E/download
-$ unzip portal-app.zip 
+$ wget --content-disposition https://nextcloud.paas-ta.org/index.php/s/cRHds5osDff5G3f/download
+$ unzip portal-app-1.2.0.zip 
 
 ### 설치 디렉토리 (파일) 구성  
-portal-app
+portal-app-1.2.0
 ├── portal-api-2.3.0
 │   ├── manifest.yml
 │   └── paas-ta-portal-api.jar
