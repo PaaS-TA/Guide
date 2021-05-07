@@ -496,60 +496,49 @@ my_rabbitmq_service   rabbitmq     standard                create succeeded   ra
 #### git을 통해 sample-app을 다운로드 한다.
 
 ```
-$ git clone https://github.com/pivotal-cf/rabbit-example-app.git
-Cloning into 'rabbit-example-app'...
-remote: Enumerating objects: 297, done.
-remote: Total 297 (delta 0), reused 0 (delta 0), pack-reused 297
-Receiving objects: 100% (297/297), 10.59 MiB | 4.48 MiB/s, done.
-Resolving deltas: 100% (87/87), done.
-Checking connectivity... done
+$ https://github.com/cloudfoundry-community/cf-rabbitmq-example-app.git
+Cloning into 'cf-rabbitmq-example-app'...
+remote: Enumerating objects: 91, done.
+remote: Total 91 (delta 0), reused 0 (delta 0), pack-reused 91
+Unpacking objects: 100% (91/91), done.
 ```
 
 #### --no-start 옵션으로 App을 배포한다. 
 --no-start: App 배포시 구동은 하지 않는다.
 
->`$cd rabbit-example-app`<br>
+>`$ cd cf-rabbitmq-example-app`<br>
 
->`$cf push rabbit-example-app --no-start`<br>
+>`$ cf push rabbit-example-app --no-start -i 1`<br>
 
 ```
-$ cf push rabbit-example-app --no-start
-Pushing from manifest to org system / space dev as admin...
-Using manifest file /home/inception/workspace/user/cheolhan/rabbit-example-app/manifest.yml
-Getting app info...
-Creating app with these attributes...
-+ name:       test-app
-  path:       /home/inception/workspace/user/cheolhan/rabbit-example-app
-+ command:    thin -R config.ru start
-  routes:
-
-Creating app test-app...
-Mapping routes...
-Comparing local files to remote cache...
+$ cf push rabbit-example-app --no-start -i 1
+Pushing app rabbit-example-app to org system / space dev as admin...
+Applying manifest file /home/ubuntu/workspace/ruby/tmp/cf-rabbitmq-example-app/manifest.yml...
+Manifest applied
 Packaging files to upload...
 Uploading files...
- 3.24 MiB / 3.24 MiB [============================================================================================================================================================================================================================================] 100.00% 1s
+ 230.44 KiB / 230.44 KiB [===================================================================================================] 100.00% 1s
 
 Waiting for API to complete processing files...
 
-name:              test-app
+name:              rabbit-example-app
 requested state:   stopped
-routes:            test-app.115.68.47.178.xip.io
+routes:            rabbit-example-app.115.68.47.178.xip.io
 last uploaded:     
 stack:             
 buildpacks:        
 
-type:            web
-instances:       0/1
-memory usage:    1024M
-start command:   thin -R config.ru start
+type:           web
+sidecars:       
+instances:      0/1
+memory usage:   256M
      state   since                  cpu    memory   disk     details
-#0   down    2019-11-19T01:24:08Z   0.0%   0 of 0   0 of 0   
+#0   down    2021-05-07T02:18:19Z   0.0%   0 of 0   0 of 0   
 ```
 
 #### Sample App에서 생성한 서비스 인스턴스 바인드 신청을 한다. 
 
->`cf bind-service test-app my_rabbitmq_service`<br>
+>`cf bind-service rabbit-example-app my_rabbitmq_service`<br>
 
 <br>
 
@@ -586,33 +575,32 @@ start command:   thin -R config.ru start
 
 #### 바인드가 적용되기 위해서 App을 재기동한다.
 
->`cf restart test-app`
+>`cf restart rabbit-example-app`
 
 <br>
 
 ####  App이 정상적으로 RabbitMQ 서비스를 사용하는지 확인한다.
 
+```
+$ export APP=https://rabbit-example-app.<System_Domain>
 
-####  브라우저에서 확인
->`http://test-app.<YOUR_DOMAIN>/write`
+$ curl $APP/ping -k
+OK
 
->`http://test-app.<YOUR_DOMAIN>/read`
+$ curl -X POST $APP/queues -d 'name=test-queue' -k
+SUCCESS
 
->![rabbitmq_image_12]
+$ curl $APP/queues -k
+test.mq.test-queue
 
-####  스토어 엔드포인트 테스트
->`curl -XPOST -d 'test' http://test-app.<YOUR-DOMAIN>/store`
+$ curl -X PUT $APP/queue/test-queue -d 'data=Hello-PaaS-TA' -k
+SUCCESS
 
->`curl -XGET http://test-app.<YOUR-DOMAIN>/store`
+$ curl -X GET $APP/queue/test-queue -k
+Hello-PaaS-TA
+```
 
->![rabbitmq_image_13]
 
-####  큐 엔드포인트 테스트
->`curl -XPOST -d 'test' http://test-app.<YOUR-DOMAIN>/queues/<YOUR-QUEUE-NAME>`
-
->`curl -XGET http://test-app.<YOUR-DOMAIN>/queues/<YOUR-QUEUE-NAME>`
-
->![rabbitmq_image_14]
 
 [rabbitmq_image_01]:/service-guide/images/rabbitmq/rabbitmq_image_01.png
 
