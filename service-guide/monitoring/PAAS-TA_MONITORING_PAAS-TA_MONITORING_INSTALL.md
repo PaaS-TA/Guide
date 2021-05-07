@@ -21,7 +21,7 @@
 
 1. BOSH 설치가 되어있으며, BOSH Login이 되어 있어야 한다.
 2. cloud-config와 runtime-config가 업데이트 되어있는지 확인한다.
-3. Stemcell 목록을 확인하여 서비스 설치에 필요한 Stemcell(ubuntu xenial 621.78)이 업로드 되어 있는 것을 확인한다.
+3. Stemcell 목록을 확인하여 서비스 설치에 필요한 Stemcell(ubuntu xenial 621.94)이 업로드 되어 있는 것을 확인한다.
 4. PaaS-TA 5.0이 설치되어 있어야 하며, BOSH와 PaaS-TA를 설치하는 과정에서 Monitoring 옵션을 포함하여 설치되어 있어야 한다.
 5. PaaS(logsearch), IaaS(Monasca), SaaS(PaaS-TA Pinpoint Monitoring), CaaS(PaaS-TA CaaS Service)등 Monitoring을 하고 싶은 환경에 해당되는 서비스가 설치되어 있어야 한다. (logsearch 설치 필수)
 
@@ -115,7 +115,7 @@ kubernetes_token: "eyJhbGciOiJSUzI1NiIsImtpZCI6IiJ9.eyJpc3MiOiJrdWJlcm5ldGVzL3Nl
 
 # STEMCELL
 stemcell_os: "ubuntu-xenial"		# Stemcell OS
-stemcell_version: "621.78"		# Stemcell Version
+stemcell_version: "621.94"		# Stemcell Version
 
 
 # REDIS
