@@ -512,21 +512,16 @@ webide   webide    dedicated-vm                create succeeded   webide-service
 
 <br>
 
-- Workspace를 구성하기 위해 Docker 관련 자료를 다운로드한다.
-
-![](/service-guide/images/webide/web-ide-09.png)
-
-<br>
 
 ### <div id='4.2'/> 4.2. WEB-IDE Workspace 화면
 
-- Open Project를 누르면 Workspace 화면이 열린다.
+- WEB-IDE를 처음 생성 시 Workspace를 새로 생성하는 화면이 열리고 프로젝트를 설정에 맞게 생성하여 작업을 진행한다.
 
-![](/service-guide/images/webide/web-ide-10.png)
+![](/service-guide/images/webide/web-ide-on-02.jpeg)
 
-- 실제로 소스를 개발해서 빌드하거나 GIT이나 SVN에서 IMPORT 한다.
+![](/service-guide/images/webide/web-ide-on-03.jpeg)
 
-![](/service-guide/images/webide/web-ide-11.png)
+![](/service-guide/images/webide/web-ide-on-04.jpeg)
 
 <br>
 
