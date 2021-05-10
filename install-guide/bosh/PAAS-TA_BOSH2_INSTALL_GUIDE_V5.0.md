@@ -497,7 +497,6 @@ Succeeded
 
 - 서비스 설치에 필요한 릴리즈 파일을 다운로드 받아 Local machine의 작업 경로로 위치시킨다.  
   
-  - 설치 파일 통합 다운로드 위치 : https://paas-ta.kr/download/package    
   - PaaS-TA 5.5.2 BOSH 설치 릴리즈 파일 다운로드 : [bosh.zip](https://nextcloud.paas-ta.org/index.php/s/fy83bkQQCcek2yk/download)
 
 ```
