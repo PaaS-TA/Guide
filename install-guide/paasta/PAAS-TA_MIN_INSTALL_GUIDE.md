@@ -1083,7 +1083,7 @@ $ chmod +x ~/workspace/paasta-5.5.2/deployment/paasta-deployment-min/paasta/*.sh
 
 
 ## <div id='3.7'/>3.7.  PaaS-TA 설치
-- 서버 환경에 맞추어 [common_vars.yml](#3.6.1.1)와 [vars.yml](#3.6.1.2)을 수정 한 뒤, Deploy 스크립트 파일의 설정을 수정한다. 
+- 서버 환경에 맞추어 [common_vars.yml](#3.6.1.1)와 [min-vars.yml](#3.6.1.2)을 수정 한 뒤, Deploy 스크립트 파일의 설정을 수정한다. 
 
 - 4VM 배포시
 > $ vi ~/workspace/paasta-5.5.2/deployment/paasta-deployment-min/paasta/deploy-4vm-aws.sh
@@ -1215,7 +1215,7 @@ diego-release-2.48.0.tgz                     php-buildpack-release-4.4.20.tgz   
 
 ```
 
-- 서버 환경에 맞추어 [common_vars.yml](#3.6.1.1)와 [vars.yml](#3.6.1.2)을 수정 한 뒤, Deploy 스크립트 파일의 설정을 수정한다. 
+- 서버 환경에 맞추어 [common_vars.yml](#3.6.1.1)와 [min-vars.yml](#3.6.1.2)을 수정 한 뒤, Deploy 스크립트 파일의 설정을 수정한다. 
 
 - 4VM 배포시
 > $ vi ~/workspace/paasta-5.5.2/deployment/paasta-deployment-min/paasta/deploy-4vm-aws.sh
