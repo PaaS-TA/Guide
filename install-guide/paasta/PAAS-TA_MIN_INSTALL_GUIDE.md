@@ -1083,7 +1083,7 @@ $ chmod +x ~/workspace/paasta-5.5.2/deployment/paasta-deployment-min/paasta/*.sh
 
 
 ## <div id='3.7'/>3.7.  PaaS-TA 설치
-- 서버 환경에 맞추어 [common_vars.yml](#3.6.1.1)와 [vars.yml]((#3.6.1.2))을 수정 한 뒤, Deploy 스크립트 파일의 설정을 수정한다. 
+- 서버 환경에 맞추어 [common_vars.yml](#3.6.1.1)와 [vars.yml](#3.6.1.2)을 수정 한 뒤, Deploy 스크립트 파일의 설정을 수정한다. 
 
 - 4VM 배포시
 > $ vi ~/workspace/paasta-5.5.2/deployment/paasta-deployment-min/paasta/deploy-4vm-aws.sh
@@ -1185,7 +1185,6 @@ Succeeded
 
 - 서비스 설치에 필요한 릴리즈 파일을 다운로드 받아 Local machine의 작업 경로로 위치시킨다.  
   
-  - 설치 파일 통합 다운로드 위치 : https://paas-ta.kr/download/package    
   - PaaS-TA 5.5.2 설치 릴리즈 파일 다운로드 : [paasta.zip](https://nextcloud.paas-ta.org/index.php/s/TS6M2MTBkYsX8Lq/download)
 
 ```
@@ -1216,7 +1215,7 @@ diego-release-2.48.0.tgz                     php-buildpack-release-4.4.20.tgz   
 
 ```
 
-- 서버 환경에 맞추어 [common_vars.yml](#3.6.1.1)와 [vars.yml]((#3.6.1.2))을 수정 한 뒤, Deploy 스크립트 파일의 설정을 수정한다. 
+- 서버 환경에 맞추어 [common_vars.yml](#3.6.1.1)와 [vars.yml](#3.6.1.2)을 수정 한 뒤, Deploy 스크립트 파일의 설정을 수정한다. 
 
 - 4VM 배포시
 > $ vi ~/workspace/paasta-5.5.2/deployment/paasta-deployment-min/paasta/deploy-4vm-aws.sh
