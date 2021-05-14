@@ -496,17 +496,19 @@ my_rabbitmq_service   rabbitmq     standard                create succeeded   ra
 #### git을 통해 sample-app을 다운로드 한다.
 
 ```
-$ https://github.com/cloudfoundry-community/cf-rabbitmq-example-app.git
-Cloning into 'cf-rabbitmq-example-app'...
-remote: Enumerating objects: 91, done.
-remote: Total 91 (delta 0), reused 0 (delta 0), pack-reused 91
-Unpacking objects: 100% (91/91), done.
+$ git clone https://github.com/pivotal-cf/rabbit-example-app.git
+Cloning into 'rabbit-example-app'...
+remote: Enumerating objects: 297, done.
+remote: Total 297 (delta 0), reused 0 (delta 0), pack-reused 297
+Receiving objects: 100% (297/297), 10.59 MiB | 4.48 MiB/s, done.
+Resolving deltas: 100% (87/87), done.
+Checking connectivity... done
 ```
 
 #### --no-start 옵션으로 App을 배포한다. 
 --no-start: App 배포시 구동은 하지 않는다.
 
->`$ cd cf-rabbitmq-example-app`<br>
+>`$ cd rabbitmq-example-app`<br>
 
 >`$ cf push rabbit-example-app --no-start -i 1`<br>
 
@@ -579,26 +581,36 @@ memory usage:   256M
 
 <br>
 
+
 ####  App이 정상적으로 RabbitMQ 서비스를 사용하는지 확인한다.
 
-```
-$ export APP=https://rabbit-example-app.<System_Domain>
 
-$ curl $APP/ping -k
-OK
+####  브라우저에서 확인
+>`https://rabbit-example-app.<YOUR_DOMAIN>/write`
 
-$ curl -X POST $APP/queues -d 'name=test-queue' -k
-SUCCESS
+>`https://rabbit-example-app.<YOUR_DOMAIN>/read`
 
-$ curl $APP/queues -k
-test.mq.test-queue
+>![rabbitmq_image_12]
 
-$ curl -X PUT $APP/queue/test-queue -d 'data=Hello-PaaS-TA' -k
-SUCCESS
+####  스토어 엔드포인트 테스트
+>`curl -XPOST -d 'test' https://rabbit-example-app.<YOUR-DOMAIN>/store`
 
-$ curl -X GET $APP/queue/test-queue -k
-Hello-PaaS-TA
-```
+>`curl -XGET https://rabbit-example-app.<YOUR-DOMAIN>/store`
+
+>![rabbitmq_image_13]
+
+####  큐 엔드포인트 테스트
+>`curl -XPOST -d 'test' https://rabbit-example-app.<YOUR-DOMAIN>/queues/<YOUR-QUEUE-NAME>`
+
+>`curl -XGET https://rabbit-example-app.<YOUR-DOMAIN>/queues/<YOUR-QUEUE-NAME>`
+
+>![rabbitmq_image_14]
+
+
+
+
+
+
 
 
 
