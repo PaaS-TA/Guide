@@ -1241,7 +1241,6 @@ BOSH_ENVIRONMENT="${BOSH_ENVIRONMENT}"			 		# bosh director alias name (PaaS-TA�
 
 bosh -e ${BOSH_ENVIRONMENT} -d paasta -n deploy paasta-deployment.yml \	# PaaS-TA Manifest File
 	-o operations/aws.yml \						# AWS 설정
-	-o operations/cce.yml \						# CCE 조치 적용
 	-o operations/use-haproxy.yml \					# HAProxy 적용
 	-o operations/use-haproxy-public-network.yml \			# HAProxy Public Network 적용
 	-o operations/use-postgres.yml \				# Database Type 설정 (3.5버전 이하에서 Migration 시 필수)
