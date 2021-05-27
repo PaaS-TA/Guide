@@ -32,7 +32,7 @@ PaaS-TA 3.5 버전부터는 BOSH 2.0 기반으로 deploy를 진행하며 기존 
 ## <div id='13'> ● 시스템 구성도
 
 본 문서의 설치된 시스템 구성도이다.  
-Pinpoint Server, HBase의 HBase Master, Collector , WebUI2로 최소사항을 구성하였다. 
+Pinpoint Server, HBase의 HBase Master, Collector , WebUI로 최소사항을 구성하였다. 
 
 ![시스템구성도][pinpoint_image_01]
 
@@ -65,7 +65,7 @@ Pinpoint Server, HBase의 HBase Master, Collector , WebUI2로 최소사항을 �
 
 1. BOSH 설치가 되어있으며, BOSH Login이 되어 있어야 한다.
 2. cloud-config와 runtime-config가 업데이트 되어있는지 확인한다.
-3. Stemcell 목록을 확인하여 서비스 설치에 필요한 Stemcell(ubuntu xenial 621.78)이 업로드 되어 있는 것을 확인한다.
+3. Stemcell 목록을 확인하여 서비스 설치에 필요한 Stemcell(ubuntu xenial 621.94)이 업로드 되어 있는 것을 확인한다.
 
 
 > cloud-config 확인  
@@ -84,8 +84,8 @@ Pinpoint Server, HBase의 HBase Master, Collector , WebUI2로 최소사항을 �
 - PaaS-TA를 설치하기 위한 deployment가 존재하지 않는다면 다운로드 받는다
 ```
 $ cd ${HOME}/workspace/paasta-5.5.0/deployment
-$ git clone https://github.com/paas-ta/common.git –b v5.0.1
-$ git clone https://github.com/paas-ta/monitoring-deployment.git –b v5.5.0
+$ git clone https://github.com/paas-ta/common.git -b v5.0.1
+$ git clone https://github.com/paas-ta/monitoring-deployment.git -b v5.5.0
 ```
 
 
@@ -157,7 +157,7 @@ abacus_url: "http://abacus.61.252.53.248.xip.io"	# Abacus URL (e.g. "http://abac
 deployment_name: "pinpoint-monitoring"			# On-Demand Deployment Name
 #### Main Stemcells Setting ###
 stemcell_os: "ubuntu-xenial"				# Deployment Main Stemcell OS
-stemcell_version: "621.78"				# Main Stemcell Version
+stemcell_version: "621.94"				# Main Stemcell Version
 stemcell_alias: "default"   				# Main Stemcell Alias
 #### On-Demand Release Deployment Setting ### 
 releases_name:  "paasta-pinpoint-monitoring-release"	# On-Demand Release Name
@@ -229,7 +229,7 @@ echo 'y' | bosh -e {director_name} -d pinpoint-monitoring deploy paasta-pinpoint
 - Pinpoint Monitoring 설치 Shell Script 파일 실행 (BOSH 로그인 필요)
 
 ```
-$ cd ~/workspace/paasta-5.5.0/deployment/monitoring-deployment/paasta-monitoring
+$ cd ~/workspace/paasta-5.5.0/deployment/monitoring-deployment/pinpoint-monitoring
 $ sh deploy-pinpoint.sh
 ```
 
@@ -239,8 +239,8 @@ Pinpoint Monitoring이 설치 완료 되었음을 확인한다.
 $ bosh –e {director_name} vms
 
 
-$ bosh -e micro-bosh -d paasta-pinpoint-monitoring vms
-Deployment 'paasta-pinpoint-monitoring'
+$ bosh -e micro-bosh -d pinpoint-monitoring vms
+Deployment 'pinpoint-monitoring'
 
 Instance                                            Process State  AZ  IPs           VM CID               VM Type             Active  
 collector/a7932462-5a55-4ad6-9a50-6d9775d8391a      running        z3  10.0.81.122   i-0104012f0c4cf1051  caas_small_highmem  true  
