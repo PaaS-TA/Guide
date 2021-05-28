@@ -463,7 +463,7 @@ applications:
   services:
   - mysql-service-instance
   env:
-    mysql_datasource_driver-class-name: com.mysql.cj.jdbc.Driver
+    mysql_datasource_driver-class-name: org.mariadb.jdbc.Driver
     mysql_datasource_jdbc-url: jdbc:\${vcap.services.mysql-service-instance.credentials.uri}
     mysql_datasource_username: \${vcap.services.mysql-service-instance.credentials.username}
     mysql_datasource_password: \${vcap.services.mysql-service-instance.credentials.password}
@@ -545,7 +545,7 @@ buildpack: java_buildpack
 
 ##### rule.json 화일을 만들고 아래와 같이 내용을 넣는다.  
 >`$ vi rule.json`   
-destination ips : mysql 인스턴스 ips.
+destination : mysql의 proxy 인스턴스 ip.
 ```json
 [
   {
