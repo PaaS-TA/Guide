@@ -508,7 +508,7 @@ Checking connectivity... done
 #### --no-start 옵션으로 App을 배포한다. 
 --no-start: App 배포시 구동은 하지 않는다.
 
->`$ cd rabbitmq-example-app`<br>
+>`$ cd rabbit-example-app`<br>
 
 >`$ cf push rabbit-example-app --no-start -i 1`<br>
 
