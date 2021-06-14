@@ -760,6 +760,28 @@ service broker:   pinpoint-service-broker
 
 http://3.12.24.53/#/main/spring-music-pinpoint@SPRING_BOOT/realtime 접속
 ```
+	
+- (참고) 바인드 후 Pinpoint 서비스 대시보드 접속 시 정상접속이 안될 경우 보안 그룹을 추가한다.
+
+```  
+##### rule.json 화일을 만들고 아래와 같이 내용을 넣는다.
+$ vi rule.json
+[
+  {
+    "protocol": "all",
+    "destination": "<collector_IP>",
+  }
+]
+
+##### 보안 그룹을 생성한 후, 모든 App에 Pinpoint 서비스를 사용할수 있도록 생성한 보안 그룹을 적용한다.
+$ cf create-security-group pinpoint rule.json
+$ cf bind-running-security-group pinpoint
+
+##### App을 리부팅 한다.
+$ cf restage spring-music-pinpoint
+```  
+
+	
 
 [pinpoint_image_01]:/service-guide/images/pinpoint/pinpoint-image1.png
 [pinpoint_image_01-1]:/service-guide/images/pinpoint/pinpoint-image1-1.png
