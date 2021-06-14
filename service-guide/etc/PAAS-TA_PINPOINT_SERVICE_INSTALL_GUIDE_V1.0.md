@@ -463,15 +463,25 @@ Pinpoint Pinpoint\_standard all
 
 Sample Web App은 PaaS-TA에 App으로 배포가 된다. 배포된 App에 Pinpoint 서비스 Bind 를 통하여 초기 데이터를 생성하게 된다. 바인드 완료 후 연결 url을 통하여 브라우저로 해당 App에 대한 Pinpoint 서비스 모니터링을 할 수 있다.
 
--   Spring-music App을 이용하여 Pinpoint 모니터링을 테스트 하였다.
--   앱을 다운로드 후 –b 옵션을 주어 buildpack을 지정하여 push 해 놓는다.
+- Sample APP & Buildpack download : https://nextcloud.paas-ta.org/index.php/s/osyn4J6K5ZPBb2Q/download
+```
+$ wget https://nextcloud.paas-ta.org/index.php/s/osyn4J6K5ZPBb2Q/download --content-disposition
+$ unzip pinpoint-sample.zip -d pinpoint-sample
+```
+
+- Pinpoint buildpack 등록 
+	
+```
+$ cf create-buildpack pinpoint_buildpack pinpoint-sample/java-buildpack-pinpoint-monitoring-2402a2c.zip 14
+```
+	
+```
+$ cd pinpoint-sample/spring-music
+$ cf push --no-start
+```
 
 ```
-$ cf push spring-music-pinpoint -b java_buildpack_pinpoint --no-start
-```
-
-```
-Using manifest file /home/ubuntu/workspace/bd_test/spring-music/manifest.yml
+Using manifest file /home/ubuntu/workspace/pinpoint-sample/spring-music/manifest.yml
 
 Creating app spring-music-pinpoint in org org / space space as admin...
 OK
