@@ -544,7 +544,7 @@ memory usage:   256M
 
 <br>
 
->(참고) 바인드 후 App구동시 Mysql 서비스 접속 에러로 App 구동이 안될 경우 보안 그룹을 추가한다.  
+>(참고) 바인드 후 App구동시 RabbitMQ 서비스 접속 에러로 App 구동이 안될 경우 보안 그룹을 추가한다.  
 
 <br>
 
@@ -567,7 +567,7 @@ memory usage:   256M
 
 <br>
 
-##### 모든 App에 Mysql 서비스를 사용할수 있도록 생성한 보안 그룹을 적용한다.
+##### 모든 App에 RabbitMQ 서비스를 사용할수 있도록 생성한 보안 그룹을 적용한다.
 
 >`$ cf bind-running-security-group rabbitmq`
 
