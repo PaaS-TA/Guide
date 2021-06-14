@@ -741,9 +741,21 @@ No running env variables have been set
 No staging env variables have been set
 ```
 
-- App 정상 구동 확인
+- APP 및 Service  정상 구동 확인
 ```
-$ curl http://<URL(IP)>/#/main/spring-music-pinpoint@TOMCAT
+
+$ cf service PS1
+	
+name:             PS1
+service:          Pinpoint
+tags:             
+plan:             Pinpoint_standard
+description:      A simple pinpoint implementation
+documentation:    http://www.openpaas.org
+dashboard:        http://3.53.24.53/#/main
+service broker:   pinpoint-service-broker
+
+http://3.12.24.53/#/main/spring-music-pinpoint@SPRING_BOOT/realtime 접속
 ```
 
 [pinpoint_image_01]:/service-guide/images/pinpoint/pinpoint-image1.png
