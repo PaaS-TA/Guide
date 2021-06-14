@@ -665,7 +665,7 @@ $ uaac client add pipeclient -s clientsecret --redirect_uri "http://115.68.47.17
 > **[POSITION]** : 우선순위  
 
 - Java Offline Buildpack 다운로드 
-> wget -O java-buildpack-offline-v4.25.zip http://45.248.73.44/index.php/s/mcaBZQCqwbyzC6a/download  
+> wget -O java-buildpack-offline-v4.37.zip https://nextcloud.paas-ta.org/index.php/s/8rGJXEFa8odFDLk/download 
 
 **buildpack 등록**  
 
