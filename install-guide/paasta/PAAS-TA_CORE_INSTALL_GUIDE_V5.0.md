@@ -759,7 +759,7 @@ syslog_fallback_servers: []					# [MONITORING] PaaS-TA Syslog Fallback Servers
 
 # STEMCELL
 stemcell_os: "ubuntu-xenial"		# Stemcell OS
-stemcell_version: "621.94"		# Stemcell Version
+stemcell_version: "621.125"		# Stemcell Version
 
 # SMOKE-TEST
 smoke_tests_azs: ["z1"]			# Smoke-Test 가용 존
