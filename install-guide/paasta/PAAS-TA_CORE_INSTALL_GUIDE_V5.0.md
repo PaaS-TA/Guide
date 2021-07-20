@@ -74,7 +74,7 @@ PaaS-TA 3.1 버전까지는 PaaS-TA Container, Controller를 각각의 deploymen
 
 - BOSH2 기반의 BOSH를 설치한다.
 - PaaS-TA AP 설치는 BOSH를 설치한 Inception(설치 환경)에서 작업한다.
-- PaaS-TA AP 설치를 위해 BOSH LOGIN을 진행한다. ([BOSH 로그인](https://github.com/PaaS-TA/Guide/blob/v5.5.3/install-guide/bosh/PAAS-TA_BOSH2_INSTALL_GUIDE_V5.0.md#3.3.7))
+- PaaS-TA AP 설치를 위해 BOSH LOGIN을 진행한다. ([BOSH 로그인](../bosh/PAAS-TA_BOSH2_INSTALL_GUIDE_V5.0.md#3.3.7))
 
 ## <div id='3.2'/>3.2. 설치 파일 다운로드
 - PaaS-TA AP를 설치하기 위한 deployment가 존재하지 않는다면 다운로드 받는다
