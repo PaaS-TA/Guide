@@ -4,8 +4,8 @@
 　● [목적](#1.1)  
 　● [범위](#1.2)  
 　● [참고 자료](#1.3)  
-2. [PaaS-TA AP 5.5.3](#2)  
-3. [PaaS-TA AP 5.5.3 설치](#3)  
+2. [PaaS-TA 5.5.3 AP](#2)  
+3. [PaaS-TA 5.5.3 AP 설치](#3)  
 　3.1. [Prerequisite](#3.1)  
 　3.2. [설치 파일 다운로드](#3.2)  
 　3.3. [Stemcell 업로드](#3.3)  
@@ -61,7 +61,7 @@ BOSH Deployment: [https://github.com/cloudfoundry/bosh-deployment](https://githu
 
 CF Deployment: [https://github.com/cloudfoundry/cf-deployment](https://github.com/cloudfoundry/cf-deployment)
 
-# <div id='2'/>2. PaaS-TA AP 5.5.3
+# <div id='2'/>2. PaaS-TA 5.5.3 AP
 
 PaaS-TA AP는 BOSH를 기반으로 설치된다. BOSH CLI를 사용하여 BOSH를 생성한 후, paasta-deployment로 PaaS-TA AP를 배포한다. 
 
@@ -69,7 +69,7 @@ PaaS-TA 3.1 버전까지는 PaaS-TA Container, Controller를 각각의 deploymen
 
 ![PaaSTa_BOSH_Use_Guide_Image2]  
 
-# <div id='3'/>3. PaaS-TA AP 5.5.3 설치
+# <div id='3'/>3. PaaS-TA 5.5.3 AP 설치
 ## <div id='3.1'/>3.1. Prerequisite
 
 - BOSH2 기반의 BOSH를 설치한다.
@@ -729,7 +729,7 @@ abacus_url: "http://abacus.xx.xx.xxx.xxx.nip.io"	# Abacus URL (e.g. "http://abac
 
 #### <div id='3.6.1.2'/>● vars.yml
 
-PaaS-TA 를 설치 할 때 적용되는 각종 변수값이나 배포 될 VM의 설정을 변경할 수 있다.
+PaaS-TA AP를 설치 할 때 적용되는 각종 변수값이나 배포 될 VM의 설정을 변경할 수 있다.
 
 > $ vi ~/workspace/paasta-5.5.3/deployment/paasta-deployment/paasta/vars.yml
 ```
