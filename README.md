@@ -3,22 +3,16 @@
 #### 5.5.0 이하의 버전을 사용할 경우 해당 경로를 https://nextcloud.paas-ta.org/~ 로 변경이 필요합니다.  
 
 
-# PaaS-TA 5.5.2 가이드 문서
+# PaaS-TA 5.5.3 가이드 문서
 
 
-## 플랫폼 설치 가이드
+## Application-Platform 5.6.0 설치 가이드
 - 운영 환경 설치
-  - PaaS-TA 플랫폼 자동화 설치
-    - (Deprecated) ~~[플랫폼 설치 자동화  설치](./use-guide/platform/PAAS-TA_PLATFORM_INSTALL_AUTOMATION_INSTALL_GUIDE_v1.0.md)~~
-    - (Deprecated) ~~[플랫폼 설치 자동화 사용 메뉴얼](./use-guide/platform/PAAS-TA_PLATFORM_INSTALL_AUTOMATION_USE_MANUAL_v1.0.md)~~
-  - PaaS-TA 플랫폼 수동 설치
-    - [BOSH 설치(AWS, OpenStack)](./install-guide/bosh/PAAS-TA_BOSH2_INSTALL_GUIDE_V5.0.md)
-    - [PaaS-TA 설치(AWS, OpenStack)](./install-guide/paasta/PAAS-TA_CORE_INSTALL_GUIDE_V5.0.md)
-    - [PaaS-TA-min 설치(AWS)](./install-guide/paasta/PAAS-TA_MIN_INSTALL_GUIDE.md)
-    - (Deprecated) ~~[BOSH 및 PaaS-TA 설치(CLOUDit)](./use-guide/platform/PAAS-TA_PLATFORM_INSTALL_AUTOMATION_CLOUDIT_v1.0.md)~~
-    - (Deprecated) ~~[PaaS-TA 포털 수동 설치(CLOUDit)](./use-guide/platform/PAAS-TA_PLATFORM_INSTALL_AUTOMATION_CLOUDIT_PORTAL_v1.0.md)~~
+  - [BOSH 설치(AWS, OpenStack)](./install-guide/bosh/PAAS-TA_BOSH2_INSTALL_GUIDE_V5.0.md)
+  - [PaaS-TA 설치(AWS, OpenStack)](./install-guide/paasta/PAAS-TA_CORE_INSTALL_GUIDE_V5.0.md)
+  - [PaaS-TA-min 설치(AWS)](./install-guide/paasta/PAAS-TA_MIN_INSTALL_GUIDE.md)
 
-##  가이드
+## 기타 가이드
 - [CF Migration 가이드 (3.1 to 4.0)](../../../Guide-4.0-ROTELLE/blob/master/PaaS_TA_4.0_migration.md)
   
 ## 포털 설치 가이드

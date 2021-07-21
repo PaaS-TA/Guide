@@ -4,8 +4,8 @@
 　● [목적](#1.1)  
 　● [범위](#1.2)  
 　● [참고 자료](#1.3)  
-2. [PaaS-TA 5.5.2](#2)  
-3. [PaaS-TA 5.5.2 설치](#3)  
+2. [PaaS-TA 5.5.3 AP](#2)  
+3. [PaaS-TA 5.5.3 AP 설치](#3)  
 　3.1. [Prerequisite](#3.1)  
 　3.2. [설치 파일 다운로드](#3.2)  
 　3.3. [Stemcell 업로드](#3.3)  
@@ -16,38 +16,38 @@
 　　●  [Compilation](#3.5.3)  
 　　●  [Disk Size](#3.5.4)  
 　　●  [Networks](#3.5.5)  
-　3.6. [PaaS-TA 설치 파일](#3.6)  
-　　3.6.1. [PaaS-TA 설치 Variable 파일](#3.6.1)    
+　3.6. [PaaS-TA AP 설치 파일](#3.6)  
+　　3.6.1. [PaaS-TA AP 설치 Variable 파일](#3.6.1)    
 　　　●  [common_vars.yml](#3.6.1.1)  
 　　　●  [vars.yml](#3.6.1.2)  
-　　　●  [PaaS-TA 그외 Variable List](#3.6.1.3)  
-　　3.6.2. [PaaS-TA Operation 파일](#3.6.2)  
-　　3.6.3. [PaaS-TA 설치 Shell Scripts](#3.6.3)  
+　　　●  [PaaS-TA AP 그외 Variable List](#3.6.1.3)  
+　　3.6.2. [PaaS-TA AP Operation 파일](#3.6.2)  
+　　3.6.3. [PaaS-TA AP 설치 Shell Scripts](#3.6.3)  
 　　　●  [deploy-aws.sh](#3.6.3.1)  
 　　　●  [deploy-openstack.sh](#3.6.3.2)  
-　3.7. [PaaS-TA 설치](#3.7)  
-　3.8. [PaaS-TA 설치 - 다운로드 된 Release 파일 이용 방식](#3.8)  
-　3.9. [PaaS-TA 로그인](#3.9)   
+　3.7. [PaaS-TA AP 설치](#3.7)  
+　3.8. [PaaS-TA AP 설치 - 다운로드 된 Release 파일 이용 방식](#3.8)  
+　3.9. [PaaS-TA AP 로그인](#3.9)   
 
 ## Executive Summary
 
-본 문서는 PaaS-TA 5.5.2(이하 PaaS-TA)을 수동으로 설치하기 위한 가이드를 제공하는 데 그 목적이 있다.
+본 문서는 PaaS-TA 5.5.3 Application Platform(이하 PaaS-TA AP)을 수동으로 설치하기 위한 가이드를 제공하는 데 그 목적이 있다.
 
 # <div id='1'/>1.  문서 개요 
 
 ## <div id='1.1'/>● 목적
-본 문서는 Inception 환경(설치환경)에서 BOSH2(이하 BOSH) 설치 후, BOSH를 기반으로 Monitoring을 적용하지 않은 PaaS-TA를 설치하기 위한 가이드를 제공하는 데 그 목적이 있다.
+본 문서는 Inception 환경(설치환경)에서 BOSH2(이하 BOSH) 설치 후, BOSH를 기반으로 Monitoring을 적용하지 않은 PaaS-TA AP를 설치하기 위한 가이드를 제공하는 데 그 목적이 있다.
 
 
 ## <div id='1.2'/>● 범위
-본 문서는 cf-deployment v13.19.0을 기준으로 작성되었다.  
-PaaS-TA은 bosh-deployment를 기반으로 한 BOSH 환경에서 설치한다.  
+본 문서는 cf-deployment v16.14.0을 기준으로 작성되었다.  
+PaaS-TA AP는 bosh-deployment를 기반으로 한 BOSH 환경에서 설치한다.  
 
-PaaS-TA 설치 시 필요한 Stemcell은 기존 ubuntu-xenial-621.78에서 ubuntu-xenial-621.94로 변경되었다.  
+PaaS-TA AP 설치 시 필요한 Stemcell은 기존 ubuntu-xenial-621.94에서 ubuntu-xenial-621.125로 변경되었다.  
 
-PaaS-TA는 VMware vSphere, Google Cloud Platform, Amazon Web Services EC2, OpenStack, Microsoft Azure 등의 IaaS를 지원한다.  
+PaaS-TA AP는 VMware vSphere, Google Cloud Platform, Amazon Web Services EC2, OpenStack, Microsoft Azure 등의 IaaS를 지원한다.  
 
-현재 PaaS-TA 5.5.2에서 검증한 IaaS 환경은 AWS, OpenStack 환경이다.
+현재 PaaS-TA 5.5.3 AP에서 검증한 IaaS 환경은 AWS, OpenStack 환경이다.
 
 ## <div id='1.3'/>● 참고 자료
 
@@ -61,49 +61,49 @@ BOSH Deployment: [https://github.com/cloudfoundry/bosh-deployment](https://githu
 
 CF Deployment: [https://github.com/cloudfoundry/cf-deployment](https://github.com/cloudfoundry/cf-deployment)
 
-# <div id='2'/>2. PaaS-TA 5.5.2
+# <div id='2'/>2. PaaS-TA 5.5.3 AP
 
-PaaS-TA는 BOSH를 기반으로 설치된다. BOSH CLI를 사용하여 BOSH를 생성한 후, paasta-deployment로 PaaS-TA를 배포한다. 
+PaaS-TA AP는 BOSH를 기반으로 설치된다. BOSH CLI를 사용하여 BOSH를 생성한 후, paasta-deployment로 PaaS-TA AP를 배포한다. 
 
-PaaS-TA 3.1 버전까지는 PaaS-TA Container, Controller를 각각의 deployment로 설치했지만, PaaS-TA 3.5 버전부터 paasta-deployment 하나로 통합되었으며, 한 번에 PaaS-TA를 설치한다. 
+PaaS-TA 3.1 버전까지는 PaaS-TA Container, Controller를 각각의 deployment로 설치했지만, PaaS-TA 3.5 버전부터 paasta-deployment 하나로 통합되었으며, 한 번에 PaaS-TA AP를 설치한다. 
 
 ![PaaSTa_BOSH_Use_Guide_Image2]  
 
-# <div id='3'/>3. PaaS-TA 5.5.2 설치
+# <div id='3'/>3. PaaS-TA 5.5.3 AP 설치
 ## <div id='3.1'/>3.1. Prerequisite
 
 - BOSH2 기반의 BOSH를 설치한다.
-- PaaS-TA 설치는 BOSH를 설치한 Inception(설치 환경)에서 작업한다.
-- PaaS-TA 설치를 위해 BOSH LOGIN을 진행한다. ([BOSH 로그인](https://github.com/PaaS-TA/Guide/blob/v5.5.2/install-guide/bosh/PAAS-TA_BOSH2_INSTALL_GUIDE_V5.0.md#3.3.7))
+- PaaS-TA AP 설치는 BOSH를 설치한 Inception(설치 환경)에서 작업한다.
+- PaaS-TA AP 설치를 위해 BOSH LOGIN을 진행한다. ([BOSH 로그인](../bosh/PAAS-TA_BOSH2_INSTALL_GUIDE_V5.0.md#3.3.7))
 
 ## <div id='3.2'/>3.2. 설치 파일 다운로드
-- PaaS-TA를 설치하기 위한 deployment가 존재하지 않는다면 다운로드 받는다
+- PaaS-TA AP를 설치하기 위한 deployment가 존재하지 않는다면 다운로드 받는다
 
 ```
-$ mkdir -p ~/workspace/paasta-5.5.2/deployment
-$ cd ~/workspace/paasta-5.5.2/deployment
+$ mkdir -p ~/workspace/paasta-5.5.3/deployment
+$ cd ~/workspace/paasta-5.5.3/deployment
 $ git clone https://github.com/PaaS-TA/common.git
-$ cd ~/workspace/paasta-5.5.2/deployment
-$ git clone https://github.com/PaaS-TA/paasta-deployment.git -b v5.5.2
+$ cd ~/workspace/paasta-5.5.3/deployment
+$ git clone https://github.com/PaaS-TA/paasta-deployment.git -b v5.6.0
 ```
 
 ## <div id='3.3'/>3.3. Stemcell 업로드
-Stemcell은 배포 시 생성되는 PaaS-TA VM Base OS Image이며, PaaS-TA 5.5.2은 Ubuntu xenial stemcell 621.94를 기반으로 한다.  
+Stemcell은 배포 시 생성되는 PaaS-TA AP VM Base OS Image이며, PaaS-TA 5.5.3 AP는 Ubuntu xenial stemcell 621.125를 기반으로 한다.  
 기본적인 Stemcell 업로드 명령어는 다음과 같다.  
 ```                     
 $ bosh -e ${BOSH_ENVIRONMENT} upload-stemcell {URL}
 ```
 
-PaaS-TA 5.5.2은 Stemcell 업로드 스크립트를 지원하며, BOSH 로그인 후 다음 명령어를 수행하여 Stemcell을 올린다.  
+PaaS-TA 5.5.3 AP는 Stemcell 업로드 스크립트를 지원하며, BOSH 로그인 후 다음 명령어를 수행하여 Stemcell을 올린다.  
 BOSH_ENVIRONMENT는 BOSH 설치 시 사용한 Director 명이고, CURRENT_IAAS는 배포된 환경 IaaS(aws, azure, gcp, openstack, vsphere, 그외 입력시 bosh-lite)에 맞게 입력을 한다. 
-<br>(PaaS-TA에서 제공되는 create-bosh-login.sh을 이용하여 BOSH LOGIN시 BOSH_ENVIRONMENT와 CURRENT_IAAS는 자동입력된다.)
+<br>(PaaS-TA AP에서 제공되는 create-bosh-login.sh을 이용하여 BOSH LOGIN시 BOSH_ENVIRONMENT와 CURRENT_IAAS는 자동입력된다.)
 
 - Stemcell 업로드 Script의 설정 수정 (BOSH_ENVIRONMENT 수정)
 
-> $ vi ~/workspace/paasta-5.5.2/deployment/paasta-deployment/bosh/upload-stemcell.sh
+> $ vi ~/workspace/paasta-5.5.3/deployment/paasta-deployment/bosh/upload-stemcell.sh
 ```                     
 #!/bin/bash
-STEMCELL_VERSION=621.94
+STEMCELL_VERSION=621.125
 CURRENT_IAAS="${CURRENT_IAAS}"				# IaaS Information (PaaS-TA에서 제공되는 create-bosh-login.sh 미 사용시 aws/azure/gcp/openstack/vsphere 입력)
 BOSH_ENVIRONMENT="${BOSH_ENVIRONMENT}"			# bosh director alias name (PaaS-TA에서 제공되는 create-bosh-login.sh 미 사용시 bosh envs에서 이름을 확인하여 입력)
 
@@ -125,50 +125,50 @@ fi
 - Stemcell 업로드 Script 실행
 
 ```
-$ cd ~/workspace/paasta-5.5.2/deployment/paasta-deployment/bosh
+$ cd ~/workspace/paasta-5.5.3/deployment/paasta-deployment/bosh
 $ source upload-stemcell.sh
 ```
 
-- [PaaS-TA 5.5.2 스템셀 통합 다운로드](https://nextcloud.paas-ta.org/index.php/s/RLgPANn7LNmGrqP/download)  
+- [PaaS-TA 5.5.3 AP 스템셀 통합 다운로드](https://nextcloud.paas-ta.org/index.php/s/axmrx6ddPBnJNZ8/download)  
 - 만약 오프라인 환경에 저장한 스템셀을 사용 하고 싶다면, Stemcell을 저장 한 뒤 경로를 설정 후 Stemcell 업로드 Script를 실행한다. 
 
 ```  
 # 폴더 생성 및 이동
-$ mkdir -p ~/workspace/paasta-5.5.2/stemcell/paasta
-$ cd ~/workspace/paasta-5.5.2/stemcell/paasta/
+$ mkdir -p ~/workspace/paasta-5.5.3/stemcell/paasta
+$ cd ~/workspace/paasta-5.5.3/stemcell/paasta/
 
 # 개별 Stemcell 다운로드 
 ## AWS의 경우
-$ wget https://s3.amazonaws.com/bosh-core-stemcells/621.94/bosh-stemcell-621.94-aws-xen-hvm-ubuntu-xenial-go_agent.tgz
+$ wget https://s3.amazonaws.com/bosh-core-stemcells/621.125/bosh-stemcell-621.125-aws-xen-hvm-ubuntu-xenial-go_agent.tgz
 
 ## AZURE의 경우
-$ wget https://bosh-core-stemcells.s3-accelerate.amazonaws.com/621.94/bosh-stemcell-621.94-azure-hyperv-ubuntu-xenial-go_agent.tgz
+$ wget https://bosh-core-stemcells.s3-accelerate.amazonaws.com/621.125/bosh-stemcell-621.125-azure-hyperv-ubuntu-xenial-go_agent.tgz
 
 ## GCP의 경우
-$ wget https://bosh-core-stemcells.s3-accelerate.amazonaws.com/621.94/bosh-stemcell-621.94-google-kvm-ubuntu-xenial-go_agent.tgz
+$ wget https://bosh-core-stemcells.s3-accelerate.amazonaws.com/621.125/bosh-stemcell-621.125-google-kvm-ubuntu-xenial-go_agent.tgz
 
 ## OPENSTACK의 경우
-$ wget https://s3.amazonaws.com/bosh-core-stemcells/621.94/bosh-stemcell-621.94-openstack-kvm-ubuntu-xenial-go_agent.tgz
+$ wget https://s3.amazonaws.com/bosh-core-stemcells/621.125/bosh-stemcell-621.125-openstack-kvm-ubuntu-xenial-go_agent.tgz
 
 ## VSHPERE의 경우
-$ wget https://s3.amazonaws.com/bosh-core-stemcells/621.94/bosh-stemcell-621.94-vsphere-esxi-ubuntu-xenial-go_agent.tgz
+$ wget https://s3.amazonaws.com/bosh-core-stemcells/621.125/bosh-stemcell-621.125-vsphere-esxi-ubuntu-xenial-go_agent.tgz
 
 ## BOSH-LITE의 경우
-$ wget https://s3.amazonaws.com/bosh-core-stemcells/621.94/bosh-stemcell-621.94-warden-boshlite-ubuntu-xenial-go_agent.tgz
+$ wget https://s3.amazonaws.com/bosh-core-stemcells/621.125/bosh-stemcell-621.125-warden-boshlite-ubuntu-xenial-go_agent.tgz
 
 # 통합 다운로드의 경우
-$ cd ~/workspace/paasta-5.5.2
-$ wget https://nextcloud.paas-ta.org/index.php/s/RLgPANn7LNmGrqP/download  --content-disposition
+$ cd ~/workspace/paasta-5.5.3
+$ wget https://nextcloud.paas-ta.org/index.php/s/axmrx6ddPBnJNZ8/download  --content-disposition
 $ unzip stemcell.zip
 ```
 
 - 오프라인 Stemcell 업로드 Script의 설정 수정 (BOSH_ENVIRONMENT, STEMCELL_DIR 수정)
 
-> $ vi ~/workspace/paasta-5.5.2/deployment/paasta-deployment/bosh/offline-upload-stemcell.sh
+> $ vi ~/workspace/paasta-5.5.3/deployment/paasta-deployment/bosh/offline-upload-stemcell.sh
 ```                     
 #!/bin/bash
-STEMCELL_VERSION=621.94
-STEMCELL_DIR="/home/ubuntu/workspace/paasta-5.5.2/stemcell/paasta"
+STEMCELL_VERSION=621.125
+STEMCELL_DIR="/home/ubuntu/workspace/paasta-5.5.3/stemcell/paasta"
 CURRENT_IAAS="${CURRENT_IAAS}"				# IaaS Information (PaaS-TA에서 제공되는 create-bosh-login.sh 미 사용시 aws/azure/gcp/openstack/vsphere 입력, 미 입력시 bosh-lite)
 BOSH_ENVIRONMENT="${BOSH_ENVIRONMENT}"			# bosh director alias name (PaaS-TA에서 제공되는 create-bosh-login.sh 미 사용시 bosh envs에서 이름을 확인하여 입력)
 
@@ -190,7 +190,7 @@ fi
 - 오프라인 Stemcell 업로드 Script 실행
 
 ```
-$ cd ~/workspace/paasta-5.5.2/deployment/paasta-deployment/bosh
+$ cd ~/workspace/paasta-5.5.3/deployment/paasta-deployment/bosh
 $ source offline-upload-stemcell.sh
 ```
 
@@ -203,7 +203,7 @@ Runtime config는 BOSH로 배포되는 VM에 적용되는 설정이다.
 $ bosh -e ${BOSH_ENVIRONMENT} update-runtime-config {PATH} --name={NAME}
 ```
 
-PaaS-TA에서 적용하는 Runtime Config는 다음과 같다.  
+PaaS-TA AP에서 적용하는 Runtime Config는 다음과 같다.  
 
 - DNS Runtime Config  
   PaaS-TA 4.0부터 적용되는 부분으로 PaaS-TA Component에서 Consul이 대체된 Component이다.  
@@ -212,10 +212,10 @@ PaaS-TA에서 적용하는 Runtime Config는 다음과 같다.
 - OS Configuration Runtime Config  
   BOSH Linux OS 구성 릴리스를 이용하여 sysctl을 구성한다.  
 
-PaaS-TA 5.5.2은 Runtime Config 설정 스크립트를 지원하며, BOSH 로그인 후 다음 명령어를 수행하여 Runtime Config를 설정한다.  
+PaaS-TA 5.5.3 AP는 Runtime Config 설정 스크립트를 지원하며, BOSH 로그인 후 다음 명령어를 수행하여 Runtime Config를 설정한다.  
 
   - Runtime Config 업데이트 Script 수정 (BOSH_ENVIRONMENT 수정)
-> $ vi ~/workspace/paasta-5.5.2/deployment/paasta-deployment/bosh/update-runtime-config.sh
+> $ vi ~/workspace/paasta-5.5.3/deployment/paasta-deployment/bosh/update-runtime-config.sh
 ```                     
 #!/bin/bash
 
@@ -226,7 +226,7 @@ bosh -e ${BOSH_ENVIRONMENT} update-runtime-config -n --name=os-conf runtime-conf
 ```
 - Runtime Config 업데이트 Script 실행
 ```                     
-$ cd ~/workspace/paasta-5.5.2/deployment/paasta-deployment/bosh
+$ cd ~/workspace/paasta-5.5.3/deployment/paasta-deployment/bosh
 $ source update-runtime-config.sh
 ```
 
@@ -238,29 +238,29 @@ $ source update-runtime-config.sh
 
 
 - 만약 오프라인 환경에 저장한 릴리즈를 사용 하고 싶다면, 릴리즈를 저장 한 뒤 경로를 설정 후 update-runtime-config 업로드 Script를 실행한다. 
-- [bosh-dns-release-1.27.0 다운로드](https://nextcloud.paas-ta.org/index.php/s/8wf2Fjn2ytxsnR7/download)
-- [os-conf-release-22.1.0 다운로드](https://nextcloud.paas-ta.org/index.php/s/G7ossXeZZHeMPTQ/download)
+- [bosh-dns-release-1.27.0 다운로드](https://bosh.io/d/github.com/cloudfoundry/bosh-dns-release?v=1.29.0)
+- [os-conf-release-22.1.1 다운로드](https://bosh.io/d/github.com/cloudfoundry/os-conf-release?v=22.1.1)
 
 ```  
 # 폴더 생성 및 이동
-$ mkdir -p ~/workspace/paasta-5.5.2/release/bosh
-$ cd ~/workspace/paasta-5.5.2/release/bosh
+$ mkdir -p ~/workspace/paasta-5.5.3/release/bosh
+$ cd ~/workspace/paasta-5.5.3/release/bosh
 
-# bosh-dns-release 1.27.0 다운로드 
-$ wget https://nextcloud.paas-ta.org/index.php/s/8wf2Fjn2ytxsnR7/download --content-disposition
+# bosh-dns-release 1.29.0 다운로드 
+$ wget https://bosh.io/d/github.com/cloudfoundry/bosh-dns-release?v=1.29.0 --content-disposition
 
-# os-conf 22.1.0 다운로드 
-$ wget https://nextcloud.paas-ta.org/index.php/s/G7ossXeZZHeMPTQ/download --content-disposition
+# os-conf 22.1.1 다운로드 
+$ wget https://bosh.io/d/github.com/cloudfoundry/os-conf-release?v=22.1.1 --content-disposition
 ```
 
 - 오프라인 Runtime Config 업데이트 Script 수정 (BOSH_ENVIRONMENT, RELEASE_DIR 수정)
 
-> $ vi ~/workspace/paasta-5.5.2/deployment/paasta-deployment/bosh/offline-update-runtime-config.sh
+> $ vi ~/workspace/paasta-5.5.3/deployment/paasta-deployment/bosh/offline-update-runtime-config.sh
 ```                     
 #!/bin/bash
   
 BOSH_ENVIRONMENT="${BOSH_ENVIRONMENT}"                    # bosh director alias name (PaaS-TA에서 제공되는 create-bosh-login.sh 미 사용시 bosh envs에서 이름을 확인하여 입력)
-RELEASE_DIR="/home/ubuntu/workspace/paasta-5.5.2/release" # Release Directory (offline으로 릴리즈 다운받아 사용시 설정)
+RELEASE_DIR="/home/ubuntu/workspace/paasta-5.5.3/release" # Release Directory (offline으로 릴리즈 다운받아 사용시 설정)
 
 bosh -e ${BOSH_ENVIRONMENT} update-runtime-config -n runtime-configs/dns-offline.yml \
                 -v releases_dir=${RELEASE_DIR}
@@ -271,7 +271,7 @@ bosh -e ${BOSH_ENVIRONMENT} update-runtime-config -n --name=os-conf runtime-conf
 - 오프라인 Runtime Config 업데이트 Script 실행
 
 ```
-$ cd ~/workspace/paasta-5.5.2/deployment/paasta-deployment/bosh
+$ cd ~/workspace/paasta-5.5.3/deployment/paasta-deployment/bosh
 $ source offline-update-runtime-config.sh
 ```
 
@@ -280,9 +280,9 @@ $ source offline-update-runtime-config.sh
 
 ## <div id='3.5'/>3.5. Cloud Config 설정
 
-PaaS-TA를 설치하기 위한 IaaS 관련 Network, Storage, VM 관련 설정을 Cloud Config로 정의한다.  
-PaaS-TA 설치 파일을 내려받으면 ~/workspace/paasta-5.5.2/deployment/paasta-deployment/cloud-config 디렉터리 이하에 IaaS별 Cloud Config 예제를 확인할 수 있으며, 예제를 참고하여 cloud-config.yml을 IaaS에 맞게 수정한다.  
-PaaS-TA 배포 전에 Cloud Config를 BOSH에 적용해야 한다. 
+PaaS-TA AP를 설치하기 위한 IaaS 관련 Network, Storage, VM 관련 설정을 Cloud Config로 정의한다.  
+PaaS-TA AP 설치 파일을 내려받으면 ~/workspace/paasta-5.5.3/deployment/paasta-deployment/cloud-config 디렉터리 이하에 IaaS별 Cloud Config 예제를 확인할 수 있으며, 예제를 참고하여 cloud-config.yml을 IaaS에 맞게 수정한다.  
+PaaS-TA AP 배포 전에 Cloud Config를 BOSH에 적용해야 한다. 
 
 - AWS을 기준으로 한 cloud-config.yml 예제
 
@@ -601,7 +601,7 @@ vm_types:
 - Cloud Config 업데이트
 
 ```
-$ bosh -e ${BOSH_ENVIRONMENT} update-cloud-config ~/workspace/paasta-5.5.2/deployment/paasta-deployment/cloud-config/{iaas}-cloud-config.yml
+$ bosh -e ${BOSH_ENVIRONMENT} update-cloud-config ~/workspace/paasta-5.5.3/deployment/paasta-deployment/cloud-config/{iaas}-cloud-config.yml
 ```
 
 - Cloud Config 확인
@@ -612,10 +612,10 @@ $ bosh -e ${BOSH_ENVIRONMENT} cloud-config
 
 ### <div id='3.5.1'/>● AZs
 
-PaaS-TA에서 제공되는 Cloud Config 예제는 z1 ~ z6까지 설정되어 있다.  
-z1 ~ z3까지는 PaaS-TA VM이 설치되는 Zone이며, z4 ~ z6까지는 서비스가 설치되는 Zone으로 정의한다.  
+PaaS-TA AP에서 제공되는 Cloud Config 예제는 z1 ~ z6까지 설정되어 있다.  
+z1 ~ z3까지는 PaaS-TA AP VM이 설치되는 Zone이며, z4 ~ z6까지는 서비스가 설치되는 Zone으로 정의한다.  
 3개 단위로 설정하는 이유는 서비스 3중화를 위해서이다.  
-PaaS-TA를 설치하는 환경에 따라 다르게 설정해도 된다.
+PaaS-TA AP를 설치하는 환경에 따라 다르게 설정해도 된다.
 
 ### <div id='3.5.2'/>● VM Types
 
@@ -625,63 +625,63 @@ VM Type은 IaaS에서 정의된 VM Type이다.
 ![PaaSTa_FLAVOR_Image]
 
 ### <div id='3.5.3'/>● Compilation
-PaaS-TA 및 서비스 설치 시, PaaS-TA는 Compile VM을 생성하여 소스를 컴파일하고, PaaS-TA VM을 생성하여 컴파일된 파일을 대상 VM에 설치한다.  
+PaaS-TA AP 및 서비스 설치 시, PaaS-TA AP는 Compile VM을 생성하여 소스를 컴파일하고, PaaS-TA AP VM을 생성하여 컴파일된 파일을 대상 VM에 설치한다.  
 컴파일이 끝난 VM은 삭제된다.
 
 ※ Worker 수는 Compile VM의 수로, 많을수록 컴파일 속도가 빨라진다.
 
 ### <div id='3.5.4'/>● Disk Size
-PaaS-TA 및 서비스가 설치되는 VM의 Persistent Disk Size이다.
+PaaS-TA AP 및 서비스가 설치되는 VM의 Persistent Disk Size이다.
 
 ### <div id='3.5.5'/>● Networks
 Networks는 AZ 별 Subnet Network, DNS, Security Groups, Network ID를 정의한다.  
 보통 AZ 별로 256개의 IP를 정의할 수 있도록 Range Cider를 정의한다.
 
 
-## <div id='3.6'/>3.6.  PaaS-TA 설치 파일
+## <div id='3.6'/>3.6.  PaaS-TA AP 설치 파일
 
-common_vars.yml파일과 vars.yml을 수정하여 PaaS-TA 설치시 적용하는 변수를 설정할 수 있다.
+common_vars.yml파일과 vars.yml을 수정하여 PaaS-TA AP 설치시 적용하는 변수를 설정할 수 있다.
 
 <table>
 <tr>
 <td>common_vars.yml</td>
-<td>PaaS-TA 및 각종 Service 설치시 적용하는 공통 변수 설정 파일</td>
+<td>PaaS-TA AP 및 각종 Service 설치시 적용하는 공통 변수 설정 파일</td>
 </tr>
 <tr>
 <td>vars.yml</td>
-<td>PaaS-TA 설치시 적용하는 변수 설정 파일</td>
+<td>PaaS-TA AP 설치시 적용하는 변수 설정 파일</td>
 </tr>
 <tr>
 <td>deploy-aws.sh</td>
-<td>AWS 환경에 PaaS-TA 설치를 위한 Shell Script 파일</td>
+<td>AWS 환경에 PaaS-TA AP 설치를 위한 Shell Script 파일</td>
 </tr>
 <tr>
 <td>deploy-openstack.sh</td>
-<td>OpenStack 환경에 PaaS-TA 설치를 위한 Shell Script 파일</td>
+<td>OpenStack 환경에 PaaS-TA AP 설치를 위한 Shell Script 파일</td>
 </tr>
 <tr>
 <td>paasta-deployment.yml</td>
-<td>PaaS-TA을 배포하는 Manifest 파일</td>
+<td>PaaS-TA AP을 배포하는 Manifest 파일</td>
 </tr>
 </table>
 
 
 
-### <div id='3.6.1'/>3.6.1. PaaS-TA 설치 Variable File
+### <div id='3.6.1'/>3.6.1. PaaS-TA AP 설치 Variable File
 
 
 #### <div id='3.6.1.1'/>● common_vars.yml
-~/workspace/paasta-5.5.2/deployment/common 폴더에 있는 common_vars.yml PaaS-TA 및 각종 Service 설치시 적용하는 공통 변수 설정 파일이 존재한다.  
-PaaS-TA 5.5.2을 설치할 때는 system_domain, paasta_admin_username, paasta_admin_password, uaa_client_admin_secret, uaa_client_portal_secret, paasta_database_port의 값을 변경 하여 설치 할 수 있다.
+~/workspace/paasta-5.5.3/deployment/common 폴더에 있는 common_vars.yml PaaS-TA AP 및 각종 Service 설치시 적용하는 공통 변수 설정 파일이 존재한다.  
+PaaS-TA 5.5.3 AP 설치할 때는 system_domain, paasta_admin_username, paasta_admin_password, uaa_client_admin_secret, uaa_client_portal_secret, paasta_database_port의 값을 변경 하여 설치 할 수 있다.
 
-> $ vi ~/workspace/paasta-5.5.2/deployment/common/common_vars.yml
+> $ vi ~/workspace/paasta-5.5.3/deployment/common/common_vars.yml
 
 ```
 # BOSH INFO
 bosh_ip: "10.0.1.6"                        		# BOSH IP
 bosh_url: "http://10.0.1.6"				# BOSH URL (e.g. "https://00.000.0.0")
 bosh_client_admin_id: "admin"				# BOSH Client Admin ID
-bosh_client_admin_secret: "ert7na4jpewsczt"		# BOSH Client Admin Secret('echo $(bosh int ~/workspace/paasta-5.5.2/deployment/paasta-deployment/bosh/{iaas}/creds.yml —path /admin_password))' 명령어를 통해 확인 가능)
+bosh_client_admin_secret: "ert7na4jpewsczt"		# BOSH Client Admin Secret('echo $(bosh int ~/workspace/paasta-5.5.3/deployment/paasta-deployment/bosh/{iaas}/creds.yml —path /admin_password))' 명령어를 통해 확인 가능)
 bosh_director_port: 25555				# BOSH Director Port
 bosh_oauth_port: 8443					# BOSH OAuth Port
 bosh_version: 271.2					# BOSH version('bosh env' 명령어를 통해 확인 가능, on-demand service용, e.g. "271.2")
@@ -729,14 +729,14 @@ abacus_url: "http://abacus.xx.xx.xxx.xxx.nip.io"	# Abacus URL (e.g. "http://abac
 
 #### <div id='3.6.1.2'/>● vars.yml
 
-PaaS-TA를 설치 할 때 적용되는 각종 변수값이나 배포 될 VM의 설정을 변경할 수 있다.
+PaaS-TA AP를 설치 할 때 적용되는 각종 변수값이나 배포 될 VM의 설정을 변경할 수 있다.
 
-> $ vi ~/workspace/paasta-5.5.2/deployment/paasta-deployment/paasta/vars.yml
+> $ vi ~/workspace/paasta-5.5.3/deployment/paasta-deployment/paasta/vars.yml
 ```
 # SERVICE VARIABLE
 deployment_name: "paasta"			# Deployment Name
 network_name: "default"				# VM에 별도로 지정하지 않는 Default Network Name
-releases_dir: "/home/ubuntu/workspace/paasta-5.5.2/release"	# Release Directory (offline으로 릴리즈 다운받아 사용시 설정)
+releases_dir: "/home/ubuntu/workspace/paasta-5.5.3/release"	# Release Directory (offline으로 릴리즈 다운받아 사용시 설정)
 haproxy_public_ip: "52.78.32.153"		# HAProxy IP (Public IP, HAproxy VM 배포시 필요)
 haproxy_public_network_name: "vip"		# PaaS-TA Public Network Name
 haproxy_private_network_name: "private" 	# PaaS-TA Private Network Name (vSphere use-haproxy-public-network-vsphere.yml 포함 배포시 설정 필요)
@@ -759,7 +759,7 @@ syslog_fallback_servers: []					# [MONITORING] PaaS-TA Syslog Fallback Servers
 
 # STEMCELL
 stemcell_os: "ubuntu-xenial"		# Stemcell OS
-stemcell_version: "621.94"		# Stemcell Version
+stemcell_version: "621.125"		# Stemcell Version
 
 # SMOKE-TEST
 smoke_tests_azs: ["z1"]			# Smoke-Test 가용 존
@@ -872,7 +872,7 @@ haproxy_network: "default"		# HAProxy 네트워크
 ```
 
 
-#### <div id='3.6.1.3'/>● PaaS-TA 그외 Variable List
+#### <div id='3.6.1.3'/>● PaaS-TA AP 그외 Variable List
 
 1. uaa_login_logout_redirect_parameter_whitelist : 포탈 페이지 이동을 위한 UAA Redirect Whitelist 등록 변수
 
@@ -919,7 +919,7 @@ ex) uaa_client_admin_secret="admin-secret"
 
 - uaa_client_admin_secret 적용 확인 방법
 
-  (1) PaaS-TA 설치 후 아래 명령어 실행한다.
+  (1) PaaS-TA AP 설치 후 아래 명령어 실행한다.
 
   ```
   $ uaac target
@@ -945,7 +945,7 @@ ex) uaa_client_admin_secret="admin-secret"
 
 
 
-### <div id='3.6.2'/>3.6.2. PaaS-TA Operation 파일
+### <div id='3.6.2'/>3.6.2. PaaS-TA AP Operation 파일
 
 <table>
 <tr>
@@ -980,7 +980,7 @@ ex) uaa_client_admin_secret="admin-secret"
 <tr>
 <td>operations/use-haproxy.yml</td>
 <td>HAProxy 적용 <br>
-    - IaaS에서 제공하는 LB를 사용하여 PaaS-TA 설치 시, Operation 파일을 제거하고 설치한다.
+    - IaaS에서 제공하는 LB를 사용하여 PaaS-TA AP 설치 시, Operation 파일을 제거하고 설치한다.
 </td>
 <td>Requires operation file: use-haproxy-public-network.yml <br>
     Requires value :  -v haproxy_private_ip
@@ -989,7 +989,7 @@ ex) uaa_client_admin_secret="admin-secret"
 <tr>
 <td>operations/use-haproxy-public-network.yml</td>
 <td>HAProxy Public Network 설정 <br>
-    - IaaS에서 제공하는 LB를 사용하여 PaaS-TA 설치 시, Operation 파일을 제거하고 설치한다.
+    - IaaS에서 제공하는 LB를 사용하여 PaaS-TA AP 설치 시, Operation 파일을 제거하고 설치한다.
 </td>
 <td>Requires: use-haproxy.yml <br>
     Requires Value :  <br>
@@ -1000,7 +1000,7 @@ ex) uaa_client_admin_secret="admin-secret"
 <tr>
 <td>operations/use-haproxy-public-network-vsphere.yml</td>
 <td>HAProxy Public Network 설정 <br>
-    - vsphere에서 사용하며, IaaS에서 제공하는 LB를 사용하여 PaaS-TA 설치 시, Operation 파일을 제거하고 설치한다.
+    - vsphere에서 사용하며, IaaS에서 제공하는 LB를 사용하여 PaaS-TA AP 설치 시, Operation 파일을 제거하고 설치한다.
 </td>
 <td>Requires: use-haproxy.yml <br>
     Requires Value :  <br>
@@ -1017,7 +1017,7 @@ ex) uaa_client_admin_secret="admin-secret"
 </tr>
 <tr>
 <td>operations/cce.yml</td>
-<td>CCE 조치를 적용하여 설치한다. (MySQL)</td>
+<td>CCE 조치를 적용하여 설치한다.</td>
 <td></td>
 </tr>
 <tr>
@@ -1026,34 +1026,23 @@ ex) uaa_client_admin_secret="admin-secret"
 <td>Requires: cce.yml<br>
     Requires value :  -v releases_dir</td>
 </tr>
-<tr>
-<td>operations/cce-postgres.yml</td>
-<td>CCE 조치를 적용하여 설치한다. (PostgreSQL)</td>
-<td>Requires: use-postgres.yml</td>
-</tr>
-<tr>
-<td>operations/use-offline-releases-cce-postgres.yml</td>
-<td>cce-postgres.yml에서 사용되는 릴리즈를 오프라인에 저장된 릴리즈로 설치가 가능하다.</td>
-<td>Requires: cce-postgres.yml<br>
-    Requires value :  -v releases_dir</td>
-</tr>
 </table>
 
-### <div id='3.6.3'/>3.6.3.   PaaS-TA 설치 Shell Scripts
-paasta-deployment.yml 파일은 PaaS-TA를 배포하는 Manifest 파일이며, PaaS-TA VM에 대한 설치 정의를 하게 된다.  
-PaaS-TA VM 중 singleton-blobstore, database의 AZs(zone)을 변경하면 조직(ORG), 스페이스(SPACE), 앱(APP) 정보가 모두 삭제된다. 
+### <div id='3.6.3'/>3.6.3.   PaaS-TA AP설치 Shell Scripts
+paasta-deployment.yml 파일은 PaaS-TA AP를 배포하는 Manifest 파일이며, PaaS-TA AP VM에 대한 설치 정의를 하게 된다.  
+PaaS-TA AP VM 중 singleton-blobstore, database의 AZs(zone)을 변경하면 조직(ORG), 스페이스(SPACE), 앱(APP) 정보가 모두 삭제된다. 
 
-이미 설치된 PaaS-TA의 재배포 시, singleton-blobstore, database의 AZs(zone)을 변경하면 조직(ORG), 공간(SPACE), 앱(APP) 정보가 모두 삭제된다.
+이미 설치된 PaaS-TA AP의 재배포 시, singleton-blobstore, database의 AZs(zone)을 변경하면 조직(ORG), 공간(SPACE), 앱(APP) 정보가 모두 삭제된다.
 
-**※ PaaS-TA 설치 시 명령어는 BOSH deploy를 사용한다. (IaaS 환경에 따라 Option이 다름)**
+**※ PaaS-TA AP 설치 시 명령어는 BOSH deploy를 사용한다. (IaaS 환경에 따라 Option이 다름)**
 
-PaaS-TA 배포 BOSH 명령어 예시
+PaaS-TA AP 배포 BOSH 명령어 예시
 
 ```
 $ bosh -e ${BOSH_ENVIRONMENT} -d paasta deploy paasta-deployment.yml
 ```
 
-PaaS-TA 배포 시, 설치 Option을 추가해야 한다. 설치 Option에 대한 설명은 아래와 같다.
+PaaS-TA AP 배포 시, 설치 Option을 추가해야 한다. 설치 Option에 대한 설명은 아래와 같다.
 
 <table>
 <tr>
@@ -1092,7 +1081,7 @@ bosh -e ${BOSH_ENVIRONMENT} -d paasta -n deploy paasta-deployment.yml \	# PaaS-T
 	-o operations/use-haproxy.yml \					# HAProxy 적용
 	-o operations/use-haproxy-public-network.yml \			# HAProxy Public Network 적용
 	-o operations/use-postgres.yml \				# Database Type 설정 (3.5버전 이하에서 Migration 시 필수)
-	-o operations/cce-postgres.yml \				# CCE 조치 적용
+	-o operations/cce.yml \						# CCE 조치 적용
 	-o operations/rename-network-and-deployment.yml \		# Rename Network and Deployment
 	-l vars.yml \							# 환경에 PaaS-TA 설치시 적용하는 변수 설정 파일
 	-l ../../common/common_vars.yml					# PaaS-TA 및 각종 Service 설치시 적용하는 공통 변수 설정 파일
@@ -1107,7 +1096,7 @@ bosh -e ${BOSH_ENVIRONMENT} -d paasta -n deploy paasta-deployment.yml \	# PaaS-T
 	-o operations/use-haproxy.yml \					# HAProxy 적용
 	-o operations/use-haproxy-public-network.yml \			# HAProxy Public Network 적용
 	-o operations/use-postgres.yml \				# Database Type 설정 (3.5버전 이하에서 Migration 시 필수)
-	-o operations/cce-postgres.yml \				# CCE 조치 적용
+	-o operations/cce.yml \						# CCE 조치 적용
 	-o operations/rename-network-and-deployment.yml \		# Rename Network and Deployment
 	-l vars.yml \							# PaaS-TA 설치시 적용하는 변수 설정 파일
 	-l ../../common/common_vars.yml					# PaaS-TA 및 각종 Service 설치시 적용하는 공통 변수 설정 파일
@@ -1116,15 +1105,15 @@ bosh -e ${BOSH_ENVIRONMENT} -d paasta -n deploy paasta-deployment.yml \	# PaaS-T
 - Shell script 파일에 실행 권한 부여
 
 ```
-$ chmod +x ~/workspace/paasta-5.5.2/deployment/paasta-deployment/paasta/*.sh
+$ chmod +x ~/workspace/paasta-5.5.3/deployment/paasta-deployment/paasta/*.sh
 ```
 
 
 
-## <div id='3.7'/>3.7.  PaaS-TA 설치
+## <div id='3.7'/>3.7.  PaaS-TA AP 설치
 - 서버 환경에 맞추어 [common_vars.yml](#3.6.1.1)와 [vars.yml](#3.6.1.2)을 수정 한 뒤, Deploy 스크립트 파일의 설정을 수정한다. 
 
-> $ vi ~/workspace/paasta-5.5.2/deployment/paasta-deployment/paasta/deploy-aws.sh
+> $ vi ~/workspace/paasta-5.5.3/deployment/paasta-deployment/paasta/deploy-aws.sh
 
 ```
 BOSH_ENVIRONMENT="${BOSH_ENVIRONMENT}"			 		# bosh director alias name (PaaS-TA에서 제공되는 create-bosh-login.sh 미 사용시 bosh envs에서 이름을 확인하여 입력)
@@ -1134,20 +1123,20 @@ bosh -e ${BOSH_ENVIRONMENT} -d paasta -n deploy paasta-deployment.yml \	# PaaS-T
 	-o operations/use-haproxy.yml \					# HAProxy 적용
 	-o operations/use-haproxy-public-network.yml \			# HAProxy Public Network 적용
 	-o operations/use-postgres.yml \				# Database Type 설정 (3.5버전 이하에서 Migration 시 필수)
-	-o operations/cce-postgres.yml \				# CCE 조치 적용
+	-o operations/cce.yml \						# CCE 조치 적용
 	-o operations/rename-network-and-deployment.yml \		# Rename Network and Deployment
 	-l vars.yml \							# 환경에 PaaS-TA 설치시 적용하는 변수 설정 파일
 	-l ../../common/common_vars.yml					# PaaS-TA 및 각종 Service 설치시 적용하는 공통 변수 설정 파일
 ```
 
-- PaaS-TA 설치 시 Shell Script 파일 실행 (BOSH 로그인 필요)
+- PaaS-TA AP 설치 시 Shell Script 파일 실행 (BOSH 로그인 필요)
 
 ```
-$ cd ~/workspace/paasta-5.5.2/deployment/paasta-deployment/paasta
+$ cd ~/workspace/paasta-5.5.3/deployment/paasta-deployment/paasta
 $ ./deploy-{IaaS}.sh
 ```
 
-- PaaS-TA 설치 확인
+- PaaS-TA AP 설치 확인
 
 > $ bosh -e ${BOSH_ENVIRONMENT} vms -d paasta
 
@@ -1160,81 +1149,80 @@ Task 134. Done
 Deployment 'paasta'
 
 Instance                                                  Process State  AZ  IPs           VM CID               VM Type             Active  Stemcell  
-api/918da8e3-36c9-4144-b457-f48792041ece                  running        z1  10.0.31.206   i-093920c2caf43fe63  small               true    bosh-aws-xen-hvm-ubuntu-xenial-go_agent/621.94  
-api/c01d1a66-56c0-4dfb-87cd-b4e7323012ec                  running        z2  10.0.32.204   i-0bd6841ee37df618b  small               true    bosh-aws-xen-hvm-ubuntu-xenial-go_agent/621.94  
-cc-worker/30aa88de-8b5c-4e3a-a0ae-b2933f3af492            running        z1  10.0.31.207   i-02a7032164038f09b  minimal             true    bosh-aws-xen-hvm-ubuntu-xenial-go_agent/621.94  
-cc-worker/31a465bd-64af-49c6-a867-3439d98b2014            running        z2  10.0.32.205   i-0d8345c5348a42fdd  minimal             true    bosh-aws-xen-hvm-ubuntu-xenial-go_agent/621.94  
-credhub/0d2da1ef-dbdc-47d8-9514-69c1e0e83f82              running        z2  10.0.32.213   i-0f21b57a610868775  minimal             true    bosh-aws-xen-hvm-ubuntu-xenial-go_agent/621.94  
-credhub/a43132d5-ab04-4fe3-8b75-b8194f28678b              running        z1  10.0.31.216   i-0ea2f77eb95a32f21  minimal             true    bosh-aws-xen-hvm-ubuntu-xenial-go_agent/621.94  
-database/07b7ba09-7ace-4428-b4d4-a80163aaf82c             running        z1  10.0.31.202   i-0c532e0a7a53015c2  small               true    bosh-aws-xen-hvm-ubuntu-xenial-go_agent/621.94  
-diego-api/a05bbf7b-f513-48f0-8444-c90cd4b63ae2            running        z2  10.0.32.202   i-0b982d70a8debde41  small               true    bosh-aws-xen-hvm-ubuntu-xenial-go_agent/621.94  
-diego-api/ba388ba5-e6df-4d5e-9c6e-3af6b1fdc319            running        z1  10.0.31.203   i-0a5dfee4dc8ba1b68  small               true    bosh-aws-xen-hvm-ubuntu-xenial-go_agent/621.94  
-diego-cell/15378660-b457-4b6e-a9cb-5729b091c675           running        z1  10.0.31.213   i-095a00b9cb171c444  small-highmem-16GB  true    bosh-aws-xen-hvm-ubuntu-xenial-go_agent/621.94  
-diego-cell/7d7ed58e-c82e-429e-a6ce-18e4d70cca29           running        z2  10.0.32.211   i-02d836e28133368a1  small-highmem-16GB  true    bosh-aws-xen-hvm-ubuntu-xenial-go_agent/621.94  
-diego-cell/eb3b22f3-2905-4ef5-81d0-1ba6974b7316           running        z1  10.0.31.214   i-0a26ae4105e8ef6f4  small-highmem-16GB  true    bosh-aws-xen-hvm-ubuntu-xenial-go_agent/621.94  
-doppler/75577265-7f33-45c0-b4de-b24a881462bf              running        z1  10.0.31.211   i-01b19951e2ed96a55  minimal             true    bosh-aws-xen-hvm-ubuntu-xenial-go_agent/621.94  
-doppler/82956ad8-d103-4223-b426-cebc793c45ee              running        z2  10.0.32.209   i-01e7d7cf7d117bf96  minimal             true    bosh-aws-xen-hvm-ubuntu-xenial-go_agent/621.94  
-doppler/8d1fa381-c9d4-4b51-b195-c25d5d7a1a55              running        z1  10.0.31.212   i-048de3c6ad38a0184  minimal             true    bosh-aws-xen-hvm-ubuntu-xenial-go_agent/621.94  
-doppler/ece4a895-03b9-47a1-9b48-9eaabaf258ef              running        z2  10.0.32.210   i-09a3cf0e5ac171012  minimal             true    bosh-aws-xen-hvm-ubuntu-xenial-go_agent/621.94  
-haproxy/abb270ef-01e8-4d4c-941c-2187ca2cc8ad              running        z7  10.0.30.201   i-08af20c6712d54dd6  minimal             true    bosh-aws-xen-hvm-ubuntu-xenial-go_agent/621.94  
+api/918da8e3-36c9-4144-b457-f48792041ece                  running        z1  10.0.31.206   i-093920c2caf43fe63  small               true    bosh-aws-xen-hvm-ubuntu-xenial-go_agent/621.125  
+api/c01d1a66-56c0-4dfb-87cd-b4e7323012ec                  running        z2  10.0.32.204   i-0bd6841ee37df618b  small               true    bosh-aws-xen-hvm-ubuntu-xenial-go_agent/621.125 
+cc-worker/30aa88de-8b5c-4e3a-a0ae-b2933f3af492            running        z1  10.0.31.207   i-02a7032164038f09b  minimal             true    bosh-aws-xen-hvm-ubuntu-xenial-go_agent/621.125  
+cc-worker/31a465bd-64af-49c6-a867-3439d98b2014            running        z2  10.0.32.205   i-0d8345c5348a42fdd  minimal             true    bosh-aws-xen-hvm-ubuntu-xenial-go_agent/621.125  
+credhub/0d2da1ef-dbdc-47d8-9514-69c1e0e83f82              running        z2  10.0.32.213   i-0f21b57a610868775  minimal             true    bosh-aws-xen-hvm-ubuntu-xenial-go_agent/621.125  
+credhub/a43132d5-ab04-4fe3-8b75-b8194f28678b              running        z1  10.0.31.216   i-0ea2f77eb95a32f21  minimal             true    bosh-aws-xen-hvm-ubuntu-xenial-go_agent/621.125  
+database/07b7ba09-7ace-4428-b4d4-a80163aaf82c             running        z1  10.0.31.202   i-0c532e0a7a53015c2  small               true    bosh-aws-xen-hvm-ubuntu-xenial-go_agent/621.125  
+diego-api/a05bbf7b-f513-48f0-8444-c90cd4b63ae2            running        z2  10.0.32.202   i-0b982d70a8debde41  small               true    bosh-aws-xen-hvm-ubuntu-xenial-go_agent/621.125  
+diego-api/ba388ba5-e6df-4d5e-9c6e-3af6b1fdc319            running        z1  10.0.31.203   i-0a5dfee4dc8ba1b68  small               true    bosh-aws-xen-hvm-ubuntu-xenial-go_agent/621.125  
+diego-cell/15378660-b457-4b6e-a9cb-5729b091c675           running        z1  10.0.31.213   i-095a00b9cb171c444  small-highmem-16GB  true    bosh-aws-xen-hvm-ubuntu-xenial-go_agent/621.125  
+diego-cell/7d7ed58e-c82e-429e-a6ce-18e4d70cca29           running        z2  10.0.32.211   i-02d836e28133368a1  small-highmem-16GB  true    bosh-aws-xen-hvm-ubuntu-xenial-go_agent/621.125  
+diego-cell/eb3b22f3-2905-4ef5-81d0-1ba6974b7316           running        z1  10.0.31.214   i-0a26ae4105e8ef6f4  small-highmem-16GB  true    bosh-aws-xen-hvm-ubuntu-xenial-go_agent/621.125  
+doppler/75577265-7f33-45c0-b4de-b24a881462bf              running        z1  10.0.31.211   i-01b19951e2ed96a55  minimal             true    bosh-aws-xen-hvm-ubuntu-xenial-go_agent/621.125  
+doppler/82956ad8-d103-4223-b426-cebc793c45ee              running        z2  10.0.32.209   i-01e7d7cf7d117bf96  minimal             true    bosh-aws-xen-hvm-ubuntu-xenial-go_agent/621.125  
+doppler/8d1fa381-c9d4-4b51-b195-c25d5d7a1a55              running        z1  10.0.31.212   i-048de3c6ad38a0184  minimal             true    bosh-aws-xen-hvm-ubuntu-xenial-go_agent/621.125  
+doppler/ece4a895-03b9-47a1-9b48-9eaabaf258ef              running        z2  10.0.32.210   i-09a3cf0e5ac171012  minimal             true    bosh-aws-xen-hvm-ubuntu-xenial-go_agent/621.125  
+haproxy/abb270ef-01e8-4d4c-941c-2187ca2cc8ad              running        z7  10.0.30.201   i-08af20c6712d54dd6  minimal             true    bosh-aws-xen-hvm-ubuntu-xenial-go_agent/621.125  
                                                                              54.180.53.80                                                    
-log-api/7b45f808-22c4-45ff-a81c-74a20bac852a              running        z1  10.0.31.215   i-0b11b17bdbc23553e  minimal             true    bosh-aws-xen-hvm-ubuntu-xenial-go_agent/621.94  
-log-api/dac3304c-f0a2-4c20-999d-db08ee39c7a7              running        z2  10.0.32.212   i-0b8426cba9bc7db7a  minimal             true    bosh-aws-xen-hvm-ubuntu-xenial-go_agent/621.94  
-nats/35b3ab92-453f-4e9f-adf8-04477f41ee80                 running        z2  10.0.32.201   i-05a787d09b5a2df0a  minimal             true    bosh-aws-xen-hvm-ubuntu-xenial-go_agent/621.94  
-nats/d08e1c80-bdf4-40c8-9134-16fb4a34ee11                 running        z1  10.0.31.201   i-04eddc4dfa9f9793e  minimal             true    bosh-aws-xen-hvm-ubuntu-xenial-go_agent/621.94  
-router/0c77c858-f0c7-400c-868d-e96cd2dff4a9               running        z1  10.0.31.209   i-075290e50e0ef541d  minimal             true    bosh-aws-xen-hvm-ubuntu-xenial-go_agent/621.94  
-router/5458b789-8ed0-4ba8-8093-6155ba1fa9b1               running        z2  10.0.32.207   i-02bc3f58d3c0306c9  minimal             true    bosh-aws-xen-hvm-ubuntu-xenial-go_agent/621.94  
-scheduler/348e2a4e-2da7-47a3-92f8-8bf3b00e9bf0            running        z1  10.0.31.208   i-0a0b2bd3e712f0b26  minimal             true    bosh-aws-xen-hvm-ubuntu-xenial-go_agent/621.94  
-scheduler/f56a196b-1f76-4ecc-b721-9b7fd04b8a94            running        z2  10.0.32.206   i-0c0917f591ce872f5  minimal             true    bosh-aws-xen-hvm-ubuntu-xenial-go_agent/621.94  
-singleton-blobstore/af6b0c3a-27d0-46ef-b432-0b5c8e81519d  running        z1  10.0.31.205   i-0c519ef6d50d74d1e  small               true    bosh-aws-xen-hvm-ubuntu-xenial-go_agent/621.94  
-tcp-router/891c0b3e-4de6-44a5-a98b-96dd0490cac3           running        z2  10.0.32.208   i-084e044926e602669  minimal             true    bosh-aws-xen-hvm-ubuntu-xenial-go_agent/621.94  
-tcp-router/ff3e0a98-092c-4e4c-a20c-0c0abf094a44           running        z1  10.0.31.210   i-076ef16b4d4114f83  minimal             true    bosh-aws-xen-hvm-ubuntu-xenial-go_agent/621.94  
-uaa/3e0f17c1-cd11-4ce6-b3b8-bf1b0f45aa9f                  running        z1  10.0.31.204   i-0454401aa5fcf61fb  minimal             true    bosh-aws-xen-hvm-ubuntu-xenial-go_agent/621.94  
-uaa/f8f6b0e8-2bbf-4be5-8f69-ac8dc7a3d943                  running        z2  10.0.32.203   i-0abd8df56336a799e  minimal             true    bosh-aws-xen-hvm-ubuntu-xenial-go_agent/621.94  
+log-api/7b45f808-22c4-45ff-a81c-74a20bac852a              running        z1  10.0.31.215   i-0b11b17bdbc23553e  minimal             true    bosh-aws-xen-hvm-ubuntu-xenial-go_agent/621.125  
+log-api/dac3304c-f0a2-4c20-999d-db08ee39c7a7              running        z2  10.0.32.212   i-0b8426cba9bc7db7a  minimal             true    bosh-aws-xen-hvm-ubuntu-xenial-go_agent/621.125  
+nats/35b3ab92-453f-4e9f-adf8-04477f41ee80                 running        z2  10.0.32.201   i-05a787d09b5a2df0a  minimal             true    bosh-aws-xen-hvm-ubuntu-xenial-go_agent/621.125  
+nats/d08e1c80-bdf4-40c8-9134-16fb4a34ee11                 running        z1  10.0.31.201   i-04eddc4dfa9f9793e  minimal             true    bosh-aws-xen-hvm-ubuntu-xenial-go_agent/621.125  
+router/0c77c858-f0c7-400c-868d-e96cd2dff4a9               running        z1  10.0.31.209   i-075290e50e0ef541d  minimal             true    bosh-aws-xen-hvm-ubuntu-xenial-go_agent/621.125  
+router/5458b789-8ed0-4ba8-8093-6155ba1fa9b1               running        z2  10.0.32.207   i-02bc3f58d3c0306c9  minimal             true    bosh-aws-xen-hvm-ubuntu-xenial-go_agent/621.125  
+scheduler/348e2a4e-2da7-47a3-92f8-8bf3b00e9bf0            running        z1  10.0.31.208   i-0a0b2bd3e712f0b26  minimal             true    bosh-aws-xen-hvm-ubuntu-xenial-go_agent/621.125  
+scheduler/f56a196b-1f76-4ecc-b721-9b7fd04b8a94            running        z2  10.0.32.206   i-0c0917f591ce872f5  minimal             true    bosh-aws-xen-hvm-ubuntu-xenial-go_agent/621.125  
+singleton-blobstore/af6b0c3a-27d0-46ef-b432-0b5c8e81519d  running        z1  10.0.31.205   i-0c519ef6d50d74d1e  small               true    bosh-aws-xen-hvm-ubuntu-xenial-go_agent/621.125  
+tcp-router/891c0b3e-4de6-44a5-a98b-96dd0490cac3           running        z2  10.0.32.208   i-084e044926e602669  minimal             true    bosh-aws-xen-hvm-ubuntu-xenial-go_agent/621.125  
+tcp-router/ff3e0a98-092c-4e4c-a20c-0c0abf094a44           running        z1  10.0.31.210   i-076ef16b4d4114f83  minimal             true    bosh-aws-xen-hvm-ubuntu-xenial-go_agent/621.125  
+uaa/3e0f17c1-cd11-4ce6-b3b8-bf1b0f45aa9f                  running        z1  10.0.31.204   i-0454401aa5fcf61fb  minimal             true    bosh-aws-xen-hvm-ubuntu-xenial-go_agent/621.125  
+uaa/f8f6b0e8-2bbf-4be5-8f69-ac8dc7a3d943                  running        z2  10.0.32.203   i-0abd8df56336a799e  minimal             true    bosh-aws-xen-hvm-ubuntu-xenial-go_agent/621.125  
 
 30 vms
 
 Succeeded
 ```
 
-## <div id='3.8'/>3.8.  PaaS-TA 설치 - 다운로드 된 Release 파일 이용 방식
+## <div id='3.8'/>3.8.  PaaS-TA AP 설치 - 다운로드 된 Release 파일 이용 방식
 
 
 - 서비스 설치에 필요한 릴리즈 파일을 다운로드 받아 Local machine의 작업 경로로 위치시킨다.  
   
-  - PaaS-TA 5.5.2 설치 릴리즈 파일 다운로드 : [paasta.zip](https://nextcloud.paas-ta.org/index.php/s/TS6M2MTBkYsX8Lq/download)
+  - PaaS-TA 5.5.3 AP 설치 릴리즈 파일 다운로드 : [paasta.zip](https://nextcloud.paas-ta.org/index.php/s/XwaqjrzYn3tNSGp/download)
 
 ```
 # 릴리즈 다운로드 파일 위치 경로 생성
-$ mkdir -p ~/workspace/paasta-5.5.2/release
+$ mkdir -p ~/workspace/paasta-5.5.3/release
 
 # 릴리즈 파일 다운로드 및 파일 경로 확인
-$ cd ~/workspace/paasta-5.5.2/release
-$ wget https://nextcloud.paas-ta.org/index.php/s/TS6M2MTBkYsX8Lq/download --content-disposition
+$ cd ~/workspace/paasta-5.5.3/release
+$ wget https://nextcloud.paas-ta.org/index.php/s/XwaqjrzYn3tNSGp/download --content-disposition
 $ unzip paasta.zip
-$ cd ~/workspace/paasta-5.5.2/release/paasta
+$ cd ~/workspace/paasta-5.5.3/release/paasta
 $ ls
-binary-buildpack-release-1.0.36.tgz          garden-runc-release-1.19.16.tgz           pxc-release-0.29.0.tgz
-bosh-dns-aliases-release-0.0.3.tgz           go-buildpack-release-1.9.17.tgz           python-buildpack-release-1.7.20.tgz
-bpm-release-1.1.9.tgz                        haproxy-boshrelease-10.1.0.tgz            r-buildpack-release-1.1.7.tgz
-capi-release-1.98.0-PaaS-TA-v3.tgz           java-buildpack-release-4.32.1.tgz         routing-release-0.207.0-PaaS-TA-v2.tgz
-capi-release-1.98.0-PaaS-TA.tgz              log-cache-release-2.8.0.tgz               routing-release-0.207.0-PaaS-TA.tgz
-capi-release-1.98.0.tgz                      loggregator-agent-release-6.1.1.tgz       routing-release-0.207.0.tgz
-cf-cli-release-1.29.0.tgz                    loggregator-release-106.3.10.tgz          ruby-buildpack-release-1.8.23.tgz
-cf-networking-release-2.33.0-PaaS-TA-v2.tgz  metrics-discovery-release-3.0.1.tgz       silk-release-2.33.0-PaaS-TA-v2.tgz
-cf-networking-release-2.33.0-PaaS-TA.tgz     nats-release-34.tgz                       silk-release-2.33.0-PaaS-TA.tgz
-cf-networking-release-2.33.0.tgz             nginx-buildpack-release-1.1.14.tgz        silk-release-2.33.0.tgz
-cf-smoke-tests-release-41.0.1.tgz            nodejs-buildpack-release-1.7.26.tgz       staticfile-buildpack-release-1.5.10.tgz
-cflinuxfs3-release-0.204.0.tgz               os-conf-release-22.1.0.tgz                statsd-injector-release-1.11.15.tgz
-credhub-release-2.8.0.tgz                    paasta-conf-release-1.0.1.tgz             uaa-release-74.24.0.tgz
-diego-release-2.48.0-PaaS-TA.tgz             paasta-conf-release-1.0.2.tgz             uaa-release-74.29.0-PaaS-TA-v2.tgz
-diego-release-2.48.0.tgz                     php-buildpack-release-4.4.20.tgz          uaa-relese-74.29.0-PaaS-TA.tgz
-
+binary-buildpack-release-1.0.37.tgz       garden-runc-release-1.19.23.tgz      postgres-release-43.tgz
+bosh-dns-aliases-release-0.0.3.tgz        go-buildpack-release-1.9.29.tgz      pxc-release-0.34.0-PaaS-TA.tgz
+bpm-release-1.1.9.tgz                     haproxy-boshrelease-10.5.0.tgz       pxc-release-0.34.0.tgz
+capi-release-1.109.0-PaaS-TA.tgz          java-buildpack-release-4.37.tgz      python-buildpack-release-1.7.37.tgz
+capi-release-1.109.0.tgz                  log-cache-release-2.10.0.tgz         r-buildpack-release-1.1.16.tgz
+cf-cli-release-1.32.0.tgz                 loggregator-agent-release-6.2.0.tgz  routing-release-0.213.0-PaaS-TA.tgz
+cf-networking-release-2.36.0-PaaS-TA.tgz  loggregator-release-106.5.0.tgz      routing-release-0.213.0.tgz
+cf-networking-release-2.36.0.tgz          metrics-discovery-release-3.0.3.tgz  ruby-buildpack-release-1.8.37.tgz
+cf-smoke-tests-release-41.0.2.tgz         nats-release-39.tgz                  silk-release-2.36.0-PaaS-TA.tgz
+cflinuxfs3-release-0.236.0.tgz            nginx-buildpack-release-1.1.24.tgz   silk-release-2.36.0.tgz
+credhub-release-2.9.0-PaaS-TA.tgz         nodejs-buildpack-release-1.7.48.tgz  staticfile-buildpack-release-1.5.19.tgz
+credhub-release-2.9.0.tgz                 os-conf-release-22.1.0.tgz           statsd-injector-release-1.11.15.tgz
+diego-release-2.49.0-PaaS-TA.tgz          paasta-conf-release-1.0.2.tgz        uaa-release-75.1.0-PaaS-TA.tgz
+diego-release-2.49.0.tgz                  php-buildpack-release-4.4.36.tgz     uaa-release-75.1.0.tgz
+dotnet-core-buildpack-release-2.3.26.tgz  postgres-release-43-PaaS-TA.tgz
 ```
 
 - 서버 환경에 맞추어 [common_vars.yml](#3.6.1.1)와 [vars.yml](#3.6.1.2)을 수정 한 뒤, Deploy 스크립트 파일의 설정을 수정한다.   
 
-> $ vi ~/workspace/paasta-5.5.2/deployment/paasta-deployment/paasta/deploy-aws.sh
+> $ vi ~/workspace/paasta-5.5.3/deployment/paasta-deployment/paasta/deploy-aws.sh
 
 ```
 BOSH_ENVIRONMENT="${BOSH_ENVIRONMENT}"			 		# bosh director alias name (PaaS-TA에서 제공되는 create-bosh-login.sh 미 사용시 bosh envs에서 이름을 확인하여 입력)
@@ -1244,24 +1232,24 @@ bosh -e ${BOSH_ENVIRONMENT} -d paasta -n deploy paasta-deployment.yml \	# PaaS-T
 	-o operations/use-haproxy.yml \					# HAProxy 적용
 	-o operations/use-haproxy-public-network.yml \			# HAProxy Public Network 적용
 	-o operations/use-postgres.yml \				# Database Type 설정 (3.5버전 이하에서 Migration 시 필수)
-	-o operations/cce-postgres.yml \				# CCE 조치 적용
+	-o operations/cce.yml \						# CCE 조치 적용
 	-o operations/rename-network-and-deployment.yml \		# Rename Network and Deployment
 	-o operations/use-offline-releases.yml \ 			# paasta-deployment.yml의 오프라인 릴리즈 사용
-	-o operations/use-offline-releases-cce-postgres.yml \		# cce-postgres.yml의 오프라인 릴리즈 사용
 	-o operations/use-offline-releases-haproxy.yml \		# use-haproxy.yml의 오프라인 릴리즈 사용
 	-o operations/use-offline-releases-postgres.yml \		# use-postgres.yml의 오프라인 릴리즈 사용
+	-o operations/use-offline-releases-cce.yml \			# cce.yml의 오프라인 릴리즈 사용
 	-l vars.yml \							# 환경에 PaaS-TA 설치시 적용하는 변수 설정 파일
 	-l ../../common/common_vars.yml					# PaaS-TA 및 각종 Service 설치시 적용하는 공통 변수 설정 파일
 ```
 
-- PaaS-TA 설치 시 Shell Script 파일 실행 (BOSH 로그인 필요)
+- PaaS-TA AP 설치 시 Shell Script 파일 실행 (BOSH 로그인 필요)
 
 ```
-$ cd ~/workspace/paasta-5.5.2/deployment/paasta-deployment/paasta
+$ cd ~/workspace/paasta-5.5.3/deployment/paasta-deployment/paasta
 $ ./deploy-{IaaS}.sh
 ```
 
-- PaaS-TA 설치 확인
+- PaaS-TA AP 설치 확인
 
 > $ bosh -e ${BOSH_ENVIRONMENT} vms -d paasta
 
@@ -1274,37 +1262,37 @@ Task 134. Done
 Deployment 'paasta'
 
 Instance                                                  Process State  AZ  IPs           VM CID               VM Type             Active  Stemcell  
-api/918da8e3-36c9-4144-b457-f48792041ece                  running        z1  10.0.31.206   i-093920c2caf43fe63  small               true    bosh-aws-xen-hvm-ubuntu-xenial-go_agent/621.94  
-api/c01d1a66-56c0-4dfb-87cd-b4e7323012ec                  running        z2  10.0.32.204   i-0bd6841ee37df618b  small               true    bosh-aws-xen-hvm-ubuntu-xenial-go_agent/621.94  
-cc-worker/30aa88de-8b5c-4e3a-a0ae-b2933f3af492            running        z1  10.0.31.207   i-02a7032164038f09b  minimal             true    bosh-aws-xen-hvm-ubuntu-xenial-go_agent/621.94  
-cc-worker/31a465bd-64af-49c6-a867-3439d98b2014            running        z2  10.0.32.205   i-0d8345c5348a42fdd  minimal             true    bosh-aws-xen-hvm-ubuntu-xenial-go_agent/621.94  
-credhub/0d2da1ef-dbdc-47d8-9514-69c1e0e83f82              running        z2  10.0.32.213   i-0f21b57a610868775  minimal             true    bosh-aws-xen-hvm-ubuntu-xenial-go_agent/621.94  
-credhub/a43132d5-ab04-4fe3-8b75-b8194f28678b              running        z1  10.0.31.216   i-0ea2f77eb95a32f21  minimal             true    bosh-aws-xen-hvm-ubuntu-xenial-go_agent/621.94  
-database/07b7ba09-7ace-4428-b4d4-a80163aaf82c             running        z1  10.0.31.202   i-0c532e0a7a53015c2  small               true    bosh-aws-xen-hvm-ubuntu-xenial-go_agent/621.94  
-diego-api/a05bbf7b-f513-48f0-8444-c90cd4b63ae2            running        z2  10.0.32.202   i-0b982d70a8debde41  small               true    bosh-aws-xen-hvm-ubuntu-xenial-go_agent/621.94  
-diego-api/ba388ba5-e6df-4d5e-9c6e-3af6b1fdc319            running        z1  10.0.31.203   i-0a5dfee4dc8ba1b68  small               true    bosh-aws-xen-hvm-ubuntu-xenial-go_agent/621.94  
-diego-cell/15378660-b457-4b6e-a9cb-5729b091c675           running        z1  10.0.31.213   i-095a00b9cb171c444  small-highmem-16GB  true    bosh-aws-xen-hvm-ubuntu-xenial-go_agent/621.94  
-diego-cell/7d7ed58e-c82e-429e-a6ce-18e4d70cca29           running        z2  10.0.32.211   i-02d836e28133368a1  small-highmem-16GB  true    bosh-aws-xen-hvm-ubuntu-xenial-go_agent/621.94  
-diego-cell/eb3b22f3-2905-4ef5-81d0-1ba6974b7316           running        z1  10.0.31.214   i-0a26ae4105e8ef6f4  small-highmem-16GB  true    bosh-aws-xen-hvm-ubuntu-xenial-go_agent/621.94  
-doppler/75577265-7f33-45c0-b4de-b24a881462bf              running        z1  10.0.31.211   i-01b19951e2ed96a55  minimal             true    bosh-aws-xen-hvm-ubuntu-xenial-go_agent/621.94  
-doppler/82956ad8-d103-4223-b426-cebc793c45ee              running        z2  10.0.32.209   i-01e7d7cf7d117bf96  minimal             true    bosh-aws-xen-hvm-ubuntu-xenial-go_agent/621.94  
-doppler/8d1fa381-c9d4-4b51-b195-c25d5d7a1a55              running        z1  10.0.31.212   i-048de3c6ad38a0184  minimal             true    bosh-aws-xen-hvm-ubuntu-xenial-go_agent/621.94  
-doppler/ece4a895-03b9-47a1-9b48-9eaabaf258ef              running        z2  10.0.32.210   i-09a3cf0e5ac171012  minimal             true    bosh-aws-xen-hvm-ubuntu-xenial-go_agent/621.94  
-haproxy/abb270ef-01e8-4d4c-941c-2187ca2cc8ad              running        z7  10.0.30.201   i-08af20c6712d54dd6  minimal             true    bosh-aws-xen-hvm-ubuntu-xenial-go_agent/621.94  
+api/918da8e3-36c9-4144-b457-f48792041ece                  running        z1  10.0.31.206   i-093920c2caf43fe63  small               true    bosh-aws-xen-hvm-ubuntu-xenial-go_agent/621.125  
+api/c01d1a66-56c0-4dfb-87cd-b4e7323012ec                  running        z2  10.0.32.204   i-0bd6841ee37df618b  small               true    bosh-aws-xen-hvm-ubuntu-xenial-go_agent/621.125  
+cc-worker/30aa88de-8b5c-4e3a-a0ae-b2933f3af492            running        z1  10.0.31.207   i-02a7032164038f09b  minimal             true    bosh-aws-xen-hvm-ubuntu-xenial-go_agent/621.125  
+cc-worker/31a465bd-64af-49c6-a867-3439d98b2014            running        z2  10.0.32.205   i-0d8345c5348a42fdd  minimal             true    bosh-aws-xen-hvm-ubuntu-xenial-go_agent/621.125 
+credhub/0d2da1ef-dbdc-47d8-9514-69c1e0e83f82              running        z2  10.0.32.213   i-0f21b57a610868775  minimal             true    bosh-aws-xen-hvm-ubuntu-xenial-go_agent/621.125 
+credhub/a43132d5-ab04-4fe3-8b75-b8194f28678b              running        z1  10.0.31.216   i-0ea2f77eb95a32f21  minimal             true    bosh-aws-xen-hvm-ubuntu-xenial-go_agent/621.125 
+database/07b7ba09-7ace-4428-b4d4-a80163aaf82c             running        z1  10.0.31.202   i-0c532e0a7a53015c2  small               true    bosh-aws-xen-hvm-ubuntu-xenial-go_agent/621.125 
+diego-api/a05bbf7b-f513-48f0-8444-c90cd4b63ae2            running        z2  10.0.32.202   i-0b982d70a8debde41  small               true    bosh-aws-xen-hvm-ubuntu-xenial-go_agent/621.125 
+diego-api/ba388ba5-e6df-4d5e-9c6e-3af6b1fdc319            running        z1  10.0.31.203   i-0a5dfee4dc8ba1b68  small               true    bosh-aws-xen-hvm-ubuntu-xenial-go_agent/621.125 
+diego-cell/15378660-b457-4b6e-a9cb-5729b091c675           running        z1  10.0.31.213   i-095a00b9cb171c444  small-highmem-16GB  true    bosh-aws-xen-hvm-ubuntu-xenial-go_agent/621.125 
+diego-cell/7d7ed58e-c82e-429e-a6ce-18e4d70cca29           running        z2  10.0.32.211   i-02d836e28133368a1  small-highmem-16GB  true    bosh-aws-xen-hvm-ubuntu-xenial-go_agent/621.125 
+diego-cell/eb3b22f3-2905-4ef5-81d0-1ba6974b7316           running        z1  10.0.31.214   i-0a26ae4105e8ef6f4  small-highmem-16GB  true    bosh-aws-xen-hvm-ubuntu-xenial-go_agent/621.125 
+doppler/75577265-7f33-45c0-b4de-b24a881462bf              running        z1  10.0.31.211   i-01b19951e2ed96a55  minimal             true    bosh-aws-xen-hvm-ubuntu-xenial-go_agent/621.125 
+doppler/82956ad8-d103-4223-b426-cebc793c45ee              running        z2  10.0.32.209   i-01e7d7cf7d117bf96  minimal             true    bosh-aws-xen-hvm-ubuntu-xenial-go_agent/621.125 
+doppler/8d1fa381-c9d4-4b51-b195-c25d5d7a1a55              running        z1  10.0.31.212   i-048de3c6ad38a0184  minimal             true    bosh-aws-xen-hvm-ubuntu-xenial-go_agent/621.125 
+doppler/ece4a895-03b9-47a1-9b48-9eaabaf258ef              running        z2  10.0.32.210   i-09a3cf0e5ac171012  minimal             true    bosh-aws-xen-hvm-ubuntu-xenial-go_agent/621.125 
+haproxy/abb270ef-01e8-4d4c-941c-2187ca2cc8ad              running        z7  10.0.30.201   i-08af20c6712d54dd6  minimal             true    bosh-aws-xen-hvm-ubuntu-xenial-go_agent/621.125 
                                                                              54.180.53.80                                                    
-log-api/7b45f808-22c4-45ff-a81c-74a20bac852a              running        z1  10.0.31.215   i-0b11b17bdbc23553e  minimal             true    bosh-aws-xen-hvm-ubuntu-xenial-go_agent/621.94  
-log-api/dac3304c-f0a2-4c20-999d-db08ee39c7a7              running        z2  10.0.32.212   i-0b8426cba9bc7db7a  minimal             true    bosh-aws-xen-hvm-ubuntu-xenial-go_agent/621.94  
-nats/35b3ab92-453f-4e9f-adf8-04477f41ee80                 running        z2  10.0.32.201   i-05a787d09b5a2df0a  minimal             true    bosh-aws-xen-hvm-ubuntu-xenial-go_agent/621.94  
-nats/d08e1c80-bdf4-40c8-9134-16fb4a34ee11                 running        z1  10.0.31.201   i-04eddc4dfa9f9793e  minimal             true    bosh-aws-xen-hvm-ubuntu-xenial-go_agent/621.94  
-router/0c77c858-f0c7-400c-868d-e96cd2dff4a9               running        z1  10.0.31.209   i-075290e50e0ef541d  minimal             true    bosh-aws-xen-hvm-ubuntu-xenial-go_agent/621.94  
-router/5458b789-8ed0-4ba8-8093-6155ba1fa9b1               running        z2  10.0.32.207   i-02bc3f58d3c0306c9  minimal             true    bosh-aws-xen-hvm-ubuntu-xenial-go_agent/621.94  
-scheduler/348e2a4e-2da7-47a3-92f8-8bf3b00e9bf0            running        z1  10.0.31.208   i-0a0b2bd3e712f0b26  minimal             true    bosh-aws-xen-hvm-ubuntu-xenial-go_agent/621.94  
-scheduler/f56a196b-1f76-4ecc-b721-9b7fd04b8a94            running        z2  10.0.32.206   i-0c0917f591ce872f5  minimal             true    bosh-aws-xen-hvm-ubuntu-xenial-go_agent/621.94  
-singleton-blobstore/af6b0c3a-27d0-46ef-b432-0b5c8e81519d  running        z1  10.0.31.205   i-0c519ef6d50d74d1e  small               true    bosh-aws-xen-hvm-ubuntu-xenial-go_agent/621.94  
-tcp-router/891c0b3e-4de6-44a5-a98b-96dd0490cac3           running        z2  10.0.32.208   i-084e044926e602669  minimal             true    bosh-aws-xen-hvm-ubuntu-xenial-go_agent/621.94  
-tcp-router/ff3e0a98-092c-4e4c-a20c-0c0abf094a44           running        z1  10.0.31.210   i-076ef16b4d4114f83  minimal             true    bosh-aws-xen-hvm-ubuntu-xenial-go_agent/621.94  
-uaa/3e0f17c1-cd11-4ce6-b3b8-bf1b0f45aa9f                  running        z1  10.0.31.204   i-0454401aa5fcf61fb  minimal             true    bosh-aws-xen-hvm-ubuntu-xenial-go_agent/621.94  
-uaa/f8f6b0e8-2bbf-4be5-8f69-ac8dc7a3d943                  running        z2  10.0.32.203   i-0abd8df56336a799e  minimal             true    bosh-aws-xen-hvm-ubuntu-xenial-go_agent/621.94  
+log-api/7b45f808-22c4-45ff-a81c-74a20bac852a              running        z1  10.0.31.215   i-0b11b17bdbc23553e  minimal             true    bosh-aws-xen-hvm-ubuntu-xenial-go_agent/621.125 
+log-api/dac3304c-f0a2-4c20-999d-db08ee39c7a7              running        z2  10.0.32.212   i-0b8426cba9bc7db7a  minimal             true    bosh-aws-xen-hvm-ubuntu-xenial-go_agent/621.125 
+nats/35b3ab92-453f-4e9f-adf8-04477f41ee80                 running        z2  10.0.32.201   i-05a787d09b5a2df0a  minimal             true    bosh-aws-xen-hvm-ubuntu-xenial-go_agent/621.125 
+nats/d08e1c80-bdf4-40c8-9134-16fb4a34ee11                 running        z1  10.0.31.201   i-04eddc4dfa9f9793e  minimal             true    bosh-aws-xen-hvm-ubuntu-xenial-go_agent/621.125 
+router/0c77c858-f0c7-400c-868d-e96cd2dff4a9               running        z1  10.0.31.209   i-075290e50e0ef541d  minimal             true    bosh-aws-xen-hvm-ubuntu-xenial-go_agent/621.125 
+router/5458b789-8ed0-4ba8-8093-6155ba1fa9b1               running        z2  10.0.32.207   i-02bc3f58d3c0306c9  minimal             true    bosh-aws-xen-hvm-ubuntu-xenial-go_agent/621.125 
+scheduler/348e2a4e-2da7-47a3-92f8-8bf3b00e9bf0            running        z1  10.0.31.208   i-0a0b2bd3e712f0b26  minimal             true    bosh-aws-xen-hvm-ubuntu-xenial-go_agent/621.125 
+scheduler/f56a196b-1f76-4ecc-b721-9b7fd04b8a94            running        z2  10.0.32.206   i-0c0917f591ce872f5  minimal             true    bosh-aws-xen-hvm-ubuntu-xenial-go_agent/621.125 
+singleton-blobstore/af6b0c3a-27d0-46ef-b432-0b5c8e81519d  running        z1  10.0.31.205   i-0c519ef6d50d74d1e  small               true    bosh-aws-xen-hvm-ubuntu-xenial-go_agent/621.125 
+tcp-router/891c0b3e-4de6-44a5-a98b-96dd0490cac3           running        z2  10.0.32.208   i-084e044926e602669  minimal             true    bosh-aws-xen-hvm-ubuntu-xenial-go_agent/621.125 
+tcp-router/ff3e0a98-092c-4e4c-a20c-0c0abf094a44           running        z1  10.0.31.210   i-076ef16b4d4114f83  minimal             true    bosh-aws-xen-hvm-ubuntu-xenial-go_agent/621.125 
+uaa/3e0f17c1-cd11-4ce6-b3b8-bf1b0f45aa9f                  running        z1  10.0.31.204   i-0454401aa5fcf61fb  minimal             true    bosh-aws-xen-hvm-ubuntu-xenial-go_agent/621.125 
+uaa/f8f6b0e8-2bbf-4be5-8f69-ac8dc7a3d943                  running        z2  10.0.32.203   i-0abd8df56336a799e  minimal             true    bosh-aws-xen-hvm-ubuntu-xenial-go_agent/621.125 
 
 30 vms
 
@@ -1313,11 +1301,11 @@ Succeeded
 
 
 
-## <div id='3.9'/>3.9.  PaaS-TA 로그인 
+## <div id='3.9'/>3.9.  PaaS-TA AP 로그인 
 
-CF CLI를 설치하고 PaaS-TA에 로그인한다.  
+CF CLI를 설치하고 PaaS-TA AP에 로그인한다.  
 CF CLI는 v6과 v7중 선택해서 설치를 한다.  
-CF API는 PaaS-TA 배포 시 지정했던 System Domain 명을 사용한다.
+CF API는 PaaS-TA AP 배포 시 지정했던 System Domain 명을 사용한다.
 
 - CF CLI v6 설치
 
@@ -1329,7 +1317,7 @@ $ sudo apt install cf-cli -y
 $ cf --version
 ```
 
-- CF CLI v7 설치 (PaaS-TA 5.1.0 이상)
+- CF CLI v7 설치 (PaaS-TA AP 5.1.0 이상)
 
 ```
 $ wget -q -O - https://packages.cloudfoundry.org/debian/cli.cloudfoundry.org.key | sudo apt-key add -
@@ -1352,7 +1340,7 @@ api endpoint:   https://api.54.180.53.80.nip.io
 api version:    3.87.0
 ```
 
-- PaaS-TA 로그인
+- PaaS-TA AP 로그인
 
 > $ cf login
 
