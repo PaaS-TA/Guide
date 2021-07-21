@@ -87,7 +87,7 @@ Succeeded
 
 서비스 설치에 필요한 Deployment를 Git Repository에서 받아 서비스 설치 작업 경로로 위치시킨다.  
 
-- Service Deployment Git Repository URL : https://github.com/PaaS-TA/service-deployment/tree/v5.1.0
+- Service Deployment Git Repository URL : https://github.com/PaaS-TA/service-deployment/tree/v5.1.1
 
 ```
 # Deployment 다운로드 파일 위치 경로 생성 및 설치 경로 이동
@@ -95,7 +95,7 @@ $ mkdir -p ~/workspace/paasta-5.5.2/deployment
 $ cd ~/workspace/paasta-5.5.2/deployment
 
 # Deployment 파일 다운로드
-$ git clone https://github.com/PaaS-TA/service-deployment.git -b v5.1.0
+$ git clone https://github.com/PaaS-TA/service-deployment.git -b v5.1.1
 
 
 # common_vars.yml 파일 다운로드(common_vars.yml가 존재하지 않는다면 다운로드)
@@ -170,7 +170,7 @@ Succeeded
 ```
 
 - common_vars.yml을 서버 환경에 맞게 수정한다. 
-- RabbitMQ에서 사용하는 변수는 system_domain, paasta_admin_username, paasta_admin_password 이다.
+- RabbitMQ에서 사용하는 변수는 system_domain, paasta_admin_username, paasta_admin_password, paasta_nats_ip 이다.
 
 > $ vi ~/workspace/paasta-5.5.2/deployment/common/common_vars.yml
 ```
