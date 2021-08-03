@@ -87,6 +87,9 @@ saas_monitoring_url: "61.252.53.248"		# Pinpoint HAProxy WEBUI의 Public IP
 ```
 
 ### <div id='7'/>● paasta-monitoring-vars.yml
+mariadb 및 influxdb에 대한 계정은 보안 설정이 되어 있으므로, 변경하여 배포할 경우 이를 이용하는 관련 모듈이 정상적으로 동작하지 않을 수 있으며, 
+이를 수정하기 위해서는 PaaS-TA-Monitoring-Release 및 paas-ta-monitoring-influxdb-release 레파지토리의 Job에 대한 설정 수정이 필요하다.
+
 ```
 # SERVICE VARIABLE
 inception_os_user_name: "ubuntu"
