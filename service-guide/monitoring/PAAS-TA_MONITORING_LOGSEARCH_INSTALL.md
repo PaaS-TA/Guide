@@ -38,9 +38,9 @@
 
 - Logsearch를 설치하기 위한 deployment가 존재하지 않는다면 다운로드 받는다
 ```
-$ cd ${HOME}/workspace/paasta-5.5.0/deployment
+$ cd ${HOME}/workspace/paasta-5.5.2/deployment
 $ git clone https://github.com/paas-ta/common.git
-$ git clone https://github.com/paas-ta/monitoring-deployment.git –b v5.5.0
+$ git clone https://github.com/paas-ta/monitoring-deployment.git –b v5.5.2
 ```
 
 ### <div id='5'/>2.3. Logsearch 설치 환경설정
@@ -48,7 +48,7 @@ $ git clone https://github.com/paas-ta/monitoring-deployment.git –b v5.5.0
 PaaS-TA VM Log수집을 위해서는 Logsearch가 설치되어야 한다. 
 
 ```
-$ cd ${HOME}/workspace/paasta-5.5.0/deployment/monitoring-deployment/logsearch
+$ cd ${HOME}/workspace/paasta-5.5.2/deployment/monitoring-deployment/logsearch
 ```
 
 ### <div id='6'/>● common_vars.yml
@@ -60,7 +60,7 @@ syslog_address는 Monitoring 옵션을 포함한 BOSH와 PaaS-TA를 설치할 �
 # BOSH INFO
 bosh_url: "http://10.0.1.6"			# BOSH URL (e.g. "https://00.000.0.0")
 bosh_client_admin_id: "admin"			# BOSH Client Admin ID
-bosh_client_admin_secret: "ert7na4jpewscztsxz48"	# BOSH Client Admin Secret('echo $(bosh int ~/workspace/paasta-5.5.0/deployment/paasta-deployment/bosh/{iaas}/creds.yml --path /admin_password)' 명령어를 통해 확인 가능)
+bosh_client_admin_secret: "ert7na4jpewscztsxz48"	# BOSH Client Admin Secret('echo $(bosh int ~/workspace/paasta-5.5.2/deployment/paasta-deployment/bosh/{iaas}/creds.yml --path /admin_password)' 명령어를 통해 확인 가능)
 bosh_director_port: 25555			# BOSH Director Port
 bosh_oauth_port: 8443				# BOSH OAuth Port
 
@@ -178,7 +178,7 @@ bosh –e {director_name} -d logsearch deploy logsearch-deployment.yml \
 - 서버 환경에 맞추어 Deploy 스크립트 파일의 설정을 수정한다.  
   기본적으로 온라인 설치로 되어 있음.
 
-> $ vi ${HOME}/workspace/paasta-5.5.0/deployment/monitoring-deployment/logsearch/deploy-logsearch.sh
+> $ vi ${HOME}/workspace/paasta-5.5.2/deployment/monitoring-deployment/logsearch/deploy-logsearch.sh
 
 ```
 # .yml 파일들 설정 변경 이슈 있는지 같이 확인한다.  
@@ -191,7 +191,7 @@ bosh –e {director_name} -d logsearch deploy logsearch-deployment.yml \
 - Logsearch 설치 Shell Script 파일 실행 (BOSH 로그인 필요)
 
 ```
-$ cd ~/workspace/paasta-5.5.0/deployment/monitoring-deployment/logsearch
+$ cd ~/workspace/paasta-5.5.2/deployment/monitoring-deployment/logsearch
 $ sh deploy-logsearch.sh
 ```
 
