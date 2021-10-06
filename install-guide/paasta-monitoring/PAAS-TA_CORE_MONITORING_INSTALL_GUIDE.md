@@ -1109,13 +1109,13 @@ BOSH_ENVIRONMENT="${BOSH_ENVIRONMENT}"			 # bosh director alias name (PaaS-TA에
 
 bosh -e ${BOSH_ENVIRONMENT} -d paasta -n deploy paasta-deployment.yml \	# PaaS-TA Manifest File
 	-o operations/aws.yml \						# AWS 설정
-	-o operations/cce.yml \						# CCE 조치 적용
 	-o operations/use-haproxy.yml \					# HAProxy 적용
 	-o operations/use-haproxy-public-network.yml \			# HAProxy Public Network 적용
 	-o operations/use-postgres.yml \				# Database Type 설정 (3.5버전 이하에서 Migration 시 필수)
 	-o operations/rename-network-and-deployment.yml \		# Rename Network and Deployment
-  -o paasta-addon/paasta-monitoring.yml \                       # [MONITORING] monitoring metric agent 적용  
-	-o operations/addons/enable-component-syslog.yml \            # [MONITORING] monitoring log agent 적용  
+        -o operations/addons/paasta-addon/paasta-monitoring.yml \       # [MONITORING] monitoring metric agent 적용  
+	-o operations/addons/enable-component-syslog.yml \              # [MONITORING] monitoring log agent 적용  
+	-o operations/cce-postgres.yml \                                # CCE 조치 적용
 	-l vars.yml \							# 환경에 PaaS-TA 설치시 적용하는 변수 설정 파일
 	-l ../../common/common_vars.yml					# PaaS-TA 및 각종 Service 설치시 적용하는 공통 변수 설정 파일
 ```
@@ -1124,13 +1124,13 @@ bosh -e ${BOSH_ENVIRONMENT} -d paasta -n deploy paasta-deployment.yml \	# PaaS-T
 ```
 bosh -e ${BOSH_ENVIRONMENT} -d paasta -n deploy paasta-deployment.yml \	# PaaS-TA Manifest File
 	-o operations/openstack.yml \					# OpenStack 설정
-	-o operations/cce-postgres.yml \                                # CCE 조치 적용
 	-o operations/use-haproxy.yml \					# HAProxy 적용
 	-o operations/use-haproxy-public-network.yml \			# HAProxy Public Network 적용
 	-o operations/use-postgres.yml \				# Database Type 설정 (3.5버전 이하에서 Migration 시 필수)
 	-o operations/rename-network-and-deployment.yml \		# Rename Network and Deployment
-  -o paasta-addon/paasta-monitoring.yml \                       # [MONITORING] monitoring metric agent 적용  
-	-o operations/addons/enable-component-syslog.yml \            # [MONITORING] monitoring log agent 적용  
+        -o operations/addons/paasta-addon/paasta-monitoring.yml \       # [MONITORING] monitoring metric agent 적용  
+	-o operations/addons/enable-component-syslog.yml \              # [MONITORING] monitoring log agent 적용 
+	-o operations/cce-postgres.yml \                                # CCE 조치 적용
 	-l vars.yml \							# PaaS-TA 설치시 적용하는 변수 설정 파일
 	-l ../../common/common_vars.yml					# PaaS-TA 및 각종 Service 설치시 적용하는 공통 변수 설정 파일
 ```
@@ -1153,13 +1153,13 @@ BOSH_ENVIRONMENT="${BOSH_ENVIRONMENT}"			 # bosh director alias name (PaaS-TA에
 
 bosh -e ${BOSH_ENVIRONMENT} -d paasta -n deploy paasta-deployment.yml \	# PaaS-TA Manifest File
 	-o operations/aws.yml \						# AWS 설정
-	-o operations/cce.yml \						# CCE 조치 
 	-o operations/use-haproxy.yml \					# HAProxy 적용
 	-o operations/use-haproxy-public-network.yml \			# HAProxy Public Network 적용
 	-o operations/use-postgres.yml \				# Database Type 설정 (3.5버전 이하에서 Migration 시 필수)
-	-o operations/rename-network-and-deployment.yml \		# Rename Network and Deployment  
-	-o paasta-addon/paasta-monitoring.yml \			        # [MONITORING] monitoring metric agent 적용  
-	-o operations/addons/enable-component-syslog.yml \		# [MONITORING] monitoring log agent 적용  
+	-o operations/rename-network-and-deployment.yml \		# Rename Network and Deployment
+        -o operations/addons/paasta-addon/paasta-monitoring.yml \       # [MONITORING] monitoring metric agent 적용  
+	-o operations/addons/enable-component-syslog.yml \              # [MONITORING] monitoring log agent 적용  
+	-o operations/cce-postgres.yml \                                # CCE 조치 적용
 	-l vars.yml \							# 환경에 PaaS-TA 설치시 적용하는 변수 설정 파일
 	-l ../../common/common_vars.yml					# PaaS-TA 및 각종 Service 설치시 적용하는 공통 변수 설정 파일
 ```
@@ -1257,7 +1257,7 @@ dotnet-core-buildpack-release-2.3.14.tgz  postgres-release-43.tgz
 
 - 서버 환경에 맞추어 [common_vars.yml](#3.6.1.1)와 [vars.yml]((#3.6.1.2))을 수정 한 뒤, Deploy 스크립트 파일의 설정을 수정한다.   
 
-> $ vi ~/workspace/paasta-5.5.0/deployment/paasta-deployment/paasta/deploy-aws-monitoring.sh
+> $ vi ~/workspace/paasta-5.5.2/deployment/paasta-deployment/paasta/deploy-aws-monitoring.sh
 
 ```
 BOSH_ENVIRONMENT="${BOSH_ENVIRONMENT}"			 # bosh director alias name (PaaS-TA에서 제공되는 create-bosh-login.sh 미 사용시 bosh envs에서 이름을 확인하여 입력)
