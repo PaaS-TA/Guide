@@ -6,7 +6,7 @@
 # PaaS-TA 5.5.4 가이드 문서
 
 
-## Application-Platform 5.6.0 설치 가이드
+## Application-Platform 5.6.1 설치 가이드
 - 운영 환경 설치
   - [BOSH 설치(AWS, OpenStack)](./install-guide/bosh/PAAS-TA_BOSH2_INSTALL_GUIDE_V5.0.md)
   - [PaaS-TA 설치(AWS, OpenStack)](./install-guide/paasta/PAAS-TA_CORE_INSTALL_GUIDE_V5.0.md)
