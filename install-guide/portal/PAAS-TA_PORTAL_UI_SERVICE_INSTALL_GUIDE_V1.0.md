@@ -38,7 +38,7 @@ PaaS-TA 3.5 버전부터는 Bosh2.0 기반으로 deploy를 진행하며 내부 �
 본 문서의 설치된 시스템 구성도이다. Binary Storage, Mariadb, Proxy, Gateway Api, Registration Api, Portal Api, Common Api, Log Api, Storage Api, Webadmin, Webuser로 최소사항을 구성하였다.
 
 ![시스템구성도][paas-ta-portal-01]
-* Paas-TA Portal 설치할때 cloud config에 추가적으로 정의한 VM_Tpye명과 스펙 
+* Paas-TA Portal 설치할때 cloud config에 추가적으로 정의한 VM_Tpye명과 스펙
 
 | VM_Type | 스펙 |
 |--------|-------|
@@ -76,15 +76,15 @@ BOSH CLI v2 가 설치 되어 있지 않을 경우 먼저 BOSH2.0 설치 가이�
 
 ### <div id="2.2"/> 2.2. Stemcell 확인
 
-Stemcell 목록을 확인하여 서비스 설치에 필요한 Stemcell이 업로드 되어 있는 것을 확인한다.  (PaaS-TA 5.5.2 과 동일 stemcell 사용)
+Stemcell 목록을 확인하여 서비스 설치에 필요한 Stemcell이 업로드 되어 있는 것을 확인한다.  (PaaS-TA 5.5.4 와 동일 stemcell 사용)
 
 > $ bosh -e ${BOSH_ENVIRONMENT} stemcells
 
 ```
 Using environment '10.0.1.6' as client 'admin'
 
-Name                                     Version  OS             CPI  CID  
-bosh-aws-xen-hvm-ubuntu-xenial-go_agent  621.94*  ubuntu-xenial  -    ami-038de43e4d9b6f5fb  
+Name                                       Version   OS             CPI  CID  
+bosh-openstack-kvm-ubuntu-bionic-go_agent  1.34      ubuntu-bionic  -    ce507ae4-aca6-4a6d-b7c7-220e3f4aaa7d
 
 (*) Currently deployed
 
@@ -97,15 +97,15 @@ Succeeded
 
 서비스 설치에 필요한 Deployment를 Git Repository에서 받아 서비스 설치 작업 경로로 위치시킨다.  
 
-- Portal Deployment Git Repository URL : https://github.com/PaaS-TA/portal-deployment/tree/v5.2.0
+- Portal Deployment Git Repository URL : https://github.com/PaaS-TA/portal-deployment/tree/v5.2.1
 
 ```
 # Deployment 다운로드 파일 위치 경로 생성 및 설치 경로 이동
-$ mkdir -p ~/workspace/paasta-5.5.2/deployment
-$ cd ~/workspace/paasta-5.5.2/deployment
+$ mkdir -p ~/workspace/paasta-5.5.4/deployment
+$ cd ~/workspace/paasta-5.5.4/deployment
 
 # Deployment 파일 다운로드
-$ git clone https://github.com/PaaS-TA/portal-deployment.git -b v5.2.0
+$ git clone https://github.com/PaaS-TA/portal-deployment.git -b v5.2.1
 ```
 
 ### <div id="2.4"/> 2.4. Deployment 파일 수정
@@ -175,16 +175,16 @@ vm_types:
 Succeeded
 ```
 
-- common_vars.yml을 서버 환경에 맞게 수정한다. 
+- common_vars.yml을 서버 환경에 맞게 수정한다.
 - Portal-UI에서 사용하는 변수는 system_domain, paasta_api_version, uaa_client_portal_secret 이다.
 
-> $ vi ~/workspace/paasta-5.5.2/deployment/common/common_vars.yml
+> $ vi ~/workspace/paasta-5.5.4/deployment/common/common_vars.yml
 ```
 # BOSH INFO
 bosh_ip: "10.0.1.6"				# BOSH IP
-bosh_url: "https://10.0.1.6"			# BOSH URL (e.g. "https://00.000.0.0")
+bosh_url: "https://10.0.1.6"				# BOSH URL (e.g. "https://00.000.0.0")
 bosh_client_admin_id: "admin"			# BOSH Client Admin ID
-bosh_client_admin_secret: "ert7na4jpew"		# BOSH Client Admin Secret('echo $(bosh int ~/workspace/paasta-5.5.2/deployment/paasta-deployment/bosh/{iaas}/creds.yml --path /admin_password)' 명령어를 통해 확인 가능)
+bosh_client_admin_secret: "ert7na4jpewscztsxz48"	# BOSH Client Admin Secret('echo $(bosh int ~/workspace/paasta-5.0/deployment/paasta-deployment/bosh/{iaas}/creds.yml --path /admin_password)' 명령어를 통해 확인 가능)
 bosh_director_port: 25555			# BOSH director port
 bosh_oauth_port: 8443				# BOSH oauth port
 bosh_version: 271.2				# BOSH version('bosh env' 명령어를 통해 확인 가능, on-demand service용, e.g. "271.2")
@@ -196,16 +196,16 @@ paasta_admin_password: "admin"			# PaaS-TA Admin Password
 paasta_nats_ip: "10.0.1.121"
 paasta_nats_port: 4222
 paasta_nats_user: "nats"
-paasta_nats_password: "7EZB5ZkMLMqT7"		# PaaS-TA Nats Password (CredHub 로그인후 'credhub get -n /micro-bosh/paasta/nats_password' 명령어를 통해 확인 가능)
+paasta_nats_password: "7EZB5ZkMLMqT73h2JtxPv1fvh3UsqO"	# PaaS-TA Nats Password (CredHub 로그인후 'credhub get -n /micro-bosh/paasta/nats_password' 명령어를 통해 확인 가능)
 paasta_nats_private_networks_name: "default"	# PaaS-TA Nats 의 Network 이름
 paasta_database_ips: "10.0.1.123"		# PaaS-TA Database IP (e.g. "10.0.1.123")
 paasta_database_port: 5524			# PaaS-TA Database Port (e.g. 5524(postgresql)/13307(mysql)) -- Do Not Use "3306"&"13306" in mysql
-paasta_database_type: "postgresql"		# PaaS-TA Database Type (e.g. "postgresql" or "mysql")
-paasta_database_driver_class: "org.postgresql.Driver"	# PaaS-TA Database driver-class (e.g. "org.postgresql.Driver" or "com.mysql.jdbc.Driver")
+paasta_database_type: "postgresql"                      # PaaS-TA Database Type (e.g. "postgresql" or "mysql")
+paasta_database_driver_class: "org.postgresql.Driver"   # PaaS-TA Database driver-class (e.g. "org.postgresql.Driver" or "com.mysql.jdbc.Driver")
 paasta_cc_db_id: "cloud_controller"		# CCDB ID (e.g. "cloud_controller")
-paasta_cc_db_password: "cc_admin"		# CCDB Password (e.g. "cc_admin")
+paasta_cc_db_password: "cc_admin"		# CCDB Password (e.g. "c418e687c4Kx!" 영어/숫자/특수문자 혼용 8자리 이상)
 paasta_uaa_db_id: "uaa"				# UAADB ID (e.g. "uaa")
-paasta_uaa_db_password: "uaa_admin"		# UAADB Password (e.g. "uaa_admin")
+paasta_uaa_db_password: "uaa_admin"		# UAADB Password (e.g. "ifb2497iEA5!" 영어/숫자/특수문자 혼용 8자리 이상)
 paasta_api_version: "v3"
 
 # UAAC INFO
@@ -217,30 +217,29 @@ uaa_client_portal_secret: "clientsecret"	# UAAC Portal Client에 접근하기 �
 metric_url: "10.0.161.101"			# Monitoring InfluxDB IP
 elasticsearch_master_ip: "10.0.1.146"           # Logsearch의 elasticsearch master IP
 elasticsearch_master_port: 9200                 # Logsearch의 elasticsearch master Port
-syslog_address: "10.0.121.100"			# Logsearch의 ls-router IP
-syslog_port: "2514"				# Logsearch의 ls-router Port
-syslog_transport: "relp"			# Logsearch Protocol
-saas_monitoring_url: "61.252.53.248"		# Pinpoint HAProxy WEBUI의 Public IP
-monitoring_api_url: "61.252.53.241"		# Monitoring-WEB의 Public IP
+syslog_address: "10.0.121.100"            	# Logsearch의 ls-router IP
+syslog_port: "2514"                          	# Logsearch의 ls-router Port
+syslog_transport: "relp"                        # Logsearch Protocol
+saas_monitoring_url: "61.252.53.248"	   	# Pinpoint HAProxy WEBUI의 Public IP
+monitoring_api_url: "61.252.53.241"        	# Monitoring-WEB의 Public IP
 
 ### Portal INFO
 portal_web_user_ip: "52.78.88.252"
-portal_web_user_url: "http://portal-web-user.52.78.88.252.nip.io" 
+portal_web_user_url: "http://portal-web-user.52.78.88.252.nip.io"
 
 ### ETC INFO
 abacus_url: "http://abacus.61.252.53.248.nip.io"	# abacus url (e.g. "http://abacus.xxx.xxx.xxx.xxx.nip.io")
-
 ```
 
 
 
 - Deployment YAML에서 사용하는 변수 파일을 서버 환경에 맞게 수정한다.
 
-> $ vi ~/workspace/paasta-5.5.2/deployment/portal-deployment/portal-ui/vars.yml  
+> $ vi ~/workspace/paasta-5.5.4/deployment/portal-deployment/portal-ui/vars.yml  
 ```
 # STEMCELL INFO
-stemcell_os: "ubuntu-xenial"                                             # stemcell os
-stemcell_version: "621.94"                                               # stemcell version
+stemcell_os: "ubuntu-bionic"                                             # stemcell os
+stemcell_version: "1.34"                                                 # stemcell version
 
 # NETWORKS INFO
 private_networks_name: "default"                                         # private network name
@@ -271,15 +270,14 @@ webuser_azs: [z6]                                                        # webus
 webuser_instances: 1                                                     # webuser : instances (1)
 webuser_vm_type: "small"                                                 # webuser : vm type
 webuser_monitoring: false                                                # webuser : monitoring 사용 여부. true일 경우 앱 상세정보에서 모니터링창이 활성화 된다.
-webuser_quantity: false                                                  # webuser : 사용량 조회 창 활성화 여부
 webuser_automaticapproval: false                                         # webuser : 회원가입시 PaaS-TA에 접속 가능 여부. true일 경우 관리자 포탈에서 승인을 해주어야 접근이 가능하다.
 user_app_size: 0                                                         # webuser : 사용자 myApp 배포시 용량제한 여부 (값이 0일경우 무제한)
 
 # ETC INFO
-portal_default_api_name: "PaaS-TA 5.5.2"                                 # ETC : default api name
+portal_default_api_name: "PaaS-TA"                                       # ETC : default api name (e.g. PaaS-TA {Version})
 portal_default_api_url: "http://<PORTAL-API-HAPROXY-PUBLIC-IP>:2225"     # ETC : default api url
 portal_default_header_auth: "Basic YWRtaW46b3BlbnBhYXN0YQ=="             # ETC : default header auth
-portal_default_api_desc: "PaaS-TA 5.5.2 install infra"                   # ETC : default api description
+portal_default_api_desc: "PaaS-TA infra"                                 # ETC : default api description (e.g. PaaS-TA {Version} infra)
 apache_limit_request_body: <APACHE limitRequestBody>                     # Apache Limiting Upload File Size Directory / ex> 5000000
 apache_usr_limit_request_body: <APACHE limitRequestBody>                 # Apache Limiting Upload File Size Directory webDir ex> 10240000
 ```
@@ -289,7 +287,7 @@ apache_usr_limit_request_body: <APACHE limitRequestBody>                 # Apach
 - 서버 환경에 맞추어 Deploy 스크립트 파일의 VARIABLES 설정을 수정하고, Option file을 추가할지 선택한다.  
      (선택) -o operations/cce.yml (CCE 조치를 적용하여 설치)
 
-> $ vi ~/workspace/paasta-5.5.2/deployment/portal-deployment/portal-ui/deploy.sh
+> $ vi ~/workspace/paasta-5.5.4/deployment/portal-deployment/portal-ui/deploy.sh
 ```
 #!/bin/bash
 
@@ -308,31 +306,31 @@ bosh -e ${BOSH_ENVIRONMENT} -n -d portal-ui deploy portal-ui.yml \
 
 - 서비스를 설치한다.  
 ```
-$ cd ~/workspace/paasta-5.5.2/deployment/portal-deployment/portal-ui   
+$ cd ~/workspace/paasta-5.5.4/deployment/portal-deployment/portal-ui   
 $ sh ./deploy.sh  
-``` 
+```
 
 ### <div id="2.6"/> 2.6. 서비스 설치 - 다운로드 된 PaaS-TA Release 파일 이용 방식
 
 - 서비스 설치에 필요한 릴리즈 파일을 다운로드 받아 Local machine의 서비스 설치 작업 경로로 위치시킨다.  
-  
+
   - 설치 릴리즈 파일 다운로드 : [paasta-portal-ui-release-2.5.0.tgz](https://nextcloud.paas-ta.org/index.php/s/goy2rWd9cyDBkfp/download)
 
 ```
 # 릴리즈 다운로드 파일 위치 경로 생성
-$ mkdir -p ~/workspace/paasta-5.5.2/release/portal
+$ mkdir -p ~/workspace/paasta-5.5.4/release/portal
 
 # 릴리즈 파일 다운로드 및 파일 경로 확인
-$ ls ~/workspace/paasta-5.5.2/release/portal
+$ ls ~/workspace/paasta-5.5.4/release/portal
 paasta-portal-ui-release-2.5.0.tgz
 ```
-  
+
 - 서버 환경에 맞추어 Deploy 스크립트 파일의 VARIABLES 설정을 수정하고 Option file 및 변수를 추가한다.  
      (추가) -o operations/use-offline-releases.yml (미리 다운받은 offline 릴리즈 사용)  
      (추가) -v releases_dir="<RELEASE_DIRECTORY>"  
-     
-> $ vi ~/workspace/paasta-5.5.2/deployment/portal-deployment/portal-ui/deploy.sh
-  
+
+> $ vi ~/workspace/paasta-5.5.4/deployment/portal-deployment/portal-ui/deploy.sh
+
 ```
 #!/bin/bash
 
@@ -348,13 +346,13 @@ bosh -e ${BOSH_ENVIRONMENT} -n -d portal-ui deploy portal-ui.yml \
     -o operations/cce.yml \
     -l ${COMMON_VARS_PATH} \
     -l vars.yml \
-    -v releases_dir="/home/ubuntu/workspace/paasta-5.5.2/release"  
+    -v releases_dir="/home/ubuntu/workspace/paasta-5.5.4/release"  
 
 ```  
 
 - 서비스를 설치한다.  
 ```
-$ cd ~/workspace/paasta-5.5.2/deployment/portal-deployment/portal-ui  
+$ cd ~/workspace/paasta-5.5.4/deployment/portal-deployment/portal-ui  
 $ sh ./deploy.sh  
 ```  
 
@@ -391,7 +389,7 @@ Portal 5.1.0 버전 이상부터는 배포된 어플리케이션의 SSH 접속�
 
 - Portal 배포를 위한 조직 및 공간 생성
 ```
-### Portal 배포를 위한 조직 및 공간 생성 및 설정 
+### Portal 배포를 위한 조직 및 공간 생성 및 설정
 $ cf create-quota portal_quota -m 20G -i -1 -s -1 -r -1 --reserved-route-ports -1 --allow-paid-service-plans
 $ cf create-org portal -q portal_quota
 $ cf create-space system -o portal  
@@ -401,7 +399,7 @@ $ cf target -o portal -s system
 
 - Portal SSH 다운로드 및 배포
 ```
-$ cd ~/workspace/paasta-5.5.2/release/portal
+$ cd ~/workspace/paasta-5.5.4/release/portal
 $ wget --content-disposition https://nextcloud.paas-ta.org/index.php/s/awPjYDYCMiHY7yF/download
 $ unzip portal-ssh.zip
 $ cd portal-ssh
@@ -411,7 +409,7 @@ $ cf push
 
 ## <div id="3"/>3. PaaS-TA Portal 운영
 
-### <div id="3.1"/> 3.1. 사용자의 조직 생성 Flag 활성화 
+### <div id="3.1"/> 3.1. 사용자의 조직 생성 Flag 활성화
 
 PaaS-TA는 기본적으로 일반 사용자는 조직을 생성할 수 없도록 설정되어 있다. 포털 배포를 위해 조직 및 공간을 생성해야 하고 또 테스트를 구동하기 위해서도 필요하므로 사용자가 조직을 생성할 수 있도록 user_org_creation FLAG를 활성화 한다. FLAG 활성화를 위해서는 PaaS-TA 운영자 계정으로 로그인이 필요하다.
 
@@ -433,8 +431,8 @@ Feature user_org_creation Enabled.
     $ uaac token client get\
         Client ID:  admin\
         Client secret:  *****
-        
-3. uaac client add portalclient –s “portalclient Secret” 
+
+3. uaac client add portalclient –s “portalclient Secret”
 >--redirect_uri "사용자포탈 Url, 사용자포탈 Url/callback"\
 $ uaac client add portalclient -s xxxxx --redirect_uri "http://portal-web-user.xxxx.nip.io, http://portal-web-user.xxxx.nip.io/callback" \
 --scope "cloud_controller_service_permissions.read , openid , cloud_controller.read , cloud_controller.write , cloud_controller.admin" \
@@ -443,7 +441,7 @@ $ uaac client add portalclient -s xxxxx --redirect_uri "http://portal-web-user.x
 --autoapprove="openid , cloud_controller_service_permissions.read"
 
  >![paas-ta-portal-32]
-1. uaac portalclient가 url이 잘못 등록되어있다면 해당 화면과 같이 redirect오류가 발생한다. 
+1. uaac portalclient가 url이 잘못 등록되어있다면 해당 화면과 같이 redirect오류가 발생한다.
 2. uaac client update를 통해 url을 수정해야한다.
    > $ uaac target\
     $ uaac token client get\
@@ -459,52 +457,52 @@ $ uaac client add portalclient -s xxxxx --redirect_uri "http://portal-web-user.x
 Paas-TA Portal 각각 Instance의 log를 확인 할 수 있다.
 1. 로그를 확인할 Instance에 접근한다.
     > bosh ssh -d [deployment name] [instance name]
-       
+
        Instance                                                          Process State  AZ  IPs            VM CID                                   VM Type        Active   
        haproxy/8cc2d633-2b43-4f3d-a2e8-72f5279c11d5                      running        z5  10.30.107.213  vm-315bfa1b-9829-46de-a19d-3bd65e9f9ad4  portal_large   true  
                                                                                             115.68.46.214                                                            
        mariadb/117cbf05-b223-4133-bf61-e15f16494e21                      running        z5  10.30.107.211  vm-bc5ae334-12d4-41d4-8411-d9315a96a305  portal_large   true  
        paas-ta-portal-webadmin/8047fcbd-9a98-4b61-b161-0cbb277fa643      running        z5  10.30.107.221  vm-188250fd-e918-4aab-9cbe-7d368852ea8a  portal_medium  true  
        paas-ta-portal-webuser/cb206717-81c9-49ed-a0a8-e6c3b957cb66       running        z5  10.30.107.222  vm-822f68a5-91c8-453a-b9b3-c1bbb388e377  portal_medium  true  
-       
+
        11 vms
-       
+
        Succeeded
        inception@inception:~$ bosh ssh -d paas-ta-portal-ui paas-ta-portal-webadmin  << instance 접근(bosh ssh) 명령어 입력
        Using environment '10.30.40.111' as user 'admin' (openid, bosh.admin)
-       
+
        Using deployment 'paas-ta-portal-webadmin'
-       
+
        Task 5195. Done
        Unauthorized use is strictly prohibited. All access and activity
        is subject to logging and monitoring.
        Welcome to Ubuntu 14.04.5 LTS (GNU/Linux 4.4.0-92-generic x86_64)
-       
+
         * Documentation:  https://help.ubuntu.com/
-       
+
        The programs included with the Ubuntu system are free software;
        the exact distribution terms for each program are described in the
        individual files in /usr/share/doc/*/copyright.
-       
+
        Ubuntu comes with ABSOLUTELY NO WARRANTY, to the extent permitted by
        applicable law.
-       
+
        Last login: Tue Sep  4 07:11:42 2018 from 10.30.20.28
        To run a command as administrator (user "root"), use "sudo <command>".
        See "man sudo_root" for details.
-       
-       paas-ta-portal-webadmin/48fa0c5a-52eb-4ae8-a7b9-91275615318c:~$ 
+
+       paas-ta-portal-webadmin/48fa0c5a-52eb-4ae8-a7b9-91275615318c:~$
 
 2. 로그파일이 있는 폴더로 이동한다.
     > 위치 : /var/vcap/sys/log/[job name]/
-    
+
          paas-ta-portal-webadmin/48fa0c5a-52eb-4ae8-a7b9-91275615318c:~$ cd /var/vcap/sys/log/paas-ta-portal-webadmin/
          paas-ta-portal-webadmin/48fa0c5a-52eb-4ae8-a7b9-91275615318c:/var/vcap/sys/log/paas-ta-portal-webadmin$ ls
          paas-ta-portal-webadmin.stderr.log  paas-ta-portal-webadmin.stdout.log
 
 3. 로그파일을 열어 내용을 확인한다.
     > vim [job name].stdout.log
-        
+
         예)
         vim paas-ta-portal-webadmin.stdout.log
         2018-09-04 02:08:42.447 ERROR 7268 --- [nio-2222-exec-1] p.p.a.e.GlobalControllerExceptionHandler : Error message : Response : org.springframework.security.web.firewall.FirewalledResponse@298a1dc2
@@ -546,7 +544,7 @@ Paas-TA Portal 각각 Instance의 log를 확인 할 수 있다.
 ### <div id="3.5"/> 3.5. 카탈로그 적용
 ##### 1. Catalog 빌드팩, 서비스팩 추가
 Paas-TA Portal 설치 후에 관리자 포탈에서 빌드팩, 서비스팩을 등록해야 사용자 포탈에서 사용이 가능하다.
- 
+
  1. 관리자 포탈에 접속한다.(portal-web-admin.[public ip].nip.io)
     >![paas-ta-portal-15]
  2. 운영관리를 누른다.
@@ -556,8 +554,8 @@ Paas-TA Portal 설치 후에 관리자 포탈에서 빌드팩, 서비스팩을 �
  3. 빌드팩, 서비스팩 상세화면에 들어가서 각 항목란에 값을 입력후에 저장을 누른다.
     >![paas-ta-portal-18]
  4. 사용자포탈에서 변경된값이 적용되어있는지 확인한다.
-    >![paas-ta-portal-19] 
-    
+    >![paas-ta-portal-19]
+
 ### <div id="3.6"/> 3.6. 모니터링 및 오토스케일링 적용
 ##### 1. 포탈 설치 이전 모니터링 설정 적용
 ###### 1.PaaS-TA 에서 제공하고있는 모니터링을 미리 설치를 한 후에 진행해야 한다.
@@ -567,13 +565,13 @@ Paas-TA Portal 설치 후에 관리자 포탈에서 빌드팩, 서비스팩을 �
  1. 사용자 포탈의 앱 상세 페이지로 이동한다.
     >![paas-ta-portal-30]
  2. ① 상세페이지 레이아웃 하단의 모니터링 버튼을 누른다.
-    
+
  3. ② 모니터링 오토 스케일링 화면
-    
+
  4. ③ 모니터링 알람 설정 화면
-    
+
  5. 추이차트 탭에서 디스크 메모리 네트워크 사용량을 인스턴스 별로 확인이 가능하다.        
-    
+
 [paas-ta-portal-01]:../../install-guide/portal/images/Paas-TA-Portal_01.png
 [paas-ta-portal-02]:../../install-guide/portal/images/Paas-TA-Portal_02.png
 [paas-ta-portal-03]:../../install-guide/portal/images/Paas-TA-Portal_03.png
