@@ -6,5 +6,5 @@
   - 3\. [PaaS-TA PaaS Monitoring Logsearch 설치(선택)](./PAAS-TA_MONITORING_LOGSEARCH_INSTALL.md)
   - 4\. [PaaS-TA SaaS Monitoring Pinpoint release 설치(선택)](./PAAS-TA_MONITORING_PINPOINT_MONITORING_INSTALL.md)
   - 5\. [PaaS-TA CaaS Monitoring Container Service 설치(선택)](./PAAS-TA_MONITORING_CONTAINER_SERVICE_INSTALL.md)
-  - <strike> 6\. [PaaS-TA IaaS Monitoring Monasca 설치(선택)](./PAAS-TA_MONITORING_MONASCA_INSTALL.md)</strike>
+  - 6\. (Deprecated) <strike>[PaaS-TA IaaS Monitoring Monasca 설치(선택)](./PAAS-TA_MONITORING_MONASCA_INSTALL.md)</strike>
   - 7\. [PaaS-TA Monitoring 설치](./PAAS-TA_MONITORING_PAAS-TA_MONITORING_INSTALL.md)
