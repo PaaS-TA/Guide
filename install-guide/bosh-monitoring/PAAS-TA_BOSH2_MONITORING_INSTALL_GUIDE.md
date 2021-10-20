@@ -59,10 +59,10 @@ BOSH는 초기에 Cloud Foundry PaaS를 위해 개발되었지만, 현재는 Jen
 BOSH가 지원하는 IaaS는 VMware vSphere, Google Cloud Platform, Amazon Web Services EC2, Microsoft Azure, OpenStack, Alibaba Cloud가 있다.  
 PaaS-TA는 VMware vSphere, Google Cloud Platform, Amazon Web Services EC2, OpenStack, Microsoft Azure 등의 IaaS를 지원한다.  
 
-현재 PaaS-TA 5.5.4에서 검증한 IaaS 환경은 OpenStack 환경이다.
+현재 PaaS-TA 5.5.2에서 검증한 IaaS 환경은 OpenStack 환경이다.
 
 PaaS-TA 3.1 버전까지는 Cloud Foundry BOSH1을 기준으로 설치했지만, PaaS-TA 3.5 버전부터 BOSH2를 기준으로 설치하였다.  
-PaaS-TA 5.5.4는 Cloud Foundry에서 제공하는 bosh-deployment를 활용하여 BOSH를 설치한다.
+PaaS-TA 5.5.2는 Cloud Foundry에서 제공하는 bosh-deployment를 활용하여 BOSH를 설치한다.
 
 
 BOSH2는 BOSH2 CLI를 통하여 BOSH와 PaaS-TA를 모두 생성한다.  
@@ -199,23 +199,23 @@ $ bosh -version
 
 - BOSH를 설치하기 위한 deployment가 존재하지 않는다면 다운로드 받는다
 ```
-$ mkdir -p ~/workspace/paasta-5.5.4/deployment
-$ cd ~/workspace/paasta-5.5.4/deployment
-$ git clone https://github.com/PaaS-TA/paasta-deployment.git -b v5.5.4
+$ mkdir -p ~/workspace/paasta-5.5.2/deployment
+$ cd ~/workspace/paasta-5.5.2/deployment
+$ git clone https://github.com/PaaS-TA/paasta-deployment.git -b v5.5.2
 
 # 공통 사용 부분이다. 다운로드 받는다.
-$ cd ~/workspace/paasta-5.5.4/deployment 
+$ cd ~/workspace/paasta-5.5.2/deployment 
 $ git clone -b {TagVersion} https://github.com/PaaS-TA/common.git
 
 # monitoirng 을 위한 deployment 를 다운로드 받는다.  
-$ cd ~/workspace/paasta-5.5.4/deployment   
+$ cd ~/workspace/paasta-5.5.2/deployment   
 $ git clone -b {TagVersion} https://github.com/PaaS-TA/monitoring-deployment.git
 ```
 
 - paasta/deployment/paasta-deployment 이하 폴더 확인
 
 ```
-$ cd ~/workspace/paasta-5.5.4/deployment/paasta-deployment
+$ cd ~/workspace/paasta-5.5.2/deployment/paasta-deployment
 $ ls
 README.md  bosh  cloud-config  paasta
 ```
@@ -241,7 +241,7 @@ README.md  bosh  cloud-config  paasta
 모니터링이 적용된 bosh 구성의 경우 모니터링이 적용된 설치 파일 등 추가 구성해 주어야 한다.  
 [모니터링 bosh-addon 참조 가이드](https://github.com/PaaS-TA/monitoring-deployment/blob/master/bosh-addon/README.md)
 
-~/workspace/paasta-5.5.4/deployment/paasta-deployment/bosh 폴더에는 BOSH 설치를 위한 IaaS별 Shell Script 파일이 존재한다.  
+~/workspace/paasta-5.5.2/deployment/paasta-deployment/bosh 폴더에는 BOSH 설치를 위한 IaaS별 Shell Script 파일이 존재한다.  
 
 Shell Script 파일을 이용하여 BOSH를 설치한다.
 파일명은 deploy-{IaaS}-monitoring.sh 로 만들어졌다.  
@@ -283,7 +283,7 @@ bosh_client_admin_id: "admin"				# Bosh Client Admin ID
 private_cidr: "10.0.1.0/24"				# Private IP Range
 private_gw: "10.0.1.1"					# Private IP Gateway
 bosh_url: "10.0.1.6"					# Private IP 
-releases_dir: "/home/ubuntu/workspace/paasta-5.5.4/release"	# Release Directory (offline으로 릴리즈 다운받아 사용시 설정)
+releases_dir: "/home/ubuntu/workspace/paasta-5.5.2/release"	# Release Directory (offline으로 릴리즈 다운받아 사용시 설정)
 director_name: "micro-bosh"				# BOSH Director Name
 access_key_id: "XXXXXXXXXXXXXXX"			# AWS Access Key
 secret_access_key: "XXXXXXXXXXXXX"			# AWS Secret Key
@@ -309,7 +309,7 @@ syslog_transport: "relp"				# Logsearch Protocol
 ```
 # BOSH VARIABLE
 bosh_client_admin_id: "admin"				# Bosh Client Admin ID
-releases_dir: "/home/ubuntu/workspace/paasta-5.5.4/release"	# Release Directory (offline으로 릴리즈 다운받아 사용시 설정)
+releases_dir: "/home/ubuntu/workspace/paasta-5.5.2/release"	# Release Directory (offline으로 릴리즈 다운받아 사용시 설정)
 director_name: "micro-bosh"				# BOSH Director Name
 private_cidr: "10.0.1.0/24"				# Private IP Range
 private_gw: "10.0.1.1"					# Private IP Gateway
@@ -477,7 +477,7 @@ bosh create-env bosh.yml \
 - Shell Script 파일에 실행 권한 부여
 
 ```
-$ chmod +x ~/workspace/paasta-5.5.4/deployment/paasta-deployment/bosh/*.sh  
+$ chmod +x ~/workspace/paasta-5.5.2/deployment/paasta-deployment/bosh/*.sh  
 ```
 
 
@@ -485,7 +485,7 @@ $ chmod +x ~/workspace/paasta-5.5.4/deployment/paasta-deployment/bosh/*.sh
 
 - 서버 환경에 맞추어 Deploy 스크립트 파일의 설정을 수정한다. 
 
-> $ vi ~/workspace/paasta-5.5.4/deployment/paasta-deployment/bosh/deploy-aws-monitoring.sh
+> $ vi ~/workspace/paasta-5.5.2/deployment/paasta-deployment/bosh/deploy-aws-monitoring.sh
 ```                     
 bosh create-env bosh.yml \                         
 	--state=aws/state.json \	
@@ -503,15 +503,15 @@ bosh create-env bosh.yml \
 - BOSH 설치 Shell Script 파일 실행
 
 ```
-$ cd ~/workspace/paasta-5.5.4/deployment/paasta-deployment/bosh
+$ cd ~/workspace/paasta-5.5.2/deployment/paasta-deployment/bosh
 $ ./deploy-{iaas}-monitoring.sh
 ```
 
 - BOSH 설치 중
 
 ```
-ubuntu@inception:~/workspace/paasta-5.5.4/deployment/paasta-deployment/bosh$ ./deploy-aws-monitoring.sh
-Deployment manifest: '/home/ubuntu/workspace/paasta-5.5.4/deployment/paasta-deployment/bosh/bosh.yml'
+ubuntu@inception:~/workspace/paasta-5.5.2/deployment/paasta-deployment/bosh$ ./deploy-aws-monitoring.sh
+Deployment manifest: '/home/ubuntu/workspace/paasta-5.5.2/deployment/paasta-deployment/bosh/bosh.yml'
 Deployment state: 'aws/state.json'
 
 Started validating
@@ -544,17 +544,17 @@ Succeeded
 - 서비스 설치에 필요한 릴리즈 파일을 다운로드 받아 Local machine의 작업 경로로 위치시킨다.  
   
   - 설치 파일 통합 다운로드 위치 : https://paas-ta.kr/download/package    
-  - PaaS-TA 5.5.4 BOSH 설치 릴리즈 파일 다운로드 : [bosh.zip](https://nextcloud.paas-ta.org/index.php/s/fy83bkQQCcek2yk/download)
+  - PaaS-TA 5.5.2 BOSH 설치 릴리즈 파일 다운로드 : [bosh.zip](https://nextcloud.paas-ta.org/index.php/s/fy83bkQQCcek2yk/download)
 
 ```
 # 릴리즈 다운로드 파일 위치 경로 생성
-$ mkdir -p ~/workspace/paasta-5.5.4/release
+$ mkdir -p ~/workspace/paasta-5.5.2/release
 
 # 릴리즈 파일 다운로드 및 파일 경로 확인
-$ cd ~/workspace/paasta-5.5.4/release
+$ cd ~/workspace/paasta-5.5.2/release
 $ wget http://45.248.73.44/index.php/s/fy83bkQQCcek2yk/download --content-disposition
 $ unzip bosh.zip
-$ cd ~/workspace/paasta-5.5.4/release/bosh
+$ cd ~/workspace/paasta-5.5.2/release/bosh
 $ ls
 bosh-271.2.0-PaaS-TA.tgz                                                        bosh-vsphere-cpi-release-54.1.1.tgz
 bosh-271.2.0-ubuntu-xenial-621.93-20201130-224348-505837986-20201130224349.tgz  bosh-warden-cpi-41-ubuntu-xenial-621.93-20201130-224003-395585274-20201130224004.tgz
@@ -574,7 +574,7 @@ bosh-virtualbox-cpi-release-0.2.0.tgz
 
 - 서버 환경에 맞추어 Deploy 스크립트 파일의 설정을 수정한다. 
 
-> $ vi ~/workspace/paasta-5.5.4/deployment/paasta-deployment/bosh/deploy-aws-monitoring.sh
+> $ vi ~/workspace/paasta-5.5.2/deployment/paasta-deployment/bosh/deploy-aws-monitoring.sh
 
 
 ```                     
@@ -600,15 +600,15 @@ bosh create-env bosh.yml \
 - BOSH 설치 Shell Script 파일 실행
 
 ```
-$ cd ~/workspace/paasta-5.5.4/deployment/paasta-deployment/bosh
+$ cd ~/workspace/paasta-5.5.2/deployment/paasta-deployment/bosh
 $ ./deploy-{iaas}-monitoring.sh
 ```
 
 - BOSH 설치 중
 
 ```
-ubuntu@inception:~/workspace/paasta-5.5.4/deployment/paasta-deployment/bosh$ ./deploy-aws.sh
-Deployment manifest: '/home/ubuntu/workspace/paasta-5.5.4/deployment/paasta-deployment/bosh/bosh.yml'
+ubuntu@inception:~/workspace/paasta-5.5.2/deployment/paasta-deployment/bosh$ ./deploy-aws.sh
+Deployment manifest: '/home/ubuntu/workspace/paasta-5.5.2/deployment/paasta-deployment/bosh/bosh.yml'
 Deployment state: 'aws/state.json'
 
 Started validating
@@ -646,7 +646,7 @@ BOSH 로그인 후, BOSH CLI 명령어를 이용하여 PaaS-TA를 설치할 수 
 BOSH 로그인 명령어는 다음과 같다.  
 
 ```
-$ cd ~/workspace/paasta-5.5.4/deployment/paasta-deployment/bosh
+$ cd ~/workspace/paasta-5.5.2/deployment/paasta-deployment/bosh
 $ export BOSH_CA_CERT=$(bosh int ./{iaas}/creds.yml --path /director_ssl/ca)
 $ export BOSH_CLIENT=admin
 $ export BOSH_CLIENT_SECRET=$(bosh int ./{iaas}/creds.yml --path /admin_password)
@@ -677,7 +677,7 @@ $ credhub --version
 CredHub에 로그인하기 위해 BOSH를 설치한 bosh-deployment 디렉터리의 creds.yml을 활용하여 로그인한다.
 
 ```
-$ cd ~/workspace/paasta-5.5.4/deployment/paasta-deployment/bosh
+$ cd ~/workspace/paasta-5.5.2/deployment/paasta-deployment/bosh
 $ export CREDHUB_CLIENT=credhub-admin
 $ export CREDHUB_SECRET=$(bosh int --path /credhub_admin_client_secret {iaas}/creds.yml)
 $ export CREDHUB_CA_CERT=$(bosh int --path /credhub_tls/ca {iaas}/creds.yml)
@@ -701,14 +701,14 @@ Jumpbox는 BOSH VM에 접근하기 위한 인증을 적용하게 된다.
 BOSH VM에 이상이 있거나 상태를 체크할 때 Jumpbox를 활용하여 BOSH VM에 접근할 수 있다.
 
 ```
-$ cd ~/workspace/paasta-5.5.4/deployment/paasta-deployment/bosh
+$ cd ~/workspace/paasta-5.5.2/deployment/paasta-deployment/bosh
 $ bosh int {iaas}/creds.yml --path /jumpbox_ssh/private_key > jumpbox.key 
 $ chmod 600 jumpbox.key
 $ ssh jumpbox@{bosh_url} -i jumpbox.key
 ```
 
 ```
-ubuntu@inception:~/workspace/paasta-5.5.4/deployment/paasta-deployment/bosh$ ssh jumpbox@10.0.1.6 -i jumpbox.key
+ubuntu@inception:~/workspace/paasta-5.5.2/deployment/paasta-deployment/bosh$ ssh jumpbox@10.0.1.6 -i jumpbox.key
 Unauthorized use is strictly prohibited. All access and activity
 is subject to logging and monitoring.
 Welcome to Ubuntu 16.04.6 LTS (GNU/Linux 4.15.0-54-generic x86_64)
@@ -731,7 +731,7 @@ PaaS-TA 5.5부터 BOSH 로그인을 하는 스크립트의 생성을 지원한�
 
 - BOSH Login 생성 Script의 설정 수정
 
-> vi ~/workspace/paasta-5.5.4/deployment/paasta-deployment/bosh/create-bosh-login.sh
+> vi ~/workspace/paasta-5.5.2/deployment/paasta-deployment/bosh/create-bosh-login.sh
 
 ```
 #!/bin/bash
@@ -762,7 +762,7 @@ credhub login -s https://'${BOSH_IP}':8844 --skip-tls-validation
 - BOSH Login 생성 Script 실행
 
 ```
-$ cd ~/workspace/paasta-5.5.4/deployment/paasta-deployment/bosh
+$ cd ~/workspace/paasta-5.5.2/deployment/paasta-deployment/bosh
 $ source create-bosh-login.sh
 ```
 
