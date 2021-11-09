@@ -13,5 +13,5 @@
   
 + Monitoring  
   + [아키텍처](https://github.com/PaaS-TA/paas-ta-monitoring-guide/blob/master/architecture/PAAS-TA_MONITORING_ARCHITECTURE.md)  
-  + [설치 가이드](https://github.com/PaaS-TA/paas-ta-monitoring-guide/blob/master/install/PAAS-TA_MONITORING_INSTALL_GUIDE_V5.0.md)  
+  + [설치 가이드](https://github.com/PaaS-TA/paas-ta-monitoring-guide/blob/master/install/PAAS-TA_MONITORING_INSTALL_GUIDE.md)  
   + [사용 가이드](#1.1)  
