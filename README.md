@@ -12,6 +12,6 @@
   * [사용 가이드](#1.1)  
   
 + Monitoring  
-  + [아키텍처](#1.1)  
+  + [아키텍처](https://github.com/PaaS-TA/paas-ta-monitoring-guide/blob/master/architecture/PAAS-TA_MONITORING_ARCHITECTURE.md)  
   + [설치 가이드](#1.1)  
   + [사용 가이드](#1.1)  
