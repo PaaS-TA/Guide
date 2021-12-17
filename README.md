@@ -1,10 +1,14 @@
 ### Index
 
-## PaaS-TA 가이드 문서 (v5.5.4)
+## PaaS-TA 가이드 문서 (v6.0.0)
 - Application Platform (AP)  
-  - [아키텍처](https://github.com/okpc579/paasta-ap-guide-new/blob/main/architecture/README.md)  
-  - [설치 가이드](https://github.com/okpc579/paasta-ap-guide-new/blob/main/install/README.md)  
-  - [사용 가이드](https://github.com/okpc579/paasta-ap-guide-new/blob/main/user_guide/README.md)  
+  - [아키텍처](https://github.com/PaaS-TA/application-platform-guide/blob/master/architecture/README.md)  
+  - [설치 가이드](https://github.com/PaaS-TA/application-platform-guide/blob/master/install/README.md)  
+  - [사용 가이드](https://github.com/PaaS-TA/application-platform-guide/blob/master/user_guide/README.md)  
+
++ PaaS-TA Sidecar  
+  - [아키텍처](https://github.com/PaaS-TA/sidecar-guide/blob/master/architecture/sidecar.md)  
+  - [설치 가이드](https://github.com/PaaS-TA/sidecar-guide/tree/master/install/README.md)  
 
 * Container Platform (CP)  
   * [아키텍처](#1)  
