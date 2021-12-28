@@ -1,6 +1,6 @@
 ### Index
 
-## PaaS-TA 가이드 문서 (v6.0.0)
+## PaaS-TA 가이드 문서  
 - Application Platform (AP)  
   - [아키텍처](https://github.com/PaaS-TA/application-platform-guide/blob/master/architecture/README.md)  
   - [설치 가이드](https://github.com/PaaS-TA/application-platform-guide/blob/master/install/README.md)  
